@@ -1,0 +1,18 @@
+.upload {
+  padding: 66px 20px;
+  min-height: 100%;
+  width: 100%;
+}
+
+label {
+  display: block;
+  font-size: smaller;
+  font-weight: bold;
+  text-decoration: underline;
+  margin: 0.5em 0em;
+}
+
+.btn {
+  margin-top: 1em;
+  padding: 0.5em;
+}

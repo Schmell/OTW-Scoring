@@ -23,6 +23,7 @@
   "dependencies": {
     "firebase": "^9.6.4",
     "firebase-preact-hooks": "^0.8.0",
+    "papaparse": "^5.3.1",
     "preact": "^10.3.1",
     "preact-layout": "^1.0.2",
     "preact-render-to-string": "^5.1.4",
@@ -32,6 +33,7 @@
   "devDependencies": {
     "@types/enzyme": "^3.10.5",
     "@types/jest": "^26.0.8",
+    "@types/papaparse": "^5.3.2",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
     "enzyme": "^3.11.0",

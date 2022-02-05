@@ -1,0 +1,12 @@
+.footer {
+  position: fixed;
+  bottom: 0;
+  color: white;
+  padding: 1em 1em;
+  background: #683ab786;
+  box-shadow: 0 0 -5px rgba(0, 0, 0, 0.25);
+  width: 100%;
+}
+.displayName {
+  font-weight: bold;
+}
