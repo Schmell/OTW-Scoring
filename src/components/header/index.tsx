@@ -18,12 +18,12 @@ const Header: FC = () => {
           Home
         </Link>
 
-        <Link activeClassName={style.active} href="/series">
-          Series
+        <Link activeClassName={style.active} href="/results">
+          Results
         </Link>
 
-        <Link activeClassName={style.active} href="/races">
-          Races
+        <Link activeClassName={style.active} href="/scoring">
+          Scoring
         </Link>
       </nav>
     </header>

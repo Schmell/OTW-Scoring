@@ -146,14 +146,18 @@ export const getResults = async () => {
     return item[0] === "rdisc";
   });
   results.forEach((result: any) => {
-    //   console.log("result: ", result);
+    // Results in blw file have no prefix to speak of (just an r)
+    // So we need to find each row individually
+
+    // I would like to see a differrent solution for undefined
+    // we cannot pass undefined to firestore
     const resultRow = {
       id: `${result[3]}-${result[2]}`,
       compid: result[2],
       raceid: result[3],
-      finish: resultHelp("rft", data, result)
-        ? resultHelp("rft", data, result)
-        : "",
+      // I am trying to return empty string from resultHelp
+      finish: resultHelp("rft", data, result),
+
       start: resultHelp("rst", data, result)
         ? resultHelp("rst", data, result)
         : "",
@@ -202,6 +206,8 @@ const resultHelp = (resultTag: any, data: any, result: any) => {
   });
   if (res[0]) {
     return res[0][1];
+  } else {
+    return "";
   }
 };
 export const getFleets = async () => {
@@ -214,14 +220,21 @@ export const getFleets = async () => {
 };
 
 export const getRaces = async () => {
+  /* 
+  // @TODO
+  // reutrn sailed as bool or int
+  */
   let data = await getFileData();
   var raceData: any = [];
+
   var races = data.filter((item: any) => {
     return item[0] === "racerank";
   });
+
   races.forEach((race: any) => {
     interface RaceObj {
       raceid: string;
+      // allow everything else (usually all strings from .blw)
       [x: string | number | symbol]: unknown;
     }
 
@@ -259,7 +272,7 @@ export const getRaces = async () => {
 };
 
 export const getSeries = async () => {
-  let data = await getFileData();
+  const data = await getFileData();
   const seriesRows = data.filter((item: any) => {
     const regex = new RegExp(`^ser`, "g");
     return item[0].match(regex);
@@ -280,7 +293,7 @@ export const getSeries = async () => {
 };
 
 export const downloadURL = (url: any, name: any) => {
-  var link = document.createElement("a");
+  const link = document.createElement("a");
   link.download = name;
   link.href = url;
   document.body.appendChild(link);
@@ -290,10 +303,10 @@ export const downloadURL = (url: any, name: any) => {
 };
 
 export const downloadFile = () => {
-  var data = localStorage.getItem("savedFile");
-  var blob = new Blob([data!], { type: "text/txt" });
-  var url = window.URL.createObjectURL(blob);
-  var using = JSON.parse(localStorage.getItem("using")!);
+  const data = localStorage.getItem("savedFile");
+  const blob = new Blob([data!], { type: "text/txt" });
+  const url = window.URL.createObjectURL(blob);
+  const using = JSON.parse(localStorage.getItem("using")!);
   // LL(using)
   downloadURL(url, using.name);
 };
@@ -312,3 +325,5 @@ export const downloadFile = () => {
 //     }
 //   });
 // };
+// EXPORT
+//

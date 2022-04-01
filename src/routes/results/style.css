@@ -1,0 +1,29 @@
+.series {
+  padding: 56px 20px;
+  min-height: 100%;
+  width: 100%;
+}
+
+.raceSpan {
+  width: 100%;
+}
+
+.sailed {
+  background-color: rgba(6, 6, 255, 0.342);
+}
+.sailed a:link,
+.sailed a:visited {
+  color: white;
+}
+
+.raceLi {
+  text-decoration: none;
+  color: black;
+  padding: 0.5em 0em;
+  margin-top: 0.25em;
+}
+
+a:link,
+a:visited {
+  color: black;
+}

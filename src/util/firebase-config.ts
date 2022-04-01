@@ -6,6 +6,7 @@ import {
   enableIndexedDbPersistence,
   getFirestore,
 } from "firebase/firestore";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC7SFX9Qyr_b4AMGlM6bAUiG3BZBrh72B8",
@@ -21,10 +22,12 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+// export const [user] = useAuthState(auth);
 
 // connectFirestoreEmulator(db, "localhost", 9999);
 // connectAuthEmulator(auth, "localhost:9099");
 // export const analytics = getAnalytics(app);
+5;
 
 enableIndexedDbPersistence(db).catch((err) => {
   if (err.code == "failed-precondition") {

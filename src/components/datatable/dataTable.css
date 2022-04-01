@@ -1,0 +1,20 @@
+table {
+  padding: 1em;
+}
+
+.headerCell {
+  font-weight: bold;
+  font-size: 100px;
+  background-color: gray;
+}
+.sortLabel {
+  font-weight: bold;
+}
+
+tr {
+  padding: 1em;
+}
+
+td {
+  padding: 0.25em;
+}

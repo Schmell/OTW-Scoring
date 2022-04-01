@@ -1,21 +1,19 @@
 import style from "./style.css";
-import { Fragment, h } from "preact";
-import { FC } from "preact/compat";
+import { h } from "preact";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../util/firebase-config";
 import { SignIn } from "../../components/SignIn";
 import { SignOut } from "../../components/SignOut";
 
-const Home: FC = () => {
+const Unauthed = () => {
   const [user] = useAuthState(auth);
 
   return (
-    <Fragment>
-      <h1>Home</h1>
-      <p> Welcome to On the Water RC</p>
+    <div>
+      <h1>Sign in to use this feature</h1>
       {!user ? <SignIn /> : <SignOut />}
-    </Fragment>
+    </div>
   );
 };
 
-export default Home;
+export default Unauthed;
