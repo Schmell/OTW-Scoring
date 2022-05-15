@@ -1,5 +1,10 @@
 import { parse, unparse } from "papaparse";
+import { formatTime } from "./formatters";
 // fromUrl is not implemented
+interface MyFile extends File {
+  lastModifiedDate?: any;
+}
+let file: MyFile;
 export const fromInput = (e: { target: HTMLInputElement }) => {
   /*
   // @TODO 
@@ -8,7 +13,7 @@ export const fromInput = (e: { target: HTMLInputElement }) => {
   // Maybe check currentFIle first and if no then write current and using
   */
 
-  let file: any;
+  // let file: any;
   if (e.target.files && e.target.files.length === 1) {
     file = e.target.files[0];
     console.log("file: ", file);
@@ -90,18 +95,12 @@ export const papaPromise = (file: any): Promise<any> => {
 
 export const getFileData = async (): Promise<any> => {
   const file = localStorage.getItem("currentFile");
-  // const f = await Csv.getLocalStorageItem("currentFile");
-  // console.log("f: ", f);
-  // console.log("file: ", file);
   let parsed = await papaPromise(file);
-  // console.log("parsed: ", parsed);
   return parsed;
 };
 
 export const getComps = async () => {
-  // let parsed = Papa.parse(this.getFile());
   let data = await getFileData();
-  // console.log("data: ", data);
   var compData: any = [];
   var compBoats = data.filter(function (item: any) {
     return item[0] === "comphigh";
@@ -216,6 +215,7 @@ export const getFleets = async () => {
     return item[0] === "serpubgroupvalues";
   });
   var fleets = fleetsRaw[0][1].match(/[^|]+/g);
+
   return fleets;
 };
 
@@ -224,36 +224,54 @@ export const getRaces = async () => {
   // @TODO
   // reutrn sailed as bool or int
   */
-  let data = await getFileData();
+  const data = await getFileData();
+
+  // new object to be returned
   var raceData: any = [];
 
+  // Find all raceids by getting known csv row
   var races = data.filter((item: any) => {
     return item[0] === "racerank";
   });
 
+  // For each race push data to new object
   races.forEach((race: any) => {
-    interface RaceObj {
-      raceid: string;
-      // allow everything else (usually all strings from .blw)
-      [x: string | number | symbol]: unknown;
-    }
+    // interface RaceObj {
+    //   raceid: string;
+    //   // allow everything else (usually all strings from .blw)
+    //   [x: string | number | symbol]: unknown;
+    // }
 
-    let raceObj: RaceObj = {
+    let raceObj = {
       raceid: "",
+      starts: "",
     };
 
     raceObj.raceid = race[3];
-    let resultRows = data.filter(function (item: any) {
+    let resultRows = data.filter((item: any) => {
       var regex = new RegExp(`^race`, "g");
       return item[0].match(regex) && item[3] === race[3];
     });
-
+    // console.log("resultRows: ", resultRows);
     let raceStarts: any = [];
-    resultRows.forEach((item: any) => {
+    resultRows.forEach((item: string[]) => {
+      // Format the starts to object
+      // this looks like helper functions will help
+      // and guards
+
       if (item[0] === "racestart") {
-        let stringToSplit = item[1].split("|");
+        const stringToSplit = item[1].split("|");
         let fleetStart = stringToSplit[1];
+        // console.log("fleetStart: ", fleetStart);
         let fleetName = stringToSplit[0].split("^")[1];
+        if (!fleetName) {
+          fleetName = "";
+        }
+        if (!fleetStart) {
+          fleetStart = "0";
+        } else {
+          fleetStart = formatTime(fleetStart);
+        }
         raceStarts.push({ fleet: fleetName, start: fleetStart });
       } else {
         const newName = item[0].replace("race", "");
@@ -273,23 +291,35 @@ export const getRaces = async () => {
 
 export const getSeries = async () => {
   const data = await getFileData();
+  // add file info
+  console.log("file: ", file);
   const seriesRows = data.filter((item: any) => {
     const regex = new RegExp(`^ser`, "g");
     return item[0].match(regex);
   });
 
-  interface SeriesObj {
+  // would be a long interface or type so just allow everything
+  type SeriesObj = {
+    event: string;
+    __owner?: string;
     [x: string | number | symbol]: unknown;
-  }
+  };
 
-  let seriesObj: SeriesObj = {};
+  let seriesObj: SeriesObj = { event: "" };
 
   seriesRows.forEach((item: any) => {
     const newName = item[0].replace("ser", "");
     seriesObj[newName] = item[1];
   });
-
-  return seriesObj;
+  // make an object for fileInfo to organize better
+  const __fileInfo = {} as any;
+  __fileInfo.fileName = file.name;
+  __fileInfo.lastModified = file.lastModified;
+  __fileInfo.lastModifiedDate = file.lastModifiedDate;
+  __fileInfo.size = file.size;
+  const returnObj = { ...seriesObj, __fileInfo };
+  // return series object and fileinfo
+  return returnObj;
 };
 
 export const downloadURL = (url: any, name: any) => {

@@ -1,11 +1,10 @@
 import { h } from "preact";
 import { Link } from "preact-router/match";
-import { FC } from "preact/compat";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../util/firebase-config";
 import style from "./style.css";
 
-const Header: FC = () => {
+const Header = () => {
   const [user] = useAuthState(auth);
   return (
     <header class={style.header}>

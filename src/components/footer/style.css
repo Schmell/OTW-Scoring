@@ -3,9 +3,12 @@
   bottom: 0;
   color: white;
   padding: 1em 1em;
-  background: #683ab786;
-  box-shadow: 0 0 -5px rgba(0, 0, 0, 0.25);
+  background: var(--blue-8);
+  /* #3282cd; */
   width: 100%;
+  box-shadow: inset -2px 2px 8px rgba(0, 0, 0, 0.15);
+
+  border-top-right-radius: 0.5em;
 }
 .displayName {
   font-weight: bold;

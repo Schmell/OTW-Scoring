@@ -7,6 +7,21 @@ import {
   getFirestore,
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
+// import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
+
+// firebaseApps previously initialized using initializeApp()
+// const db = getFirestore();
+// connectFirestoreEmulator(db, 'localhost', 8080);
+// const firebaseConfig = {
+//   apiKey: "AIzaSyC7SFX9Qyr_b4AMGlM6bAUiG3BZBrh72B8",
+//   authDomain: "schmell-first-try.firebaseapp.com",
+//   databaseURL: "https://schmell-first-try-default-rtdb.firebaseio.com",
+//   projectId: "schmell-first-try",
+//   storageBucket: "schmell-first-try.appspot.com",
+//   messagingSenderId: "464776014382",
+//   appId: "1:464776014382:web:8667afbe5dec4c4408cdbf",
+//   measurementId: "G-Q077CT5BYW",
+// };
 
 const firebaseConfig = {
   apiKey: "AIzaSyC7SFX9Qyr_b4AMGlM6bAUiG3BZBrh72B8",
@@ -24,8 +39,8 @@ export const db = getFirestore(app);
 export const auth = getAuth(app);
 // export const [user] = useAuthState(auth);
 
-// connectFirestoreEmulator(db, "localhost", 9999);
-// connectAuthEmulator(auth, "localhost:9099");
+connectFirestoreEmulator(db, "localhost", 9999);
+connectAuthEmulator(auth, "http://localhost:9099");
 // export const analytics = getAnalytics(app);
 5;
 
