@@ -12,6 +12,7 @@ import Upload from "../routes/upload";
 import { AuthRoute } from "../util/AuthenticatedRoute ";
 import Footer from "./footer";
 import Header from "./header";
+import New from "../routes/new";
 
 const colors = {
   brand: {
@@ -68,6 +69,7 @@ const App: FunctionalComponent = () => (
       <div class="page">
         <Router>
           <Route path="/" component={Home} />
+          <Route path="/new" component={New} />
           <AuthRoute path="/races/:race" component={Races} />
           <AuthRoute path="/upload" component={Upload} />
           <Route path="/results" component={Results} />

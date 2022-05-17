@@ -74,6 +74,7 @@ export const RacesList = (props) => {
                     _visited={{ color: "white" }}
                     icon={<EditIcon />}
                     onClick={() => {
+                      // Either use context here or maybe save to db as state
                       route(`/${props.seriesid}/${race.id}`);
                       // setRace(race.ref);
                     }}

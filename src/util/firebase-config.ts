@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { connectAuthEmulator, getAuth } from "firebase/auth";
 import {
   connectFirestoreEmulator,
+  doc,
   enableIndexedDbPersistence,
   getFirestore,
 } from "firebase/firestore";
@@ -37,6 +38,8 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+// Get rid of this
+export const eRef = doc(db, "events/XSKmjOrjRRa3BsehsHH1");
 // export const [user] = useAuthState(auth);
 
 connectFirestoreEmulator(db, "localhost", 9999);

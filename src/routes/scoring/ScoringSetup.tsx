@@ -28,6 +28,7 @@ import { AddIcon } from "@chakra-ui/icons";
 // RacePropertiesForm
 export const ScoringSetUp = ({ event, race, setRaceProperties }) => {
   // This form should set up the race
+  // RENAME this to RacePropertiesForm
   // Scoring style. ie: rank , elapsed, finish, maybe even corrected
   // Date/time maybe can be adjusted *time bieng first
   // console.log("race: ", race);
@@ -45,7 +46,7 @@ export const ScoringSetUp = ({ event, race, setRaceProperties }) => {
     rank: "1",
   });
 
-  const [raceTime, setRaceTime] = useState<any>();
+  const [raceTime, setRaceTime] = useState<string>();
   const [raceDate, setRaceDate] = useState<any>();
   const [raceSailed, setRaceSailed] = useState<any>();
   const [raceStarts, setRaceStarts] = useState<IraceStarts[]>();

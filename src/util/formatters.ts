@@ -51,13 +51,13 @@ export const formatDate = (date: string) => {
   // this Obviously has holes in its theroy
   // I hate dates and i would encourage people to update there sailwave files or
   // just as the scorer just input the date at this stage
+
+  // if (!date) return "";
   if (date) {
     if (date.toString().includes("/")) {
       const rearrange = date.toString().split("/");
       // When i try to not mutate i get undefined randomly
-      // let year;
-      // let month;
-      // let day;
+
       // Add "20" to 2 digit years
       if (rearrange[2].length === 2) {
         // console.log("rearrange[2]: ", rearrange[2]);
