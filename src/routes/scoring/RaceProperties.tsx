@@ -1,37 +1,33 @@
+import { AddIcon } from "@chakra-ui/icons";
 import {
   Box,
-  Flex,
-  Heading,
-  Divider,
-  FormLabel,
-  RadioGroup,
-  Radio,
-  FormControl,
-  Input,
-  FormErrorMessage,
-  Checkbox,
   Button,
-  Text,
+  Checkbox,
+  Divider,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Heading,
   HStack,
   IconButton,
+  Input,
+  Radio,
+  RadioGroup,
+  Text,
 } from "@chakra-ui/react";
-import { Field, FieldArray, Form, Formik } from "formik";
-import { getDoc, updateDoc } from "firebase/firestore";
-import { Fragment, h } from "preact";
-import { useState, useEffect } from "preact/hooks";
-import { formatDate, formatTime } from "../../util/formatters";
 import { Temporal } from "@js-temporal/polyfill";
-import { AddIcon } from "@chakra-ui/icons";
-// This should become the race roperties form
-// User/Series properties should dictate scoring type
-// ie: finish time, elapesd or place
-// RacePropertiesForm
-export const ScoringSetUp = ({ event, race, setRaceProperties }) => {
-  // This form should set up the race
-  // RENAME this to RacePropertiesForm
-  // Scoring style. ie: rank , elapsed, finish, maybe even corrected
-  // Date/time maybe can be adjusted *time bieng first
-  // console.log("race: ", race);
+import { doc } from "firebase/firestore";
+import { Field, FieldArray, Form, Formik } from "formik";
+import { Fragment, h } from "preact";
+import { useState } from "preact/hooks";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { db } from "../../util/firebase-config";
+import { formatDate, formatTime } from "../../util/formatters";
+
+
+export const RaceProperties = (props) => {
+
   interface IcurrentRace {
     // Let it all go
     [key: string | number]: any;
@@ -42,33 +38,43 @@ export const ScoringSetUp = ({ event, race, setRaceProperties }) => {
     start: string;
   }
 
-  const [currentRace, setCurrentRace] = useState<IcurrentRace>({
-    rank: "1",
-  });
+  // const [currentRace, setCurrentRace] = useState<IcurrentRace>({
+  //   rank: "1",
+  // });
 
   const [raceTime, setRaceTime] = useState<string>();
   const [raceDate, setRaceDate] = useState<any>();
   const [raceSailed, setRaceSailed] = useState<any>();
   const [raceStarts, setRaceStarts] = useState<IraceStarts[]>();
+  console.log(props.navPath);
+  
+  const [currentRace, loading, error] = useDocumentData(doc(db, props.navPath));
 
-  useEffect(() => {
-    const currentRace = async () => {
-      const r = await getDoc(race);
-      const data = (await r.data()) as any;
-      // const raceDate = Temporal.PlainDate.from(formatDate(data.date)!);
-      setCurrentRace(data);
-      setRaceTime(formatTime(data.time));
-      setRaceDate(formatDate(data.date));
-      setRaceSailed(+data.sailed); // Int
-      setRaceStarts(data.starts);
-    };
-    currentRace();
-  }, []);
+  setRaceTime(formatTime(currentRace?.time));
+  setRaceDate(formatDate(currentRace?.date));
+  setRaceSailed(+currentRace?.sailed); // Int
+  setRaceStarts(currentRace?.starts);
+  // const raceRef = ;
+  // const [currentRace] = useCollection(raceRef);
+  // const currentRace = await getDoc(doc(db, props.navPath))
+  // useEffect(() => {
+  //   const currentRace = async () => {
+  //     const r = await getDoc(race);
+  //     const data = (await r.data()) as any;
+  //     // const raceDate = Temporal.PlainDate.from(formatDate(data.date)!);
+  //     setCurrentRace(data);
+  //     setRaceTime(formatTime(data.time));
+  //     setRaceDate(formatDate(data.date));
+  //     setRaceSailed(+data.sailed); // Int
+  //     setRaceStarts(data.starts);
+  //   };
+  //   currentRace();
+  // }, []);
 
   const submitHandler = async (values: any) => {
     // console.log("currentRace: ", race);
     console.log(values, null, 2);
-    await updateDoc(race, values);
+    // await updateDoc(race, values);
   };
 
   return (
@@ -77,10 +83,10 @@ export const ScoringSetUp = ({ event, race, setRaceProperties }) => {
         <Flex justifyContent="space-between" alignItems="center">
           {/* This is the header with race name or number */}
           <Heading as="h5" color="blue.400">
-            {currentRace.name ? currentRace.name : `Race ${currentRace.rank}`}
+            {currentRace?.name ? currentRace.name : `Race ${currentRace?.rank}`}
           </Heading>
           <Text fontSize="sm" color="lightgray">
-            id: {currentRace.raceid}
+            id: {currentRace?.raceid}
           </Text>
         </Flex>
         <Divider my={3} />
@@ -100,34 +106,17 @@ export const ScoringSetUp = ({ event, race, setRaceProperties }) => {
               <Form>
                 <Field name="resultType">
                   {({ field, form }) => (
-                    <FormControl
-                      isInvalid={form.errors.name && form.touched.name}
-                    >
+                    <FormControl isInvalid={form.errors.name && form.touched.name}>
                       <FormLabel htmlFor="resultType">Scoring type</FormLabel>
                       <RadioGroup {...field} id="resultType" colorScheme="blue">
                         <HStack>
-                          <Field
-                            type="radio"
-                            name="resultType"
-                            value="position"
-                            as={Radio}
-                          >
+                          <Field type="radio" name="resultType" value="position" as={Radio}>
                             Position
                           </Field>
-                          <Field
-                            type="radio"
-                            name="resultType"
-                            value="elapsed"
-                            as={Radio}
-                          >
+                          <Field type="radio" name="resultType" value="elapsed" as={Radio}>
                             Elapsed
                           </Field>
-                          <Field
-                            type="radio"
-                            name="resultType"
-                            value="finish"
-                            as={Radio}
-                          >
+                          <Field type="radio" name="resultType" value="finish" as={Radio}>
                             Finishes
                           </Field>
                         </HStack>
@@ -140,11 +129,7 @@ export const ScoringSetUp = ({ event, race, setRaceProperties }) => {
                 <Divider my={3} />
 
                 {/* Date */}
-                <Box
-                  d="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
+                <Box d="flex" justifyContent="space-between" alignItems="center">
                   <Box>
                     <FormControl>
                       <FormLabel htmlFor="date">Date: </FormLabel>
@@ -153,13 +138,7 @@ export const ScoringSetUp = ({ event, race, setRaceProperties }) => {
                   </Box>
                   <Box>
                     <FormLabel htmlFor="sailed">Sailed</FormLabel>
-                    <Field
-                      name="sailed"
-                      type="checkbox"
-                      colorScheme="blue"
-                      isChecked={raceSailed}
-                      as={Checkbox}
-                    />
+                    <Field name="sailed" type="checkbox" colorScheme="blue" isChecked={raceSailed} as={Checkbox} />
                   </Box>
                 </Box>
 
@@ -169,20 +148,14 @@ export const ScoringSetUp = ({ event, race, setRaceProperties }) => {
                 <FormLabel htmlFor="time">First gun</FormLabel>
                 <Box d="flex" justifyContent="space-between">
                   {/* Need to get seconds here */}
-                  <Field
-                    name="time"
-                    type="time"
-                    step="2"
-                    as={Input}
-                    border="none"
-                  />
+                  <Field name="time" type="time" step="2" as={Input} border="none" />
                   <Button
                     colorScheme="gray"
                     px={8}
                     ml={4}
                     onClick={(e) => {
                       const theDate = Temporal.Now.plainTimeISO();
-                      setRaceTime(theDate.round("minutes"));
+                      setRaceTime(theDate.round("minutes").toString());
                     }}
                   >
                     Set Time
@@ -209,9 +182,7 @@ export const ScoringSetUp = ({ event, race, setRaceProperties }) => {
                 <FieldArray name="starts">
                   {(helper) =>
                     raceStarts?.map((item, idx) => {
-                      const [start, setStart] = useState(
-                        formatTime(item.start)
-                      );
+                      const [start, setStart] = useState(formatTime(item.start));
 
                       return (
                         <Box ml={2} mt={4} mb={3} key={idx}>
@@ -222,12 +193,9 @@ export const ScoringSetUp = ({ event, race, setRaceProperties }) => {
                             type="time"
                             step="2"
                             border="none"
-                            onChange={(
-                              e: React.FormEvent<HTMLInputElement>
-                            ) => {
+                            onChange={(e: React.FormEvent<HTMLInputElement>) => {
                               if (values.starts) {
-                                values.starts[idx].start =
-                                  e.currentTarget.value;
+                                values.starts[idx].start = e.currentTarget.value;
                               }
 
                               // values[key] = val;

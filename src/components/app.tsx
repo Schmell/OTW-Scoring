@@ -1,18 +1,12 @@
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { doc, getDoc } from "firebase/firestore";
 import { FunctionalComponent, h } from "preact";
-import { Route, Router } from "preact-router";
-import Home from "../routes/home";
-import NotFoundPage from "../routes/notfound";
-import Races from "../routes/races";
-import Results from "../routes/results/";
-import Scoring from "../routes/Scoring";
-import { ScoringSetUp } from "../routes/scoring/ScoringSetup";
-import { RacesList } from "../routes/scoring/RacesList";
-import Upload from "../routes/upload";
-import { AuthRoute } from "../util/AuthenticatedRoute ";
+import { useEffect, useState } from "preact/hooks";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth, db } from "../util/firebase-config";
 import Footer from "./footer";
 import Header from "./header";
-import New from "../routes/new";
+import Routing from "./Routing";
 
 const colors = {
   brand: {
@@ -60,42 +54,43 @@ const colors = {
 
 const theme = extendTheme({ colors });
 
-const App: FunctionalComponent = () => (
+const App: FunctionalComponent = () => {
   // I would like to have routes nested with AuthRoute
   // I would like to keep urls clean and be able to pass refs
+  const [user] = useAuthState(auth)
+  if(!user) return null
+  const [navPath, setNavPath ] = useState()
+  const [eventPath, setEventPath] = useState()
+  const [racePath, setRacePath] = useState()
+  // if (!navPath) setNavPath('/events')
+  // Set up our function to save our navigation to firebase
+  useEffect(()=>{
+    const setNavPaths = async ()=>{
+      const userDoc =  await getDoc(doc(db, 'users', user!.uid))
+      const eventPath = await userDoc.data()?.eventPath
+      setEventPath(eventPath)
+      const racePath = await userDoc.data()?.racePath
+      setRacePath(racePath)
+    }
+    setNavPaths()
+  }, [eventPath, racePath])
+
+  return(
   <ChakraProvider resetCSS theme={theme}>
     <div id="preact_root">
       <Header />
       <div class="page">
-        <Router>
-          <Route path="/" component={Home} />
-          <Route path="/new" component={New} />
-          <AuthRoute path="/races/:race" component={Races} />
-          <AuthRoute path="/upload" component={Upload} />
-          <Route path="/results" component={Results} />
-          <AuthRoute
-            path="/results/:seriesid/:raceid"
-            component={(props) => <Results {...props} />}
-          />
-          <AuthRoute path="/scoring" component={Scoring} />
-
-          {/* Display RaceList */}
-          <AuthRoute
-            path="/scoring/:seriesid/"
-            component={(props) => <RacesList {...props} />}
-          />
-
-          <AuthRoute
-            path="/scoring/:seriesid/:raceid"
-            component={(props) => <ScoringSetUp {...props} />}
-          />
-
-          <NotFoundPage default />
-        </Router>
+        <Routing 
+          user={user} 
+          eventPath={eventPath} 
+          setEventPath={setEventPath}
+          racePath={racePath}
+          setRacePath={setRacePath}
+        />
       </div>
       <Footer />
     </div>
   </ChakraProvider>
-);
+)};
 
 export default App;

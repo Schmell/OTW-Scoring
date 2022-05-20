@@ -1,37 +1,28 @@
 import {
-  NotAllowedIcon,
   CheckCircleIcon,
-  EditIcon,
-  ViewIcon,
+  EditIcon, NotAllowedIcon, ViewIcon
 } from "@chakra-ui/icons";
 import {
-  Heading,
-  Divider,
-  List,
-  ListItem,
-  Flex,
-  Text,
-  IconButton,
-  Tooltip,
+  Divider, Flex, Heading, IconButton, List,
+  ListItem, Text, Tooltip
 } from "@chakra-ui/react";
 import { collection } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
 import { useState } from "preact/hooks";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { db } from "../../util/firebase-config";
+import { auth, db } from "../../util/firebase-config";
 import { formatDate } from "../../util/formatters";
 import style from "./scoring.css";
 
 export const RacesList = (props) => {
-  console.log("props: ", props);
-  // { event, setRace, seriesid }
-  // console.log("seriesid: ", seriesid);
-  // const racesRef = collection(event, "/races");
-  const seriesRef = collection(db, `/events/${props.seriesid}/races`);
+console.log(props);
+  // const [user] = useAuthState(auth);
+  const [path, setPath] = useState(props.eventPath)
+  
+  const seriesRef = collection(db, `/events/${path}/races`);
   const [races] = useCollection(seriesRef);
-  // const races = useCollection()
-  // const [sailed, setSailed] = useState();
 
   return (
     <Fragment>
@@ -73,9 +64,11 @@ export const RacesList = (props) => {
                     size="xs"
                     _visited={{ color: "white" }}
                     icon={<EditIcon />}
+                    disabled={race.data().sailed === "1"}
                     onClick={() => {
                       // Either use context here or maybe save to db as state
-                      route(`/${props.seriesid}/${race.id}`);
+                      props.setRacePath(`/events/${props.navPath}/races/${race.data().raceid}`)
+                      route("/race-properties");
                       // setRace(race.ref);
                     }}
                   />
@@ -89,6 +82,7 @@ export const RacesList = (props) => {
                     colorScheme="blue"
                     size="xs"
                     icon={<ViewIcon />}
+                    disabled={race.data().sailed === "0"}
                     onClick={({ target }) => {
                       route(
                         `/results/${race.data()._seriesid}/${
