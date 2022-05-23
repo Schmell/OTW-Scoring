@@ -84,7 +84,7 @@ export const formatDate = (date: string) => {
 export const formatTime = (s: string): string => {
   // check for letters in string
   // This throws a warning
-
+if(!s) return "error"
   const regex = /[A-Z]/g;
   if (s.match(regex)) {
     console.warn("Not a time: ", s);

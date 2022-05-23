@@ -12,16 +12,20 @@ import { route } from "preact-router";
 import { useState } from "preact/hooks";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection } from "react-firebase-hooks/firestore";
+import useFireState from "../../hooks/useFireState";
+import useStorage from "../../hooks/useStorage";
 import { auth, db } from "../../util/firebase-config";
 import { formatDate } from "../../util/formatters";
 import style from "./scoring.css";
 
 export const RacesList = (props) => {
-console.log(props);
+// console.log(props);
   // const [user] = useAuthState(auth);
   const [path, setPath] = useState(props.eventPath)
-  
-  const seriesRef = collection(db, `/events/${path}/races`);
+  const [seriesId, setSeriesId] = useStorage('seriesId')
+  const [raceId, setRaceId] = useStorage('raceId')
+  console.log('seriesId: ', seriesId);
+  const seriesRef = collection(db, `/events/${seriesId}/races`);
   const [races] = useCollection(seriesRef);
 
   return (
@@ -67,7 +71,8 @@ console.log(props);
                     disabled={race.data().sailed === "1"}
                     onClick={() => {
                       // Either use context here or maybe save to db as state
-                      props.setRacePath(`/events/${props.navPath}/races/${race.data().raceid}`)
+                      // props.setRacePath(`/events/${props.navPath}/races/${race.data().raceid}`)
+                      setRaceId(race.data().raceid)
                       route("/race-properties");
                       // setRace(race.ref);
                     }}

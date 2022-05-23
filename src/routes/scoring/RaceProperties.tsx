@@ -15,66 +15,48 @@ import {
   Radio,
   RadioGroup,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { Temporal } from "@js-temporal/polyfill";
-import { doc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { Field, FieldArray, Form, Formik } from "formik";
 import { Fragment, h } from "preact";
 import { useState } from "preact/hooks";
 import { useDocumentData } from "react-firebase-hooks/firestore";
+import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
 import { formatDate, formatTime } from "../../util/formatters";
+import { AddStartModal } from "./RaceProperties/AddStartModal";
 
 
 export const RaceProperties = (props) => {
-
-  interface IcurrentRace {
-    // Let it all go
-    [key: string | number]: any;
-  }
-
   interface IraceStarts {
     fleet: string;
     start: string;
   }
 
-  // const [currentRace, setCurrentRace] = useState<IcurrentRace>({
-  //   rank: "1",
-  // });
-
   const [raceTime, setRaceTime] = useState<string>();
   const [raceDate, setRaceDate] = useState<any>();
   const [raceSailed, setRaceSailed] = useState<any>();
   const [raceStarts, setRaceStarts] = useState<IraceStarts[]>();
-  console.log(props.navPath);
-  
-  const [currentRace, loading, error] = useDocumentData(doc(db, props.navPath));
+  const [raceId, setRaceId] = useStorage('raceId') // not sure if we need
+  const [seriesId, setSeriesId] = useStorage('seriesId')
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
-  setRaceTime(formatTime(currentRace?.time));
-  setRaceDate(formatDate(currentRace?.date));
-  setRaceSailed(+currentRace?.sailed); // Int
-  setRaceStarts(currentRace?.starts);
-  // const raceRef = ;
-  // const [currentRace] = useCollection(raceRef);
-  // const currentRace = await getDoc(doc(db, props.navPath))
-  // useEffect(() => {
-  //   const currentRace = async () => {
-  //     const r = await getDoc(race);
-  //     const data = (await r.data()) as any;
-  //     // const raceDate = Temporal.PlainDate.from(formatDate(data.date)!);
-  //     setCurrentRace(data);
-  //     setRaceTime(formatTime(data.time));
-  //     setRaceDate(formatDate(data.date));
-  //     setRaceSailed(+data.sailed); // Int
-  //     setRaceStarts(data.starts);
-  //   };
-  //   currentRace();
-  // }, []);
+  const docRef = doc(db, "events", seriesId, 'races', raceId)
+  const [currentRace, loading, error] = useDocumentData(docRef);
+  if (error) throw error
+  if(!loading){
+    setRaceTime(formatTime(currentRace?.time));
+    setRaceDate(formatDate(currentRace?.date));
+    setRaceSailed(+currentRace?.sailed); // Int
+    setRaceStarts(currentRace?.starts);
+
+  }
 
   const submitHandler = async (values: any) => {
-    // console.log("currentRace: ", race);
-    console.log(values, null, 2);
-    // await updateDoc(race, values);
+    // console.log(values);
+    await updateDoc(docRef, values)
   };
 
   return (
@@ -89,7 +71,9 @@ export const RaceProperties = (props) => {
             id: {currentRace?.raceid}
           </Text>
         </Flex>
+
         <Divider my={3} />
+
         <Box mx={4}>
           <Formik
             enableReinitialize
@@ -169,13 +153,10 @@ export const RaceProperties = (props) => {
                   <FormLabel htmlFor="starts">Starts</FormLabel>
                   <IconButton
                     aria-label="Add start"
-                    // colorScheme="blue"
-                    // size="xs"
                     icon={<AddIcon />}
-                    onClick={(e) => {
-                      console.log("e: ", e);
-                    }}
+                    onClick={onOpen}
                   />
+                  <AddStartModal isOpen={isOpen} onClose={onClose} docRef={docRef}/>
                 </Box>
                 <Divider my={3} />
 
