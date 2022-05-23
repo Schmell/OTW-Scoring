@@ -182,7 +182,7 @@ export const ScoringSetUp = ({ event, race, setRaceProperties }) => {
                     ml={4}
                     onClick={(e) => {
                       const theDate = Temporal.Now.plainTimeISO();
-                      setRaceTime(theDate.round("minutes"));
+                      setRaceTime(theDate.round("minutes").toString());
                     }}
                   >
                     Set Time

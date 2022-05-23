@@ -9,24 +9,14 @@ import style from "./style.css";
 const Upload = () => {
   // user Auth should come from firbase config
   const [user] = useAuthState(auth);
-  const getFile = async (e) => {
+
+  const getFile = (e) => {
     fromInput(e);
     // populate();
   };
 
   return (
     <Box className={style.upload}>
-      {/* <label>
-        Upload BLW File
-        <input
-          id="inputFile"
-          className="fileInput"
-          type="file"
-          // boxShadow="lg"
-          // colorScheme="blue"
-          onChange={(e) => getFile(e)}
-        />
-      </label> */}
       <Box>
         <FormLabel className={style.file}>
           <Input
