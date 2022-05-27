@@ -10,3 +10,18 @@ a:visited {
 .chakra-icon:visited {
   background-color: beige;
 }
+.chakra-radio__label{
+  text-decoration: none;
+}
+
+.raceform label{
+  text-decoration: none;
+}
+
+.radiolabel{
+  /* font-family:Arial, Helvetica, sans-serif; */
+  font-size: "2px";
+  font-weight: lighter;
+  /* color: lightgray; */
+
+}
