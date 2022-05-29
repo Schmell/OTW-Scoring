@@ -83,13 +83,15 @@ export const RacesList = ({ setHeaderTitle }) => {
                         : `Race ${race.data().rank}`}
                     </Text>
                     <Text color="gray.400" px={3} fontSize="xs">
+                      {/* SHould be just a Tooltip
+                      make a function that formats sailed output */}
                       {race.data().sailed === "1" ? (
                         " - Sailed"
                       ) : race.data().sailed === "0" ? (
                         <Button
                           aria-label="Start Race"
                           colorScheme="green"
-                          width={20}
+                          className={style.startRaceButton}
                           size="xs"
                           rightIcon={<ChevronRightIcon />}
                         >

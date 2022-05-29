@@ -66,8 +66,16 @@ export const RaceProperties = ({ setHeaderTitle }) => {
   }
 
   const submitHandler = async (values: any) => {
-    console.log("values: ", values);
+    // remove undefined's from values
+    Object.keys(values).map((m) => {
+      console.log("m: ", values[m]);
+      if (values[m] === undefined) return (values[m] = "");
+      return values;
+    });
+    // update the firestore doc
     await updateDoc(docRef, values);
+
+    // show submitted toast
     submittedToast({
       title: "Race Updated",
       description: "Your race properties have changed",
@@ -75,6 +83,8 @@ export const RaceProperties = ({ setHeaderTitle }) => {
       duration: 2000,
       isClosable: true,
     });
+
+    // route back to races
     route("/races");
   };
 
