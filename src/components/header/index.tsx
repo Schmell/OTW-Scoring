@@ -20,12 +20,12 @@ const Header = ({ headerTitle, setHeaderTitle }) => {
           Home
         </Link>
 
-        <Link activeClassName={style.active} href="/upload">
+        {/* <Link activeClassName={style.active} href="/upload">
           Upload
-        </Link>
+        </Link> */}
 
-        <Link activeClassName={style.active} href="/scoring">
-          Scoring
+        <Link activeClassName={style.active} href="/series">
+          Series
         </Link>
       </nav>
     </header>

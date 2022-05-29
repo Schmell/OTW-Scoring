@@ -4,6 +4,7 @@ import Home from "../routes/home";
 import New from "../routes/new";
 import NotFoundPage from "../routes/notfound";
 import Results from "../routes/results";
+import Series from "../routes/scoring";
 import Scoring from "../routes/Scoring";
 import { RaceProperties } from "../routes/scoring/RaceProperties";
 import { RacesList } from "../routes/scoring/RacesList";
@@ -27,7 +28,7 @@ const Routing: FunctionalComponent<IRouting> = (props) => {
 
       <Route path="/results" component={Results} {...props} />
 
-      <AuthRoute path="/scoring" component={Scoring} {...props} />
+      <AuthRoute path="/series" component={Series} {...props} />
 
       <AuthRoute
         path="/race-properties"

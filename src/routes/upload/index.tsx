@@ -1,4 +1,11 @@
-import { Box, Button, Divider, FormLabel, Input } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Divider,
+  FormLabel,
+  Heading,
+  Input,
+} from "@chakra-ui/react";
 import { Formik, Field, Form, FormikHelpers } from "formik";
 import { h } from "preact";
 import { route } from "preact-router";
@@ -9,7 +16,8 @@ import { populate } from "./populate";
 import { rePopulate } from "./re-populate";
 import style from "./style.css";
 
-const Upload = () => {
+const Upload = ({ setHeaderTitle }) => {
+  setHeaderTitle("Upload");
   // user Auth should come from firbase config
   const [user] = useAuthState(auth);
 
@@ -17,6 +25,9 @@ const Upload = () => {
 
   return (
     <Box className={style.upload}>
+      <Heading color="blue.400" mb={3}>
+        Select File
+      </Heading>
       <Formik
         initialValues={{
           file: "",
@@ -24,12 +35,12 @@ const Upload = () => {
         onSubmit={() => {
           // console.log("target.files[0]: ", importedFile);
           rePopulate(user, importedFile);
-          route("/scoring");
+          route("/series");
         }}
       >
         <Form>
           <Box>
-            <FormLabel htmlFor="file">Upload</FormLabel>
+            {/* <FormLabel htmlFor="file">Upload</FormLabel> */}
             <Field
               type="file"
               id="file"

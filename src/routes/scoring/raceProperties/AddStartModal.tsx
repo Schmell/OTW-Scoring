@@ -11,7 +11,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import { arrayUnion, updateDoc } from "firebase/firestore";
-import { Field, Form, Formik, useFormik } from "formik";
+import { Form, useFormik } from "formik";
 import { h } from "preact";
 
 export const AddStartModal = ({ isOpen, onClose, docRef }) => {
