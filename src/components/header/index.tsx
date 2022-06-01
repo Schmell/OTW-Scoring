@@ -3,6 +3,7 @@ import { Link } from "preact-router/match";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../util/firebase-config";
 import { FadeIn } from "../animations/FadeSlide";
+import ColorModeToggle from "../ColorToggleMode";
 import style from "./style.css";
 
 const Header = ({ headerTitle, setHeaderTitle }) => {
@@ -20,9 +21,7 @@ const Header = ({ headerTitle, setHeaderTitle }) => {
           Home
         </Link>
 
-        {/* <Link activeClassName={style.active} href="/upload">
-          Upload
-        </Link> */}
+        {/* <ColorModeToggle /> */}
 
         <Link activeClassName={style.active} href="/series">
           Series

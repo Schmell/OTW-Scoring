@@ -98,49 +98,65 @@ export const RacesList = ({ setHeaderTitle }) => {
                           Start race
                         </Button>
                       ) : (
-                        ` - ${capitalizeFirstLetter(race.data().sailed)}`
+                        capitalizeFirstLetter(race.data().sailed)
                       )}
                     </Text>
                   </Flex>
+
                   <Flex gap={2} alignContent="flex-end">
+                    {/* Edit race button */}
                     <Tooltip
+                      hasArrow
                       label="Edit race settings"
                       aria-label="Edit race settings"
+                      placement="top-start"
+                      bg="blue.300"
                     >
-                      <IconButton
-                        className={style.whiteIcon}
-                        aria-label="Edit race settings"
-                        colorScheme="blue"
-                        size="xs"
-                        _visited={{ color: "white" }}
-                        icon={<EditIcon />}
-                        disabled={race.data().sailed === "1"}
-                        onClick={() => {
-                          setRaceId(race.id);
-                          route("/race-properties");
-                        }}
-                      />
+                      <span>
+                        <IconButton
+                          className={style.whiteIcon}
+                          aria-label="Edit race settings"
+                          colorScheme="blue"
+                          size="xs"
+                          _visited={{ color: "white" }}
+                          icon={<EditIcon />}
+                          disabled={race.data().sailed === "1"}
+                          onClick={() => {
+                            setRaceId(race.id);
+                            route("/race-properties");
+                          }}
+                        />
+                      </span>
                     </Tooltip>
+
+                    {/* View race results */}
                     <Tooltip
+                      hasArrow
                       label="View race results"
                       aria-label="View race results"
+                      placement="top-start"
+                      bg="blue.300"
                     >
-                      <IconButton
-                        aria-label="View results "
-                        colorScheme="blue"
-                        size="xs"
-                        icon={<ViewIcon />}
-                        disabled={race.data().sailed !== "1"}
-                        onClick={({ target }) => {
-                          route(
-                            `/results/${race.data()._seriesid}/${
-                              race.data().raceid
-                            }`
-                          );
-                        }}
-                      />
+                      <span>
+                        <IconButton
+                          aria-label="View results "
+                          colorScheme="blue"
+                          size="xs"
+                          icon={<ViewIcon />}
+                          disabled={race.data().sailed !== "1"}
+                          onClick={({ target }) => {
+                            route(
+                              `/results/${race.data()._seriesid}/${
+                                race.data().raceid
+                              }`
+                            );
+                          }}
+                        />
+                      </span>
                     </Tooltip>
-                    <Text fontSize="xs" width={16}>
+
+                    {/* Race Date */}
+                    <Text fontSize="xs" width={16} align="right">
                       {formatDate(race.data().date)}
                     </Text>
                   </Flex>

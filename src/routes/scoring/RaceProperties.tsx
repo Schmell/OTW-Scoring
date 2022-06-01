@@ -3,18 +3,12 @@ import {
   Button,
   Divider,
   Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
   Heading,
-  HStack,
-  Radio,
-  RadioGroup,
   Text,
   useToast,
 } from "@chakra-ui/react";
 import { doc, updateDoc } from "firebase/firestore";
-import { Field, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
 import { useState } from "preact/hooks";
@@ -26,15 +20,17 @@ import {
 import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
 import { formatDate, formatTime } from "../../util/formatters";
+import { Date } from "./raceProperties/Date";
 import { FirstGun } from "./raceProperties/FirstGun";
 import { Notes } from "./raceProperties/Notes";
-import { Starts } from "./raceProperties/Starts";
-import style from "./scoring.css";
-import { Date } from "./raceProperties/Date";
 import { ResultType } from "./raceProperties/ResultType";
 import { Sailed } from "./raceProperties/Sailed";
+import { Starts } from "./raceProperties/Starts";
+import style from "./scoring.css";
+
 export const RaceProperties = ({ setHeaderTitle }) => {
-  setHeaderTitle("Race form");
+  setHeaderTitle("Edit Race");
+
   interface IraceStarts {
     fleet: string;
     start: string;
@@ -63,15 +59,17 @@ export const RaceProperties = ({ setHeaderTitle }) => {
   if (!loading) {
     setRaceTime(formatTime(currentRace?.time));
     setRaceStarts(currentRace?.starts);
+    setPostponedDate(currentRace?.postponedDate);
   }
 
   const submitHandler = async (values: any) => {
+    console.log("values: ", values);
     // remove undefined's from values
-    Object.keys(values).map((m) => {
-      console.log("m: ", values[m]);
-      if (values[m] === undefined) return (values[m] = "");
-      return values;
-    });
+    // Object.keys(values).map((m) => {
+    //   console.log("m: ", values[m]);
+    //   if (values[m] === undefined) return (values[m] = "");
+    //   return values;
+    // });
     // update the firestore doc
     await updateDoc(docRef, values);
 
@@ -140,7 +138,12 @@ export const RaceProperties = ({ setHeaderTitle }) => {
                   <Divider my={3} />
 
                   {/* Sailed */}
-                  <Sailed postponed={postponed} postponedDate />
+                  <Sailed
+                    postponed={postponed}
+                    postponedDate={postponedDate}
+                    setPostponedDate={setPostponedDate}
+                    currentRace={currentRace}
+                  />
 
                   <Divider my={3} />
 
