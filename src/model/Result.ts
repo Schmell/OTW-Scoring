@@ -10,7 +10,9 @@ import {
   where,
   WithFieldValue,
 } from "firebase/firestore";
-import { eRef } from "../util/firebase-config";
+
+// import { eRef } from "../util/firebase-config";
+
 // import { eventRef } from "./App";
 
 export interface IResult {
@@ -51,7 +53,10 @@ export class Result implements IResult {
     }
     // get the comp for this result
     const compsQuery = query(
-      collection(eRef, "comps"),
+      // ///////////////////////////////////////////////////////////////////////////////
+      // I CHANGED THIS FROM eRef wich was a hard coded value for testing
+      // ///////////////////////////////////////////////////////////////////////////////
+      collection(this.ref, "comps"),
       where("compid", "==", this.compid)
     );
     const comps = await getDocs(compsQuery);
@@ -68,7 +73,10 @@ export class Result implements IResult {
     }
 
     const racesQuery = query(
-      collection(eRef, "races"),
+      // ///////////////////////////////////////////////////////////////////////////////
+      // I CHANGED THIS FROM eRef wich was a hard coded value for testing
+      // ///////////////////////////////////////////////////////////////////////////////
+      collection(this.ref, "races"),
       where("raceid", "==", this.raceid)
     );
     const races = await getDocs(racesQuery);

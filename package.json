@@ -40,6 +40,7 @@
     "preact-router": "^3.2.1",
     "react-data-table-component": "^7.4.7",
     "react-firebase-hooks": "^5.0.2",
+    "react-icons": "^4.4.0",
     "react-table": "^7.7.0"
   },
   "devDependencies": {

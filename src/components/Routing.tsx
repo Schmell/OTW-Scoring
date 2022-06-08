@@ -9,6 +9,9 @@ import Scoring from "../routes/Scoring";
 import { RaceProperties } from "../routes/scoring/RaceProperties";
 import { RacesList } from "../routes/scoring/RacesList";
 import Upload from "../routes/upload";
+import UserLanding from "../routes/user/UserLanding";
+import UserProfile from "../routes/user/UserProfile";
+import UserSettings from "../routes/user/UserSettings";
 import { AuthRoute } from "../util/AuthenticatedRoute ";
 import { SignIn } from "./SignIn";
 
@@ -37,6 +40,12 @@ const Routing: FunctionalComponent<IRouting> = (props) => {
       />
 
       <AuthRoute path="/races" component={RacesList} {...props} />
+
+      <AuthRoute path="/user" component={UserLanding} {...props} />
+
+      <AuthRoute path="/user/settings" component={UserSettings} {...props} />
+
+      <AuthRoute path="/user/profile" component={UserProfile} {...props} />
 
       <NotFoundPage default />
     </Router>

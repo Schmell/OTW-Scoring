@@ -18,8 +18,8 @@ a:visited {
   text-decoration: none;
 }
 .startRaceButton{
-  /* width: 200px; */
- min-width: 140px;
+  width: 100px;
+ /* min-width: 140px; */
 /* max-width: 180px; */
   /* background-color: beige; */
 }
@@ -31,3 +31,15 @@ a:visited {
   /* color: lightgray; */
 
 }
+
+.selectList {
+  font-size: var(--size-fluid-2);
+  font-weight: 500;
+  padding-block: var(--size-fluid-1);
+  /* padding-inline: var(--size-fluid-2); */
+  border-bottom: 1px solid var(--gray-4);
+}
+
+/* .selectList:hover {
+  background-color: var(--gray-2);
+} */

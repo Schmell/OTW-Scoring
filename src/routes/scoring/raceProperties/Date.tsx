@@ -21,7 +21,7 @@ export const Date = () => {
       <Box>
         <FormControl>
           <FormLabel htmlFor="date">Date: </FormLabel>
-          <Field type="date" name="date" />
+          <Field type="date" name="date" as={Input} />
         </FormControl>
       </Box>
     </Fragment>

@@ -14,6 +14,7 @@ import { route } from "preact-router";
 import { useState } from "preact/hooks";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import {
+  FadeIn,
   FadeInSlideLeft,
   FadeInSlideRight,
 } from "../../components/animations/FadeSlide";
@@ -65,11 +66,10 @@ export const RaceProperties = ({ setHeaderTitle }) => {
   const submitHandler = async (values: any) => {
     console.log("values: ", values);
     // remove undefined's from values
-    // Object.keys(values).map((m) => {
-    //   console.log("m: ", values[m]);
-    //   if (values[m] === undefined) return (values[m] = "");
-    //   return values;
-    // });
+    Object.keys(values).map((m) => {
+      if (values[m] === undefined) return (values[m] = "");
+      return values;
+    });
     // update the firestore doc
     await updateDoc(docRef, values);
 
@@ -90,7 +90,12 @@ export const RaceProperties = ({ setHeaderTitle }) => {
     <Fragment>
       <Box>
         {/* Heading */}
-        <Flex justifyContent="space-between" alignItems="center">
+        <Flex
+          justifyContent="space-between"
+          alignItems="center"
+          minWidth="max-content"
+          wrap="wrap"
+        >
           {/* This is the header with race name or number */}
           <FadeInSlideRight>
             <Heading as="h5" color="blue.400">
@@ -99,6 +104,8 @@ export const RaceProperties = ({ setHeaderTitle }) => {
                 : `Race ${currentRace?.rank}`}
             </Heading>
           </FadeInSlideRight>
+
+          {/* For Dev purposes only */}
           <FadeInSlideLeft>
             <Text fontSize="sm" color="lightgray">
               id: {currentRace?.raceid} - {currentRace?._seriesid}
@@ -109,7 +116,7 @@ export const RaceProperties = ({ setHeaderTitle }) => {
         <Divider my={3} />
 
         {/* Start the form */}
-        <FadeInSlideLeft>
+        <FadeIn>
           <Box mx={4}>
             <Formik
               enableReinitialize
@@ -169,7 +176,7 @@ export const RaceProperties = ({ setHeaderTitle }) => {
               )}
             </Formik>
           </Box>
-        </FadeInSlideLeft>
+        </FadeIn>
       </Box>
     </Fragment>
   );

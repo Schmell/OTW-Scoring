@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { Field } from "formik";
 import { Fragment, h } from "preact";
+import SecBtn from "../../../components/generic/SecBtn";
 
 interface ISailedProps {
   postponed?: string;
@@ -74,19 +75,15 @@ export const Sailed = ({
                         {currentRace.postponedDate}
                       </Field>
 
-                      <Button
-                        colorScheme="blue"
-                        variant="outline"
-                        boxShadow="md"
+                      <SecBtn
                         ml={3}
                         onClick={(target) => {
-                          //   console.log(currentRace);
                           currentRace.postponedDate = null;
                           setPostponedDate(false);
                         }}
                       >
                         Set as TBA
-                      </Button>
+                      </SecBtn>
                     </Fragment>
                   ) : (
                     <Flex
@@ -95,19 +92,14 @@ export const Sailed = ({
                       width="100%"
                     >
                       <Text>TBA</Text>
-                      <Button
-                        colorScheme={"blue"}
-                        variant={"outline"}
-                        boxShadow={"md"}
+                      <SecBtn
                         onClick={({ target }) => {
-                          console.log(target);
-
                           currentRace.postponedDate = true;
                           setPostponedDate(true);
                         }}
                       >
                         Set date
-                      </Button>
+                      </SecBtn>
                     </Flex>
                   )}
                   {/*  */}

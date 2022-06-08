@@ -35,21 +35,13 @@ h3 {
 }
 
 .page {
-  padding-inline: var(--size-3);
-  padding-block: var(--size-9);
-  margin-inline: auto;
-  min-height: 100%;
-  max-width: 700px;
-}
+  /* padding-inline: var(--size-3); */
+  
+  padding-block: var(--size-8);
+  overflow: hidden;
+  /* margin-inline: auto; */
+  /* min-height: 100%; */
+} 
 
-.selectList {
-  font-size: var(--size-fluid-2);
-  font-weight: 500;
-  padding-block: var(--size-fluid-1);
-  padding-inline: var(--size-fluid-2);
-  border-bottom: 1px solid var(--gray-4);
-}
 
-.selectList:hover {
-  background-color: var(--gray-2);
-}
+

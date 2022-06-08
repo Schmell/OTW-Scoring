@@ -11,6 +11,7 @@ export function SignOut() {
         colorScheme="blue"
         boxShadow="md"
         mr={3}
+        // zIndex="0"
         onClick={() => auth.signOut()}
       >
         Sign Out

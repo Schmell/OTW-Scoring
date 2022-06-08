@@ -1,6 +1,4 @@
-import { TriangleUpIcon } from "@chakra-ui/icons";
 import {
-  Box,
   Button,
   Divider,
   Flex,
@@ -8,10 +6,10 @@ import {
   List,
   ListItem,
   Spinner,
+  styled,
   Text,
 } from "@chakra-ui/react";
 import { collection, query, where } from "firebase/firestore";
-import { motion, MotionConfig } from "framer-motion";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
 import { useCollection } from "react-firebase-hooks/firestore";
@@ -19,9 +17,9 @@ import {
   FadeInSlideLeft,
   FadeInSlideRight,
 } from "../../components/animations/FadeSlide";
-import useFireState from "../../hooks/useFireState";
 import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
+import style from "./scoring.css";
 
 export const EventsList = ({ user, setHeaderTitle }) => {
   setHeaderTitle("Series");
@@ -79,7 +77,7 @@ export const EventsList = ({ user, setHeaderTitle }) => {
               <FadeInSlideLeft>
                 <ListItem
                   key={series.id}
-                  className="selectList"
+                  className={style.selectList}
                   onClick={() => {
                     setSeriesId(series.id);
                     route("/races");

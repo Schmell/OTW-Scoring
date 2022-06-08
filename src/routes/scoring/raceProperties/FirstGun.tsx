@@ -3,6 +3,7 @@ import { Temporal } from "@js-temporal/polyfill";
 import { updateDoc } from "firebase/firestore";
 import { Field } from "formik";
 import { Fragment, h } from "preact";
+import SecBtn from "../../../components/generic/SecBtn";
 
 export const FirstGun = ({ docRef, setRaceTime }) => {
   const handleSetTime = async () => {
@@ -17,16 +18,9 @@ export const FirstGun = ({ docRef, setRaceTime }) => {
       <Box d="flex" justifyContent="space-between">
         {/* Need to get seconds here */}
         <Field name="time" type="time" step="2" as={Input} border="none" />
-        <Button
-          colorScheme="blue"
-          variant="outline"
-          boxShadow="md"
-          px={8}
-          ml={4}
-          onClick={handleSetTime}
-        >
+        <SecBtn px={8} ml={4} onClick={handleSetTime}>
           Set Time
-        </Button>
+        </SecBtn>
       </Box>
     </Fragment>
   );
