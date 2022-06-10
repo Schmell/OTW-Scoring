@@ -3,16 +3,21 @@ import {
   Divider,
   Flex,
   Heading,
+  IconButton,
   List,
   ListItem,
+  Skeleton,
+  SkeletonText,
   Spinner,
+  Stack,
   styled,
   Text,
 } from "@chakra-ui/react";
-import { collection, query, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, query, where } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
 import { useCollection } from "react-firebase-hooks/firestore";
+import { BsXLg } from "react-icons/bs";
 import {
   FadeInSlideLeft,
   FadeInSlideRight,
@@ -28,6 +33,11 @@ export const EventsList = ({ user, setHeaderTitle }) => {
   const [events, eventsLoading] = useCollection(
     query(eventsRef, where("__owner", "==", user && user.uid))
   );
+
+  const removeSeries = async (id: any) => {
+    console.log("id: ", id);
+    await deleteDoc(doc(db, "events", id));
+  };
 
   // useStorage option (modified to be used as context)
   const [seriesId, setSeriesId] = useStorage("seriesId", {
@@ -59,7 +69,7 @@ export const EventsList = ({ user, setHeaderTitle }) => {
       </Flex>
 
       <Divider mt={3} border="8px" />
-      {/*  */}
+
       <List>
         {eventsLoading ? (
           <Flex justifyContent="center" alignItems="center" mt={8}>
@@ -86,6 +96,17 @@ export const EventsList = ({ user, setHeaderTitle }) => {
                   <Flex justifyContent="space-between">
                     <Text>{series.data().event}</Text>
                     <Text fontSize="xs" color="gray.400"></Text>
+                    <IconButton
+                      aria-label="Remove series"
+                      icon={<BsXLg />}
+                      size={"sm"}
+                      variant="ghost"
+                      colorScheme={"blue"}
+                      onClick={() => {
+                        console.log("series.data(): ", series.id);
+                        removeSeries(series.id);
+                      }}
+                    />
                   </Flex>
 
                   <Text fontSize="xs" color="gray.400">

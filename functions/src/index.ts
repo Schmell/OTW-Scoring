@@ -7,3 +7,9 @@ export const helloWorld = functions.https.onRequest((request, response) => {
   functions.logger.info("Hello logs!", { structuredData: true });
   response.send("Hello from Firebase!");
 });
+
+export const removeSubCollection = functions.firestore
+  .document("/events/{eventId}")
+  .onDelete(() => {
+    functions.logger.info("onDelete happened!");
+  });

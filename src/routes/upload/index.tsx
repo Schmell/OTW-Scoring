@@ -2,17 +2,19 @@ import {
   Box,
   Button,
   Divider,
-  FormLabel,
+  Flex,
   Heading,
-  Input,
+  List,
+  ListItem,
+  Text,
 } from "@chakra-ui/react";
-import { Formik, Field, Form, FormikHelpers } from "formik";
+import fileDialog from "file-dialog";
+import { Field, Form, Formik } from "formik";
 import { h } from "preact";
 import { route } from "preact-router";
+import { useState } from "preact/hooks";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { fromInput } from "../../util/blw";
 import { auth } from "../../util/firebase-config";
-import { populate } from "./populate";
 import { rePopulate } from "./re-populate";
 import style from "./style.css";
 
@@ -20,8 +22,18 @@ const Upload = ({ setHeaderTitle }) => {
   setHeaderTitle("Upload");
   // user Auth should come from firbase config
   const [user] = useAuthState(auth);
+  const [files, setFiles] = useState(File[""]);
 
-  let importedFile;
+  let importedFile: any;
+
+  const showDialog = async () => {
+    const fd = await fileDialog({ multiple: true, accept: ".blw" });
+    const iterable = Array.from(fd);
+    setFiles(iterable);
+    iterable.forEach((item) => {
+      rePopulate(user, item);
+    });
+  };
 
   return (
     <Box className={style.upload}>
@@ -63,6 +75,26 @@ const Upload = ({ setHeaderTitle }) => {
           </Box>
         </Form>
       </Formik>
+
+      <Divider my={4} />
+      <Flex gap={4} border="solid 1px blue" p={2}>
+        <Button
+          variant={"outline"}
+          boxShadow="lg"
+          colorScheme={"blue"}
+          onClick={showDialog}
+        >
+          Choose Files
+        </Button>
+        <List>
+          {files &&
+            files.map((file) => (
+              <ListItem>
+                <Text color={"blue.500"}>{file.name}</Text>
+              </ListItem>
+            ))}
+        </List>
+      </Flex>
     </Box>
   );
 };

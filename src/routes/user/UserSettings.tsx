@@ -17,6 +17,7 @@ import { SliderValueLabel } from "@mui/material";
 import { doc, updateDoc } from "firebase/firestore";
 import { Field, Form, Formik } from "formik";
 import { Fragment, h } from "preact";
+import { useEffect, useState } from "preact/hooks";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import {
@@ -30,6 +31,15 @@ const UserSettings = () => {
   const [user, userLoading] = useAuthState(auth);
   const docRef = doc(db, "user", user!.uid); // bang
   const [value, loading, error, snapshot] = useDocumentData(docRef);
+  const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    if (!loading && value) {
+      console.log("value.preffersDark: ", value.preffersDark);
+      console.log("checked: ", checked);
+      setChecked(value.preffersDark);
+    }
+  }, []);
 
   const submitHandler = async (values: any) => {
     console.log("values: ", values);
@@ -68,7 +78,7 @@ const UserSettings = () => {
               enableReinitialize
               initialValues={{
                 defaultResultType: value?.defaultResultType,
-                preffersDark: !value?.preffersDark,
+                preffersDark: checked,
               }}
               onSubmit={submitHandler}
             >
@@ -125,11 +135,12 @@ const UserSettings = () => {
                   name="preffersDark"
                   type="switch"
                   as={Switch}
-                  isChecked={value?.preffersDark}
+                  isChecked={checked}
                   onChange={({ target }) => {
-                    // console.log("e: ", target);
-                    target.setAttribute("isChecked", "true");
-                    // value?.preffersDark = !value?.preffersDark
+                    setChecked(() => {
+                      if (checked) return false;
+                      return true;
+                    });
                   }}
                 ></Field>
 

@@ -31,9 +31,13 @@ import {
   BsFillCalendarEventFill,
   BsFillDiagram3Fill,
   BsFillPeopleFill,
+  BsFillHouseDoorFill,
+  BsFillGearFill,
+  BsBell,
+  BsList,
   BsWind,
+  BsCloudUploadFill,
 } from "react-icons/bs";
-import { FiBell, FiHome, FiMenu, FiSettings } from "react-icons/fi";
 import { auth } from "../../util/firebase-config";
 import ColorModeToggle from "../generic/ColorToggleMode";
 
@@ -44,15 +48,16 @@ interface LinkItemProps {
   href?: string;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: "Home", icon: FiHome, href: "/" },
-  { name: "Events", icon: BsFillCalendarEventFill, href: "/series" },
+  { name: "Home", icon: BsFillHouseDoorFill, href: "/" },
+  { name: "Upload", icon: BsCloudUploadFill, href: "/upload" },
+  { name: "Events", icon: BsFillCalendarEventFill, href: "/events" },
   { name: "Series", icon: BsFillDiagram3Fill, href: "/series" },
   { name: "Races", icon: BsWind, href: "/races" },
-  { name: "Competiors", icon: BsFillPeopleFill, href: "/competiotrs" },
-  { name: "Settings", icon: FiSettings, href: "/settings" },
+  { name: "Competiors", icon: BsFillPeopleFill, href: "/competitors" },
+  { name: "Settings", icon: BsFillGearFill, href: "/settings" },
 ];
 
-export default function SidebarWithHeader({ children }) {
+export default function SidebarWithHeader({ children, headerTitle }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -66,6 +71,7 @@ export default function SidebarWithHeader({ children }) {
       <SidebarContent
         onClose={() => onClose}
         display={{ base: "none", md: "block" }}
+        headerTitle={headerTitle}
       />
 
       <Drawer
@@ -77,12 +83,12 @@ export default function SidebarWithHeader({ children }) {
         onOverlayClick={onClose}
       >
         <DrawerContent>
-          <SidebarContent onClose={onClose} />
+          <SidebarContent onClose={onClose} headerTitle={headerTitle} />
         </DrawerContent>
       </Drawer>
 
       {/* mobilenav */}
-      <MobileNav onOpen={onOpen} />
+      <MobileNav onOpen={onOpen} headerTitle={headerTitle} />
 
       {/* This is where content lives */}
       <Box ml={{ base: 0, md: 60 }} p={4}>
@@ -94,9 +100,10 @@ export default function SidebarWithHeader({ children }) {
 
 interface SidebarProps extends BoxProps {
   onClose: () => void;
+  headerTitle: string;
 }
 
-const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+const SidebarContent = ({ onClose, headerTitle, ...rest }: SidebarProps) => {
   return (
     <Box
       transition="3s ease"
@@ -121,7 +128,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         mb={4}
       >
         <Text fontSize="2xl" mx={8}>
-          Blw Me
+          {headerTitle}
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
@@ -182,9 +189,10 @@ const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
+  headerTitle: string;
 }
 
-const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+const MobileNav = ({ onOpen, headerTitle, ...rest }: MobileProps) => {
   const [user] = useAuthState(auth);
 
   return (
@@ -213,14 +221,14 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           variant="ghost"
           size="lg"
           color={"white"}
-          fontSize="2em"
+          fontSize="1.5em"
           _hover={{
             bgcolor: "blue.400",
           }}
           _active={{
             bgcolor: "blue.700",
           }}
-          icon={<FiMenu />}
+          icon={<BsList />}
           onClick={onOpen}
         />
 
@@ -231,13 +239,14 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           color="white"
           ml={4}
         >
-          BlwMe
+          {headerTitle}
         </Text>
       </Flex>
 
       <HStack spacing={{ base: "0", md: "6" }}>
         {/* This is the right menu */}
         <ColorModeToggle
+          aria-label="Color Mode"
           color={"white"}
           variant="ghost"
           // need oolorMode values for hover
@@ -251,7 +260,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           variant="ghost"
           // need oolorMode values for hover
           _hover={{ bgColor: "blue.400" }}
-          icon={<FiBell />}
+          icon={<BsBell />}
         />
 
         <Flex alignItems={"center"}>
