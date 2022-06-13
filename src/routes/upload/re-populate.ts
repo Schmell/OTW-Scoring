@@ -18,12 +18,14 @@ export const rePopulate = async (user: User | null | undefined, file) => {
   const compsData = await blw.getComps();
   const racesData = await blw.getRaces();
 
-  const eventsRef = collection(db, "events");
+  // Need to stop using events to represent series
+  // Will have a top level events to encapsulate multi-series events 
+  const seriesRef = collection(db, "series");
   seriesData.__owner = user.uid;
-  const sId = await addDoc(eventsRef, seriesData);
+  const sId = await addDoc(seriesRef, seriesData);
 
   await compsData.forEach((comp: any) => {
-    setDoc(doc(eventsRef, sId.id, "comps", comp.compid), {
+    setDoc(doc(seriesRef, sId.id, "comps", comp.compid), {
       _seriesid: sId.id,
       ...comp,
     });
@@ -31,7 +33,7 @@ export const rePopulate = async (user: User | null | undefined, file) => {
 
   await racesData.forEach((race: any) => {
     // console.log("race: ", race, sId.id);
-    setDoc(doc(eventsRef, sId.id, "races", race.raceid), {
+    setDoc(doc(seriesRef, sId.id, "races", race.raceid), {
       _seriesid: sId.id,
       ...race,
     });
@@ -40,7 +42,7 @@ export const rePopulate = async (user: User | null | undefined, file) => {
   const resultsData = await getResults();
   await resultsData.forEach((result: any, idx: any) => {
     // console.log("race: ", race, sId.id);
-    setDoc(doc(eventsRef, sId.id, "results", result.id), {
+    setDoc(doc(seriesRef, sId.id, "results", result.id), {
       _seriesid: sId.id,
       ...result,
     });

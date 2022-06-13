@@ -27,7 +27,7 @@ import { db } from "../../util/firebase-config";
 import style from "./scoring.css";
 
 export const EventsList = ({ user, setHeaderTitle }) => {
-  setHeaderTitle("Series");
+  setHeaderTitle("Events list");
   // Get users events // should be just series
   const eventsRef = collection(db, "events");
   const [events, eventsLoading] = useCollection(
