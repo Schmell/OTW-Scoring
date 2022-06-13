@@ -41,6 +41,13 @@ export const RacesList = ({ setHeaderTitle }) => {
   const seriesRef = collection(db, `/events/${seriesId}/races`);
   const [races, racesLoading] = useCollection(seriesRef);
 
+  console.log( seriesId);
+  
+  if(!racesLoading){
+    console.log('races: ', races?.docs);
+
+  }
+
   const capitalizeFirstLetter = (string: string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
