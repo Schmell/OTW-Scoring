@@ -8,7 +8,8 @@
     "serve": "sirv build --port 8080 --cors --single",
     "dev": "preact watch",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
-    "test": "jest ./tests"
+    "test": "jest ./tests",
+    "em-start": " firebase emulators:start"
   },
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",
@@ -28,6 +29,7 @@
     "@js-temporal/polyfill": "^0.4.0",
     "@mui/material": "^5.7.0",
     "classnames": "^2.3.1",
+    "file-dialog": "^0.0.8",
     "firebase": "^9.6.4",
     "formik": "^2.2.9",
     "framer-motion": "^6.2.8",
@@ -39,6 +41,7 @@
     "preact-router": "^3.2.1",
     "react-data-table-component": "^7.4.7",
     "react-firebase-hooks": "^5.0.2",
+    "react-icons": "^4.4.0",
     "react-table": "^7.7.0"
   },
   "devDependencies": {

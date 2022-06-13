@@ -1,5 +1,8 @@
 .header {
   position: fixed;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   left: 0;
   top: 0;
   width: 100%;
@@ -56,4 +59,16 @@ label {
 
 .header nav a.active {
   background: rgba(0, 0, 0, 0.4);
+}
+
+.userMenu > button{
+  color: green
+}
+
+.userMenu > button:visited{
+  color: blue
+}
+
+.chakra-link:visited, .chakra-link:active{
+  color: aqua;
 }
