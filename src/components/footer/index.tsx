@@ -1,18 +1,18 @@
-import style from "./style.css";
-
+import { Avatar, Box, Flex } from "@chakra-ui/react";
 import { h } from "preact";
-import { FC } from "preact/compat";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../util/firebase-config";
+import style from "./style.css";
 
-interface footerProps {}
-
-const Footer: FC<footerProps> = ({}) => {
+const Footer = ({}) => {
   const [user] = useAuthState(auth);
   return (
-    <div class={style.footer}>
-      <span class={style.displayName}>{user?.displayName}</span>
-    </div>
+    <Flex className={style.footer}>
+      <Avatar name="Kent Dodds" src="https://bit.ly/kent-c-dodds" size="xs" />
+      <Box className={style.displayName} pl={2}>
+        {user?.displayName}
+      </Box>
+    </Flex>
   );
 };
 export default Footer;

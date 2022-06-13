@@ -1,30 +1,68 @@
+import { Box, Button } from "@chakra-ui/react";
 import {
-  GoogleAuthProvider,
   GithubAuthProvider,
+  GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { auth } from "../util/firebase-config";
-import { Fragment, h } from "preact";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { h } from "preact";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth, db } from "../util/firebase-config";
 
 export function SignIn() {
-  const signInWithGoogle = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider);
+  // const [user, userLoading] = useAuthState(auth);
+  // console.log("user: ", user);
+  const setUserData = async ({ user }) => {
+    if (user) {
+      const userDoc = doc(db, "user", user.uid);
+      const userSnap = await getDoc(userDoc);
+
+      if (userSnap.exists()) return;
+
+      await setDoc(userDoc, {
+        uid: user.uid,
+        displayName: user.displayName,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+        photoURL: user.photoURL,
+      });
+    }
   };
 
-  const signInWithGitHub = () => {
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    const sign = await signInWithPopup(auth, provider);
+    setUserData(sign);
+  };
+
+  const signInWithGitHub = async () => {
     const provider = new GithubAuthProvider();
-    signInWithPopup(auth, provider);
+    const sign = await signInWithPopup(auth, provider);
+    setUserData(sign);
   };
 
   return (
-    <Fragment>
-      <button className="sign-in" onClick={signInWithGoogle}>
-        Sign in with Google
-      </button>
-      <button className="sign-in" onClick={signInWithGitHub}>
-        Sign in with GitHub
-      </button>
-    </Fragment>
+    <Box>
+      <Button
+        className="sign-in"
+        variant="outline"
+        colorScheme="blue"
+        boxShadow="md"
+        mr={3}
+        onClick={signInWithGoogle}
+      >
+        Google Login
+      </Button>
+
+      <Button
+        className="sign-in"
+        variant="outline"
+        colorScheme="blue"
+        boxShadow="md"
+        onClick={signInWithGitHub}
+      >
+        GitHub Login
+      </Button>
+    </Box>
   );
 }

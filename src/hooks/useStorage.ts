@@ -5,30 +5,33 @@ import { useState, useCallback, useEffect } from "react";
  * writing to localStorage; also subscribes to changes in localStorage
  *
  * @param {string} key The string key name to be written to localStorage
- * @param {object} options
- * @param {*} options.initialValue Initial value for setState
+ * @param {object} [null] options
+ * @param {*} [undefined] options.initialValue Initial value for setState
  * @param {boolean} options.bool Treat values as boolean types
  * @returns
  */
-type useStorageProps = {
-  key: string;
-  options: useStorageOptions;
-};
+
 type useStorageOptions = {
-  initialValue: any | null;
-  bool: boolean;
+  initVal?: any | null; // if not set you get whats in localStorage
+  bool?: boolean; // made optional because i think it just works the same
 };
-const useStorage = (key: string, options: useStorageOptions) => {
-  const [value, setValue] = useState(options.initialValue);
+
+const useStorage = (key: string, options?: useStorageOptions) => {
+  const [value, setValue] = useState(() => {
+    // if initVal is passed then set it
+    if (options?.initVal) return options.initVal;
+    // if not get current localStorage - this allows you to use like context
+    return localStorage.getItem(key);
+  });
 
   useEffect(() => {
     const rawValue = window.localStorage.getItem(key);
     if (rawValue != null)
-      setValue(options.bool ? parseRawValue(rawValue) : rawValue);
+      setValue(options?.bool ? parseRawValue(rawValue) : rawValue);
 
     const handleChanges = (e) => {
       if (e.key === key) {
-        setValue(options.bool ? parseRawValue(e.newValue) : e.newValue);
+        setValue(options?.bool ? parseRawValue(e.newValue) : e.newValue);
       }
     };
 
@@ -37,7 +40,7 @@ const useStorage = (key: string, options: useStorageOptions) => {
     return () => {
       window.removeEventListener("storage", handleChanges);
     };
-  }, [key, options.bool]);
+  }, [key, options?.bool]);
 
   const updater = useCallback(
     (newValue) => {
@@ -52,6 +55,7 @@ const useStorage = (key: string, options: useStorageOptions) => {
 
 export default useStorage;
 
+// change value to bool
 const parseRawValue = (rawValue) =>
   rawValue === "true" || rawValue === "1"
     ? true

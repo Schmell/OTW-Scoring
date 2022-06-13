@@ -2,6 +2,7 @@ import { User } from "firebase/auth";
 import { parse } from "papaparse";
 import { formatTime } from "./formatters";
 
+<<<<<<< HEAD
 interface IBlw{
     user: User | null | undefined
     file: chromeFile
@@ -30,6 +31,35 @@ export class Blw {
 
 
    papaPromise(file: any): Promise<string[]> | Error {
+=======
+interface IBlw {
+  user: User | null | undefined;
+  file: chromeFile;
+}
+
+interface chromeFile extends File {
+  lastModifiedDate: string;
+}
+
+export class Blw {
+  user: User | null | undefined;
+  file: chromeFile;
+  constructor(props: IBlw) {
+    this.user = props.user;
+    this.file = props.file;
+  }
+
+  async getFileData(): Promise<string[]> {
+    const file = this.file;
+    const data = await this.papaPromise(file);
+    if (data instanceof Error) {
+      throw data;
+    }
+    return data;
+  }
+
+  papaPromise(file: any): Promise<string[]> | Error {
+>>>>>>> bba0015782d41309e2b4fa53740d1ca6f1b17d7c
     return new Promise((resolve, reject) => {
       parse(file, {
         complete(results) {
@@ -40,9 +70,15 @@ export class Blw {
         },
       });
     });
+<<<<<<< HEAD
   };
   
   async getComps(){
+=======
+  }
+
+  async getComps() {
+>>>>>>> bba0015782d41309e2b4fa53740d1ca6f1b17d7c
     let data = await this.getFileData();
     var compData: any = [];
     var compBoats = data.filter(function (item: any) {
@@ -55,12 +91,20 @@ export class Blw {
         compid: string;
         [x: string | number | symbol]: unknown;
       }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> bba0015782d41309e2b4fa53740d1ca6f1b17d7c
       let competitor: CompetitorObj = {
         id: 0,
         compid: "",
       };
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> bba0015782d41309e2b4fa53740d1ca6f1b17d7c
       competitor.id = parseInt(compBoat[2]);
       competitor.compid = compBoat[2];
       let compRows = data.filter((item: any) => {
@@ -78,19 +122,32 @@ export class Blw {
     });
     //console.log(compData)
     return sorted!;
+<<<<<<< HEAD
   }; // getComps
 
   async getResults(){
     const data = await this.getFileData();
     const resultsArr: any = [];
   
+=======
+  } // getComps
+
+  async getResults() {
+    const data = await this.getFileData();
+    const resultsArr: any = [];
+
+>>>>>>> bba0015782d41309e2b4fa53740d1ca6f1b17d7c
     const results = data.filter((item: any) => {
       return item[0] === "rdisc";
     });
     results.forEach((result: any) => {
       // Results in blw file have no prefix to speak of (just an r)
       // So we need to find each row individually
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> bba0015782d41309e2b4fa53740d1ca6f1b17d7c
       // I would like to see a differrent solution for undefined
       // we cannot pass undefined to firestore
       const resultRow = {
@@ -99,7 +156,11 @@ export class Blw {
         raceid: result[3],
         // I am trying to return empty string from resultHelp
         finish: this.resultHelp("rft", data, result),
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> bba0015782d41309e2b4fa53740d1ca6f1b17d7c
         start: this.resultHelp("rst", data, result)
           ? this.resultHelp("rst", data, result)
           : "",
@@ -136,9 +197,15 @@ export class Blw {
       };
       resultsArr.push(resultRow);
     }); // forEach
+<<<<<<< HEAD
   
     return resultsArr;
   };
+=======
+
+    return resultsArr;
+  }
+>>>>>>> bba0015782d41309e2b4fa53740d1ca6f1b17d7c
 
   resultHelp(resultTag: any, data: any, result: any) {
     let res = data.filter((item: any) => {
@@ -151,7 +218,11 @@ export class Blw {
     } else {
       return "";
     }
+<<<<<<< HEAD
   };
+=======
+  }
+>>>>>>> bba0015782d41309e2b4fa53740d1ca6f1b17d7c
 
   async getFleets() {
     const data = await this.getFileData();
@@ -159,25 +230,44 @@ export class Blw {
       return item[0] === "serpubgroupvalues";
     });
     var fleets = fleetsRaw[0][1].match(/[^|]+/g);
+<<<<<<< HEAD
   
     return fleets;
   };
   
   async getRaces(){
+=======
+
+    return fleets;
+  }
+
+  async getRaces() {
+>>>>>>> bba0015782d41309e2b4fa53740d1ca6f1b17d7c
     /* 
     // @TODO
     // reutrn sailed as bool or int
     */
     const data = await this.getFileData();
+<<<<<<< HEAD
   
     // new object to be returned
     var raceData: any = [];
   
+=======
+
+    // new object to be returned
+    var raceData: any = [];
+
+>>>>>>> bba0015782d41309e2b4fa53740d1ca6f1b17d7c
     // Find all raceids by getting known csv row
     var races = data.filter((item: any) => {
       return item[0] === "racerank";
     });
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> bba0015782d41309e2b4fa53740d1ca6f1b17d7c
     // For each race push data to new object
     races.forEach((race: any) => {
       // interface RaceObj {
@@ -185,12 +275,20 @@ export class Blw {
       //   // allow everything else (usually all strings from .blw)
       //   [x: string | number | symbol]: unknown;
       // }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> bba0015782d41309e2b4fa53740d1ca6f1b17d7c
       let raceObj = {
         raceid: "",
         starts: "",
       };
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> bba0015782d41309e2b4fa53740d1ca6f1b17d7c
       raceObj.raceid = race[3];
       let resultRows = data.filter((item: any) => {
         var regex = new RegExp(`^race`, "g");
@@ -202,7 +300,11 @@ export class Blw {
         // Format the starts to object
         // this looks like helper functions will help
         // and guards
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> bba0015782d41309e2b4fa53740d1ca6f1b17d7c
         if (item[0] === "racestart") {
           const stringToSplit = item[1].split("|");
           let fleetStart = stringToSplit[1];
@@ -222,6 +324,7 @@ export class Blw {
           raceObj[newName] = item[1];
         }
       });
+<<<<<<< HEAD
   
       raceStarts.forEach((start: any) => {
         raceObj.starts = raceStarts;
@@ -234,22 +337,46 @@ export class Blw {
   };
   
   async getSeries(){
+=======
+
+      raceStarts.forEach((start: any) => {
+        raceObj.starts = raceStarts;
+      });
+
+      raceData.push(raceObj);
+    });
+
+    return raceData!;
+  }
+
+  async getSeries() {
+>>>>>>> bba0015782d41309e2b4fa53740d1ca6f1b17d7c
     const data = await this.getFileData();
     // add file info
     const seriesRows = data.filter((item: any) => {
       const regex = new RegExp(`^ser`, "g");
       return item[0].match(regex);
     });
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> bba0015782d41309e2b4fa53740d1ca6f1b17d7c
     // would be a long interface or type so just allow everything
     type SeriesObj = {
       event: string;
       __owner?: string;
       [x: string | number | symbol]: unknown;
     };
+<<<<<<< HEAD
   
     let seriesObj: SeriesObj = { event: "" };
   
+=======
+
+    let seriesObj: SeriesObj = { event: "" };
+
+>>>>>>> bba0015782d41309e2b4fa53740d1ca6f1b17d7c
     seriesRows.forEach((item: any) => {
       const newName = item[0].replace("ser", "");
       seriesObj[newName] = item[1];
@@ -263,9 +390,15 @@ export class Blw {
     const returnObj = { ...seriesObj, __fileInfo };
     // return series object and fileinfo
     return returnObj;
+<<<<<<< HEAD
   };
   
   downloadURL(url: any, name: any){
+=======
+  }
+
+  downloadURL(url: any, name: any) {
+>>>>>>> bba0015782d41309e2b4fa53740d1ca6f1b17d7c
     const link = document.createElement("a");
     link.download = name;
     link.href = url;
@@ -273,16 +406,26 @@ export class Blw {
     link.click();
     document.body.removeChild(link);
     // delete link;
+<<<<<<< HEAD
   };
   
   downloadFile(){
+=======
+  }
+
+  downloadFile() {
+>>>>>>> bba0015782d41309e2b4fa53740d1ca6f1b17d7c
     const data = localStorage.getItem("savedFile");
     const blob = new Blob([data!], { type: "text/txt" });
     const url = window.URL.createObjectURL(blob);
     const using = JSON.parse(localStorage.getItem("using")!);
     // LL(using)
     this.downloadURL(url, using.name);
+<<<<<<< HEAD
   };
 
     
+=======
+  }
+>>>>>>> bba0015782d41309e2b4fa53740d1ca6f1b17d7c
 }
