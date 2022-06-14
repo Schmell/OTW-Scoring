@@ -5,21 +5,18 @@ import {
   ChevronRightIcon,
   EditIcon,
   NotAllowedIcon,
-  ViewIcon,
+  ViewIcon
 } from "@chakra-ui/icons";
 import {
-  Box,
   Button,
-  Container,
-  Divider,
-  Flex,
+  Container, Flex,
   Heading,
   IconButton,
   List,
   ListItem,
   Spinner,
   Text,
-  Tooltip,
+  Tooltip
 } from "@chakra-ui/react";
 import { collection } from "firebase/firestore";
 import { Fragment, h } from "preact";
@@ -27,7 +24,7 @@ import { route } from "preact-router";
 import { useCollection } from "react-firebase-hooks/firestore";
 import {
   FadeInSlideLeft,
-  FadeInSlideRight,
+  FadeInSlideRight
 } from "../../components/animations/FadeSlide";
 import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
@@ -38,7 +35,7 @@ export const RacesList = ({ setHeaderTitle }) => {
   setHeaderTitle("Races");
   const [seriesId, setSeriesId] = useStorage("seriesId");
   const [raceId, setRaceId] = useStorage("raceId", { initVal: "1" });
-  const seriesRef = collection(db, `/events/${seriesId}/races`);
+  const seriesRef = collection(db, `/series/${seriesId}/races`);
   const [races, racesLoading] = useCollection(seriesRef);
 
   console.log( seriesId);

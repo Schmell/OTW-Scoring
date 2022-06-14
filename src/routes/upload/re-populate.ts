@@ -14,9 +14,12 @@ export const rePopulate = async (user: User | null | undefined, file) => {
   // i dont want to rely on localStorage any more
   // i re-wrote blw as a class to access methods
   const blw = new Blw({ user, file });
+  // now i need to check wether these files are copies or not
+  // i guess i need to modify a lastmodified date on server stuff
   const seriesData = await blw.getSeries();
   const compsData = await blw.getComps();
   const racesData = await blw.getRaces();
+  const resultsData = await blw.getResults();
 
   // Need to stop using events to represent series
   // Will have a top level events to encapsulate multi-series events 
@@ -39,12 +42,20 @@ export const rePopulate = async (user: User | null | undefined, file) => {
     });
   });
 
-  const resultsData = await getResults();
-  await resultsData.forEach((result: any, idx: any) => {
+  await resultsData.forEach((result: any) => {
     // console.log("race: ", race, sId.id);
     setDoc(doc(seriesRef, sId.id, "results", result.id), {
       _seriesid: sId.id,
       ...result,
     });
   });
+
+  // const resultsData = await getResults();
+  // await resultsData.forEach((result: any, idx: any) => {
+  //   // console.log("race: ", race, sId.id);
+  //   setDoc(doc(seriesRef, sId.id, "results", result.id), {
+  //     _seriesid: sId.id,
+  //     ...result,
+  //   });
+  // });
 }; // populate
