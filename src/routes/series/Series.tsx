@@ -8,13 +8,14 @@ import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/F
 import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
 import style from "./style.css";
+import { MdOutlineFileUpload, MdOutlineAddToPhotos, MdModeEdit } from "react-icons/md";
 
 const Series = ({ user, setHeaderTitle }) => {
   setHeaderTitle("Series");
   // Get users series
   const seriesRef = collection(db, "series");
   const [series, seriesLoading] = useCollection(query(seriesRef, where("__owner", "==", user && user.uid)));
-//   console.log("series: ", series?.docs);
+  //   console.log("series: ", series?.docs);
 
   const removeSeries = async (id: any) => {
     await deleteDoc(doc(db, "series", id));
@@ -35,17 +36,28 @@ const Series = ({ user, setHeaderTitle }) => {
           </Heading>
         </FadeInSlideRight>
 
-        {/* Upload Button */}
+        {/* Sub header buttons */}
         <FadeInSlideLeft>
-          <Button
+          <IconButton
+            aria-label="upload"
+            colorScheme="blue"
+            variant="outline"
+            boxShadow="md"
+            mr={2}
+            _visited={{ color: "blue" }}
+            onClick={() => route("/upload")}
+            icon={<MdOutlineFileUpload />}
+          />
+
+          <IconButton
+            aria-label="add series"
             colorScheme="blue"
             variant="outline"
             boxShadow="md"
             _visited={{ color: "blue" }}
-            onClick={() => route("/upload")}
-          >
-            Upload
-          </Button>
+            // onClick={() => route("/series/edit")}
+            icon={<MdOutlineAddToPhotos />}
+          />
         </FadeInSlideLeft>
       </Flex>
 
@@ -61,29 +73,45 @@ const Series = ({ user, setHeaderTitle }) => {
             <Fragment>
               <FadeInSlideLeft>
                 <ListItem key={series.id} className={style.selectList}>
+                    
                   <Flex justifyContent="space-between">
+
                     <Box
                       onClick={() => {
                         setSeriesId(series.id);
                         route("/races");
                       }}
                     >
+
                       <Text>{series.data().event}</Text>
+
                       <Text fontSize="xs" color="gray.400">
                         {series.id}
                       </Text>
                     </Box>
-                    <IconButton
-                      aria-label="Remove series"
-                      icon={<BsXLg />}
-                      size={"sm"}
-                      variant="ghost"
-                      colorScheme={"blue"}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        removeSeries(series.id);
-                      }}
-                    />
+
+                    <Box>
+                      <IconButton
+                        aria-label="edit series"
+                        icon={<MdModeEdit />}
+                        size={"sm"}
+                        variant="ghost"
+                        colorScheme={"blue"}
+                        onClick={() => route("/series/edit")}
+                      />
+
+                      <IconButton
+                        aria-label="Remove series"
+                        icon={<BsXLg />}
+                        size={"sm"}
+                        variant="ghost"
+                        colorScheme={"blue"}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          removeSeries(series.id);
+                        }}
+                      />
+                    </Box>
                   </Flex>
 
                   <Text fontSize="xs" color="gray.400">

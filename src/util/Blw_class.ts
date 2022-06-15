@@ -99,39 +99,17 @@ export class Blw {
         // I am trying to return empty string from resultHelp
         finish: this.resultHelp("rft", data, result),
 
-        start: this.resultHelp("rst", data, result)
-          ? this.resultHelp("rst", data, result)
-          : "",
-        points: this.resultHelp("rpts", data, result)
-          ? this.resultHelp("rpts", data, result)
-          : "",
-        position: this.resultHelp("rpos", data, result)
-          ? this.resultHelp("rpos", data, result)
-          : "",
-        discard: this.resultHelp("rdisc", data, result)
-          ? this.resultHelp("rdisc", data, result)
-          : "",
-        corrected: this.resultHelp("rcor", data, result)
-          ? this.resultHelp("rcor", data, result)
-          : "",
-        rrestyp: this.resultHelp("rrestyp", data, result)
-          ? this.resultHelp("rrestyp", data, result)
-          : "",
-        elapsed: this.resultHelp("rele", data, result)
-          ? this.resultHelp("rele", data, result)
-          : "",
-        srat: this.resultHelp("srat", data, result)
-          ? this.resultHelp("srat", data, result)
-          : "",
-        rewin: this.resultHelp("rewin", data, result)
-          ? this.resultHelp("rewin", data, result)
-          : "",
-        rrwin: this.resultHelp("rrwin", data, result)
-          ? this.resultHelp("rrwin", data, result)
-          : "",
-        rrset: this.resultHelp("rrset", data, result)
-          ? this.resultHelp("rrset", data, result)
-          : "",
+        start: this.resultHelp("rst", data, result) ? this.resultHelp("rst", data, result) : "",
+        points: this.resultHelp("rpts", data, result) ? this.resultHelp("rpts", data, result) : "",
+        position: this.resultHelp("rpos", data, result) ? this.resultHelp("rpos", data, result) : "",
+        discard: this.resultHelp("rdisc", data, result) ? this.resultHelp("rdisc", data, result) : "",
+        corrected: this.resultHelp("rcor", data, result) ? this.resultHelp("rcor", data, result) : "",
+        rrestyp: this.resultHelp("rrestyp", data, result) ? this.resultHelp("rrestyp", data, result) : "",
+        elapsed: this.resultHelp("rele", data, result) ? this.resultHelp("rele", data, result) : "",
+        srat: this.resultHelp("srat", data, result) ? this.resultHelp("srat", data, result) : "",
+        rewin: this.resultHelp("rewin", data, result) ? this.resultHelp("rewin", data, result) : "",
+        rrwin: this.resultHelp("rrwin", data, result) ? this.resultHelp("rrwin", data, result) : "",
+        rrset: this.resultHelp("rrset", data, result) ? this.resultHelp("rrset", data, result) : "",
       };
       resultsArr.push(resultRow);
     }); // forEach
@@ -141,9 +119,7 @@ export class Blw {
 
   resultHelp(resultTag: any, data: any, result: any) {
     let res = data.filter((item: any) => {
-      return (
-        item[0] === resultTag && item[2] === result[2] && item[3] === result[3]
-      );
+      return item[0] === resultTag && item[2] === result[2] && item[3] === result[3];
     });
     if (res[0]) {
       return res[0][1];
@@ -152,6 +128,8 @@ export class Blw {
     }
   }
 
+  // I don't think i use this
+  // each race has fleets
   async getFleets() {
     const data = await this.getFileData();
     var fleetsRaw: any[] = data.filter((item: any) => {
@@ -163,10 +141,6 @@ export class Blw {
   }
 
   async getRaces() {
-    /* 
-    // @TODO
-    // reutrn sailed as bool or int
-    */
     const data = await this.getFileData();
 
     // new object to be returned
@@ -179,12 +153,6 @@ export class Blw {
 
     // For each race push data to new object
     races.forEach((race: any) => {
-      // interface RaceObj {
-      //   raceid: string;
-      //   // allow everything else (usually all strings from .blw)
-      //   [x: string | number | symbol]: unknown;
-      // }
-
       let raceObj = {
         raceid: "",
         starts: "",
@@ -196,32 +164,41 @@ export class Blw {
         return item[0].match(regex) && item[3] === race[3];
       });
       // console.log("resultRows: ", resultRows);
-      let raceStarts: any = [];
-      resultRows.forEach((item) => {
-        // Format the starts to object
-        // this looks like helper functions will help
-        // and guards
 
+      let raceStarts: any = [];
+
+      resultRows.forEach((item) => {
+
+        // Format the starts to object
         if (item[0] === "racestart") {
           const stringToSplit = item[1].split("|");
-          let fleetStart = stringToSplit[1];
-          // console.log("fleetStart: ", fleetStart);
-          let fleetName = stringToSplit[0].split("^")[1];
-          if (!fleetName) {
-            fleetName = "";
+
+          let start = stringToSplit[1];
+
+          let fleet = stringToSplit[0].split("^")[1];
+
+          // remove the undefined
+          if (!fleet) fleet = "none";
+
+          // This will stop undefined or null
+          try {
+            start = formatTime(start);
           }
-          if (!fleetStart) {
-            fleetStart = "0";
-          } else {
-            fleetStart = formatTime(fleetStart);
+          catch {
+            start = "00:00:00";
           }
-          raceStarts.push({ fleet: fleetName, start: fleetStart });
+
+          raceStarts.push({ fleet, start });
+
         } else {
+          // not racestart so just add to raceObj
           const newName = item[0].replace("race", "");
+
           raceObj[newName] = item[1];
         }
       });
 
+      // now add the starts to raceObj
       raceStarts.forEach((start: any) => {
         raceObj.starts = raceStarts;
       });
@@ -230,7 +207,7 @@ export class Blw {
     });
 
     return raceData!;
-  }
+  } // getRaces
 
   async getSeries() {
     const data = await this.getFileData();
@@ -241,9 +218,11 @@ export class Blw {
     });
 
     // would be a long interface or type so just allow everything
+    // maybe in the future we wont need everything from sailwave
     type SeriesObj = {
       event: string;
       __owner?: string;
+      lastModifiedDate?: string;
       [x: string | number | symbol]: unknown;
     };
 
@@ -253,17 +232,22 @@ export class Blw {
       const newName = item[0].replace("ser", "");
       seriesObj[newName] = item[1];
     });
+
     // make an object for fileInfo to organize better
-    const __fileInfo = {} as any;
-    __fileInfo.fileName = this.file.name;
-    __fileInfo.lastModified = this.file.lastModified;
-    __fileInfo.lastModifiedDate = this.file.lastModifiedDate;
-    __fileInfo.size = this.file.size;
+    const fileInfo = this.file
+    const __fileInfo = {...fileInfo} 
+    // __fileInfo.fileName = this.file.name;
+    // __fileInfo.lastModified = this.file.lastModified;
+    // __fileInfo.lastModifiedDate = this.file.lastModifiedDate;
+    // __fileInfo.size = this.file.size;
     const returnObj = { ...seriesObj, __fileInfo };
     // return series object and fileinfo
     return returnObj;
-  }
+  } // getSeries
 
+
+  // Don't know if this works currently
+  // These functions should be in an export class
   downloadURL(url: any, name: any) {
     const link = document.createElement("a");
     link.download = name;
@@ -274,6 +258,7 @@ export class Blw {
     // delete link;
   }
 
+  // Don't know if this works currently
   downloadFile() {
     const data = localStorage.getItem("savedFile");
     const blob = new Blob([data!], { type: "text/txt" });

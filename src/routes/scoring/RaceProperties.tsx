@@ -54,7 +54,7 @@ export const RaceProperties = ({ setHeaderTitle }) => {
   // Need this for the AddStartModal
 
   // Get the currentRace data
-  const docRef = doc(db, "events", seriesId, "races", raceId);
+  const docRef = doc(db, "series", seriesId, "races", raceId);
   const [currentRace, loading, error] = useDocumentData(docRef);
 
   if (!loading) {
@@ -65,12 +65,15 @@ export const RaceProperties = ({ setHeaderTitle }) => {
 
   const submitHandler = async (values: any) => {
     console.log("values: ", values);
+
+    // not sure i need this
     // remove undefined's from values
     Object.keys(values).map((m) => {
       if (values[m] === undefined) return (values[m] = "");
       return values;
     });
     // update the firestore doc
+    // here we may need to add modified flag or something
     await updateDoc(docRef, values);
 
     // show submitted toast

@@ -8,6 +8,7 @@ import Results from "../routes/results";
 import { RaceProperties } from "../routes/scoring/RaceProperties";
 import { RacesList } from "../routes/scoring/RacesList";
 import Series from "../routes/series/Series";
+import SeriesEdit from "../routes/series/SeriesEdit";
 import Upload from "../routes/upload";
 import UserLanding from "../routes/user/UserLanding";
 import UserProfile from "../routes/user/UserProfile";
@@ -32,6 +33,8 @@ const Routing: FunctionalComponent<IRouting> = (props) => {
       <Route path="/results" component={Results} {...props} />
 
       <AuthRoute path="/series" component={Series} {...props} />
+      
+      <AuthRoute path="/series/edit" component={SeriesEdit} {...props} />
 
       <AuthRoute
         path="/race-properties"

@@ -15,7 +15,7 @@ import { route } from "preact-router";
 import { useState } from "preact/hooks";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../util/firebase-config";
-import { rePopulate } from "./re-populate";
+import { Populate } from "./populate";
 import style from "./style.css";
 
 const Upload = ({ setHeaderTitle }) => {
@@ -31,7 +31,7 @@ const Upload = ({ setHeaderTitle }) => {
     const iterable = Array.from(fd);
     setFiles(iterable);
     iterable.forEach((item) => {
-      rePopulate(user, item);
+      Populate(user, item);
     });
   };
 
@@ -46,7 +46,7 @@ const Upload = ({ setHeaderTitle }) => {
         }}
         onSubmit={() => {
           // console.log("target.files[0]: ", importedFile);
-          rePopulate(user, importedFile);
+          Populate(user, importedFile);
           route("/series");
         }}
       >
