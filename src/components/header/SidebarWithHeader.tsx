@@ -22,9 +22,11 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
+import { doc, DocumentData, DocumentReference, query } from "firebase/firestore";
 import { h } from "preact";
 import { Link as PLink } from "preact-router";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { useCollectionData, useDocumentData } from "react-firebase-hooks/firestore";
 import { IconType } from "react-icons";
 import {
   BsChevronDown,
@@ -38,7 +40,7 @@ import {
   BsWind,
   BsCloudUploadFill,
 } from "react-icons/bs";
-import { auth } from "../../util/firebase-config";
+import { auth, db } from "../../util/firebase-config";
 import ColorModeToggle from "../generic/ColorToggleMode";
 
 // This needs to get in line with routing
@@ -193,7 +195,19 @@ interface MobileProps extends FlexProps {
 }
 
 const MobileNav = ({ onOpen, headerTitle, ...rest }: MobileProps) => {
-  const [user] = useAuthState(auth);
+  // Need to get user from the db instead
+  const [user, userLoading] = useAuthState(auth);
+
+  let userQuery: DocumentReference<DocumentData> | null | undefined
+
+  if(!userLoading && user){
+    userQuery = doc(db, "user",  user.uid)
+  }
+  const [userInfo, userInfoLoading] = useDocumentData( userQuery)
+  // this dont work
+  // how can i assure that user is loaded and then do DocumentData
+  
+
 
   return (
     // This is the Header
@@ -263,6 +277,10 @@ const MobileNav = ({ onOpen, headerTitle, ...rest }: MobileProps) => {
           icon={<BsBell />}
         />
 
+        {/* user header stuff */}
+      {userInfo && (
+
+      
         <Flex alignItems={"center"}>
           <Menu>
             <MenuButton
@@ -273,10 +291,10 @@ const MobileNav = ({ onOpen, headerTitle, ...rest }: MobileProps) => {
               <HStack>
                 <Avatar
                   size={"sm"}
-                  name={user?.displayName ? user.displayName : "Unknown"}
+                  name={userInfo?.nickname ? userInfo.nickname : "Unknown"}
                   src={
-                    user?.photoURL
-                      ? user.photoURL
+                    userInfo?.photoURL
+                      ? userInfo.photoURL
                       : "../assets/icons/favicon-16x16.png"
                   }
                 />
@@ -287,7 +305,7 @@ const MobileNav = ({ onOpen, headerTitle, ...rest }: MobileProps) => {
                   ml="2"
                 >
                   <Text fontSize="sm" color={"white"}>
-                    {user?.displayName}
+                    {userInfo?.nickname}
                   </Text>
                   <Text fontSize="xs" color="gray.600">
                     Admin
@@ -354,6 +372,8 @@ const MobileNav = ({ onOpen, headerTitle, ...rest }: MobileProps) => {
             </Box>
           </Menu>
         </Flex>
+)}
+
       </HStack>
     </Flex>
   );

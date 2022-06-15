@@ -8,12 +8,12 @@ import {
   FormLabel,
   Heading,
   HStack,
+  Input,
   Radio,
   RadioGroup,
   Switch,
   useToast,
 } from "@chakra-ui/react";
-import { SliderValueLabel } from "@mui/material";
 import { doc, updateDoc } from "firebase/firestore";
 import { Field, Form, Formik } from "formik";
 import { Fragment, h } from "preact";

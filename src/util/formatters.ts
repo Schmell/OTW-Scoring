@@ -84,7 +84,6 @@ export const formatDate = (date: string) => {
 export const formatTime = (s: string): string => {
   // check for letters in string
   // This throws a warning
-
   const regex = /[A-Z]/g;
   if (s.match(regex)) {
     console.warn("Not a time: ", s);
@@ -92,7 +91,7 @@ export const formatTime = (s: string): string => {
   }
   // guard's
   if (s.includes("-")) {
-    console.log("replace -  ", s);
+    // console.log("replace -  ", s);
     const r = s.replace("-", ":");
     const t = r.replace("-", ":");
     return t;

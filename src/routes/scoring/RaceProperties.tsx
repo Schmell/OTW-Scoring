@@ -15,15 +15,18 @@ import {
   Radio,
   RadioGroup,
   Text,
+  useToast
 } from "@chakra-ui/react";
 import { Temporal } from "@js-temporal/polyfill";
-import { doc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { Field, FieldArray, Form, Formik } from "formik";
 import { Fragment, h } from "preact";
+import { route } from "preact-router";
 import { useState } from "preact/hooks";
 import { useDocumentData } from "react-firebase-hooks/firestore";
+import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
-import { formatDate, formatTime } from "../../util/formatters";
+import { formatTime } from "../../util/formatters";
 
 
 export const RaceProperties = (props) => {
@@ -41,40 +44,55 @@ export const RaceProperties = (props) => {
   // const [currentRace, setCurrentRace] = useState<IcurrentRace>({
   //   rank: "1",
   // });
+ const [seriesId] = useStorage('seriesId')
+ const [raceId] = useStorage('raceId')
+
 
   const [raceTime, setRaceTime] = useState<string>();
   const [raceDate, setRaceDate] = useState<any>();
   const [raceSailed, setRaceSailed] = useState<any>();
   const [raceStarts, setRaceStarts] = useState<IraceStarts[]>();
-  console.log(props.navPath);
-  
-  const [currentRace, loading, error] = useDocumentData(doc(db, props.navPath));
+  const [postponed, setPostponed] = useState<string>("");
+  const [postponedDate, setPostponedDate] = useState("");
 
-  setRaceTime(formatTime(currentRace?.time));
-  setRaceDate(formatDate(currentRace?.date));
-  setRaceSailed(+currentRace?.sailed); // Int
-  setRaceStarts(currentRace?.starts);
-  // const raceRef = ;
-  // const [currentRace] = useCollection(raceRef);
-  // const currentRace = await getDoc(doc(db, props.navPath))
-  // useEffect(() => {
-  //   const currentRace = async () => {
-  //     const r = await getDoc(race);
-  //     const data = (await r.data()) as any;
-  //     // const raceDate = Temporal.PlainDate.from(formatDate(data.date)!);
-  //     setCurrentRace(data);
-  //     setRaceTime(formatTime(data.time));
-  //     setRaceDate(formatDate(data.date));
-  //     setRaceSailed(+data.sailed); // Int
-  //     setRaceStarts(data.starts);
-  //   };
-  //   currentRace();
-  // }, []);
+  const submittedToast = useToast();
+
+  // Need this for the AddStartModal
+
+  // Get the currentRace data
+  const docRef = doc(db, "series", seriesId, "races", raceId);
+  const [currentRace, loading, error] = useDocumentData(docRef);
+
+  if (!loading) {
+    setRaceTime(formatTime(currentRace?.time));
+    setRaceStarts(currentRace?.starts);
+    setPostponedDate(currentRace?.postponedDate);
+  }
 
   const submitHandler = async (values: any) => {
-    // console.log("currentRace: ", race);
-    console.log(values, null, 2);
-    // await updateDoc(race, values);
+    console.log("values: ", values);
+
+    // not sure i need this
+    // remove undefined's from values
+    Object.keys(values).map((m) => {
+      if (values[m] === undefined) return (values[m] = "");
+      return values;
+    });
+    // update the firestore doc
+    // here we may need to add modified flag or something
+    await updateDoc(docRef, values);
+
+    // show submitted toast
+    submittedToast({
+      title: "Race Updated",
+      description: "Your race properties have changed",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
+
+    // route back to races
+    route("/races");
   };
 
   return (

@@ -22,6 +22,7 @@ export function SignIn() {
       await setDoc(userDoc, {
         uid: user.uid,
         displayName: user.displayName,
+        nickname:  user.displayName,
         email: user.email,
         phoneNumber: user.phoneNumber,
         photoURL: user.photoURL,
