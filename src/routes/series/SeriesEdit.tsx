@@ -31,7 +31,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
 
   const [seriesId] = useStorage("seriesId");
 
-  const submittedToast = useToast();
+ 
 
   // Need this for the AddStartModal
 
@@ -41,6 +41,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
 
   const submitHandler = async (values: any) => {
     console.log("values: ", values);
+    const submittedToast = useToast();
 
     // not sure i need this
     // remove undefined's from values
@@ -48,7 +49,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
       if (values[m] === undefined) return (values[m] = "");
       return values;
     });
-    
+
     // update the firestore doc
     // here we may need to add modified flag or something
     await updateDoc(docRef, values);
