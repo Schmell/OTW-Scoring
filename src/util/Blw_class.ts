@@ -234,12 +234,12 @@ export class Blw {
     });
 
     // make an object for fileInfo to organize better
-    const fileInfo = this.file
-    const __fileInfo = {...fileInfo} 
-    // __fileInfo.fileName = this.file.name;
-    // __fileInfo.lastModified = this.file.lastModified;
-    // __fileInfo.lastModifiedDate = this.file.lastModifiedDate;
-    // __fileInfo.size = this.file.size;
+    // const fileInfo = this.file
+    const __fileInfo = {} as any
+    __fileInfo.fileName = this.file.name;
+    __fileInfo.lastModified = this.file.lastModified;
+    __fileInfo.lastModifiedDate = this.file.lastModifiedDate;
+    __fileInfo.size = this.file.size;
     const returnObj = { ...seriesObj, __fileInfo };
     // return series object and fileinfo
     return returnObj;

@@ -97,7 +97,10 @@ const Series = ({ user, setHeaderTitle }) => {
                         size={"sm"}
                         variant="ghost"
                         colorScheme={"blue"}
-                        onClick={() => route("/series/edit")}
+                        onClick={() => {
+                          setSeriesId(series.id)
+                          route("/series/edit")
+                        }}
                       />
 
                       <IconButton
