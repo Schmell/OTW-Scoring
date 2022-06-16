@@ -1,13 +1,5 @@
 import { AddIcon, CloseIcon } from "@chakra-ui/icons";
-import {
-  Box,
-  FormLabel,
-  IconButton,
-  Divider,
-  Flex,
-  Input,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, FormLabel, IconButton, Divider, Flex, Input, useDisclosure, Tooltip } from "@chakra-ui/react";
 import { updateDoc } from "firebase/firestore";
 import { FieldArray, Field } from "formik";
 import { Fragment, h } from "preact";
@@ -22,14 +14,16 @@ export const Starts = ({ raceStarts, docRef, values }) => {
     <Fragment>
       <Box display="flex" justifyContent="space-between">
         <FormLabel htmlFor="starts">Starts</FormLabel>
-        <IconButton
-          aria-label="Add start"
-          colorScheme="blue"
-          variant="outline"
-          boxShadow="md"
-          icon={<AddIcon />}
-          onClick={onOpen}
-        />
+        <Tooltip label="Add Start" hasArrow bg="blue.300" placement="bottom-start">
+          <IconButton
+            aria-label="Add start"
+            colorScheme="blue"
+            variant="outline"
+            boxShadow="md"
+            icon={<AddIcon />}
+            onClick={onOpen}
+          />
+        </Tooltip>
         <AddStartModal isOpen={isOpen} onClose={onClose} docRef={docRef} />
       </Box>
       <Divider my={3} />

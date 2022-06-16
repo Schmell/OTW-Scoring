@@ -1,4 +1,16 @@
-import { Box, Button, Divider, Flex, Heading, IconButton, List, ListItem, Spinner, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Divider,
+  Flex,
+  Heading,
+  IconButton,
+  List,
+  ListItem,
+  Spinner,
+  Text,
+  Tooltip,
+} from "@chakra-ui/react";
 import { collection, deleteDoc, doc, query, where } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
@@ -18,6 +30,7 @@ const Series = ({ user, setHeaderTitle }) => {
   //   console.log("series: ", series?.docs);
 
   const removeSeries = async (id: any) => {
+    // Uses cloud function to remove any sub-collections
     await deleteDoc(doc(db, "series", id));
   };
 
@@ -38,26 +51,30 @@ const Series = ({ user, setHeaderTitle }) => {
 
         {/* Sub header buttons */}
         <FadeInSlideLeft>
-          <IconButton
-            aria-label="upload"
-            colorScheme="blue"
-            variant="outline"
-            boxShadow="md"
-            mr={2}
-            _visited={{ color: "blue" }}
-            onClick={() => route("/upload")}
-            icon={<MdOutlineFileUpload />}
-          />
+          <Tooltip label="Upload file" hasArrow bg="blue.300" placement="bottom-start">
+            <IconButton
+              aria-label="upload"
+              colorScheme="blue"
+              variant="outline"
+              boxShadow="md"
+              mr={2}
+              _visited={{ color: "blue" }}
+              onClick={() => route("/upload")}
+              icon={<MdOutlineFileUpload />}
+            />
+          </Tooltip>
 
-          <IconButton
-            aria-label="add series"
-            colorScheme="blue"
-            variant="outline"
-            boxShadow="md"
-            _visited={{ color: "blue" }}
-            // onClick={() => route("/series/edit")}
-            icon={<MdOutlineAddToPhotos />}
-          />
+          <Tooltip label="Add Series" hasArrow bg="blue.300" placement="bottom-start">
+            <IconButton
+              aria-label="add series"
+              colorScheme="blue"
+              variant="outline"
+              boxShadow="md"
+              _visited={{ color: "blue" }}
+              // onClick={() => route("/series/edit")}
+              icon={<MdOutlineAddToPhotos />}
+            />
+          </Tooltip>
         </FadeInSlideLeft>
       </Flex>
 
@@ -73,16 +90,13 @@ const Series = ({ user, setHeaderTitle }) => {
             <Fragment>
               <FadeInSlideLeft>
                 <ListItem key={series.id} className={style.selectList}>
-                    
                   <Flex justifyContent="space-between">
-
                     <Box
                       onClick={() => {
                         setSeriesId(series.id);
                         route("/races");
                       }}
                     >
-
                       <Text>{series.data().event}</Text>
 
                       <Text fontSize="xs" color="gray.400">
@@ -91,29 +105,32 @@ const Series = ({ user, setHeaderTitle }) => {
                     </Box>
 
                     <Box>
-                      <IconButton
-                        aria-label="edit series"
-                        icon={<MdModeEdit />}
-                        size={"sm"}
-                        variant="ghost"
-                        colorScheme={"blue"}
-                        onClick={() => {
-                          setSeriesId(series.id)
-                          route("/series/edit")
-                        }}
-                      />
-
-                      <IconButton
-                        aria-label="Remove series"
-                        icon={<BsXLg />}
-                        size={"sm"}
-                        variant="ghost"
-                        colorScheme={"blue"}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          removeSeries(series.id);
-                        }}
-                      />
+                      <Tooltip label="Edit Series" hasArrow bg="blue.300" placement="bottom-start">
+                        <IconButton
+                          aria-label="edit series"
+                          icon={<MdModeEdit />}
+                          size={"sm"}
+                          variant="ghost"
+                          colorScheme={"blue"}
+                          onClick={() => {
+                            setSeriesId(series.id);
+                            route("/series/edit");
+                          }}
+                        />
+                      </Tooltip>
+                      <Tooltip label="Delete Series" hasArrow bg="blue.300" placement="bottom-start">
+                        <IconButton
+                          aria-label="Delete series"
+                          icon={<BsXLg />}
+                          size={"sm"}
+                          variant="ghost"
+                          colorScheme={"blue"}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            removeSeries(series.id);
+                          }}
+                        />
+                      </Tooltip>
                     </Box>
                   </Flex>
 

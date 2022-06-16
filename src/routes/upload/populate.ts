@@ -11,7 +11,7 @@ import {
   where,
 } from "firebase/firestore";
 import { route } from "preact-router";
-import { Blw } from "../../util/Blw_class";
+import { Blw } from "../../util/Blw";
 import { db } from "../../util/firebase-config";
 
 export const Populate = async (user: User | null | undefined, file) => {

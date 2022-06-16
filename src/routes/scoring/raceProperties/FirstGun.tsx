@@ -19,7 +19,7 @@ export const FirstGun = ({ docRef, setRaceTime }) => {
         {/* Need to get seconds here */}
         <Field name="time" type="time" step="2" as={Input} border="none" />
         <SecBtn px={8} ml={4} onClick={handleSetTime}>
-          Set Time
+         Now
         </SecBtn>
       </Box>
     </Fragment>

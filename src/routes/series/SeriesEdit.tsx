@@ -16,6 +16,7 @@ import {
   useToast,
   Text,
   Button,
+  Tooltip,
 } from "@chakra-ui/react";
 import { MdOutlineAddToPhotos, MdOutlineFileUpload } from "react-icons/md";
 import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
@@ -31,24 +32,13 @@ const SeriesEdit = ({ setHeaderTitle }) => {
 
   const [seriesId] = useStorage("seriesId");
 
- 
-
-  // Need this for the AddStartModal
-
   // Get the currentRace data
   const docRef = doc(db, "series", seriesId);
   const [currentSeries, seriesLoading, error] = useDocumentData(docRef);
+  const submittedToast = useToast();
 
   const submitHandler = async (values: any) => {
     console.log("values: ", values);
-    const submittedToast = useToast();
-
-    // not sure i need this
-    // remove undefined's from values
-    Object.keys(values).map((m) => {
-      if (values[m] === undefined) return (values[m] = "");
-      return values;
-    });
 
     // update the firestore doc
     // here we may need to add modified flag or something
@@ -78,30 +68,35 @@ const SeriesEdit = ({ setHeaderTitle }) => {
 
         {/* Sub header buttons */}
         <FadeInSlideLeft>
-          <IconButton
-            aria-label="upload"
-            colorScheme="blue"
-            variant="outline"
-            boxShadow="md"
-            mr={2}
-            _visited={{ color: "blue" }}
-            onClick={() => route("/upload")}
-            icon={<MdOutlineFileUpload />}
-          />
+          <Tooltip label="Upload" hasArrow bgColor={"blue.300"} placement="bottom-start">
+            <IconButton
+              aria-label="upload"
+              colorScheme="blue"
+              variant="outline"
+              boxShadow="md"
+              mr={2}
+              _visited={{ color: "blue" }}
+              onClick={() => route("/upload")}
+              icon={<MdOutlineFileUpload />}
+            />
+          </Tooltip>
 
-          <IconButton
-            aria-label="add series"
-            colorScheme="blue"
-            variant="outline"
-            boxShadow="md"
-            _visited={{ color: "blue" }}
-            // onClick={() => route("/series/edit")}
-            icon={<MdOutlineAddToPhotos />}
-          />
+          <Tooltip label="Add Series" hasArrow bgColor={"blue.300"} placement="bottom-start">
+            <IconButton
+              aria-label="Add series"
+              colorScheme="blue"
+              variant="outline"
+              boxShadow="md"
+              _visited={{ color: "blue" }}
+              // onClick={() => route("/series/edit")}
+              icon={<MdOutlineAddToPhotos />}
+            />
+          </Tooltip>
         </FadeInSlideLeft>
       </Flex>
 
       <Divider my={3} border="8px" />
+
       <Box>
         {currentSeries && (
           <Formik
@@ -182,6 +177,11 @@ const SeriesEdit = ({ setHeaderTitle }) => {
 
                     <Divider mt={3} />
 
+                    <FormLabel htmlFor="venueemail">Venue email</FormLabel>
+                    <Field name="venueemail" as={Input} />
+
+                    <Divider mt={3} />
+
                     <FormLabel htmlFor="venueburgee">Venue burgee</FormLabel>
                     <Field name="venueburgee" as={Input} />
                   </AccordionPanel>
@@ -197,7 +197,6 @@ const SeriesEdit = ({ setHeaderTitle }) => {
                     </AccordionButton>
                   </Text>
                   <AccordionPanel pb={4}>
-
                     <FormLabel htmlFor="fileName">File name</FormLabel>
                     <Field name="fileName" as={Input} />
 

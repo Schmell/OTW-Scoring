@@ -1,6 +1,7 @@
 import { FunctionalComponent, h } from "preact";
 import Router, { Route } from "preact-router";
 import Competitors from "../routes/competitors/Competitors";
+import EventEdit from "../routes/events/EventEdit";
 import Events from "../routes/events/Events";
 import Home from "../routes/home";
 import NotFoundPage from "../routes/notfound";
@@ -33,18 +34,16 @@ const Routing: FunctionalComponent<IRouting> = (props) => {
       <Route path="/results" component={Results} {...props} />
 
       <AuthRoute path="/series" component={Series} {...props} />
-      
+
       <AuthRoute path="/series/edit" component={SeriesEdit} {...props} />
 
-      <AuthRoute
-        path="/race-properties"
-        component={RaceProperties}
-        {...props}
-      />
+      <AuthRoute path="/race-properties" component={RaceProperties} {...props} />
 
       <AuthRoute path="/races" component={RacesList} {...props} />
 
       <AuthRoute path="/events" component={Events} {...props} />
+
+      <AuthRoute path="/events/edit" component={EventEdit} {...props} />
 
       <AuthRoute path="/competitors" component={Competitors} {...props} />
 

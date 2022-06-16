@@ -1,56 +1,50 @@
-import { AddIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
-  Checkbox,
   Divider,
   Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
   Heading,
-  HStack,
-  IconButton,
-  Input,
-  Radio,
-  RadioGroup,
   Text,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
-import { Temporal } from "@js-temporal/polyfill";
 import { doc, updateDoc } from "firebase/firestore";
-import { Field, FieldArray, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
 import { useState } from "preact/hooks";
 import { useDocumentData } from "react-firebase-hooks/firestore";
+import {
+  FadeIn,
+  FadeInSlideLeft,
+  FadeInSlideRight,
+} from "../../components/animations/FadeSlide";
 import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
-import { formatTime } from "../../util/formatters";
+import { formatDate, formatTime } from "../../util/formatters";
+import { Date } from "./raceProperties/Date";
+import { FirstGun } from "./raceProperties/FirstGun";
+import { Notes } from "./raceProperties/Notes";
+import { ResultType } from "./raceProperties/ResultType";
+import { Sailed } from "./raceProperties/Sailed";
+import { Starts } from "./raceProperties/Starts";
+import style from "./scoring.css";
 
-
-export const RaceProperties = (props) => {
-
-  interface IcurrentRace {
-    // Let it all go
-    [key: string | number]: any;
-  }
+export const RaceProperties = ({ setHeaderTitle }) => {
+  setHeaderTitle("Edit Race");
 
   interface IraceStarts {
     fleet: string;
     start: string;
   }
 
-  // const [currentRace, setCurrentRace] = useState<IcurrentRace>({
-  //   rank: "1",
-  // });
- const [seriesId] = useStorage('seriesId')
- const [raceId] = useStorage('raceId')
+  // Get the current navigation id's
+  // only need the getters here
+  const [raceId] = useStorage("raceId");
+  const [seriesId] = useStorage("seriesId");
 
-
+  // Set state for form values
+  // Not sure why these are the only ones i need to set state for
   const [raceTime, setRaceTime] = useState<string>();
-  const [raceDate, setRaceDate] = useState<any>();
-  const [raceSailed, setRaceSailed] = useState<any>();
   const [raceStarts, setRaceStarts] = useState<IraceStarts[]>();
   const [postponed, setPostponed] = useState<string>("");
   const [postponedDate, setPostponedDate] = useState("");
@@ -98,145 +92,94 @@ export const RaceProperties = (props) => {
   return (
     <Fragment>
       <Box>
-        <Flex justifyContent="space-between" alignItems="center">
+        {/* Heading */}
+        <Flex
+          justifyContent="space-between"
+          alignItems="center"
+          minWidth="max-content"
+          wrap="wrap"
+        >
           {/* This is the header with race name or number */}
-          <Heading as="h5" color="blue.400">
-            {currentRace?.name ? currentRace.name : `Race ${currentRace?.rank}`}
-          </Heading>
-          <Text fontSize="sm" color="lightgray">
-            id: {currentRace?.raceid}
-          </Text>
+          <FadeInSlideRight>
+            <Heading as="h5" color="blue.400">
+              {currentRace?.name
+                ? currentRace.name
+                : `Race ${currentRace?.rank}`}
+            </Heading>
+          </FadeInSlideRight>
+
+          {/* For Dev purposes only */}
+          <FadeInSlideLeft>
+            <Text fontSize="sm" color="lightgray">
+              id: {currentRace?.raceid} - {currentRace?._seriesid}
+            </Text>
+          </FadeInSlideLeft>
         </Flex>
+
         <Divider my={3} />
-        <Box mx={4}>
-          <Formik
-            enableReinitialize
-            initialValues={{
-              resultType: "finish",
-              date: raceDate,
-              sailed: raceSailed,
-              time: raceTime,
-              starts: raceStarts,
-            }}
-            onSubmit={submitHandler}
-          >
-            {({ values }) => (
-              <Form>
-                <Field name="resultType">
-                  {({ field, form }) => (
-                    <FormControl isInvalid={form.errors.name && form.touched.name}>
-                      <FormLabel htmlFor="resultType">Scoring type</FormLabel>
-                      <RadioGroup {...field} id="resultType" colorScheme="blue">
-                        <HStack>
-                          <Field type="radio" name="resultType" value="position" as={Radio}>
-                            Position
-                          </Field>
-                          <Field type="radio" name="resultType" value="elapsed" as={Radio}>
-                            Elapsed
-                          </Field>
-                          <Field type="radio" name="resultType" value="finish" as={Radio}>
-                            Finishes
-                          </Field>
-                        </HStack>
-                      </RadioGroup>
-                      <FormErrorMessage>{form.errors.name}</FormErrorMessage>
-                    </FormControl>
-                  )}
-                </Field>
 
-                <Divider my={3} />
+        {/* Start the form */}
+        <FadeIn>
+          <Box mx={4}>
+            <Formik
+              enableReinitialize
+              initialValues={{
+                resultType: "finish",
+                date: formatDate(currentRace?.date),
+                sailed: currentRace?.sailed,
+                postponed: postponed,
+                postponedDate: currentRace?.postponedDate,
+                time: raceTime,
+                starts: raceStarts,
+                notes: currentRace?.notes,
+              }}
+              onSubmit={submitHandler}
+            >
+              {({ values }) => (
+                <Form className={style.raceform}>
+                  {/* Result Type */}
+                  <ResultType />
 
-                {/* Date */}
-                <Box d="flex" justifyContent="space-between" alignItems="center">
-                  <Box>
-                    <FormControl>
-                      <FormLabel htmlFor="date">Date: </FormLabel>
-                      <Field type="date" name="date" />
-                    </FormControl>
-                  </Box>
-                  <Box>
-                    <FormLabel htmlFor="sailed">Sailed</FormLabel>
-                    <Field name="sailed" type="checkbox" colorScheme="blue" isChecked={raceSailed} as={Checkbox} />
-                  </Box>
-                </Box>
+                  <Divider my={3} />
 
-                <Divider my={3} />
+                  {/* Date */}
+                  <Date />
 
-                {/* First gun  */}
-                <FormLabel htmlFor="time">First gun</FormLabel>
-                <Box d="flex" justifyContent="space-between">
-                  {/* Need to get seconds here */}
-                  <Field name="time" type="time" step="2" as={Input} border="none" />
-                  <Button
-                    colorScheme="gray"
-                    px={8}
-                    ml={4}
-                    onClick={(e) => {
-                      const theDate = Temporal.Now.plainTimeISO();
-                      setRaceTime(theDate.round("minutes").toString());
-                    }}
-                  >
-                    Set Time
-                  </Button>
-                </Box>
+                  <Divider my={3} />
 
-                <Divider my={3} />
-
-                {/* Starts */}
-                <Box display="flex" justifyContent="space-between">
-                  <FormLabel htmlFor="starts">Starts</FormLabel>
-                  <IconButton
-                    aria-label="Add start"
-                    // colorScheme="blue"
-                    // size="xs"
-                    icon={<AddIcon />}
-                    onClick={(e) => {
-                      console.log("e: ", e);
-                    }}
+                  {/* Sailed */}
+                  <Sailed
+                    postponed={postponed}
+                    postponedDate={postponedDate}
+                    setPostponedDate={setPostponedDate}
+                    currentRace={currentRace}
                   />
-                </Box>
-                <Divider my={3} />
 
-                <FieldArray name="starts">
-                  {(helper) =>
-                    raceStarts?.map((item, idx) => {
-                      const [start, setStart] = useState(formatTime(item.start));
+                  <Divider my={3} />
 
-                      return (
-                        <Box ml={2} mt={4} mb={3} key={idx}>
-                          <FormLabel fontSize={12}>{item.fleet}</FormLabel>
-                          <Field
-                            key={idx}
-                            name={`starts.${idx}.${item.fleet}`}
-                            type="time"
-                            step="2"
-                            border="none"
-                            onChange={(e: React.FormEvent<HTMLInputElement>) => {
-                              if (values.starts) {
-                                values.starts[idx].start = e.currentTarget.value;
-                              }
+                  {/* First gun  */}
+                  <FirstGun docRef={docRef} setRaceTime={setRaceTime} />
 
-                              // values[key] = val;
-                              setStart(e.currentTarget.value);
-                              // return { key, val };
-                            }}
-                            value={start}
-                            as={Input}
-                          />
-                          {/* <pre>{JSON.stringify(helper, null, 2)}</pre> */}
-                        </Box>
-                      );
-                    })
-                  }
-                </FieldArray>
+                  <Divider my={3} />
 
-                <Button type="submit" colorScheme="blue" w="100%" my={4}>
-                  Submit
-                </Button>
-              </Form>
-            )}
-          </Formik>
-        </Box>
+                  <Starts
+                    raceStarts={raceStarts}
+                    docRef={docRef}
+                    values={values}
+                  />
+
+                  {/* Notes */}
+                  <Notes loading={loading} currentRace={currentRace} />
+
+                  {/* Submit Button */}
+                  <Button type="submit" colorScheme="blue" w="100%" my={4}>
+                    Submit
+                  </Button>
+                </Form>
+              )}
+            </Formik>
+          </Box>
+        </FadeIn>
       </Box>
     </Fragment>
   );
