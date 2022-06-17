@@ -14,7 +14,10 @@ import { route } from "preact-router";
 import { Blw } from "../../util/Blw";
 import { db } from "../../util/firebase-config";
 
-export const Populate = async (user: User | null | undefined, file: File) => {
+export const Populate = async (
+  user: User | null | undefined,
+  file: File | undefined
+) => {
   if (!user) {
     console.warn("User not logged in ", user);
     route("/");
@@ -22,6 +25,7 @@ export const Populate = async (user: User | null | undefined, file: File) => {
   }
   // i dont want to rely on localStorage any more
   // i re-wrote blw as a class to access methods
+  if (!file) return;
   const blw = new Blw({ user, file });
   // now i need to check wether these files are copies or not
   // i guess i need to modify a lastmodified date on server stuff

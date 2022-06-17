@@ -10,13 +10,14 @@ import {
   Text,
 } from "@chakra-ui/react";
 import fileDialog from "file-dialog";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { ref, uploadBytes } from "firebase/storage";
 import { Field, Form, Formik } from "formik";
 import { h } from "preact";
 import { route } from "preact-router";
 import { useState } from "preact/hooks";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, storage } from "../../util/firebase-config";
+import { auth, db, storage } from "../../util/firebase-config";
 import { Populate } from "./populate";
 import style from "./style.css";
 
@@ -30,13 +31,49 @@ const Upload = ({ setHeaderTitle }) => {
   // let importedFile: any;
 
   const showDialog = async () => {
-    const fd = await fileDialog({ multiple: true, accept: ".blw" });
-    const iterable = Array.from(fd);
+    return await fileDialog({ multiple: true, accept: ".blw" });
+  };
+
+  const populateWithAll = (fileObj: FileList) => {
+    const iterable = Array.from(fileObj);
     setFiles(iterable);
     iterable.forEach((item) => {
       Populate(user, item);
     });
     route("/series");
+  };
+
+  const getExistingFileInfos = async () => {
+    // Set up firstore query
+    const sersRef = collection(db, "series");
+    const sersQuery = query(sersRef, where("__owner", "==", user?.uid));
+    const sersDocs = await getDocs(sersQuery);
+
+    // return array of fileInfos wit series id added in
+    return sersDocs.docs.map((ser, index, array) => {
+      const fileInfo = ser.data().__fileInfo;
+      const serId = ser.id;
+      return (array[index] = { serId, ...fileInfo });
+    });
+  };
+
+  const checkSeries = async (fileList: FileList) => {
+    const iterable = Array.from(fileList);
+    return iterable.map(async (file) => {
+      return await compareSeriesWithDb(file);
+    });
+  };
+
+  //
+  const compareSeriesWithDb = async (file: File) => {
+    // Get existing series's (fileInfo's only) that belong to user
+    const existingInfos = await getExistingFileInfos();
+    // Now compare against the incoming fileList
+    return existingInfos.filter((info, index, array) => {
+      if (info.fileName === file.name) {
+        return info;
+      }
+    });
   };
 
   const handleUpload = async () => {
@@ -89,15 +126,21 @@ const Upload = ({ setHeaderTitle }) => {
       </Formik> */}
 
       <Divider my={4} />
-      <Flex gap={4} border="solid 1px blue" p={2}>
+
+      <Flex gap={4} p={2}>
         <Button
           variant={"outline"}
           boxShadow="lg"
           colorScheme={"blue"}
-          onClick={showDialog}
+          onClick={async () => {
+            const fileList = await showDialog();
+            const duplicates = await checkSeries(fileList);
+            console.log("duplicates: ");
+          }}
         >
           Choose Files
         </Button>
+
         <List>
           {files &&
             files.map((file) => (
