@@ -43,3 +43,48 @@ a:visited {
 /* .selectList:hover {
   background-color: var(--gray-2);
 } */
+a,
+a:visited {
+  color: white;
+}
+
+.whiteIcon {
+  color: white;
+}
+
+.chakra-icon:visited {
+  background-color: beige;
+}
+.chakra-radio__label{
+  text-decoration: none;
+}
+
+.raceform label{
+  text-decoration: none;
+}
+.startRaceButton{
+  width: 100px;
+ /* min-width: 140px; */
+/* max-width: 180px; */
+  /* background-color: beige; */
+}
+
+.radiolabel{
+  /* font-family:Arial, Helvetica, sans-serif; */
+  font-size: "2px";
+  font-weight: lighter;
+  /* color: lightgray; */
+
+}
+
+.selectList {
+  font-size: var(--size-fluid-2);
+  font-weight: 500;
+  padding-block: var(--size-fluid-1);
+  /* padding-inline: var(--size-fluid-2); */
+  border-bottom: 1px solid var(--gray-4);
+}
+
+/* .selectList:hover {
+  background-color: var(--gray-2);
+} */
