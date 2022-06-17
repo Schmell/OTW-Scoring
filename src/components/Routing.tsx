@@ -35,10 +35,13 @@ const Routing: FunctionalComponent<IRouting> = (props) => {
       <Route path="/results" component={Results} {...props} />
 
       <AuthRoute path="/series" component={Series} {...props} />
-
       <AuthRoute path="/series/edit" component={SeriesEdit} {...props} />
 
-      <AuthRoute path="/race-properties" component={RaceProperties} {...props} />
+      <AuthRoute
+        path="/race-properties"
+        component={RaceProperties}
+        {...props}
+      />
 
       <AuthRoute path="/races" component={RacesList} {...props} />
 
@@ -49,9 +52,7 @@ const Routing: FunctionalComponent<IRouting> = (props) => {
       <AuthRoute path="/competitors" component={Competitors} {...props} />
 
       <AuthRoute path="/user" component={UserLanding} {...props} />
-
       <AuthRoute path="/user/settings" component={UserSettings} {...props} />
-
       <AuthRoute path="/user/profile" component={UserProfile} {...props} />
 
       <NotFoundPage default />

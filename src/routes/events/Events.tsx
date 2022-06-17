@@ -1,14 +1,27 @@
-import { Box, Divider, Flex, Heading, IconButton, List, ListItem, Spinner, Text, Tooltip } from "@chakra-ui/react";
-import { Fragment, h } from "preact";
-import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
-import { MdClear, MdLibraryAdd, MdModeEdit } from "react-icons/md";
-import { route } from "preact-router";
-import useStorage from "../../hooks/useStorage";
+import {
+  Box,
+  Divider,
+  Flex,
+  Heading,
+  IconButton,
+  List,
+  ListItem,
+  Spinner,
+  Text,
+  Tooltip,
+} from "@chakra-ui/react";
 import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
+import { Fragment, h } from "preact";
+import { route } from "preact-router";
+import { useCollection } from "react-firebase-hooks/firestore";
+import { MdClear, MdLibraryAdd, MdModeEdit } from "react-icons/md";
+import {
+  FadeInSlideLeft,
+  FadeInSlideRight,
+} from "../../components/animations/FadeSlide";
+import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
-import { useCollection, useCollectionData } from "react-firebase-hooks/firestore";
 import style from "./style.css";
-import { BsXLg } from "react-icons/bs";
 
 const Events = ({ user, setHeaderTitle }) => {
   setHeaderTitle("Events");
@@ -37,7 +50,13 @@ const Events = ({ user, setHeaderTitle }) => {
             Select event
           </Heading>
         </FadeInSlideRight>
-        <Tooltip label="Add Event" hasArrow bgColor={"blue.300"} placement="bottom-start">
+
+        <Tooltip
+          label="Add Event"
+          hasArrow
+          bgColor={"blue.300"}
+          placement="bottom-start"
+        >
           <IconButton
             aria-label="Add Event"
             icon={<MdLibraryAdd />}
@@ -48,12 +67,20 @@ const Events = ({ user, setHeaderTitle }) => {
           />
         </Tooltip>
       </Flex>
+
       <Divider mt={3} />
+
       <Box>
         <List>
           {eventsLoading ? (
             <Flex justifyContent=" center" alignItems="center">
-              <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="xl"
+              />
             </Flex>
           ) : (
             events?.docs.map((event) => (
@@ -67,15 +94,23 @@ const Events = ({ user, setHeaderTitle }) => {
                       }}
                     >
                       <Text as="h2">{event.data().name}</Text>
+
                       <Text fontSize={"sm"} color={"gray.400"}>
                         {event.data().venue}
                       </Text>
+
                       <Text fontSize={"xs"} color={"gray.400"}>
                         {event.data().date}
                       </Text>
                     </Box>
+
                     <Box>
-                      <Tooltip label="Edit Series" hasArrow bg="blue.300" placement="bottom-start">
+                      <Tooltip
+                        label="Edit Series"
+                        hasArrow
+                        bg="blue.300"
+                        placement="bottom-start"
+                      >
                         <IconButton
                           aria-label="edit series"
                           icon={<MdModeEdit />}
@@ -88,7 +123,12 @@ const Events = ({ user, setHeaderTitle }) => {
                           }}
                         />
                       </Tooltip>
-                      <Tooltip label="Delete Series" hasArrow bg="blue.300" placement="bottom-start">
+                      <Tooltip
+                        label="Delete Series"
+                        hasArrow
+                        bg="blue.300"
+                        placement="bottom-start"
+                      >
                         <IconButton
                           aria-label="Delete series"
                           icon={<MdClear />}

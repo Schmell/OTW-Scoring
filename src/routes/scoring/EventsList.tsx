@@ -5,16 +5,19 @@ import {
   Heading,
   IconButton,
   List,
-  ListItem, Spinner, Text
+  ListItem,
+  Spinner,
+  Text,
 } from "@chakra-ui/react";
 import { collection, deleteDoc, doc, query, where } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { BsXLg } from "react-icons/bs";
+import { MdClear } from "react-icons/md";
 import {
   FadeInSlideLeft,
-  FadeInSlideRight
+  FadeInSlideRight,
 } from "../../components/animations/FadeSlide";
 import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
@@ -62,7 +65,7 @@ export const EventsList = ({ user, setHeaderTitle }) => {
         </FadeInSlideLeft>
       </Flex>
 
-      <Divider mt={3} border="8px" />
+      <Divider my={3} />
 
       <List>
         {eventsLoading ? (
@@ -92,7 +95,7 @@ export const EventsList = ({ user, setHeaderTitle }) => {
                     <Text fontSize="xs" color="gray.400"></Text>
                     <IconButton
                       aria-label="Remove series"
-                      icon={<BsXLg />}
+                      icon={<MdClear />}
                       size={"sm"}
                       variant="ghost"
                       colorScheme={"blue"}
@@ -115,5 +118,3 @@ export const EventsList = ({ user, setHeaderTitle }) => {
     </Fragment>
   );
 };
-
-

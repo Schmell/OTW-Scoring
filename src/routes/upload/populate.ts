@@ -14,7 +14,7 @@ import { route } from "preact-router";
 import { Blw } from "../../util/Blw";
 import { db } from "../../util/firebase-config";
 
-export const Populate = async (user: User | null | undefined, file) => {
+export const Populate = async (user: User | null | undefined, file: File) => {
   if (!user) {
     console.warn("User not logged in ", user);
     route("/");
@@ -44,25 +44,21 @@ export const Populate = async (user: User | null | undefined, file) => {
   seriesData.__owner = user.uid;
 
   // Get series ref
-  // need to check wether this file exists and modified dates are differnet first
-
-  // get all series first
-
   const seriesRef = collection(db, "series");
 
-  const q = query(seriesRef, where("__owner", "==", user.uid));
-  const theDocs = await getDocs(q);
-  theDocs.forEach((item) => {
-    console.log("item: ", item);
-  });
-  // console.log('q: ', q);
-  checkSeries(seriesRef);
+  // need to check wether this file exists and modified dates are differnet first
+  // not sure how this will work
+  // I guess this should return the messages
+  // and then the user can decide what to do
+  // So turn the the set doc statements into exported functions
+  checkSeries(seriesRef, file);
 
   // add series doc
   const sId = await addDoc(seriesRef, seriesData);
 
   // Map comps to firestore
   await compsData.forEach((comp: any) => {
+    // console.log("comp: ", comp, sId.id);
     setDoc(doc(seriesRef, sId.id, "comps", comp.compid), {
       _seriesid: sId.id,
       ...comp,
@@ -80,7 +76,7 @@ export const Populate = async (user: User | null | undefined, file) => {
 
   // Map results to firestore
   await resultsData.forEach((result: any) => {
-    // console.log("race: ", race, sId.id);
+    // console.log("result: ", result, sId.id);
     setDoc(doc(seriesRef, sId.id, "results", result.id), {
       _seriesid: sId.id,
       ...result,
@@ -88,8 +84,23 @@ export const Populate = async (user: User | null | undefined, file) => {
   });
 }; // populate
 
-async function checkSeries(seriesRef: CollectionReference<DocumentData>) {
+const checkSeries = async (
+  seriesRef: CollectionReference<DocumentData>,
+  file: File
+) => {
+  //
   const ser = await getDocs(seriesRef);
-  console.log("ser: ", ser.docs);
+
+  ser.docs.forEach((s) => {
+    if (file.name === s.data().__fileInfo.fileName) {
+      console.log("File name already exists in database");
+    }
+
+    if (file.lastModified > s.data().__fileInfo.lastModified) {
+      console.log("Fle waas modified since it waas uploaded");
+      console.log("Fle was modified:", s.data().__fileInfo.lastModifiedDate);
+    }
+  });
+
   // throw new Error("Function not implemented.");
-}
+};

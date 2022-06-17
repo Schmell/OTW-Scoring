@@ -1,8 +1,19 @@
-import { Box, Button, Divider, Flex, FormLabel, Heading, IconButton, Input, Tooltip, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Divider,
+  Flex,
+  FormLabel,
+  Heading,
+  IconButton,
+  Input,
+  Tooltip,
+  useToast,
+} from "@chakra-ui/react";
 import { Fragment, h } from "preact";
 import { FadeInSlideRight } from "../../components/animations/FadeSlide";
 import { MdClearAll, MdDelete, MdLibraryAdd } from "react-icons/md";
-import { doc, updateDoc } from "firebase/firestore";
+import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { Formik, Form, Field } from "formik";
 import { route } from "preact-router";
 import { useDocumentData } from "react-firebase-hooks/firestore";
@@ -40,6 +51,10 @@ const EventEdit = ({ user, setHeaderTitle }) => {
     route("/events");
   };
 
+  const deleteEvent = async () => {
+    const eventToDelete = await deleteDoc(doc(db, "events", eventId));
+  };
+
   return (
     <Fragment>
       <Flex justifyContent="space-between" alignItems="end">
@@ -49,7 +64,12 @@ const EventEdit = ({ user, setHeaderTitle }) => {
           </Heading>
         </FadeInSlideRight>
         <Box>
-          <Tooltip label="Delete event" hasArrow bg="blue.300" placement="bottom-start">
+          <Tooltip
+            label="Delete event"
+            hasArrow
+            bg="blue.300"
+            placement="bottom-start"
+          >
             <IconButton
               aria-label="Delete Event"
               icon={<MdDelete />}
@@ -57,10 +77,19 @@ const EventEdit = ({ user, setHeaderTitle }) => {
               mr={2}
               variant={"outline"}
               boxShadow={"md"}
+              onClick={() => {
+                deleteEvent();
+                route("/events");
+              }}
             />
           </Tooltip>
 
-          <Tooltip label="Clear form" hasArrow bg="blue.300" placement="bottom-start">
+          <Tooltip
+            label="Clear form"
+            hasArrow
+            bg="blue.300"
+            placement="bottom-start"
+          >
             <IconButton
               aria-label="Add Event"
               icon={<MdClearAll />}
