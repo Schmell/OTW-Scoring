@@ -55,7 +55,7 @@ export const Populate = async (
   // I guess this should return the messages
   // and then the user can decide what to do
   // So turn the the set doc statements into exported functions
-  checkSeries(seriesRef, file);
+  // checkSeries(seriesRef, file);
 
   // add series doc
   const sId = await addDoc(seriesRef, seriesData);
