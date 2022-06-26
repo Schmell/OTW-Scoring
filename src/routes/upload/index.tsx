@@ -1,31 +1,17 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Flex,
-  FormLabel,
-  Heading,
-  IconButton,
-  List,
-  ListItem,
-  Text,
-  Tooltip,
-} from "@chakra-ui/react";
-import { Temporal } from "@js-temporal/polyfill";
+import { Box, Button, Divider, Flex, Heading, Text } from "@chakra-ui/react";
 import fileDialog from "file-dialog";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { ref, uploadBytes } from "firebase/storage";
-import { Field, Form, Formik } from "formik";
 import { h } from "preact";
-import { route } from "preact-router";
 import { useEffect, useState } from "preact/hooks";
 import { Fragment } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { MdClear, MdControlPointDuplicate } from "react-icons/md";
+import PriBtn from "../../components/generic/PriBtn";
 import useArray from "../../hooks/useArray";
-import { auth, db, storage } from "../../util/firebase-config";
+import { auth, db } from "../../util/firebase-config";
+import { fileType } from "./fileType";
 import { Populate } from "./populate";
 import style from "./style.css";
+import UploadList from "./UploadList";
 
 const Upload = ({ setHeaderTitle }) => {
   setHeaderTitle("Upload");
@@ -34,28 +20,20 @@ const Upload = ({ setHeaderTitle }) => {
   const [files, setFiles] = useState(File[""]);
   const [importedFile, setImportedFile] = useState();
 
-  // type dupType= {
-  //   fileName: string;
-  //   serId: string;
-  //   lastModified?: string;
-  //   size?: string;
-  //   duplicate?: boolean;
-  // };
-
-  interface dupType extends File {
-    fileName: string;
-    name: string;
-    serId: string;
-    lastModified: number;
-    lastModifiedDate: string;
-    size: number;
-    duplicate?: boolean;
-  }
-  const [duplicates, setDuplicates] = useState([{} as dupType]);
-  const [uploading, setUploading] = useState([{} as dupType]);
+  const [duplicates, setDuplicates] = useState([{} as fileType]);
+  const [uploading, setUploading] = useState([{} as fileType]);
   const dupArray = useArray([]);
 
   // let importedFile: any;
+
+  // I think i need to redo this
+  // maybe make the duplicates object in this shape
+  type duplicatesObj = {
+    seriesId: string;
+    name: string;
+    file: File;
+    duplicate: boolean;
+  };
 
   const showDialog = async () => {
     return await fileDialog({ multiple: true, accept: ".blw" });
@@ -69,8 +47,18 @@ const Upload = ({ setHeaderTitle }) => {
     });
     // route("/series");
   };
+  const populateWithArray = (fileList) => {
+    // const iterable = Array.from(fileList);
+    // console.log("fileList: ", fileList);
+    // setFiles(iterable);
+    fileList.forEach((item: File) => {
+      console.log("item: ", item);
+      Populate(user, item);
+    });
+    // route("/series");
+  };
 
-  const getExistingFileInfos = async () => {
+  const getExistingFileInfos = async (): Promise<fileType[]> => {
     // Set up firstore query
     const sersRef = collection(db, "series");
     const sersQuery = query(sersRef, where("__owner", "==", user?.uid));
@@ -88,7 +76,7 @@ const Upload = ({ setHeaderTitle }) => {
     const iterable = Array.from(fileList);
 
     const dupsMap = iterable.map(async (file) => {
-      return await compareSeriesWithDb(file as dupType);
+      return await compareSeriesWithDb(file);
     });
 
     const mappedArrays = Promise.all(dupsMap);
@@ -96,10 +84,10 @@ const Upload = ({ setHeaderTitle }) => {
   };
 
   //
-  const compareSeriesWithDb = async (file: dupType) => {
+  const compareSeriesWithDb = async (file): Promise<fileType> => {
     // Get existing series's (fileInfo's only) that belong to user
     const existingInfos = await getExistingFileInfos();
-
+    // console.log("file: ", await file.text());
     // Now compare against the incoming fileList
     const matched = existingInfos.filter((info) => {
       if (info.fileName === file.name) {
@@ -113,221 +101,100 @@ const Upload = ({ setHeaderTitle }) => {
       return matched[0];
     } else {
       // need to add file name
-      // TODO just call it name on imoprt
-      file.fileName = file.name;
-      // need to return as array
+      // TODO just call it name on import
+      // file.fileName = file.name;
+
       return file;
     }
   };
+
+  const handleChooseFile = async () => {
+    const fileList = await showDialog();
+    const checked = await checkSeries(fileList);
+    // console.log("checked: ", checked);
+    let dups: fileType[] = [];
+    let ups: fileType[] = [];
+    checked.forEach((item) => {
+      if (item.duplicate) {
+        // console.log("checked duplicates: ", duplicates);
+        // console.log("item: ", item.text());
+        dups.push(item);
+        // return;
+      } else {
+        ups.push(item);
+        // return;
+      }
+    });
+    // console.log("dups: ", dups);
+    // console.log("ups: ", ups);
+    setDuplicates(dups);
+    setUploading(ups);
+    // populateWithAll(fileList);
+  };
+
   useEffect(() => {
     // console.log("duplicates: ", duplicates);
   }, [duplicates]);
 
   return (
     <Box className={style.upload}>
-      <Heading color="blue.400" mb={3}>
-        Select File
-      </Heading>
-
-      <Divider my={4} />
-      {}
-      <Flex gap={4} pl={3}>
+      <Flex justifyContent={"space-between"}>
+        <Heading color="blue.400">Select File</Heading>
         <Button
           variant={"outline"}
           boxShadow="md"
           colorScheme={"blue"}
-          onClick={async () => {
-            const fileList = await showDialog();
-            const checked = await checkSeries(fileList);
-            console.log("checked: ", checked);
-            let dups = [{}];
-            let ups = [{}];
-            checked.forEach((item) => {
-              if (item.duplicate) {
-                // console.log("checked duplicates: ", duplicates);
-                dups.push(item);
-                // return;
-              } else {
-                ups.push(item);
-                // return;
-              }
-            });
-            console.log("dups: ", dups);
-            console.log("ups: ", ups);
-            setDuplicates(dups as dupType[]);
-            setUploading(ups as dupType[]);
-            // populateWithAll(fileList);
-          }}
+          onClick={handleChooseFile}
         >
           Choose File(s)
         </Button>
       </Flex>
 
-      {console.log("duplicates: ", duplicates)}
+      <Divider my={4} />
 
-      {duplicates &&
-        duplicates.find((dup) => {
-          if (dup.size) return true;
-        }) && (
-          <Box my={3}>
-            <Box>
-              <Heading as="h3" color="blue.300" fontSize={"md"}>
-                Duplicate files
-              </Heading>
-              <Divider my={3} />
-            </Box>
-            <Box>
-              <List>
-                {duplicates.map((dup) => (
-                  <Fragment>
-                    {dup.size && (
-                      <ListItem
-                        py={1}
-                        borderBottom="1px solid"
-                        borderBottomColor={"blue.100"}
-                      >
-                        <Flex
-                          justifyContent={"space-between"}
-                          alignItems={"center"}
-                        >
-                          <Box>
-                            <Text>{dup.fileName}</Text>
-                            {dup.lastModified && (
-                              <Text fontSize={"xs"} color={"gray.200"}>
-                                {new Date(
-                                  dup.lastModified
-                                ).toLocaleDateString()}{" "}
-                                {new Date(
-                                  dup.lastModified
-                                ).toLocaleTimeString()}
-                              </Text>
-                            )}
-                          </Box>
-                          <Box>
-                            <Tooltip
-                              label="Overwrite existing"
-                              hasArrow
-                              bg="blue.300"
-                              placement="bottom-start"
-                            >
-                              <IconButton
-                                aria-label="Overwrite existing"
-                                icon={<MdControlPointDuplicate />}
-                                size={"sm"}
-                                variant="ghost"
-                                colorScheme={"blue"}
-                              />
-                            </Tooltip>
-                            <Tooltip
-                              label="Remove from Upload"
-                              hasArrow
-                              bg="blue.300"
-                              placement="bottom-start"
-                            >
-                              <IconButton
-                                aria-label="Remove from Upload"
-                                icon={<MdClear />}
-                                size={"sm"}
-                                variant="ghost"
-                                colorScheme={"blue"}
-                                onClick={(e) => {
-                                  // e.preventDefault();
-                                  // removeEvent(event.id);
-                                }}
-                              />
-                            </Tooltip>
-                          </Box>
-                        </Flex>
-                      </ListItem>
-                    )}
-                  </Fragment>
-                ))}
-              </List>
-            </Box>
-          </Box>
-        )}
-      {/* ////////////////////////////////////////////////////////////////////////// */}
-      {uploading &&
-        uploading.find((dup) => {
-          if (dup.size) return true;
-        }) && (
-          <Box>
-            <Box>
-              <Heading as="h3" color="blue.300" fontSize={"md"}>
-                New FIles
-              </Heading>
-              <Divider my={3} />
-            </Box>
-            <Box>
-              <List>
-                {uploading.map((dup) => (
-                  <Fragment>
-                    {dup.size && (
-                      <ListItem
-                        py={1}
-                        borderBottom="1px solid"
-                        borderBottomColor={"blue.100"}
-                      >
-                        <Flex
-                          justifyContent={"space-between"}
-                          alignItems={"center"}
-                        >
-                          <Box>
-                            <Text>{dup.fileName}</Text>
-                            {dup.lastModified && (
-                              <Text fontSize={"xs"} color={"gray.200"}>
-                                {new Date(
-                                  dup.lastModified
-                                ).toLocaleDateString()}{" "}
-                                {new Date(
-                                  dup.lastModified
-                                ).toLocaleTimeString()}
-                              </Text>
-                            )}
-                          </Box>
-                          <Box>
-                            <Tooltip
-                              label="Overwrite existing"
-                              hasArrow
-                              bg="blue.300"
-                              placement="bottom-start"
-                            >
-                              <IconButton
-                                aria-label="Overwrite existing"
-                                icon={<MdControlPointDuplicate />}
-                                size={"sm"}
-                                variant="ghost"
-                                colorScheme={"blue"}
-                              />
-                            </Tooltip>
-                            <Tooltip
-                              label="Remove from Upload"
-                              hasArrow
-                              bg="blue.300"
-                              placement="bottom-start"
-                            >
-                              <IconButton
-                                aria-label="Remove from Upload"
-                                icon={<MdClear />}
-                                size={"sm"}
-                                variant="ghost"
-                                colorScheme={"blue"}
-                                onClick={(e) => {
-                                  // e.preventDefault();
-                                  // removeEvent(event.id);
-                                }}
-                              />
-                            </Tooltip>
-                          </Box>
-                        </Flex>
-                      </ListItem>
-                    )}
-                  </Fragment>
-                ))}
-              </List>
-            </Box>
-          </Box>
-        )}
+      <UploadList
+        listItems={duplicates}
+        listState={duplicates}
+        setListState={setDuplicates}
+        duplicates={true}
+      />
+
+      <UploadList
+        listItems={uploading}
+        listState={uploading}
+        setListState={setUploading}
+        duplicates={false}
+      />
+
+      {uploading.find((ups) => {
+        if (ups.fileName) return true;
+      }) ||
+      duplicates.find((dup) => {
+        if (dup.fileName) return true;
+      }) ? (
+        <Box px={1}>
+          <PriBtn
+            width={"100%"}
+            onClick={() => {
+              const cleanDups = duplicates.filter((dup) => {
+                if (dup.fileName) return dup;
+              });
+              cleanDups.forEach((item) => {
+                console.log("item: ", item);
+              });
+              populateWithArray(cleanDups);
+            }}
+          >
+            Upload
+          </PriBtn>
+        </Box>
+      ) : (
+        <Box>
+          <Text as="p">
+            Use the choose files button to select your Sailwave file to import
+          </Text>
+        </Box>
+      )}
     </Box>
   );
 };

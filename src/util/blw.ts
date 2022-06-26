@@ -257,7 +257,7 @@ export class Blw {
     // make an object for fileInfo to organize better
     // const fileInfo = this.file
     const __fileInfo = {} as any;
-    __fileInfo.fileName = this.file.name;
+    __fileInfo.name = this.file.name;
     __fileInfo.lastModified = this.file.lastModified;
     __fileInfo.lastModifiedDate = this.file.lastModifiedDate;
     __fileInfo.size = this.file.size;

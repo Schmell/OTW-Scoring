@@ -41,3 +41,23 @@ export const colors = {
     "900": "#0A1A29",
   },
 };
+
+export const components = {
+  components: {
+    Button: {
+      // style object for base or default style
+      baseStyle: {},
+      // styles for different sizes ("sm", "md", "lg")
+      sizes: {},
+      // styles for different visual variants ("outline", "solid")
+      variants: {},
+      // default values for 'size', 'variant' and 'colorScheme'
+      // 6. We can overwrite defaultProps
+      defaultProps: {
+        // size: "lg", // default is md
+        variant: "ghost", // default is solid
+        colorScheme: "blue", // default is gray
+      },
+    },
+  },
+};

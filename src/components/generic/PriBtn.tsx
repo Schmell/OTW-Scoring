@@ -6,7 +6,7 @@ interface SecBtnProps {
   [x: string | number]: any;
 }
 
-const SecBtn: FunctionalComponent<SecBtnProps> = ({
+const PriBtn: FunctionalComponent<SecBtnProps> = ({
   children,
   onClick,
   width,
@@ -14,7 +14,7 @@ const SecBtn: FunctionalComponent<SecBtnProps> = ({
   return (
     <Button
       colorScheme={"blue"}
-      variant="outline"
+      //   variant="outline"
       boxShadow="md"
       width={width}
       onClick={onClick}
@@ -24,4 +24,4 @@ const SecBtn: FunctionalComponent<SecBtnProps> = ({
   );
 };
 
-export default SecBtn;
+export default PriBtn;

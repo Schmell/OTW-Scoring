@@ -20,8 +20,6 @@ export const Populate = async (user: User | null | undefined, file: File) => {
   }
   // i dont want to rely on localStorage any more
   // i re-wrote blw as a class to access methods
-  const fileContents = await file.text();
-  console.log("fileContents: ", fileContents);
   if (!file) return;
   const blw = new Blw({ user, file });
   // now i need to check wether these files are copies or not

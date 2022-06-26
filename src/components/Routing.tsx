@@ -5,6 +5,7 @@ import EventList from "../routes/events/Event";
 import EventEdit from "../routes/events/EventEdit";
 import Events from "../routes/events/Events";
 import Home from "../routes/home";
+import Import from "../routes/import/import";
 import NotFoundPage from "../routes/notfound";
 import Results from "../routes/results";
 import { RaceProperties } from "../routes/scoring/RaceProperties";
@@ -30,7 +31,8 @@ const Routing: FunctionalComponent<IRouting> = (props) => {
 
       <Route path="/signin" component={SignIn} {...props} />
 
-      <AuthRoute path="/upload" component={Upload} {...props} />
+      {/* <AuthRoute path="/upload" component={Upload} {...props} /> */}
+      <AuthRoute path="/upload" component={Import} {...props} />
 
       <Route path="/results" component={Results} {...props} />
 
