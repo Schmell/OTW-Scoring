@@ -7,22 +7,7 @@ import {
   enableIndexedDbPersistence,
   getFirestore,
 } from "firebase/firestore";
-import { useAuthState } from "react-firebase-hooks/auth";
-// import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
-
-// firebaseApps previously initialized using initializeApp()
-// const db = getFirestore();
-// connectFirestoreEmulator(db, 'localhost', 8080);
-// const firebaseConfig = {
-//   apiKey: "AIzaSyC7SFX9Qyr_b4AMGlM6bAUiG3BZBrh72B8",
-//   authDomain: "schmell-first-try.firebaseapp.com",
-//   databaseURL: "https://schmell-first-try-default-rtdb.firebaseio.com",
-//   projectId: "schmell-first-try",
-//   storageBucket: "schmell-first-try.appspot.com",
-//   messagingSenderId: "464776014382",
-//   appId: "1:464776014382:web:8667afbe5dec4c4408cdbf",
-//   measurementId: "G-Q077CT5BYW",
-// };
+import { getStorage, connectStorageEmulator } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC7SFX9Qyr_b4AMGlM6bAUiG3BZBrh72B8",
@@ -38,12 +23,13 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
-// Get rid of this
-// export const eRef = doc(db, "events/XSKmjOrjRRa3BsehsHH1");
-// export const [user] = useAuthState(auth);
+export const storage = getStorage();
+
 // Initialize Firebase
 connectFirestoreEmulator(db, "localhost", 9999);
 connectAuthEmulator(auth, "http://localhost:9099");
+
+connectStorageEmulator(storage, "localhost", 9199);
 
 // 5;
 

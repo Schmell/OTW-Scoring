@@ -8,7 +8,7 @@ interface IBlw {
 }
 
 interface chromeFile extends File {
-  lastModifiedDate: string;
+  lastModifiedDate?: string;
 }
 
 export class Blw {
@@ -99,17 +99,39 @@ export class Blw {
         // I am trying to return empty string from resultHelp
         finish: this.resultHelp("rft", data, result),
 
-        start: this.resultHelp("rst", data, result) ? this.resultHelp("rst", data, result) : "",
-        points: this.resultHelp("rpts", data, result) ? this.resultHelp("rpts", data, result) : "",
-        position: this.resultHelp("rpos", data, result) ? this.resultHelp("rpos", data, result) : "",
-        discard: this.resultHelp("rdisc", data, result) ? this.resultHelp("rdisc", data, result) : "",
-        corrected: this.resultHelp("rcor", data, result) ? this.resultHelp("rcor", data, result) : "",
-        rrestyp: this.resultHelp("rrestyp", data, result) ? this.resultHelp("rrestyp", data, result) : "",
-        elapsed: this.resultHelp("rele", data, result) ? this.resultHelp("rele", data, result) : "",
-        srat: this.resultHelp("srat", data, result) ? this.resultHelp("srat", data, result) : "",
-        rewin: this.resultHelp("rewin", data, result) ? this.resultHelp("rewin", data, result) : "",
-        rrwin: this.resultHelp("rrwin", data, result) ? this.resultHelp("rrwin", data, result) : "",
-        rrset: this.resultHelp("rrset", data, result) ? this.resultHelp("rrset", data, result) : "",
+        start: this.resultHelp("rst", data, result)
+          ? this.resultHelp("rst", data, result)
+          : "",
+        points: this.resultHelp("rpts", data, result)
+          ? this.resultHelp("rpts", data, result)
+          : "",
+        position: this.resultHelp("rpos", data, result)
+          ? this.resultHelp("rpos", data, result)
+          : "",
+        discard: this.resultHelp("rdisc", data, result)
+          ? this.resultHelp("rdisc", data, result)
+          : "",
+        corrected: this.resultHelp("rcor", data, result)
+          ? this.resultHelp("rcor", data, result)
+          : "",
+        rrestyp: this.resultHelp("rrestyp", data, result)
+          ? this.resultHelp("rrestyp", data, result)
+          : "",
+        elapsed: this.resultHelp("rele", data, result)
+          ? this.resultHelp("rele", data, result)
+          : "",
+        srat: this.resultHelp("srat", data, result)
+          ? this.resultHelp("srat", data, result)
+          : "",
+        rewin: this.resultHelp("rewin", data, result)
+          ? this.resultHelp("rewin", data, result)
+          : "",
+        rrwin: this.resultHelp("rrwin", data, result)
+          ? this.resultHelp("rrwin", data, result)
+          : "",
+        rrset: this.resultHelp("rrset", data, result)
+          ? this.resultHelp("rrset", data, result)
+          : "",
       };
       resultsArr.push(resultRow);
     }); // forEach
@@ -119,7 +141,9 @@ export class Blw {
 
   resultHelp(resultTag: any, data: any, result: any) {
     let res = data.filter((item: any) => {
-      return item[0] === resultTag && item[2] === result[2] && item[3] === result[3];
+      return (
+        item[0] === resultTag && item[2] === result[2] && item[3] === result[3]
+      );
     });
     if (res[0]) {
       return res[0][1];
@@ -168,7 +192,6 @@ export class Blw {
       let raceStarts: any = [];
 
       resultRows.forEach((item) => {
-
         // Format the starts to object
         if (item[0] === "racestart") {
           const stringToSplit = item[1].split("|");
@@ -183,13 +206,11 @@ export class Blw {
           // This will stop undefined or null
           try {
             start = formatTime(start);
-          }
-          catch {
+          } catch {
             start = "00:00:00";
           }
 
           raceStarts.push({ fleet, start });
-
         } else {
           // not racestart so just add to raceObj
           const newName = item[0].replace("race", "");
@@ -235,8 +256,8 @@ export class Blw {
 
     // make an object for fileInfo to organize better
     // const fileInfo = this.file
-    const __fileInfo = {} as any
-    __fileInfo.fileName = this.file.name;
+    const __fileInfo = {} as any;
+    __fileInfo.name = this.file.name;
     __fileInfo.lastModified = this.file.lastModified;
     __fileInfo.lastModifiedDate = this.file.lastModifiedDate;
     __fileInfo.size = this.file.size;
@@ -244,7 +265,6 @@ export class Blw {
     // return series object and fileinfo
     return returnObj;
   } // getSeries
-
 
   // Don't know if this works currently
   // These functions should be in an export class

@@ -6,9 +6,9 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../util/firebase-config";
 import SidebarWithHeader from "./header/SidebarWithHeader";
 import Routing from "./Routing";
-import { colors } from "./theme";
+import { colors, components } from "./theme";
 
-const theme = extendTheme({ colors });
+const theme = extendTheme({ colors, components });
 
 const App: FunctionalComponent = () => {
   const [user, userLoading, userError] = useAuthState(auth);
