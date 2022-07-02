@@ -4,7 +4,7 @@ import {
   FormLabel,
   HStack,
   Radio,
-  RadioGroup
+  RadioGroup,
 } from "@chakra-ui/react";
 import { Field } from "formik";
 import { h } from "preact";

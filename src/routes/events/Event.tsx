@@ -1,18 +1,45 @@
-import { Box, Divider, Flex, Heading, IconButton, List, ListItem, Spinner, Text, Tooltip } from "@chakra-ui/react";
+import {
+  Box,
+  Divider,
+  Flex,
+  Heading,
+  IconButton,
+  List,
+  ListItem,
+  Spinner,
+  Text,
+  Tooltip,
+  useDisclosure,
+} from "@chakra-ui/react";
 // import { style } from "@mui/system";
-import { collection, deleteDoc, doc, query, where } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { h, Fragment } from "preact";
 import { route } from "preact-router";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { BsXLg } from "react-icons/bs";
-import { MdModeEdit, MdOutlineAddToPhotos, MdOutlineFileUpload } from "react-icons/md";
-import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
+import {
+  MdModeEdit,
+  MdOutlineAddToPhotos,
+  MdOutlineFileUpload,
+} from "react-icons/md";
+import {
+  FadeInSlideLeft,
+  FadeInSlideRight,
+} from "../../components/animations/FadeSlide";
 import useStorage from "../../hooks/useStorage";
 import style from "./style.css";
 import { db } from "../../util/firebase-config";
+import AddSeriesModal from "./AddSeriesModal";
 
 const EventList = ({ setHeaderTitle }) => {
-  setHeaderTitle("Event Series");
+  setHeaderTitle("Events Series");
 
   const [eventId] = useStorage("eventId");
   console.log("eventId: ", eventId);
@@ -25,8 +52,10 @@ const EventList = ({ setHeaderTitle }) => {
 
   const removeSeries = async (id: any) => {
     // Uses cloud function to remove any sub-collections
-    await deleteDoc(doc(db, "series", id));
+    await updateDoc(doc(db, "series", id), { __event: "" });
   };
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <Fragment>
@@ -39,7 +68,12 @@ const EventList = ({ setHeaderTitle }) => {
 
         {/* Sub header buttons */}
         <FadeInSlideLeft>
-          <Tooltip label="Upload file" hasArrow bg="blue.300" placement="bottom-start">
+          <Tooltip
+            label="Upload file"
+            hasArrow
+            bg="blue.300"
+            placement="bottom-start"
+          >
             <IconButton
               aria-label="upload"
               colorScheme="blue"
@@ -52,18 +86,24 @@ const EventList = ({ setHeaderTitle }) => {
             />
           </Tooltip>
 
-          <Tooltip label="Add Series" hasArrow bg="blue.300" placement="bottom-start">
+          <Tooltip
+            label="Add Series"
+            hasArrow
+            bg="blue.300"
+            placement="bottom-start"
+          >
             <IconButton
               aria-label="add series"
               colorScheme="blue"
               variant="outline"
               boxShadow="md"
               _visited={{ color: "blue" }}
-              // onClick={() => route("/series/edit")}
+              onClick={onOpen}
               icon={<MdOutlineAddToPhotos />}
             />
           </Tooltip>
         </FadeInSlideLeft>
+        <AddSeriesModal isOpen={isOpen} onClose={onClose} eventId={eventId} />
       </Flex>
 
       <Divider mt={3} border="8px" />
@@ -71,7 +111,13 @@ const EventList = ({ setHeaderTitle }) => {
       <List>
         {seriesLoading ? (
           <Flex justifyContent="center" alignItems="center" mt={8}>
-            <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              color="blue.500"
+              size="xl"
+            />
           </Flex>
         ) : (
           series?.docs.map((series) => (
@@ -80,6 +126,8 @@ const EventList = ({ setHeaderTitle }) => {
                 <ListItem key={series.id} className={style.selectList}>
                   <Flex justifyContent="space-between">
                     <Box
+                      w="80%"
+                      cursor="pointer"
                       onClick={() => {
                         setSeriesId(series.id);
                         route("/races");
@@ -93,7 +141,12 @@ const EventList = ({ setHeaderTitle }) => {
                     </Box>
 
                     <Box>
-                      <Tooltip label="Edit Series" hasArrow bg="blue.300" placement="bottom-start">
+                      <Tooltip
+                        label="Edit Series"
+                        hasArrow
+                        bg="blue.300"
+                        placement="bottom-start"
+                      >
                         <IconButton
                           aria-label="edit series"
                           icon={<MdModeEdit />}
@@ -106,7 +159,12 @@ const EventList = ({ setHeaderTitle }) => {
                           }}
                         />
                       </Tooltip>
-                      <Tooltip label="Delete Series" hasArrow bg="blue.300" placement="bottom-start">
+                      <Tooltip
+                        label="Delete Series"
+                        hasArrow
+                        bg="blue.300"
+                        placement="bottom-start"
+                      >
                         <IconButton
                           aria-label="Delete series"
                           icon={<BsXLg />}

@@ -1,72 +1,87 @@
-import { Button, Heading, List, ListItem } from "@chakra-ui/react";
-import classNames from "classnames";
-import { collection, query, where } from "firebase/firestore";
+import {
+  TableContainer,
+  Table,
+  TableCaption,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Td,
+  Tfoot,
+} from "@chakra-ui/react";
+import { collection, doc, getDocs, query, where } from "firebase/firestore";
 import { Fragment, FunctionalComponent, h } from "preact";
-import { useState } from "preact/compat";
+import { useEffect, useMemo, useReducer, useState } from "preact/compat";
 import {
   useCollection,
   useCollectionData,
 } from "react-firebase-hooks/firestore";
 import { db } from "../../util/firebase-config";
-import style from "./style.css";
+import "./style.css";
 
-const Results: FunctionalComponent = () => {
-  const eventRef = collection(db, "events");
-  const [events] = useCollection(eventRef);
-  const [event, setEvent] = useState<string | null>();
-  // const [race, setRace] = useState<string>("1");
+import {
+  createTable,
+  getCoreRowModel,
+  getSortedRowModel,
+  SortingState,
+  useTableInstance,
+} from "@tanstack/react-table";
 
-  // const [results, setResults] = useState<string | null>();
+import { Person, makeData } from "./makeData";
+import ResultTable from "./components/ResultTable";
 
-  const racesQuery = query(collection(db, `events/${event}/races`));
-  const [races] = useCollectionData(racesQuery);
+type ResultRow = {
+  boat: string;
+  comp: string;
+  points: string;
+  finish: string;
+  start: string;
+  elapsed: string;
+  corrected: string;
+};
 
-  // const resultsQuery = query(
-  //   collection(db, `events/${event}/results`),
-  //   where("raceid", "==", race)
-  // );
-  // const [theRace] = useCollectionData(resultsQuery);
-  // console.log("theRace: ", theRace);
+export default function Result({ seriesId, raceId }) {
+  // Ok this component shloud be loaded only after the comp/resu;t object is created
+
+  const seriesRef = doc(db, "series", seriesId);
+  const compRef = collection(seriesRef, "comps");
+  const [comps, compsLoading] = useCollection(compRef);
+
+  const resultsRef = collection(seriesRef, "results");
+  const raceQuery = query(resultsRef, where("raceid", "==", raceId));
+  const [results, resultsLoading] = useCollection(raceQuery);
+
+  const [data, setData] = useState<any>();
+
+  // console.log("compResults: ", compResults);
+  // console.log("makeData: ", makeData(10));
+
+  // const data = compResults;
+  // const refreshData = () => setData(() => makeData(10));
+
+  // this shuld be a function that is called before render
+  const compResults = comps?.docs.map((comp) => {
+    // console.log("comp: ", comp.data());
+    const result = results?.docs.find((res) => {
+      // console.log("res: ", res.data());
+      if (res.data().compid === comp.data().compid) {
+        return true;
+      }
+    });
+    // console.log("result: ", result?.data());
+    return { ...comp.data(), ...result?.data() };
+  });
+  console.log("compResults: ", compResults);
+  // setData(compResults);
 
   return (
     <Fragment>
-      <Heading>Series</Heading>
-      <Button as="a" href="/upload">
-        Upload
-      </Button>
-      <List>
-        {events &&
-          events.docs.map((item) => (
-            <ListItem
-              key={item.id}
-              className="selectList"
-              onClick={() => {
-                setEvent(item.id);
-              }}
-            >
-              {item.data().event}
-            </ListItem>
-          ))}
-      </List>
-
-      <List>
-        {races?.map((race) => (
-          <ListItem
-            className={classNames(style.raceSpan, [
-              race.sailed === "1" ? style.sailed : null,
-            ])}
-          >
-            <a
-              href={`/results/${race._seriesid}/${race.raceid}`}
-              data-key={event}
-            >
-              {race.rank} {race.name ? " - " + race.name : null}
-            </a>
-          </ListItem>
-        ))}
-      </List>
+      {data && (
+        <h1>data is here</h1>
+        // <ResultTable data={data} />
+      )}
     </Fragment>
   );
-};
+}
 
-export default Results;
+// export default Results;

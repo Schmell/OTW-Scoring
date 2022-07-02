@@ -24,7 +24,7 @@ const EventEdit = ({ user, setHeaderTitle }) => {
   setHeaderTitle("Event Edit");
   //   console.log("EventForm - user: ", user);
   const [eventId] = useStorage("eventId");
-
+  console.log("eventId: ", eventId);
   // Get the currentRace data
   const docRef = doc(db, "events", eventId);
   const [currentEvent, eventLoading] = useDocumentData(docRef);

@@ -1,9 +1,9 @@
 import { useRadio, chakra, Input, Icon, Tooltip } from "@chakra-ui/react";
 import { h } from "preact";
 
-export function CustomRadio(props) {
+export function IconRadio(props) {
   const { image, icon, label, ...radioProps } = props;
-  const { state, getInputProps, getCheckboxProps, htmlProps, getLabelProps } =
+  const { state, getInputProps, htmlProps, getLabelProps } =
     useRadio(radioProps);
 
   return (

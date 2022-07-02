@@ -19,9 +19,12 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { MdOutlineAddToPhotos, MdOutlineFileUpload } from "react-icons/md";
-import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
+import {
+  FadeInSlideLeft,
+  FadeInSlideRight,
+} from "../../components/animations/FadeSlide";
 import { Field, Form, Formik } from "formik";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, Timestamp, updateDoc } from "firebase/firestore";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { db } from "../../util/firebase-config";
 import { formatTime } from "../../util/formatters";
@@ -38,10 +41,12 @@ const SeriesEdit = ({ setHeaderTitle }) => {
   const submittedToast = useToast();
 
   const submitHandler = async (values: any) => {
-    console.log("values: ", values);
-
-    // update the firestore doc
+    Object.keys(values).forEach((key) =>
+      values[key] === undefined ? delete values[key] : {}
+    );
     // here we may need to add modified flag or something
+    // values.__fileInfo.lastModified = Date.now();
+    // update the firestore doc
     await updateDoc(docRef, values);
 
     // show submitted toast
@@ -68,7 +73,12 @@ const SeriesEdit = ({ setHeaderTitle }) => {
 
         {/* Sub header buttons */}
         <FadeInSlideLeft>
-          <Tooltip label="Upload" hasArrow bgColor={"blue.300"} placement="bottom-start">
+          <Tooltip
+            label="Upload"
+            hasArrow
+            bgColor={"blue.300"}
+            placement="bottom-start"
+          >
             <IconButton
               aria-label="upload"
               colorScheme="blue"
@@ -81,7 +91,12 @@ const SeriesEdit = ({ setHeaderTitle }) => {
             />
           </Tooltip>
 
-          <Tooltip label="Add Series" hasArrow bgColor={"blue.300"} placement="bottom-start">
+          <Tooltip
+            label="Add Series"
+            hasArrow
+            bgColor={"blue.300"}
+            placement="bottom-start"
+          >
             <IconButton
               aria-label="Add series"
               colorScheme="blue"
@@ -109,7 +124,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
               venuewebsite: currentSeries.venuewebsite,
               venueburgee: currentSeries.venueburgee,
               venueemail: currentSeries.venueemail,
-              fileName: currentSeries.__fileInfo.fileName,
+              name: currentSeries.__fileInfo.name,
               lastModified: currentSeries.__fileInfo.lastModified,
               lastModifiedDate: currentSeries.__fileInfo.lastModifiedDate,
               size: currentSeries.__fileInfo.size,
@@ -119,7 +134,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
             <Form>
               <Accordion>
                 <AccordionItem>
-                  <Text as={"h2"} bgColor={"gray.100"} mb={3}>
+                  <Text as={"h2"} mb={3}>
                     <AccordionButton>
                       <Box flex="1" textAlign="left">
                         Series details
@@ -158,7 +173,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
                 </AccordionItem>
 
                 <AccordionItem>
-                  <Text as={"h2"} bgColor={"gray.100"} mb={3}>
+                  <Text as={"h2"} mb={3}>
                     <AccordionButton>
                       <Box flex="1" textAlign="left">
                         Venue details
@@ -188,7 +203,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
                 </AccordionItem>
 
                 <AccordionItem>
-                  <Text as={"h2"} bgColor={"gray.100"} mb={3}>
+                  <Text as={"h2"} mb={3}>
                     <AccordionButton>
                       <Box flex="1" textAlign="left">
                         File properties
@@ -197,8 +212,8 @@ const SeriesEdit = ({ setHeaderTitle }) => {
                     </AccordionButton>
                   </Text>
                   <AccordionPanel pb={4}>
-                    <FormLabel htmlFor="fileName">File name</FormLabel>
-                    <Field name="fileName" as={Input} />
+                    <FormLabel htmlFor="name">File name</FormLabel>
+                    <Field name="name" as={Input} />
 
                     <Divider mt={3} />
 
@@ -207,7 +222,9 @@ const SeriesEdit = ({ setHeaderTitle }) => {
 
                     <Divider mt={3} />
 
-                    <FormLabel htmlFor="lastModifiedDate">Last Modified Date</FormLabel>
+                    <FormLabel htmlFor="lastModifiedDate">
+                      Last Modified Date
+                    </FormLabel>
                     <Field name="lastModifiedDate" as={Input} />
 
                     <Divider mt={3} />

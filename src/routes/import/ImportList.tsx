@@ -1,27 +1,17 @@
 import {
   Box,
-  Heading,
   Divider,
+  Flex,
+  Heading,
+  IconButton,
   List,
   ListItem,
-  Flex,
-  Tooltip,
-  IconButton,
   Text,
+  Tooltip,
   useRadioGroup,
-  HStack,
-  Stack,
-  RadioGroup,
-  Radio,
 } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
-import {
-  MdControlPointDuplicate,
-  MdContentCopy,
-  MdClear,
-  MdDone,
-} from "react-icons/md";
-import { CustomRadio } from "./CUstomRadio";
+import { MdClear } from "react-icons/md";
 import { DuplicateOptions } from "./DuplicateOptions";
 import { importFileObj } from "./importFileObj";
 //   import { fileType } from "./fileType";

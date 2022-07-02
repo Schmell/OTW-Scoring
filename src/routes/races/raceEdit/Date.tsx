@@ -1,6 +1,4 @@
-import {
-  Box, FormControl, FormLabel, Input
-} from "@chakra-ui/react";
+import { Box, FormControl, FormLabel, Input } from "@chakra-ui/react";
 import { Field } from "formik";
 import { Fragment, h } from "preact";
 

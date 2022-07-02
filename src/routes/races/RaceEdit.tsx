@@ -21,15 +21,15 @@ import {
 import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
 import { formatDate, formatTime } from "../../util/formatters";
-import { Date } from "./raceProperties/Date";
-import { FirstGun } from "./raceProperties/FirstGun";
-import { Notes } from "./raceProperties/Notes";
-import { ResultType } from "./raceProperties/ResultType";
-import { Sailed } from "./raceProperties/Sailed";
-import { Starts } from "./raceProperties/Starts";
-import style from "./scoring.css";
+import { Date } from "./raceEdit/Date";
+import { FirstGun } from "./raceEdit/FirstGun";
+import { Notes } from "./raceEdit/Notes";
+import { ResultType } from "./raceEdit/ResultType";
+import { Sailed } from "./raceEdit/Sailed";
+import { Starts } from "./raceEdit/Starts";
+import style from "./style.css";
 
-export const RaceProperties = ({ setHeaderTitle }) => {
+export const RaceEdit = ({ setHeaderTitle }) => {
   setHeaderTitle("Edit Race");
 
   interface IraceStarts {
@@ -37,6 +37,7 @@ export const RaceProperties = ({ setHeaderTitle }) => {
     start: string;
   }
 
+  //
   // Get the current navigation id's
   // only need the getters here
   const [raceId] = useStorage("raceId");

@@ -5,18 +5,19 @@ import {
   ChevronRightIcon,
   EditIcon,
   NotAllowedIcon,
-  ViewIcon
+  ViewIcon,
 } from "@chakra-ui/icons";
 import {
   Button,
-  Container, Flex,
+  Container,
+  Flex,
   Heading,
   IconButton,
   List,
   ListItem,
   Spinner,
   Text,
-  Tooltip
+  Tooltip,
 } from "@chakra-ui/react";
 import { collection } from "firebase/firestore";
 import { Fragment, h } from "preact";
@@ -24,14 +25,14 @@ import { route } from "preact-router";
 import { useCollection } from "react-firebase-hooks/firestore";
 import {
   FadeInSlideLeft,
-  FadeInSlideRight
+  FadeInSlideRight,
 } from "../../components/animations/FadeSlide";
 import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
 import { formatDate } from "../../util/formatters";
-import style from "./scoring.css";
+import style from "./style.css";
 
-export const RacesList = ({ setHeaderTitle }) => {
+const RacesList = ({ setHeaderTitle }) => {
   setHeaderTitle("Races");
   const [seriesId, setSeriesId] = useStorage("seriesId");
   const [raceId, setRaceId] = useStorage("raceId", { initVal: "1" });
@@ -139,7 +140,7 @@ export const RacesList = ({ setHeaderTitle }) => {
                             disabled={race.data().sailed === "1"}
                             onClick={() => {
                               setRaceId(race.id);
-                              route("/race-properties");
+                              route("/races/edit");
                             }}
                           />
                         </span>
@@ -162,7 +163,7 @@ export const RacesList = ({ setHeaderTitle }) => {
                             disabled={race.data().sailed !== "1"}
                             onClick={({ target }) => {
                               route(
-                                `/results/${race.data()._seriesid}/${
+                                `/result/${race.data()._seriesid}/${
                                   race.data().raceid
                                 }`
                               );
@@ -186,3 +187,5 @@ export const RacesList = ({ setHeaderTitle }) => {
     </Fragment>
   );
 };
+
+export default RacesList;

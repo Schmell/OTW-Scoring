@@ -7,12 +7,12 @@ import Events from "../routes/events/Events";
 import Home from "../routes/home";
 import Import from "../routes/import/import";
 import NotFoundPage from "../routes/notfound";
+import { RaceEdit } from "../routes/races/RaceEdit";
+import RacesList from "../routes/races/RacesList";
+import Result from "../routes/results";
 import Results from "../routes/results";
-import { RaceProperties } from "../routes/scoring/RaceProperties";
-import { RacesList } from "../routes/scoring/RacesList";
 import Series from "../routes/series/Series";
 import SeriesEdit from "../routes/series/SeriesEdit";
-import Upload from "../routes/upload";
 import UserLanding from "../routes/user/UserLanding";
 import UserProfile from "../routes/user/UserProfile";
 import UserSettings from "../routes/user/UserSettings";
@@ -35,21 +35,17 @@ const Routing: FunctionalComponent<IRouting> = (props) => {
       <AuthRoute path="/upload" component={Import} {...props} />
 
       <Route path="/results" component={Results} {...props} />
+      <Route path="/result/:seriesId/:raceId" component={Result} {...props} />
 
       <AuthRoute path="/series" component={Series} {...props} />
       <AuthRoute path="/series/edit" component={SeriesEdit} {...props} />
 
-      <AuthRoute
-        path="/race-properties"
-        component={RaceProperties}
-        {...props}
-      />
-
-      <AuthRoute path="/races" component={RacesList} {...props} />
-
       <AuthRoute path="/events" component={Events} {...props} />
       <AuthRoute path="/events/edit" component={EventEdit} {...props} />
       <AuthRoute path="/events/event" component={EventList} {...props} />
+
+      <AuthRoute path="/races" component={RacesList} {...props} />
+      <AuthRoute path="/races/edit" component={RaceEdit} {...props} />
 
       <AuthRoute path="/competitors" component={Competitors} {...props} />
 

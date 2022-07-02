@@ -31,11 +31,10 @@ const UserProfile = () => {
 
   const submitHandler = async (values: any) => {
     // remove undefined's from values
-    // Object.keys(values).map((m) => {
-    //   if (values[m] === undefined) return (values[m] = "");
-    //   return values;
-    // });
-    // update the firestore doc
+    Object.keys(values).forEach((key) =>
+      values[key] === undefined ? delete values[key] : {}
+    );
+
     await updateDoc(docRef, values);
 
     // show submitted toast
