@@ -1,87 +1,76 @@
-import {
-  TableContainer,
-  Table,
-  TableCaption,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  Td,
-  Tfoot,
-} from "@chakra-ui/react";
-import { collection, doc, getDocs, query, where } from "firebase/firestore";
-import { Fragment, FunctionalComponent, h } from "preact";
+import { collection, doc } from "firebase/firestore";
+import { Fragment, h } from "preact";
 import { useEffect, useMemo, useReducer, useState } from "preact/compat";
-import {
-  useCollection,
-  useCollectionData,
-} from "react-firebase-hooks/firestore";
+import { useCollectionData } from "react-firebase-hooks/firestore";
 import { db } from "../../util/firebase-config";
 import "./style.css";
 
-import {
-  createTable,
-  getCoreRowModel,
-  getSortedRowModel,
-  SortingState,
-  useTableInstance,
-} from "@tanstack/react-table";
-
-import { Person, makeData } from "./makeData";
+import { compConverter } from "../../model/Comp";
 import ResultTable from "./components/ResultTable";
 
-type ResultRow = {
-  boat: string;
-  comp: string;
-  points: string;
-  finish: string;
-  start: string;
-  elapsed: string;
-  corrected: string;
-};
-
 export default function Result({ seriesId, raceId }) {
-  // Ok this component shloud be loaded only after the comp/resu;t object is created
-
   const seriesRef = doc(db, "series", seriesId);
-  const compRef = collection(seriesRef, "comps");
-  const [comps, compsLoading] = useCollection(compRef);
 
-  const resultsRef = collection(seriesRef, "results");
-  const raceQuery = query(resultsRef, where("raceid", "==", raceId));
-  const [results, resultsLoading] = useCollection(raceQuery);
+  const [tableData, setTableData] = useState([{}]);
 
-  const [data, setData] = useState<any>();
+  const compsRef = collection(seriesRef, "/comps").withConverter(compConverter);
+  const [compsCol, compsLoading, _compsError] = useCollectionData(compsRef);
 
-  // console.log("compResults: ", compResults);
-  // console.log("makeData: ", makeData(10));
+  const getSeriesData = async () => {
+    if (!compsLoading) {
+      const mapper =
+        compsCol &&
+        compsCol.map(async (item) => {
+          await item.mergeResult?.(raceId);
+          return item;
+        });
 
-  // const data = compResults;
-  // const refreshData = () => setData(() => makeData(10));
+      const mapped = await Promise.all(mapper!);
+      return mapped;
+    }
+  };
 
-  // this shuld be a function that is called before render
-  const compResults = comps?.docs.map((comp) => {
-    // console.log("comp: ", comp.data());
-    const result = results?.docs.find((res) => {
-      // console.log("res: ", res.data());
-      if (res.data().compid === comp.data().compid) {
-        return true;
-      }
-    });
-    // console.log("result: ", result?.data());
-    return { ...comp.data(), ...result?.data() };
-  });
-  console.log("compResults: ", compResults);
-  // setData(compResults);
+  const replaceEmptyStringWithCode = (result) => {
+    let code = "";
+    if (result.results[0].rcod) {
+      code = result.results[0].rcod;
+    } else {
+      code = "DNC";
+    }
+    if (result.results[0].corrected === "") result.results[0].corrected = code;
+    if (result.results[0].finish === "") result.results[0].finish = code;
+    if (result.results[0].elapsed === "") result.results[0].elapsed = code;
+    return result;
+  };
+
+  const makeTableData = async () => {
+    const seriesData = await getSeriesData();
+    let tableData: object[] = [];
+
+    seriesData &&
+      seriesData.forEach((result) => {
+        const fixedResult = replaceEmptyStringWithCode(result);
+        const { comp, results } = fixedResult;
+        tableData.push({ ...results[0], ...comp });
+      });
+
+    return tableData;
+  };
+
+  useEffect(() => {
+    (async () => {
+      const result = await makeTableData();
+      setTableData(result);
+    })();
+  }, [compsCol]);
+
+  const data = useMemo(() => {
+    return tableData;
+  }, [tableData]);
 
   return (
     <Fragment>
-      {data && (
-        <h1>data is here</h1>
-        // <ResultTable data={data} />
-      )}
+      {!compsLoading && data && <ResultTable tableData={data} />}
     </Fragment>
   );
 }
-
-// export default Results;

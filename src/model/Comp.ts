@@ -16,6 +16,9 @@ export interface IComp {
   id: string;
   ref: DocumentReference<DocumentData>;
   compid: string;
+  raceid?: string;
+  comps?: {};
+  results?: {};
   [x: string | number]: any;
 }
 
@@ -40,6 +43,22 @@ export class Comp implements IComp {
     const resultsQuery = query(
       collection(this.eventRef, "results"),
       where("compid", "==", this.compid)
+    );
+    const results = await getDocs(resultsQuery);
+    let resultArray: Comp[] = [];
+    results.forEach((item) => {
+      item.data().eventRef = item.ref.parent.parent;
+      resultArray.push(new Result(item.data() as IResult));
+    });
+    // return "merged";
+    return Object.assign(this, { results: resultArray });
+  }
+
+  async mergeResult?(raceid) {
+    const resultsQuery = query(
+      collection(this.eventRef, "results"),
+      where("compid", "==", this.compid),
+      where("raceid", "==", raceid)
     );
     const results = await getDocs(resultsQuery);
     let resultArray: Comp[] = [];
