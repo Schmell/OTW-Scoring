@@ -1,72 +1,76 @@
-import { Button, Heading, List, ListItem } from "@chakra-ui/react";
-import classNames from "classnames";
-import { collection, query, where } from "firebase/firestore";
-import { Fragment, FunctionalComponent, h } from "preact";
-import { useState } from "preact/compat";
-import {
-  useCollection,
-  useCollectionData,
-} from "react-firebase-hooks/firestore";
+import { collection, doc } from "firebase/firestore";
+import { Fragment, h } from "preact";
+import { useEffect, useMemo, useReducer, useState } from "preact/compat";
+import { useCollectionData } from "react-firebase-hooks/firestore";
 import { db } from "../../util/firebase-config";
-import style from "./style.css";
+import "./style.css";
 
-const Results: FunctionalComponent = () => {
-  const eventRef = collection(db, "events");
-  const [events] = useCollection(eventRef);
-  const [event, setEvent] = useState<string | null>();
-  // const [race, setRace] = useState<string>("1");
+import { compConverter } from "../../model/Comp";
+import ResultTable from "./components/ResultTable";
 
-  // const [results, setResults] = useState<string | null>();
+export default function Result({ seriesId, raceId }) {
+  const seriesRef = doc(db, "series", seriesId);
 
-  const racesQuery = query(collection(db, `events/${event}/races`));
-  const [races] = useCollectionData(racesQuery);
+  const [tableData, setTableData] = useState([{}]);
 
-  // const resultsQuery = query(
-  //   collection(db, `events/${event}/results`),
-  //   where("raceid", "==", race)
-  // );
-  // const [theRace] = useCollectionData(resultsQuery);
-  // console.log("theRace: ", theRace);
+  const compsRef = collection(seriesRef, "/comps").withConverter(compConverter);
+  const [compsCol, compsLoading, _compsError] = useCollectionData(compsRef);
+
+  const getSeriesData = async () => {
+    if (!compsLoading) {
+      const mapper =
+        compsCol &&
+        compsCol.map(async (item) => {
+          await item.mergeResult?.(raceId);
+          return item;
+        });
+
+      const mapped = await Promise.all(mapper!);
+      return mapped;
+    }
+  };
+
+  const replaceEmptyStringWithCode = (result) => {
+    let code = "";
+    if (result.results[0].rcod) {
+      code = result.results[0].rcod;
+    } else {
+      code = "DNC";
+    }
+    if (result.results[0].corrected === "") result.results[0].corrected = code;
+    if (result.results[0].finish === "") result.results[0].finish = code;
+    if (result.results[0].elapsed === "") result.results[0].elapsed = code;
+    return result;
+  };
+
+  const makeTableData = async () => {
+    const seriesData = await getSeriesData();
+    let tableData: object[] = [];
+
+    seriesData &&
+      seriesData.forEach((result) => {
+        const fixedResult = replaceEmptyStringWithCode(result);
+        const { comp, results } = fixedResult;
+        tableData.push({ ...results[0], ...comp });
+      });
+
+    return tableData;
+  };
+
+  useEffect(() => {
+    (async () => {
+      const result = await makeTableData();
+      setTableData(result);
+    })();
+  }, [compsCol]);
+
+  const data = useMemo(() => {
+    return tableData;
+  }, [tableData]);
 
   return (
     <Fragment>
-      <Heading>Series</Heading>
-      <Button as="a" href="/upload">
-        Upload
-      </Button>
-      <List>
-        {events &&
-          events.docs.map((item) => (
-            <ListItem
-              key={item.id}
-              className="selectList"
-              onClick={() => {
-                setEvent(item.id);
-              }}
-            >
-              {item.data().event}
-            </ListItem>
-          ))}
-      </List>
-
-      <List>
-        {races?.map((race) => (
-          <ListItem
-            className={classNames(style.raceSpan, [
-              race.sailed === "1" ? style.sailed : null,
-            ])}
-          >
-            <a
-              href={`/results/${race._seriesid}/${race.raceid}`}
-              data-key={event}
-            >
-              {race.rank} {race.name ? " - " + race.name : null}
-            </a>
-          </ListItem>
-        ))}
-      </List>
+      {!compsLoading && data && <ResultTable tableData={data} />}
     </Fragment>
   );
-};
-
-export default Results;
+}

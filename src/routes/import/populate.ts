@@ -1,13 +1,5 @@
 import { User } from "firebase/auth";
-import {
-  addDoc,
-  collection,
-  CollectionReference,
-  doc,
-  DocumentData,
-  getDocs,
-  setDoc,
-} from "firebase/firestore";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { route } from "preact-router";
 import { Blw } from "../../util/Blw";
 import { db } from "../../util/firebase-config";
@@ -18,12 +10,9 @@ export const Populate = async (user: User | null | undefined, file: File) => {
     route("/");
     return null;
   }
-  // i dont want to rely on localStorage any more
-  // i re-wrote blw as a class to access methods
+
   if (!file) return;
   const blw = new Blw({ user, file });
-  // now i need to check wether these files are copies or not
-  // i guess i need to modify a lastmodified date on server stuff
 
   // need to check the series first
   const seriesData = await blw.getSeries();
@@ -37,20 +26,14 @@ export const Populate = async (user: User | null | undefined, file: File) => {
   //results are results
   const resultsData = await blw.getResults();
 
-  // Will have a top level events to encapsulate multi-series events
-
   // add owner to series data
   seriesData.__owner = user.uid;
 
+  // add blank event
+  seriesData.__event = "";
+
   // Get series ref
   const seriesRef = collection(db, "series");
-
-  // need to check wether this file exists and modified dates are differnet first
-  // not sure how this will work
-  // I guess this should return the messages
-  // and then the user can decide what to do
-  // So turn the the set doc statements into exported functions
-  // checkSeries(seriesRef, file);
 
   // add series doc
   const sId = await addDoc(seriesRef, seriesData);
@@ -82,24 +65,3 @@ export const Populate = async (user: User | null | undefined, file: File) => {
     });
   });
 }; // populate
-
-const checkSeries = async (
-  seriesRef: CollectionReference<DocumentData>,
-  file: File
-) => {
-  //
-  const ser = await getDocs(seriesRef);
-
-  ser.docs.forEach((s) => {
-    if (file.name === s.data().__fileInfo.fileName) {
-      console.log("File name already exists in database");
-    }
-
-    if (file.lastModified > s.data().__fileInfo.lastModified) {
-      console.log("Fle waas modified since it waas uploaded");
-      console.log("Fle was modified:", s.data().__fileInfo.lastModifiedDate);
-    }
-  });
-
-  // throw new Error("Function not implemented.");
-};

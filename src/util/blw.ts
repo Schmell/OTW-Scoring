@@ -243,6 +243,7 @@ export class Blw {
     type SeriesObj = {
       event: string;
       __owner?: string;
+      __event?: string;
       lastModifiedDate?: string;
       [x: string | number | symbol]: unknown;
     };

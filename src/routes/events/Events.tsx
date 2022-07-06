@@ -10,7 +10,15 @@ import {
   Text,
   Tooltip,
 } from "@chakra-ui/react";
-import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
 import { useCollection } from "react-firebase-hooks/firestore";
@@ -29,16 +37,20 @@ const Events = ({ user, setHeaderTitle }) => {
   const [eventId, setEventId] = useStorage("eventId");
 
   const colRef = collection(db, "events");
-  const [events, eventsLoading] = useCollection(colRef);
+  const ownerEvents = query(colRef, where("__owner", "==", user.uid));
+
+  const [events, eventsLoading] = useCollection(ownerEvents);
 
   const addEventHandler = async () => {
-    const docRef = await addDoc(colRef, { name: "New event" });
+    const docRef = await addDoc(colRef, {
+      name: "New event",
+      __owner: user.uid,
+    });
     setEventId(docRef.id);
     route("/events/edit");
   };
 
   const removeEvent = async (id: any) => {
-    // Uses cloud function to remove any sub-collections
     await deleteDoc(doc(db, "events", id));
   };
 
@@ -88,6 +100,8 @@ const Events = ({ user, setHeaderTitle }) => {
                 <ListItem key={event.id} className={style.selectList}>
                   <Flex justifyContent={"space-between"}>
                     <Box
+                      w="80%"
+                      cursor="pointer"
                       onClick={() => {
                         setEventId(event.id);
                         route("/events/event");
@@ -124,13 +138,13 @@ const Events = ({ user, setHeaderTitle }) => {
                         />
                       </Tooltip>
                       <Tooltip
-                        label="Delete Series"
+                        label="Remove Series"
                         hasArrow
                         bg="blue.300"
                         placement="bottom-start"
                       >
                         <IconButton
-                          aria-label="Delete series"
+                          aria-label="Remove series"
                           icon={<MdClear />}
                           size={"sm"}
                           variant="ghost"

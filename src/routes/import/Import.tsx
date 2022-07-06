@@ -105,24 +105,20 @@ const Import = ({ setHeaderTitle }) => {
     setNewSeries(ups);
   };
 
-  const populateWithArray = async (fileObjList) => {
+  const populateWithArray = (fileObjList: importFileObj[]) => {
     fileObjList.forEach(async (fileObj) => {
-      if (fileObj.copy) {
-        fileObj.file.name = "copy-" + fileObj.file.name;
-      }
-      if (!fileObj.copy) {
-        const q = query(
-          collection(db, "series"),
-          where("__fileInfo.name", "==", fileObj.file.name)
-        );
+      const { copy, file } = fileObj;
 
+      if (!copy) {
+        const colRef = collection(db, "series");
+        const q = query(colRef, where("__fileInfo.name", "==", file.name));
         const docs = await getDocs(q);
         docs.forEach((doc) => {
-          console.log("doc: ", doc.data());
           deleteDoc(doc.ref);
         });
       }
-      Populate(user, fileObj.file);
+
+      Populate(user, file);
     });
   };
 

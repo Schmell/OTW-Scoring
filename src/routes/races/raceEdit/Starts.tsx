@@ -1,5 +1,14 @@
 import { AddIcon, CloseIcon } from "@chakra-ui/icons";
-import { Box, FormLabel, IconButton, Divider, Flex, Input, useDisclosure, Tooltip } from "@chakra-ui/react";
+import {
+  Box,
+  FormLabel,
+  IconButton,
+  Divider,
+  Flex,
+  Input,
+  useDisclosure,
+  Tooltip,
+} from "@chakra-ui/react";
 import { updateDoc } from "firebase/firestore";
 import { FieldArray, Field } from "formik";
 import { Fragment, h } from "preact";
@@ -14,7 +23,12 @@ export const Starts = ({ raceStarts, docRef, values }) => {
     <Fragment>
       <Box display="flex" justifyContent="space-between">
         <FormLabel htmlFor="starts">Starts</FormLabel>
-        <Tooltip label="Add Start" hasArrow bg="blue.300" placement="bottom-start">
+        <Tooltip
+          label="Add Start"
+          hasArrow
+          bg="blue.300"
+          placement="bottom-start"
+        >
           <IconButton
             aria-label="Add start"
             colorScheme="blue"
