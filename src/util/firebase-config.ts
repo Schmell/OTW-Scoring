@@ -17,7 +17,7 @@ const firebaseConfig = {
   storageBucket: "schmell-first-try.appspot.com",
   messagingSenderId: "464776014382",
   appId: "1:464776014382:web:8667afbe5dec4c4408cdbf",
-  measurementId: "G-Q077CT5BYW",
+  measurementId: "G-Q077CT5BYW"
 };
 
 export const app = initializeApp(firebaseConfig);
@@ -25,13 +25,15 @@ export const db = getFirestore(app);
 export const auth = getAuth(app);
 export const storage = getStorage();
 
-// Initialize Firebase
-connectFirestoreEmulator(db, "localhost", 9999);
-connectAuthEmulator(auth, "http://localhost:9099");
+// Initialize Firebase emulators
+if (location.hostname === "localhost"){
+  connectFirestoreEmulator(db, "localhost", 9999);
+  connectAuthEmulator(auth, "http://localhost:9099");
+  connectStorageEmulator(storage, "localhost", 9199);
+}else{
+  // const app = initializeApp(firebaseConfig);
+}
 
-connectStorageEmulator(storage, "localhost", 9199);
-
-// 5;
 
 enableIndexedDbPersistence(db).catch((err) => {
   if (err.code == "failed-precondition") {
