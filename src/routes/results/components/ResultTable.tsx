@@ -11,10 +11,13 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  Row,
   SortingFnOption,
   SortingState,
   Table as ReactTable,
+  Updater,
   useReactTable,
+  VisibilityState,
 } from "@tanstack/react-table";
 
 import {
@@ -22,6 +25,7 @@ import {
   Button,
   Divider,
   Flex,
+  Heading,
   Icon,
   Input,
   Radio,
@@ -29,6 +33,7 @@ import {
   Select,
   Stack,
   Table as MyTable,
+  TagRightIcon,
   Tbody,
   Td,
   Th,
@@ -49,15 +54,58 @@ type ResultRow = {
   corrected: string;
   nett: string;
   total: string;
+  // serInfo: [{}];
 };
 
-export default function ResultTable({ tableData }) {
+export default function ResultTable({ tableData, fleetName, serInfo }) {
+  // this state is for the table data
+  const [data, setData] = useState<ResultRow[]>([]);
+
+  console.log("serInfo: ", serInfo);
+
+  // set
+  useEffect(() => {
+    setData(tableData);
+  }, [tableData]);
+
+  return (
+    <Fragment>
+      {data && <Table data={data} fleetName={fleetName} serInfo={serInfo} />}
+    </Fragment>
+  );
+}
+
+function Table({
+  data,
+  fleetName,
+  serInfo,
+}: {
+  data: ResultRow[];
+  fleetName: string;
+  serInfo: { resultType: string };
+}) {
+  // States
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+    // boat: true,
+    // points: true,
+    // corrected: true,
+    elapsed: false,
+    finish: false,
+    // nett: true,
+  });
+
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: "points", desc: false },
+  ]);
+  const [resultType, setResultType] = useState("points");
+  const [columnPinning, setColumnPinning] = useState({});
+
+  ////////////////////////////////////////////////////////
   // Define the columns
   const columns = useMemo<ColumnDef<ResultRow>[]>(
     () => [
       {
-        header: "Name",
-        footer: (props) => props.column.id,
+        header: fleetName,
         columns: [
           {
             accessorKey: "boat",
@@ -67,43 +115,51 @@ export default function ResultTable({ tableData }) {
             maxSize: 100,
           },
           {
-            accessorKey: "fleet",
-            enableHiding: false,
-            cell: (info) => info.getValue(),
-            footer: (props) => props.column.id,
-          },
-        ],
-      },
-      {
-        header: "Results",
-        footer: (props) => props.column.id,
-        columns: [
-          {
             accessorKey: "points",
-            enableHiding: true,
+            enableHiding: false,
+            cell: (props) => parseFloat(props.getValue()),
             footer: (props) => props.column.id,
+            sortingFn: "alphanumeric",
           },
           {
             accessorKey: "elapsed",
             enableHiding: true,
             footer: (props) => props.column.id,
+            sortingFn: (rowA, rowB, columnId) => {
+              if (rowA.getValue("elapsed") === "---") return 1;
+              if (rowB.getValue("elapsed") === "---") return -1;
+              if (rowA.getValue("elapsed") < rowB.getValue("elapsed"))
+                return -1;
+              if (rowA.getValue("elapsed") > rowB.getValue("elapsed")) return 1;
+              return 0;
+            },
           },
           {
             accessorKey: "corrected",
             enableHiding: true,
             footer: (props) => props.column.id,
+            sortingFn: (rowA, rowB, columnId) => {
+              if (rowA.getValue("corrected") === "---") return 1;
+              if (rowB.getValue("corrected") === "---") return -1;
+              if (rowA.getValue("corrected") < rowB.getValue("corrected"))
+                return -1;
+              if (rowA.getValue("corrected") > rowB.getValue("corrected"))
+                return 1;
+              return 0;
+            },
           },
           {
             accessorKey: "finish",
             enableHiding: true,
             footer: (props) => props.column.id,
+            sortingFn: (rowA, rowB, columnId) => {
+              if (rowA.getValue("finish") === "---") return 1;
+              if (rowB.getValue("finish") === "---") return -1;
+              if (rowA.getValue("finish") < rowB.getValue("finish")) return -1;
+              if (rowA.getValue("finish") > rowB.getValue("finish")) return 1;
+              return 0;
+            },
           },
-        ],
-      },
-      {
-        header: "Total",
-        footer: (props) => props.column.id,
-        columns: [
           {
             accessorKey: "nett",
             enableHiding: false,
@@ -113,39 +169,7 @@ export default function ResultTable({ tableData }) {
       },
     ],
     []
-  );
-
-  // this state is for the table data
-  const [data, setData] = useState<ResultRow[]>([]);
-  // set
-  useEffect(() => {
-    setData(tableData);
-  }, [tableData]);
-
-  return (
-    <Fragment>
-      {data && columns && <Table data={data} columns={columns} />}
-    </Fragment>
-  );
-}
-
-function Table({
-  data,
-  columns,
-}: {
-  data: ResultRow[];
-  columns: ColumnDef<ResultRow>[];
-}) {
-  //
-  // States
-  const [columnVisibility, setColumnVisibility] = useState({});
-  const [sorting, setSorting] = useState<SortingState>([
-    { id: "fleet", desc: true },
-    { id: "corrected", desc: false },
-  ]);
-  const [resultType, setResultType] = useState("points");
-  const [columnOrder, setColumnOrder] = useState<ColumnOrderState>([]);
-  const [columnPinning, setColumnPinning] = useState({});
+  ); //////////////////////////////////////////////////////
 
   // set up the table
   const table = useReactTable({
@@ -154,7 +178,6 @@ function Table({
     state: {
       sorting,
       columnVisibility,
-      columnOrder,
       columnPinning,
     },
     initialState: {
@@ -165,19 +188,15 @@ function Table({
 
     onColumnVisibilityChange: setColumnVisibility,
     onSortingChange: setSorting,
-    onColumnOrderChange: setColumnOrder,
     onColumnPinningChange: setColumnPinning,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    // debugTable: true,
-    // debugHeaders: true,
-    // debugColumns: true,
   });
 
   useEffect(() => {
-    const setVisbleColumns = () => {
+    const setVisibleColumns = () => {
       table.getAllLeafColumns().forEach((column) => {
         if (column.getCanHide()) {
           if (column.getIsVisible() && column.id !== resultType) {
@@ -190,25 +209,28 @@ function Table({
         }
       });
     };
-    setVisbleColumns();
+    setVisibleColumns();
+
     const setSortingColumns = () => {
-      console.log("sorting: ", sorting);
-      console.log("resultType: ", resultType);
-      const sortCols = [
-        { id: "fleet", desc: false },
-        { id: resultType, desc: false },
-      ];
+      const sortCols = [{ id: resultType, desc: false }];
       setSorting(sortCols);
     };
     setSortingColumns();
+    //
   }, [resultType]);
 
   useEffect(() => {
-    setResultType("corrected");
+    if (!serInfo.resultType) {
+      setResultType("points");
+    } else {
+      setResultType(serInfo.resultType);
+    }
   }, []);
 
   return (
     <Fragment>
+      <Heading>{fleetName}</Heading>
+      <Divider my={2} />
       <Flex justifyContent={"space-between"} alignItems={"center"}>
         <RadioGroup onChange={setResultType} value={resultType}>
           <Stack direction="row">

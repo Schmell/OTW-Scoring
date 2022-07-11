@@ -1,5 +1,3 @@
-import { Fragment, h } from "preact";
-import { route } from "preact-router";
 import {
   Accordion,
   AccordionButton,
@@ -7,28 +5,34 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
+  Button,
   Divider,
   Flex,
+  FormControl,
+  FormErrorMessage,
   FormLabel,
   Heading,
+  HStack,
   IconButton,
   Input,
-  useToast,
+  Radio,
+  RadioGroup,
   Text,
-  Button,
   Tooltip,
+  useToast,
 } from "@chakra-ui/react";
+import { doc, updateDoc } from "firebase/firestore";
+import { Field, Form, Formik } from "formik";
+import { Fragment, h } from "preact";
+import { route } from "preact-router";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 import { MdOutlineAddToPhotos, MdOutlineFileUpload } from "react-icons/md";
 import {
   FadeInSlideLeft,
   FadeInSlideRight,
 } from "../../components/animations/FadeSlide";
-import { Field, Form, Formik } from "formik";
-import { doc, Timestamp, updateDoc } from "firebase/firestore";
-import { useDocumentData } from "react-firebase-hooks/firestore";
-import { db } from "../../util/firebase-config";
-import { formatTime } from "../../util/formatters";
 import useStorage from "../../hooks/useStorage";
+import { db } from "../../util/firebase-config";
 
 const SeriesEdit = ({ setHeaderTitle }) => {
   setHeaderTitle("Edit Series");
@@ -128,6 +132,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
               lastModified: currentSeries.__fileInfo.lastModified,
               lastModifiedDate: currentSeries.__fileInfo.lastModifiedDate,
               size: currentSeries.__fileInfo.size,
+              resultType: currentSeries.resultType,
             }}
             onSubmit={submitHandler}
           >
@@ -147,6 +152,65 @@ const SeriesEdit = ({ setHeaderTitle }) => {
                       <Text>Event Id: </Text>
                       <Text color={"gray.400"}>{currentSeries.eventeid}</Text>
                     </Flex>
+
+                    <Divider my={3} />
+
+                    {/* <FormLabel htmlFor="resutlType">Series name</FormLabel> */}
+                    <Field name="resultType">
+                      {({ field, form }) => (
+                        <FormControl
+                          isInvalid={form.errors.name && form.touched.name}
+                        >
+                          <FormLabel htmlFor="resultType">
+                            Default result type
+                          </FormLabel>
+
+                          <RadioGroup
+                            {...field}
+                            id="resultType"
+                            colorScheme="blue"
+                          >
+                            <HStack>
+                              <Field
+                                type="radio"
+                                name="resultType"
+                                value="points"
+                                as={Radio}
+                              >
+                                Position
+                              </Field>
+                              <Field
+                                type="radio"
+                                name="resultType"
+                                value="elapsed"
+                                as={Radio}
+                              >
+                                Elapsed
+                              </Field>
+                              <Field
+                                type="radio"
+                                name="resultType"
+                                value="finish"
+                                as={Radio}
+                              >
+                                Finishes
+                              </Field>
+                              <Field
+                                type="radio"
+                                name="resultType"
+                                value="corrected"
+                                as={Radio}
+                              >
+                                Corrected
+                              </Field>
+                            </HStack>
+                          </RadioGroup>
+                          <FormErrorMessage>
+                            {form.errors.name}
+                          </FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
 
                     <Divider my={3} />
 
