@@ -1,10 +1,7 @@
 import { collection, doc } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { useEffect, useMemo, useState } from "preact/compat";
-import {
-  useCollectionData,
-  useDocumentData,
-} from "react-firebase-hooks/firestore";
+import { useCollectionData, useDocumentData } from "react-firebase-hooks/firestore";
 import { db } from "../../util/firebase-config";
 import "./style.css";
 
