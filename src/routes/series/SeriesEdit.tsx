@@ -1,5 +1,3 @@
-import { Fragment, h } from "preact";
-import { route } from "preact-router";
 import {
   Accordion,
   AccordionButton,
@@ -7,28 +5,31 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
+  Button,
   Divider,
   Flex,
+  FormControl,
+  FormErrorMessage,
   FormLabel,
   Heading,
+  HStack,
   IconButton,
   Input,
-  useToast,
+  Radio,
+  RadioGroup,
   Text,
-  Button,
   Tooltip,
+  useToast,
 } from "@chakra-ui/react";
-import { MdOutlineAddToPhotos, MdOutlineFileUpload } from "react-icons/md";
-import {
-  FadeInSlideLeft,
-  FadeInSlideRight,
-} from "../../components/animations/FadeSlide";
+import { doc, updateDoc } from "firebase/firestore";
 import { Field, Form, Formik } from "formik";
-import { doc, Timestamp, updateDoc } from "firebase/firestore";
+import { Fragment, h } from "preact";
+import { route } from "preact-router";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { db } from "../../util/firebase-config";
-import { formatTime } from "../../util/formatters";
+import { MdOutlineAddToPhotos, MdOutlineFileUpload } from "react-icons/md";
+import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
 import useStorage from "../../hooks/useStorage";
+import { db } from "../../util/firebase-config";
 
 const SeriesEdit = ({ setHeaderTitle }) => {
   setHeaderTitle("Edit Series");
@@ -41,9 +42,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
   const submittedToast = useToast();
 
   const submitHandler = async (values: any) => {
-    Object.keys(values).forEach((key) =>
-      values[key] === undefined ? delete values[key] : {}
-    );
+    Object.keys(values).forEach((key) => (values[key] === undefined ? delete values[key] : {}));
     // here we may need to add modified flag or something
     // values.__fileInfo.lastModified = Date.now();
     // update the firestore doc
@@ -73,12 +72,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
 
         {/* Sub header buttons */}
         <FadeInSlideLeft>
-          <Tooltip
-            label="Upload"
-            hasArrow
-            bgColor={"blue.300"}
-            placement="bottom-start"
-          >
+          <Tooltip label="Upload" hasArrow bgColor={"blue.300"} placement="bottom-start">
             <IconButton
               aria-label="upload"
               colorScheme="blue"
@@ -91,12 +85,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
             />
           </Tooltip>
 
-          <Tooltip
-            label="Add Series"
-            hasArrow
-            bgColor={"blue.300"}
-            placement="bottom-start"
-          >
+          <Tooltip label="Add Series" hasArrow bgColor={"blue.300"} placement="bottom-start">
             <IconButton
               aria-label="Add series"
               colorScheme="blue"
@@ -128,6 +117,8 @@ const SeriesEdit = ({ setHeaderTitle }) => {
               lastModified: currentSeries.__fileInfo.lastModified,
               lastModifiedDate: currentSeries.__fileInfo.lastModifiedDate,
               size: currentSeries.__fileInfo.size,
+              resultType: currentSeries.resultType,
+              rowTitle: currentSeries.rowTitle,
             }}
             onSubmit={submitHandler}
           >
@@ -147,6 +138,61 @@ const SeriesEdit = ({ setHeaderTitle }) => {
                       <Text>Event Id: </Text>
                       <Text color={"gray.400"}>{currentSeries.eventeid}</Text>
                     </Flex>
+
+                    <Divider my={3} />
+
+                    {/* <FormLabel htmlFor="resutlType">Series name</FormLabel> */}
+                    <Field name="resultType">
+                      {({ field, form }) => (
+                        <FormControl isInvalid={form.errors.name && form.touched.name}>
+                          <FormLabel htmlFor="resultType">Default result type</FormLabel>
+
+                          <RadioGroup {...field} id="resultType" colorScheme="blue">
+                            <HStack>
+                              <Field type="radio" name="resultType" value="points" as={Radio}>
+                                Position
+                              </Field>
+                              <Field type="radio" name="resultType" value="elapsed" as={Radio}>
+                                Elapsed
+                              </Field>
+                              <Field type="radio" name="resultType" value="finish" as={Radio}>
+                                Finishes
+                              </Field>
+                              <Field type="radio" name="resultType" value="corrected" as={Radio}>
+                                Corrected
+                              </Field>
+                            </HStack>
+                          </RadioGroup>
+                          <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
+
+                    <Divider my={3} />
+
+                    {/* <FormLabel htmlFor="resutlType">Series name</FormLabel> */}
+                    <Field name="rowTitle">
+                      {({ field, form }) => (
+                        <FormControl isInvalid={form.errors.name && form.touched.name}>
+                          <FormLabel htmlFor="resultType">Default row title</FormLabel>
+
+                          <RadioGroup {...field} id="rowTitle" colorScheme="blue">
+                            <HStack>
+                              <Field type="radio" name="rowTitle" value="boat" as={Radio}>
+                                Boat
+                              </Field>
+                              <Field type="radio" name="rowTitle" value="helmname" as={Radio}>
+                                Helm
+                              </Field>
+                              <Field type="radio" name="rowTitle" value="sailno" as={Radio}>
+                                Sail no.
+                              </Field>
+                            </HStack>
+                          </RadioGroup>
+                          <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
 
                     <Divider my={3} />
 
@@ -222,9 +268,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
 
                     <Divider mt={3} />
 
-                    <FormLabel htmlFor="lastModifiedDate">
-                      Last Modified Date
-                    </FormLabel>
+                    <FormLabel htmlFor="lastModifiedDate">Last Modified Date</FormLabel>
                     <Field name="lastModifiedDate" as={Input} />
 
                     <Divider mt={3} />

@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { User } from "firebase/auth";
 import { parse } from "papaparse";
 import { formatTime } from "./formatters";
@@ -146,6 +147,15 @@ export class Blw {
       );
     });
     if (res[0]) {
+      // if()
+      // if (res[0][1].includes(":")) {
+      //   const splits = res[0][1].split(":");
+      //   return Temporal.PlainTime.from({
+      //     hour: splits[0],
+      //     minute: splits[1],
+      //     second: splits[2],
+      //   }).toString();
+      // }
       return res[0][1];
     } else {
       return "";

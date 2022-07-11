@@ -3,18 +3,15 @@ import { Fragment, h } from "preact";
 import "./index.css";
 
 import {
-  Column,
   ColumnDef,
-  ColumnOrderState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  SortingFnOption,
   SortingState,
-  Table as ReactTable,
   useReactTable,
+  VisibilityState,
 } from "@tanstack/react-table";
 
 import {
@@ -22,8 +19,17 @@ import {
   Button,
   Divider,
   Flex,
+  Heading,
   Icon,
+  IconButton,
   Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Radio,
   RadioGroup,
   Select,
@@ -34,9 +40,10 @@ import {
   Th,
   Thead,
   Tr,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useEffect, useMemo, useState } from "preact/hooks";
-import { MdOutlineArrowDownward, MdOutlineArrowUpward } from "react-icons/md";
+import { MdOutlineArrowDownward, MdOutlineArrowUpward, MdSettings } from "react-icons/md";
 
 type ResultRow = {
   boat: string;
@@ -49,63 +56,122 @@ type ResultRow = {
   corrected: string;
   nett: string;
   total: string;
+  sailno?: string;
+  // serInfo: [{}];
 };
 
-export default function ResultTable({ tableData }) {
+export default function ResultTable({ tableData, fleetName, serInfo }) {
+  // this state is for the table data
+  const [data, setData] = useState<ResultRow[]>([]);
+
+  // set
+  useEffect(() => {
+    setData(tableData);
+  }, [tableData]);
+
+  return <Fragment>{data && <Table data={data} fleetName={fleetName} serInfo={serInfo} />}</Fragment>;
+}
+
+interface ITable {
+  data: ResultRow[];
+  fleetName: string;
+  serInfo: { resultType: string; rowTitle: string };
+}
+
+function Table({ data, fleetName, serInfo }: ITable) {
+  if (!fleetName) fleetName = "Fleet";
+  // States
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+    boat: true,
+    helmname: false,
+    sailno: false,
+    corrected: false,
+    elapsed: false,
+    finish: false,
+  });
+
+  const [sorting, setSorting] = useState<SortingState>([{ id: "points", desc: false }]);
+  const [resultType, setResultType] = useState("points");
+  const [columnPinning, setColumnPinning] = useState({});
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [rowTitle, setRowTitle] = useState("boat");
+
+  ////////////////////////////////////////////////////////
   // Define the columns
   const columns = useMemo<ColumnDef<ResultRow>[]>(
     () => [
       {
-        header: "Name",
-        footer: (props) => props.column.id,
+        header: fleetName,
         columns: [
           {
             accessorKey: "boat",
-            enableHiding: false,
-            cell: (info) => info.getValue(),
-            footer: (props) => props.column.id,
-            maxSize: 100,
-          },
-          {
-            accessorKey: "fleet",
-            enableHiding: false,
-            cell: (info) => info.getValue(),
-            footer: (props) => props.column.id,
-          },
-        ],
-      },
-      {
-        header: "Results",
-        footer: (props) => props.column.id,
-        columns: [
-          {
-            accessorKey: "points",
+            id: "boat",
             enableHiding: true,
             footer: (props) => props.column.id,
+          },
+          {
+            accessorKey: "helmname",
+            id: "helmname",
+            enableHiding: true,
+            footer: (props) => props.column.id,
+          },
+          {
+            accessorKey: "sailno",
+            id: "sailno",
+            enableHiding: true,
+            footer: (props) => props.column.id,
+          },
+          {
+            accessorKey: "points",
+            id: "points",
+            enableHiding: false,
+            cell: (props) => parseFloat(props.getValue()),
+            footer: (props) => props.column.id,
+            sortingFn: "alphanumeric",
           },
           {
             accessorKey: "elapsed",
+            id: "elapsed",
             enableHiding: true,
             footer: (props) => props.column.id,
+            sortingFn: (rowA, rowB, columnId) => {
+              if (rowA.getValue("elapsed") === "---") return 1;
+              if (rowB.getValue("elapsed") === "---") return -1;
+              if (rowA.getValue("elapsed") < rowB.getValue("elapsed")) return -1;
+              if (rowA.getValue("elapsed") > rowB.getValue("elapsed")) return 1;
+              return 0;
+            },
           },
           {
             accessorKey: "corrected",
+            id: "corrected",
             enableHiding: true,
             footer: (props) => props.column.id,
+            sortingFn: (rowA, rowB, columnId) => {
+              if (rowA.getValue("corrected") === "---") return 1;
+              if (rowB.getValue("corrected") === "---") return -1;
+              if (rowA.getValue("corrected") < rowB.getValue("corrected")) return -1;
+              if (rowA.getValue("corrected") > rowB.getValue("corrected")) return 1;
+              return 0;
+            },
           },
           {
             accessorKey: "finish",
+            id: "finish",
             enableHiding: true,
             footer: (props) => props.column.id,
+            sortingFn: (rowA, rowB, columnId) => {
+              if (rowA.getValue("finish") === "---") return 1;
+              if (rowB.getValue("finish") === "---") return -1;
+              if (rowA.getValue("finish") < rowB.getValue("finish")) return -1;
+              if (rowA.getValue("finish") > rowB.getValue("finish")) return 1;
+              return 0;
+            },
           },
-        ],
-      },
-      {
-        header: "Total",
-        footer: (props) => props.column.id,
-        columns: [
           {
             accessorKey: "nett",
+            id: "nett",
             enableHiding: false,
             footer: (props) => props.column.id,
           },
@@ -113,39 +179,7 @@ export default function ResultTable({ tableData }) {
       },
     ],
     []
-  );
-
-  // this state is for the table data
-  const [data, setData] = useState<ResultRow[]>([]);
-  // set
-  useEffect(() => {
-    setData(tableData);
-  }, [tableData]);
-
-  return (
-    <Fragment>
-      {data && columns && <Table data={data} columns={columns} />}
-    </Fragment>
-  );
-}
-
-function Table({
-  data,
-  columns,
-}: {
-  data: ResultRow[];
-  columns: ColumnDef<ResultRow>[];
-}) {
-  //
-  // States
-  const [columnVisibility, setColumnVisibility] = useState({});
-  const [sorting, setSorting] = useState<SortingState>([
-    { id: "fleet", desc: true },
-    { id: "corrected", desc: false },
-  ]);
-  const [resultType, setResultType] = useState("points");
-  const [columnOrder, setColumnOrder] = useState<ColumnOrderState>([]);
-  const [columnPinning, setColumnPinning] = useState({});
+  ); //////////////////////////////////////////////////////
 
   // set up the table
   const table = useReactTable({
@@ -154,7 +188,6 @@ function Table({
     state: {
       sorting,
       columnVisibility,
-      columnOrder,
       columnPinning,
     },
     initialState: {
@@ -165,50 +198,108 @@ function Table({
 
     onColumnVisibilityChange: setColumnVisibility,
     onSortingChange: setSorting,
-    onColumnOrderChange: setColumnOrder,
     onColumnPinningChange: setColumnPinning,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    // debugTable: true,
-    // debugHeaders: true,
-    // debugColumns: true,
   });
 
+  // this useEffect is to set up visible columns and sorting columns
   useEffect(() => {
-    const setVisbleColumns = () => {
+    const setVisibleColumns = () => {
+      // need to
       table.getAllLeafColumns().forEach((column) => {
-        if (column.getCanHide()) {
-          if (column.getIsVisible() && column.id !== resultType) {
-            column.toggleVisibility();
-          }
+        // Clear current visible
+        if (column.getIsVisible() && column.id !== resultType && column.id !== rowTitle) {
+          column.toggleVisibility();
+        }
 
-          if (column.id === resultType) {
-            column.toggleVisibility();
-          }
+        // Turn on column from result type
+        if (column.id === resultType) {
+          column.toggleVisibility();
+        }
+
+        // Turn on column from row title
+        if (!column.getIsVisible() && column.id === rowTitle) {
+          column.toggleVisibility();
         }
       });
     };
-    setVisbleColumns();
+    setVisibleColumns();
+
     const setSortingColumns = () => {
-      console.log("sorting: ", sorting);
-      console.log("resultType: ", resultType);
-      const sortCols = [
-        { id: "fleet", desc: false },
-        { id: resultType, desc: false },
-      ];
+      const sortCols = [{ id: resultType, desc: false }];
       setSorting(sortCols);
     };
     setSortingColumns();
-  }, [resultType]);
+    //
+  }, [resultType, rowTitle]);
 
+  // set the result type
   useEffect(() => {
-    setResultType("corrected");
+    if (!serInfo.resultType) {
+      setResultType("points");
+    } else {
+      setResultType(serInfo.resultType);
+    }
+    if (!serInfo.rowTitle) {
+      setRowTitle("boat");
+    } else {
+      setRowTitle(serInfo.rowTitle);
+    }
   }, []);
 
   return (
     <Fragment>
+      <Flex justifyContent={"space-between"}>
+        <Heading>{fleetName}</Heading>
+        <Box>
+          <IconButton
+            aria-label="settings"
+            icon={<MdSettings />}
+            size="md"
+            colorScheme={"blue"}
+            variant={"ghost"}
+            onClick={onOpen}
+          />
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Settings</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Heading size={"sm"} pb={3}>
+                  View Columns
+                </Heading>
+                <RadioGroup onChange={setRowTitle} value={rowTitle}>
+                  <Stack direction="row">
+                    <Radio value="boat">Boat</Radio>
+                    <Radio value="helmname">Helm</Radio>
+                    <Radio value="sailno">SailNo.</Radio>
+                  </Stack>
+                </RadioGroup>
+                <Divider my={3} />
+                <RadioGroup onChange={setResultType} value={resultType}>
+                  <Stack direction="row">
+                    <Radio value="points">Points</Radio>
+                    <Radio value="elapsed">Elapsed</Radio>
+                    <Radio value="corrected">Corrected</Radio>
+                    <Radio value="finish">Finish</Radio>
+                  </Stack>
+                </RadioGroup>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button colorScheme="blue" mr={3} onClick={onClose}>
+                  Close
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+        </Box>
+      </Flex>
+      {/* <Divider my={2} />
       <Flex justifyContent={"space-between"} alignItems={"center"}>
         <RadioGroup onChange={setResultType} value={resultType}>
           <Stack direction="row">
@@ -223,22 +314,25 @@ function Table({
           {table.getRowModel().rows.length} Rows
         </Box>
       </Flex>
+      <Divider my={3} />
+      <RadioGroup onChange={setRowTitle} value={rowTitle}>
+        <Stack direction="row">
+          <Radio value="boat">Boat</Radio>
+          <Radio value="helmname">Helm</Radio>
+          <Radio value="sailno">SailNo.</Radio>
+        </Stack>
+      </RadioGroup> */}
 
       <Divider my={3} />
 
       <Box>
         <MyTable>
-          {}
           <Thead bgColor="blue.300">
             {table.getHeaderGroups().map((headerGroup) => (
               <Tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <Th
-                      key={header.id}
-                      colSpan={header.colSpan}
-                      color={"gray.800"}
-                    >
+                    <Th key={header.id} colSpan={header.colSpan} color={"gray.800"}>
                       {header.isPlaceholder ? null : (
                         <Box
                           {...{
@@ -248,12 +342,7 @@ function Table({
                           }}
                         >
                           <Flex>
-                            <Box>
-                              {flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                            </Box>
+                            <Box>{flexRender(header.column.columnDef.header, header.getContext())}</Box>
                             <Box>
                               {" "}
                               {{
@@ -275,14 +364,7 @@ function Table({
               return (
                 <Tr key={row.id}>
                   {row.getVisibleCells().map((cell) => {
-                    return (
-                      <Td key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </Td>
-                    );
+                    return <Td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</Td>;
                   })}
                 </Tr>
               );
@@ -293,14 +375,8 @@ function Table({
         <Box className="h-2" />
 
         {/* This is the pagination navigation */}
-        {table.getRowModel().rows.length >
-          table.getState().pagination.pageSize && (
-          <Flex
-            alignItems={"start"}
-            justifyContent={"space-evenly"}
-            gap={1}
-            py={3}
-          >
+        {table.getRowModel().rows.length > table.getState().pagination.pageSize && (
+          <Flex alignItems={"start"} justifyContent={"space-evenly"} gap={1} py={3}>
             <Flex alignItems={"center"} gap={1} mr={3}>
               <Button
                 size={"xs"}
@@ -343,8 +419,7 @@ function Table({
             <Flex alignItems={"center"} gap={1}>
               <Box>
                 <strong>
-                  {table.getState().pagination.pageIndex + 1} of{" "}
-                  {table.getPageCount()}
+                  {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
                 </strong>
               </Box>
             </Flex>

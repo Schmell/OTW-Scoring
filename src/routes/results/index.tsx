@@ -1,20 +1,23 @@
 import { collection, doc } from "firebase/firestore";
 import { Fragment, h } from "preact";
-import { useEffect, useMemo, useReducer, useState } from "preact/compat";
-import { useCollectionData } from "react-firebase-hooks/firestore";
+import { useEffect, useMemo, useState } from "preact/compat";
+import { useCollectionData, useDocumentData } from "react-firebase-hooks/firestore";
 import { db } from "../../util/firebase-config";
 import "./style.css";
 
 import { compConverter } from "../../model/Comp";
-import ResultTable from "./components/ResultTable";
+import FleetsTables from "./components/FleetsTables";
+import { Temporal } from "@js-temporal/polyfill";
 
 export default function Result({ seriesId, raceId }) {
   const seriesRef = doc(db, "series", seriesId);
 
   const [tableData, setTableData] = useState([{}]);
+  // const [seriesInfo, setSeriesInfo] = useState([{}]);
 
   const compsRef = collection(seriesRef, "/comps").withConverter(compConverter);
   const [compsCol, compsLoading, _compsError] = useCollectionData(compsRef);
+  const [serInfo, serInfoLoading] = useDocumentData(seriesRef);
 
   const getSeriesData = async () => {
     if (!compsLoading) {
@@ -30,12 +33,14 @@ export default function Result({ seriesId, raceId }) {
     }
   };
 
+  // function should take in tableData and render a table for each fleet
   const replaceEmptyStringWithCode = (result) => {
     let code = "";
+
     if (result.results[0].rcod) {
       code = result.results[0].rcod;
     } else {
-      code = "DNC";
+      code = "---";
     }
     if (result.results[0].corrected === "") result.results[0].corrected = code;
     if (result.results[0].finish === "") result.results[0].finish = code;
@@ -45,6 +50,7 @@ export default function Result({ seriesId, raceId }) {
 
   const makeTableData = async () => {
     const seriesData = await getSeriesData();
+
     let tableData: object[] = [];
 
     seriesData &&
@@ -70,7 +76,11 @@ export default function Result({ seriesId, raceId }) {
 
   return (
     <Fragment>
-      {!compsLoading && data && <ResultTable tableData={data} />}
+      {!compsLoading && data && (
+        <Fragment>
+          <FleetsTables tableData={tableData} serInfo={serInfo} />
+        </Fragment>
+      )}
     </Fragment>
   );
 }
