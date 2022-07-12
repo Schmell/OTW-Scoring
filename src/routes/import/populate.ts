@@ -1,7 +1,7 @@
 import { User } from "firebase/auth";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { route } from "preact-router";
-import { Blw } from "../../util/Blw";
+import  Blw  from "../../util/Blw";
 import { db } from "../../util/firebase-config";
 
 export const Populate = async (user: User | null | undefined, file: File) => {
