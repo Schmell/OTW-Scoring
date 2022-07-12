@@ -14,7 +14,6 @@ import { Fragment, h } from "preact";
 import { MdClear } from "react-icons/md";
 import { DuplicateOptions } from "./DuplicateOptions";
 import { importFileObj } from "./importFileObj";
-//   import { fileType } from "./fileType";
 
 interface uploadProps {
   listItems: importFileObj[];
@@ -23,36 +22,12 @@ interface uploadProps {
   duplicates: boolean;
 }
 
-const ImportList = ({
-  listItems,
-  listState,
-  setListState,
-  duplicates,
-}: uploadProps) => {
+const ImportList = ({ listItems, listState, setListState, duplicates }: uploadProps) => {
   const handleChange = () => {};
 
   const { value, getRadioProps, getRootProps } = useRadioGroup({
     defaultValue: "copy",
-    // onChange: handleChange,
   });
-
-  // const handleMakeAcopy = (item) => {
-  //   console.log("item: ", item);
-  //   const filtered = listState.filter((ls) => {
-  //     if (ls.serId === item.serId) return true;
-  //   });
-  //   console.log("filtered: ", filtered);
-  //   filtered[0].fileName = "copy-" + filtered[0].fileName;
-  //   filtered[0].serId = "";
-  //   const merged = {
-  //     ...listState,
-  //     ...filtered,
-  //   };
-  //   console.log("merged: ", merged);
-
-  //   setListState(merged as fileType[]);
-  //   return;
-  // };
 
   return (
     <Fragment>
@@ -72,36 +47,20 @@ const ImportList = ({
                 {listItems.map((item) => (
                   <Fragment>
                     {item.name && (
-                      <ListItem
-                        py={1}
-                        borderBottom="1px solid"
-                        borderBottomColor={"blue.100"}
-                      >
-                        <Flex
-                          justifyContent={"space-between"}
-                          alignItems={"center"}
-                        >
+                      <ListItem py={1} borderBottom="1px solid" borderBottomColor={"blue.100"}>
+                        <Flex justifyContent={"space-between"} alignItems={"center"}>
                           <Box>
                             <Text fontSize={"lg"}>{item.name}</Text>
                             {item.file.lastModified && (
                               <Text fontSize={"xs"} color={"gray.600"}>
-                                {new Date(
-                                  item.file.lastModified
-                                ).toLocaleDateString()}{" "}
-                                {new Date(
-                                  item.file.lastModified
-                                ).toLocaleTimeString()}
+                                {new Date(item.file.lastModified).toLocaleDateString()}{" "}
+                                {new Date(item.file.lastModified).toLocaleTimeString()}
                               </Text>
                             )}
                           </Box>
                           <Flex alignItems={"center"}>
                             {item.duplicate && <DuplicateOptions item={item} />}
-                            <Tooltip
-                              label="Remove from Upload"
-                              hasArrow
-                              bg="blue.300"
-                              placement="bottom-start"
-                            >
+                            <Tooltip label="Remove from Upload" hasArrow bg="blue.300" placement="bottom-start">
                               <IconButton
                                 aria-label="Remove from Upload"
                                 icon={<MdClear />}

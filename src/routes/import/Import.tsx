@@ -1,14 +1,6 @@
 import { Box, Button, Divider, Flex, Heading, Text } from "@chakra-ui/react";
 import fileDialog from "file-dialog";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  doc,
-  deleteDoc,
-  getDoc,
-} from "firebase/firestore";
+import { collection, deleteDoc, getDocs, query, where } from "firebase/firestore";
 import { h } from "preact";
 import { route } from "preact-router";
 import { useState } from "preact/hooks";
@@ -126,31 +118,16 @@ const Import = ({ setHeaderTitle }) => {
     <Box px={2}>
       <Flex justifyContent={"space-between"}>
         <Heading color="blue.400">Select File</Heading>
-        <Button
-          variant={"outline"}
-          boxShadow="md"
-          colorScheme={"blue"}
-          onClick={handleChooseFile}
-        >
+        <Button variant={"outline"} boxShadow="md" colorScheme={"blue"} onClick={handleChooseFile}>
           Choose File(s)
         </Button>
       </Flex>
 
       <Divider my={4} />
 
-      <ImportList
-        listItems={duplicates}
-        listState={duplicates}
-        setListState={setDuplicates}
-        duplicates={true}
-      />
+      <ImportList listItems={duplicates} listState={duplicates} setListState={setDuplicates} duplicates={true} />
 
-      <ImportList
-        listItems={newSeries}
-        listState={newSeries}
-        setListState={setNewSeries}
-        duplicates={false}
-      />
+      <ImportList listItems={newSeries} listState={newSeries} setListState={setNewSeries} duplicates={false} />
 
       {newSeries.find((ups) => {
         if (ups.name) return true;
@@ -171,9 +148,7 @@ const Import = ({ setHeaderTitle }) => {
         </Box>
       ) : (
         <Box>
-          <Text as="p">
-            Use the choose files button to select your Sailwave file to import
-          </Text>
+          <Text as="p">Use the choose files button to select your Sailwave file to import</Text>
         </Box>
       )}
     </Box>
