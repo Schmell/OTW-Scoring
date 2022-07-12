@@ -7,7 +7,6 @@ import "./style.css";
 
 import { compConverter } from "../../model/Comp";
 import FleetsTables from "./components/FleetsTables";
-import { Temporal } from "@js-temporal/polyfill";
 
 export default function Result({ seriesId, raceId }) {
   const seriesRef = doc(db, "series", seriesId);

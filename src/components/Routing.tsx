@@ -1,16 +1,17 @@
 import { FunctionalComponent, h } from "preact";
 import Router, { Route } from "preact-router";
+
 import Competitors from "../routes/competitors/Competitors";
 import EventList from "../routes/events/Event";
 import EventEdit from "../routes/events/EventEdit";
 import Events from "../routes/events/Events";
 import Home from "../routes/home";
-import Import from "../routes/import/import";
+import Import from "../routes/import/Import";
 import NotFoundPage from "../routes/notfound";
 import { RaceEdit } from "../routes/races/RaceEdit";
 import RacesList from "../routes/races/RacesList";
 import Result from "../routes/results";
-import Results from "../routes/results";
+// import Results from "../routes/results";
 import Series from "../routes/series/Series";
 import SeriesEdit from "../routes/series/SeriesEdit";
 import UserLanding from "../routes/user/UserLanding";
@@ -34,7 +35,7 @@ const Routing: FunctionalComponent<IRouting> = (props) => {
       {/* <AuthRoute path="/upload" component={Upload} {...props} /> */}
       <AuthRoute path="/upload" component={Import} {...props} />
 
-      <Route path="/results" component={Results} {...props} />
+      {/* <Route path="/results" component={Results} {...props} /> */}
       <Route path="/result/:seriesId/:raceId" component={Result} {...props} />
 
       <AuthRoute path="/series" component={Series} {...props} />
