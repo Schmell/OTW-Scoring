@@ -12,7 +12,7 @@ interface chromeFile extends File {
   lastModifiedDate?: string;
 }
 
-export class Blw {
+export default class Blw {
   user: User | null | undefined;
   file: chromeFile;
   constructor(props: IBlw) {
