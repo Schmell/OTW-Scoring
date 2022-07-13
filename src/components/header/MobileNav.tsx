@@ -15,18 +15,9 @@ import {
   MenuDivider,
   Text,
   Link,
-  Modal,
-  Button,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
 } from "@chakra-ui/react";
-import { DocumentReference, DocumentData, doc } from "firebase/firestore";
 import { h } from "preact";
+import { DocumentReference, DocumentData, doc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { MdMenu, MdOutlineNotificationsNone, MdExpandMore } from "react-icons/md";
