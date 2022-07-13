@@ -1,11 +1,8 @@
-import { Box, Divider, Flex, Heading, Spinner, Text } from "@chakra-ui/react";
+import { Box, Divider, Flex, Heading, ListItem, Spinner, Text, UnorderedList } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
 import { Link } from "preact-router";
 import { useAuthState } from "react-firebase-hooks/auth";
-import {
-  FadeInSlideLeft,
-  FadeInSlideRight,
-} from "../../components/animations/FadeSlide";
+import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
 import { SignIn } from "../../components/SignIn";
 import { SignOut } from "../../components/SignOut";
 import { auth } from "../../util/firebase-config";
@@ -35,38 +32,31 @@ const Home = ({ setHeaderTitle }) => {
           <Divider my={3} />
 
           <Text fontSize="md">
-            On The Water RC is sailboat racing scoring companion for the popular
-            Sailwave desktop application
+            On The Water RC is sailboat racing scoring companion for the popular Sailwave desktop application
           </Text>
         </Box>
       </FadeInSlideRight>
 
       {userLoading ? (
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="blue.500"
-          size="xl"
-        />
+        <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
       ) : (
         <Fragment>
           <Divider my={5} />
           <Heading as="h4" fontSize={"lg"}>
-            Where to from here
+            Where too from here
           </Heading>
-
-          <Link href="/upload">
-            <Text colorScheme={"blue"} color={"blue"}>
-              Upload a sailwave file
-            </Text>
-          </Link>
-
-          <Link href="/series">
-            <Text colorScheme={"blue"} color={"blue"}>
-              Select a Series
-            </Text>
-          </Link>
+          <UnorderedList spacing={1} mt={2}>
+            <ListItem>
+              <Link href="/import">
+                <Text color={"blue.600"}>Upload a sailwave file</Text>
+              </Link>
+            </ListItem>
+            <ListItem>
+              <Link href="/series">
+                <Text color={"blue.600"}>Select a Series</Text>
+              </Link>
+            </ListItem>
+          </UnorderedList>
         </Fragment>
       )}
     </Fragment>

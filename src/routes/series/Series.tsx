@@ -16,26 +16,17 @@ import { Fragment, h } from "preact";
 import { route } from "preact-router";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { BsXLg } from "react-icons/bs";
-import {
-  FadeInSlideLeft,
-  FadeInSlideRight,
-} from "../../components/animations/FadeSlide";
+import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
 import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
 import style from "./style.css";
-import {
-  MdOutlineFileUpload,
-  MdOutlineAddToPhotos,
-  MdModeEdit,
-} from "react-icons/md";
+import { MdOutlineFileUpload, MdOutlineAddToPhotos, MdModeEdit } from "react-icons/md";
 
 const Series = ({ user, setHeaderTitle }) => {
   setHeaderTitle("Series");
   // Get users series
   const seriesRef = collection(db, "series");
-  const [series, seriesLoading] = useCollection(
-    query(seriesRef, where("__owner", "==", user && user.uid))
-  );
+  const [series, seriesLoading] = useCollection(query(seriesRef, where("__owner", "==", user && user.uid)));
   //   console.log("series: ", series?.docs);
 
   const removeSeries = async (id: any) => {
@@ -60,30 +51,20 @@ const Series = ({ user, setHeaderTitle }) => {
 
         {/* Sub header buttons */}
         <FadeInSlideLeft>
-          <Tooltip
-            label="Upload file"
-            hasArrow
-            bg="blue.300"
-            placement="bottom-start"
-          >
+          <Tooltip label="Import file" hasArrow bg="blue.300" placement="bottom-start">
             <IconButton
-              aria-label="upload"
+              aria-label="import"
               colorScheme="blue"
               variant="outline"
               boxShadow="md"
               mr={2}
               _visited={{ color: "blue" }}
-              onClick={() => route("/upload")}
+              onClick={() => route("/import")}
               icon={<MdOutlineFileUpload />}
             />
           </Tooltip>
 
-          <Tooltip
-            label="Add Series"
-            hasArrow
-            bg="blue.300"
-            placement="bottom-start"
-          >
+          <Tooltip label="Add Series" hasArrow bg="blue.300" placement="bottom-start">
             <IconButton
               aria-label="add series"
               colorScheme="blue"
@@ -102,13 +83,7 @@ const Series = ({ user, setHeaderTitle }) => {
       <List>
         {seriesLoading ? (
           <Flex justifyContent="center" alignItems="center" mt={8}>
-            <Spinner
-              thickness="4px"
-              speed="0.65s"
-              emptyColor="gray.200"
-              color="blue.500"
-              size="xl"
-            />
+            <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
           </Flex>
         ) : (
           series?.docs.map((series) => (
@@ -132,12 +107,7 @@ const Series = ({ user, setHeaderTitle }) => {
                     </Box>
 
                     <Box>
-                      <Tooltip
-                        label="Edit Series"
-                        hasArrow
-                        bg="blue.300"
-                        placement="bottom-start"
-                      >
+                      <Tooltip label="Edit Series" hasArrow bg="blue.300" placement="bottom-start">
                         <IconButton
                           aria-label="edit series"
                           icon={<MdModeEdit />}
@@ -150,12 +120,7 @@ const Series = ({ user, setHeaderTitle }) => {
                           }}
                         />
                       </Tooltip>
-                      <Tooltip
-                        label="Delete Series"
-                        hasArrow
-                        bg="blue.300"
-                        placement="bottom-start"
-                      >
+                      <Tooltip label="Delete Series" hasArrow bg="blue.300" placement="bottom-start">
                         <IconButton
                           aria-label="Delete series"
                           icon={<BsXLg />}

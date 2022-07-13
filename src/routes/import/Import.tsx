@@ -1,16 +1,16 @@
-import { Box, Button, Divider, Flex, Heading, Text } from "@chakra-ui/react";
-import fileDialog from "file-dialog";
-import { collection, deleteDoc, getDocs, query, where } from "firebase/firestore";
 import { h } from "preact";
 import { route } from "preact-router";
 import { useState } from "preact/hooks";
+import { collection, deleteDoc, getDocs, query, where } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
-import PriBtn from "../../components/generic/PriBtn";
 import { auth, db } from "../../util/firebase-config";
-import { importFileObj } from "./importFileObj";
+import { Box, Button, Divider, Flex, Heading, Text } from "@chakra-ui/react";
+import fileDialog from "file-dialog";
+//
+import PriBtn from "../../components/generic/PriBtn";
 import ImportList from "./ImportList";
+import { importFileObj } from "./importTypes";
 import { Populate } from "./populate";
-// import { fileType } from "../upload/fileType";
 
 const Import = ({ setHeaderTitle }) => {
   setHeaderTitle("Import");
@@ -143,7 +143,7 @@ const Import = ({ setHeaderTitle }) => {
               route("/series");
             }}
           >
-            Upload
+            Import
           </PriBtn>
         </Box>
       ) : (

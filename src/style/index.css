@@ -4,18 +4,6 @@
   box-sizing: border-box;
 }
 
-html,
-body {
-  /* height: 100%; */
-  /* width: 100%; */
-  /* padding: 0; */
-  /* margin: 0; */
-  /* background: var(--gray-1); */
-  /* font-family: var(--font-sans); */
-  /* font-size: var(--font-size-1); */
-  /* -webkit-font-smoothing: antialiased; */
-  /* -moz-osx-font-smoothing: grayscale; */
-}
 
 a {
   text-decoration: none;
@@ -24,6 +12,7 @@ a {
 
 #preact_root {
   height: 100%;
+  margin: auto
 }
 
 h1,

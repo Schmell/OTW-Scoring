@@ -1,4 +1,3 @@
-import { Temporal } from "@js-temporal/polyfill";
 import { User } from "firebase/auth";
 import { parse } from "papaparse";
 import { formatTime } from "./formatters";
@@ -12,7 +11,7 @@ interface chromeFile extends File {
   lastModifiedDate?: string;
 }
 
-export class Blw {
+export default class Blw {
   user: User | null | undefined;
   file: chromeFile;
   constructor(props: IBlw) {

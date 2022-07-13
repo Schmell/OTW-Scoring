@@ -13,18 +13,9 @@ import {
 import { Fragment, h } from "preact";
 import { MdClear } from "react-icons/md";
 import { DuplicateOptions } from "./DuplicateOptions";
-import { importFileObj } from "./importFileObj";
+import { importProps } from "./importTypes";
 
-interface uploadProps {
-  listItems: importFileObj[];
-  listState: importFileObj[];
-  setListState: any;
-  duplicates: boolean;
-}
-
-const ImportList = ({ listItems, listState, setListState, duplicates }: uploadProps) => {
-  const handleChange = () => {};
-
+const ImportList = ({ listItems, listState, setListState, duplicates }: importProps) => {
   const { value, getRadioProps, getRootProps } = useRadioGroup({
     defaultValue: "copy",
   });

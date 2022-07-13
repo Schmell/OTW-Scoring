@@ -7,9 +7,8 @@ import SidebarWithHeader from "./header/SidebarWithHeader";
 import Routing from "./Routing";
 import { colors, components } from "./theme";
 
-const theme = extendTheme({ colors, components });
-
 const App: FunctionalComponent = () => {
+  const theme = extendTheme({ colors, components });
   const [user, userLoading, userError] = useAuthState(auth);
 
   const [headerTitle, setHeaderTitle] = useState("Blw Me");

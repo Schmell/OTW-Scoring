@@ -1,10 +1,9 @@
-import { useRadio, chakra, Input, Icon, Tooltip } from "@chakra-ui/react";
 import { h } from "preact";
+import { useRadio, chakra, Input, Icon, Tooltip } from "@chakra-ui/react";
 
 export function IconRadio(props) {
   const { image, icon, label, ...radioProps } = props;
-  const { state, getInputProps, htmlProps, getLabelProps } =
-    useRadio(radioProps);
+  const { state, getInputProps, htmlProps, getLabelProps } = useRadio(radioProps);
 
   return (
     <Tooltip label={label} hasArrow bg="blue.300" placement="bottom-start">
@@ -16,7 +15,6 @@ export function IconRadio(props) {
           color={state.isChecked ? "limegreen" : "gray.400"}
           bg={state.isChecked ? "green:100" : "white"}
           {...getLabelProps()}
-          // fontSize={24}
         />
       </chakra.label>
     </Tooltip>

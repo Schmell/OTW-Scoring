@@ -32,10 +32,8 @@ const Routing: FunctionalComponent<IRouting> = (props) => {
 
       <Route path="/signin" component={SignIn} {...props} />
 
-      {/* <AuthRoute path="/upload" component={Upload} {...props} /> */}
-      <AuthRoute path="/upload" component={Import} {...props} />
+      <AuthRoute path="/import" component={Import} {...props} />
 
-      {/* <Route path="/results" component={Results} {...props} /> */}
       <Route path="/result/:seriesId/:raceId" component={Result} {...props} />
 
       <AuthRoute path="/series" component={Series} {...props} />
