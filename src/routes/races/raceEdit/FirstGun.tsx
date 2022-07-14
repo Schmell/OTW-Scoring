@@ -1,8 +1,8 @@
-import { Box, Button, FormLabel, Input } from "@chakra-ui/react";
+import { Fragment, h } from "preact";
+import { Box, FormLabel, Input } from "@chakra-ui/react";
 import { Temporal } from "@js-temporal/polyfill";
 import { updateDoc } from "firebase/firestore";
 import { Field } from "formik";
-import { Fragment, h } from "preact";
 import SecBtn from "../../../components/generic/SecBtn";
 
 export const FirstGun = ({ docRef, setRaceTime }) => {

@@ -1,6 +1,7 @@
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
-import { Button, ButtonProps, Flex, useColorMode } from "@chakra-ui/react";
 import { h } from "preact";
+import { Button, ButtonProps, useColorMode } from "@chakra-ui/react";
+import MdDarkModeIcon from "@mui/icons-material/DarkMode";
+import MdLightModeIcon from "@mui/icons-material/LightMode";
 
 export default function ColorModeToggle(props: ButtonProps) {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -12,7 +13,7 @@ export default function ColorModeToggle(props: ButtonProps) {
       w="fit-content"
       {...props}
     >
-      {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+      {colorMode === "light" ? <MdDarkModeIcon /> : <MdLightModeIcon />}
     </Button>
   );
 }

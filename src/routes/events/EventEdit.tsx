@@ -1,3 +1,5 @@
+import { Fragment, h } from "preact";
+import { route } from "preact-router";
 import {
   Box,
   Button,
@@ -5,20 +7,20 @@ import {
   Flex,
   FormLabel,
   Heading,
+  Icon,
   IconButton,
   Input,
   Tooltip,
   useToast,
 } from "@chakra-ui/react";
-import { Fragment, h } from "preact";
-import { FadeInSlideRight } from "../../components/animations/FadeSlide";
-import { MdClearAll, MdDelete, MdLibraryAdd } from "react-icons/md";
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
-import { Formik, Form, Field } from "formik";
-import { route } from "preact-router";
-import { useDocumentData } from "react-firebase-hooks/firestore";
-import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { Formik, Form, Field } from "formik";
+import useStorage from "../../hooks/useStorage";
+import { FadeInSlideRight } from "../../components/animations/FadeSlide";
+import ClearAllIcon from "@mui/icons-material/ClearAll";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const EventEdit = ({ user, setHeaderTitle }) => {
   setHeaderTitle("Event Edit");
@@ -64,15 +66,10 @@ const EventEdit = ({ user, setHeaderTitle }) => {
           </Heading>
         </FadeInSlideRight>
         <Box>
-          <Tooltip
-            label="Delete event"
-            hasArrow
-            bg="blue.300"
-            placement="bottom-start"
-          >
+          <Tooltip label="Delete event" hasArrow bg="blue.300" placement="bottom-start">
             <IconButton
               aria-label="Delete Event"
-              icon={<MdDelete />}
+              icon={<Icon as={DeleteIcon} />}
               colorScheme={"blue"}
               mr={2}
               variant={"outline"}
@@ -84,15 +81,10 @@ const EventEdit = ({ user, setHeaderTitle }) => {
             />
           </Tooltip>
 
-          <Tooltip
-            label="Clear form"
-            hasArrow
-            bg="blue.300"
-            placement="bottom-start"
-          >
+          <Tooltip label="Clear form" hasArrow bg="blue.300" placement="bottom-start">
             <IconButton
               aria-label="Add Event"
-              icon={<MdClearAll />}
+              icon={<Icon as={ClearAllIcon} />}
               colorScheme={"blue"}
               variant={"outline"}
               boxShadow={"md"}

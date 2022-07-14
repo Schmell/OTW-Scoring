@@ -1,20 +1,13 @@
-import { AddIcon, CloseIcon } from "@chakra-ui/icons";
-import {
-  Box,
-  FormLabel,
-  IconButton,
-  Divider,
-  Flex,
-  Input,
-  useDisclosure,
-  Tooltip,
-} from "@chakra-ui/react";
+import { Box, FormLabel, IconButton, Divider, Flex, Input, useDisclosure, Tooltip, Icon } from "@chakra-ui/react";
 import { updateDoc } from "firebase/firestore";
 import { FieldArray, Field } from "formik";
 import { Fragment, h } from "preact";
 import { useState } from "preact/hooks";
 import { formatTime } from "../../../util/formatters";
 import { AddStartModal } from "./AddStartModal";
+// Icons
+import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
 
 export const Starts = ({ raceStarts, docRef, values }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -23,18 +16,13 @@ export const Starts = ({ raceStarts, docRef, values }) => {
     <Fragment>
       <Box display="flex" justifyContent="space-between">
         <FormLabel htmlFor="starts">Starts</FormLabel>
-        <Tooltip
-          label="Add Start"
-          hasArrow
-          bg="blue.300"
-          placement="bottom-start"
-        >
+        <Tooltip label="Add Start" hasArrow bg="blue.300" placement="bottom-start">
           <IconButton
             aria-label="Add start"
             colorScheme="blue"
             variant="outline"
             boxShadow="md"
-            icon={<AddIcon />}
+            icon={<Icon as={AddIcon} />}
             onClick={onOpen}
           />
         </Tooltip>
@@ -69,7 +57,7 @@ export const Starts = ({ raceStarts, docRef, values }) => {
                   />
                   <IconButton
                     aria-label="Delete start"
-                    icon={<CloseIcon />}
+                    icon={<Icon as={CloseIcon} />}
                     variant="ghost"
                     colorScheme="blue"
                     size="xs"

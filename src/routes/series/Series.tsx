@@ -1,9 +1,11 @@
+import { Fragment, h } from "preact";
+import { route } from "preact-router";
 import {
   Box,
-  Button,
   Divider,
   Flex,
   Heading,
+  Icon,
   IconButton,
   List,
   ListItem,
@@ -12,15 +14,16 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { collection, deleteDoc, doc, query, where } from "firebase/firestore";
-import { Fragment, h } from "preact";
-import { route } from "preact-router";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { BsXLg } from "react-icons/bs";
-import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
-import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
+import useStorage from "../../hooks/useStorage";
+import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
 import style from "./style.css";
-import { MdOutlineFileUpload, MdOutlineAddToPhotos, MdModeEdit } from "react-icons/md";
+// Icons
+import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
+import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
+import EditIcon from "@mui/icons-material/Edit";
+import CloseIcon from "@mui/icons-material/Close";
 
 const Series = ({ user, setHeaderTitle }) => {
   setHeaderTitle("Series");
@@ -60,7 +63,7 @@ const Series = ({ user, setHeaderTitle }) => {
               mr={2}
               _visited={{ color: "blue" }}
               onClick={() => route("/import")}
-              icon={<MdOutlineFileUpload />}
+              icon={<Icon as={FileUploadOutlinedIcon} />}
             />
           </Tooltip>
 
@@ -72,7 +75,7 @@ const Series = ({ user, setHeaderTitle }) => {
               boxShadow="md"
               _visited={{ color: "blue" }}
               // onClick={() => route("/series/edit")}
-              icon={<MdOutlineAddToPhotos />}
+              icon={<Icon as={AddToPhotosOutlinedIcon} />}
             />
           </Tooltip>
         </FadeInSlideLeft>
@@ -110,7 +113,7 @@ const Series = ({ user, setHeaderTitle }) => {
                       <Tooltip label="Edit Series" hasArrow bg="blue.300" placement="bottom-start">
                         <IconButton
                           aria-label="edit series"
-                          icon={<MdModeEdit />}
+                          icon={<Icon as={EditIcon} />}
                           size={"sm"}
                           variant="ghost"
                           colorScheme={"blue"}
@@ -123,7 +126,7 @@ const Series = ({ user, setHeaderTitle }) => {
                       <Tooltip label="Delete Series" hasArrow bg="blue.300" placement="bottom-start">
                         <IconButton
                           aria-label="Delete series"
-                          icon={<BsXLg />}
+                          icon={<Icon as={CloseIcon} />}
                           size={"sm"}
                           variant="ghost"
                           colorScheme={"blue"}

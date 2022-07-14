@@ -1,16 +1,15 @@
 import { BoxProps, Box, useColorModeValue, Flex, CloseButton, Text } from "@chakra-ui/react";
 import { h } from "preact";
 import { Link as PLink } from "preact-router";
-import { IconType } from "react-icons";
-import {
-  MdHome,
-  MdCloudUpload,
-  MdCalendarToday,
-  MdOutlineMediation,
-  MdSailing,
-  MdPeople,
-  MdSettings,
-} from "react-icons/md";
+// import { IconType } from "react-icons";
+
+import Home from "@mui/icons-material/Home";
+import MdPeople from "@mui/icons-material/People";
+import MdCloudUpload from "@mui/icons-material/CloudUpload";
+import MdCalendarToday from "@mui/icons-material/CalendarToday";
+import MdOutlineMediation from "@mui/icons-material/Mediation";
+import MdSailing from "@mui/icons-material/Sailing";
+import MdSettings from "@mui/icons-material/Settings";
 import NavItem from "./NavItem";
 
 interface SidebarProps extends BoxProps {
@@ -19,13 +18,8 @@ interface SidebarProps extends BoxProps {
 }
 
 export default function SidebarContent({ onClose, headerTitle, ...rest }: SidebarProps) {
-  interface LinkItemProps {
-    name: string;
-    icon: IconType;
-    href?: string;
-  }
-  const LinkItems: Array<LinkItemProps> = [
-    { name: "Home", icon: MdHome, href: "/" },
+  const LinkItems = [
+    { name: "Home", icon: Home, href: "/" },
     { name: "Import", icon: MdCloudUpload, href: "/import" },
     { name: "Events", icon: MdCalendarToday, href: "/events" },
     { name: "Series", icon: MdOutlineMediation, href: "/series" },

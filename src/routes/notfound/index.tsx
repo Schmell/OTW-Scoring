@@ -1,7 +1,8 @@
 import { Box, Flex, Heading, Icon, Text } from "@chakra-ui/react";
 import { FunctionalComponent, h } from "preact";
 import { Link } from "preact-router/match";
-import { MdChevronLeft } from "react-icons/md";
+// import { MdChevronLeft } from "react-icons/md";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 const Notfound: FunctionalComponent = () => {
   return (
@@ -11,7 +12,7 @@ const Notfound: FunctionalComponent = () => {
       <Link href="/">
         <Flex>
           <Heading size={"sm"} color="black" my={4}>
-            <Icon as={MdChevronLeft} mr={2} />
+            <Icon as={ChevronLeftIcon} mr={2} />
             Back to Home
           </Heading>
         </Flex>

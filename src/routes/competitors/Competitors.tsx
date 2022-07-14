@@ -1,24 +1,9 @@
-import {
-  Box,
-  Container,
-  Divider,
-  Flex,
-  Heading,
-  IconButton,
-  List,
-  ListItem,
-  Spinner,
-} from "@chakra-ui/react";
+import { Box, Container, Divider, Flex, Heading, Icon, IconButton, List, ListItem, Spinner } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
 import { FadeInSlideRight } from "../../components/animations/FadeSlide";
-import { MdLibraryAdd } from "react-icons/md";
-import {
-  query,
-  collectionGroup,
-  where,
-  orderBy,
-  collection,
-} from "firebase/firestore";
+// import { MdLibraryAdd } from "react-icons/md";
+import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
+import { query, collectionGroup, where, orderBy, collection } from "firebase/firestore";
 import { db } from "../../util/firebase-config";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 
@@ -46,7 +31,7 @@ const Competitors = ({ user, setHeaderTitle }) => {
 
         <IconButton
           aria-label="Add Event"
-          icon={<MdLibraryAdd />}
+          icon={<Icon as={AddToPhotosOutlinedIcon} />}
           colorScheme={"blue"}
           variant={"outline"}
           boxShadow={"md"}

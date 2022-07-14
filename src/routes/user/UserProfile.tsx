@@ -1,26 +1,11 @@
-import {
-  Box,
-  Button,
-  Container,
-  Divider,
-  FormLabel,
-  Heading,
-  Input,
-  useToast,
-} from "@chakra-ui/react";
-import { doc, setDoc, updateDoc } from "firebase/firestore";
-import { Field, Form, Formik } from "formik";
-import { Fragment, h } from "preact";
-import { useAuthState } from "react-firebase-hooks/auth";
-import {
-  useCollectionData,
-  useDocumentData,
-} from "react-firebase-hooks/firestore";
-import {
-  FadeIn,
-  FadeInSlideRight,
-} from "../../components/animations/FadeSlide";
+import { h } from "preact";
+import { Box, Button, Container, Divider, FormLabel, Heading, Input, useToast } from "@chakra-ui/react";
+import { doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../util/firebase-config";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { Field, Form, Formik } from "formik";
+import { FadeIn, FadeInSlideRight } from "../../components/animations/FadeSlide";
 
 const UserProfile = () => {
   const submittedToast = useToast();
@@ -31,9 +16,7 @@ const UserProfile = () => {
 
   const submitHandler = async (values: any) => {
     // remove undefined's from values
-    Object.keys(values).forEach((key) =>
-      values[key] === undefined ? delete values[key] : {}
-    );
+    Object.keys(values).forEach((key) => (values[key] === undefined ? delete values[key] : {}));
 
     await updateDoc(docRef, values);
 

@@ -1,3 +1,5 @@
+import { Fragment, h } from "preact";
+import { route } from "preact-router";
 import {
   Accordion,
   AccordionButton,
@@ -13,6 +15,7 @@ import {
   FormLabel,
   Heading,
   HStack,
+  Icon,
   IconButton,
   Input,
   Radio,
@@ -22,14 +25,14 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { doc, updateDoc } from "firebase/firestore";
-import { Field, Form, Formik } from "formik";
-import { Fragment, h } from "preact";
-import { route } from "preact-router";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { MdOutlineAddToPhotos, MdOutlineFileUpload } from "react-icons/md";
-import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
-import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
+import { Field, Form, Formik } from "formik";
+import useStorage from "../../hooks/useStorage";
+import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
+// Icons
+import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
+import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 
 const SeriesEdit = ({ setHeaderTitle }) => {
   setHeaderTitle("Edit Series");
@@ -81,7 +84,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
               mr={2}
               _visited={{ color: "blue" }}
               onClick={() => route("/upload")}
-              icon={<MdOutlineFileUpload />}
+              icon={<Icon as={FileUploadOutlinedIcon} boxSize={4} />}
             />
           </Tooltip>
 
@@ -93,7 +96,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
               boxShadow="md"
               _visited={{ color: "blue" }}
               // onClick={() => route("/series/edit")}
-              icon={<MdOutlineAddToPhotos />}
+              icon={<Icon as={AddToPhotosOutlinedIcon} boxSize={4} />}
             />
           </Tooltip>
         </FadeInSlideLeft>

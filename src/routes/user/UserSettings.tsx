@@ -1,3 +1,5 @@
+import { Fragment, h } from "preact";
+import { useEffect, useState } from "preact/hooks";
 import {
   Box,
   Button,
@@ -8,7 +10,6 @@ import {
   FormLabel,
   Heading,
   HStack,
-  Input,
   Radio,
   RadioGroup,
   Switch,
@@ -16,14 +17,9 @@ import {
 } from "@chakra-ui/react";
 import { doc, updateDoc } from "firebase/firestore";
 import { Field, Form, Formik } from "formik";
-import { Fragment, h } from "preact";
-import { useEffect, useState } from "preact/hooks";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import {
-  FadeIn,
-  FadeInSlideRight,
-} from "../../components/animations/FadeSlide";
+import { FadeIn, FadeInSlideRight } from "../../components/animations/FadeSlide";
 import { auth, db } from "../../util/firebase-config";
 
 const UserSettings = () => {
@@ -85,40 +81,17 @@ const UserSettings = () => {
               <Form>
                 <Field name="defaultResultType">
                   {({ field, form }) => (
-                    <FormControl
-                      isInvalid={form.errors.name && form.touched.name}
-                    >
-                      <FormLabel htmlFor="defaultResultType">
-                        Default scoring type
-                      </FormLabel>
-                      <RadioGroup
-                        {...field}
-                        id="defaultResultType"
-                        colorScheme="blue"
-                      >
+                    <FormControl isInvalid={form.errors.name && form.touched.name}>
+                      <FormLabel htmlFor="defaultResultType">Default scoring type</FormLabel>
+                      <RadioGroup {...field} id="defaultResultType" colorScheme="blue">
                         <HStack>
-                          <Field
-                            type="radio"
-                            name="defaultResultType"
-                            value="position"
-                            as={Radio}
-                          >
+                          <Field type="radio" name="defaultResultType" value="position" as={Radio}>
                             Position
                           </Field>
-                          <Field
-                            type="radio"
-                            name="defaultResultType"
-                            value="elapsed"
-                            as={Radio}
-                          >
+                          <Field type="radio" name="defaultResultType" value="elapsed" as={Radio}>
                             Elapsed
                           </Field>
-                          <Field
-                            type="radio"
-                            name="defaultResultType"
-                            value="finish"
-                            as={Radio}
-                          >
+                          <Field type="radio" name="defaultResultType" value="finish" as={Radio}>
                             Finishes
                           </Field>
                         </HStack>

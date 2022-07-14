@@ -1,9 +1,6 @@
-import { Box, Container, Heading } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
-import {
-  FadeInSlideRight,
-  FadeIn,
-} from "../../components/animations/FadeSlide";
+import { Box, Container, Heading } from "@chakra-ui/react";
+import { FadeInSlideRight, FadeIn } from "../../components/animations/FadeSlide";
 
 const UserLanding = () => {
   return (

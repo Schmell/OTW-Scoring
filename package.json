@@ -22,28 +22,22 @@
     ]
   },
   "dependencies": {
-    "@chakra-ui/icons": "^1.1.7",
     "@chakra-ui/react": "^1.8.6",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@faker-js/faker": "^7.3.0",
     "@js-temporal/polyfill": "^0.4.0",
-    "@react-icons/all-files": "^4.1.0",
+    "@mui/icons-material": "^5.8.4",
     "@tanstack/react-table": "^8.1.3",
-    "classnames": "^2.3.1",
     "file-dialog": "^0.0.8",
     "firebase": "^9.6.4",
     "formik": "^2.2.9",
     "framer-motion": "^6.2.8",
-    "open-props": "^1.3.9",
     "papaparse": "^5.3.1",
     "preact": "^10.3.1",
-    "preact-layout": "^1.0.2",
     "preact-render-to-string": "^5.1.4",
     "preact-router": "^3.2.1",
-    "react-data-table-component": "^7.4.7",
-    "react-firebase-hooks": "^5.0.2",
-    "react-icons": "^4.4.0"
+    "react-firebase-hooks": "^5.0.2"
   },
   "devDependencies": {
     "@types/enzyme": "^3.10.5",

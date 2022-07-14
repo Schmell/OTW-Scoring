@@ -1,7 +1,4 @@
 import { Fragment, h } from "preact";
-
-import "./index.css";
-
 import {
   ColumnDef,
   flexRender,
@@ -13,7 +10,6 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-
 import {
   Box,
   Button,
@@ -42,8 +38,12 @@ import {
   Tr,
   useDisclosure,
 } from "@chakra-ui/react";
+
 import { useEffect, useMemo, useState } from "preact/hooks";
-import { MdOutlineArrowDownward, MdOutlineArrowUpward, MdSettings } from "react-icons/md";
+// Icons
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 type ResultRow = {
   boat: string;
@@ -57,7 +57,6 @@ type ResultRow = {
   nett: string;
   total: string;
   sailno?: string;
-  // serInfo: [{}];
 };
 
 export default function ResultTable({ tableData, fleetName, serInfo }) {
@@ -257,7 +256,7 @@ function Table({ data, fleetName, serInfo }: ITable) {
         <Box>
           <IconButton
             aria-label="settings"
-            icon={<MdSettings />}
+            icon={(<Icon as={SettingsIcon} />) as any} // not sure why??
             size="md"
             colorScheme={"blue"}
             variant={"ghost"}
@@ -346,8 +345,8 @@ function Table({ data, fleetName, serInfo }: ITable) {
                             <Box>
                               {" "}
                               {{
-                                asc: <Icon as={MdOutlineArrowUpward} />,
-                                desc: <Icon as={MdOutlineArrowDownward} />,
+                                asc: <Icon as={ArrowUpwardIcon} />,
+                                desc: <Icon as={ArrowDownwardIcon} />,
                               }[header.column.getIsSorted() as string] ?? null}
                             </Box>
                           </Flex>

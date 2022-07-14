@@ -1,4 +1,3 @@
-import style from "./style.css";
 import { h } from "preact";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../util/firebase-config";

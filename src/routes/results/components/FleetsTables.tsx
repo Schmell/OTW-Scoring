@@ -1,5 +1,5 @@
-import { Divider } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
+import { Divider } from "@chakra-ui/react";
 import ResultTable from "./ResultTable";
 
 export default function FleetsTable({ tableData, serInfo }) {
@@ -16,11 +16,7 @@ export default function FleetsTable({ tableData, serInfo }) {
     <Fragment>
       {fleetsArray.map((fleet) => (
         <Fragment>
-          <ResultTable
-            tableData={fleet}
-            fleetName={fleet[0].fleet}
-            serInfo={serInfo}
-          />
+          <ResultTable tableData={fleet} fleetName={fleet[0].fleet} serInfo={serInfo} />
           <Divider my={4} />
         </Fragment>
       ))}

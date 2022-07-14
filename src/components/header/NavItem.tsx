@@ -1,14 +1,7 @@
-import { FlexProps, Flex, useColorModeValue, Icon, Link } from "@chakra-ui/react";
 import { h } from "preact";
-// import { Link } from "preact-router";
-import { IconType } from "react-icons";
+import { Flex, useColorModeValue, Icon, Link } from "@chakra-ui/react";
 
-interface NavItemProps extends FlexProps {
-  icon: IconType;
-  children: string | number;
-}
-
-export default function NavItem({ icon, children, ...rest }: NavItemProps) {
+export default function NavItem({ icon, children, ...rest }) {
   // Individual nav items
   // maybe include the router comp in here?
   // there is a name conflict betwwen chakra and the router

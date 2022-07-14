@@ -1,12 +1,8 @@
-import { Box, Button } from "@chakra-ui/react";
-import {
-  GithubAuthProvider,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
 import { h } from "preact";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { Box, Button } from "@chakra-ui/react";
+// Firebase
+import { GithubAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "../util/firebase-config";
 
 export function SignIn() {
@@ -22,7 +18,7 @@ export function SignIn() {
       await setDoc(userDoc, {
         uid: user.uid,
         displayName: user.displayName,
-        nickname:  user.displayName,
+        nickname: user.displayName,
         email: user.email,
         phoneNumber: user.phoneNumber,
         photoURL: user.photoURL,
@@ -44,24 +40,11 @@ export function SignIn() {
 
   return (
     <Box>
-      <Button
-        className="sign-in"
-        variant="outline"
-        colorScheme="blue"
-        boxShadow="md"
-        mr={3}
-        onClick={signInWithGoogle}
-      >
+      <Button className="sign-in" variant="outline" colorScheme="blue" boxShadow="md" mr={3} onClick={signInWithGoogle}>
         Google Login
       </Button>
 
-      <Button
-        className="sign-in"
-        variant="outline"
-        colorScheme="blue"
-        boxShadow="md"
-        onClick={signInWithGitHub}
-      >
+      <Button className="sign-in" variant="outline" colorScheme="blue" boxShadow="md" onClick={signInWithGitHub}>
         GitHub Login
       </Button>
     </Box>

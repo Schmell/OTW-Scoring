@@ -1,8 +1,11 @@
+import { Fragment, h } from "preact";
+import { route } from "preact-router";
 import {
   Box,
   Divider,
   Flex,
   Heading,
+  Icon,
   IconButton,
   List,
   ListItem,
@@ -10,26 +13,16 @@ import {
   Text,
   Tooltip,
 } from "@chakra-ui/react";
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  query,
-  updateDoc,
-  where,
-} from "firebase/firestore";
-import { Fragment, h } from "preact";
-import { route } from "preact-router";
+import { addDoc, collection, deleteDoc, doc, query, where } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { MdClear, MdLibraryAdd, MdModeEdit } from "react-icons/md";
-import {
-  FadeInSlideLeft,
-  FadeInSlideRight,
-} from "../../components/animations/FadeSlide";
-import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
+import useStorage from "../../hooks/useStorage";
+import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
 import style from "./style.css";
+// import { MdClear, MdLibraryAdd, MdModeEdit } from "react-icons/md";
+import ClearIcon from "@mui/icons-material/Clear";
+import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
+import EditIcon from "@mui/icons-material/Edit";
 
 const Events = ({ user, setHeaderTitle }) => {
   setHeaderTitle("Events");
@@ -63,15 +56,10 @@ const Events = ({ user, setHeaderTitle }) => {
           </Heading>
         </FadeInSlideRight>
 
-        <Tooltip
-          label="Add Event"
-          hasArrow
-          bgColor={"blue.300"}
-          placement="bottom-start"
-        >
+        <Tooltip label="Add Event" hasArrow bgColor={"blue.300"} placement="bottom-start">
           <IconButton
             aria-label="Add Event"
-            icon={<MdLibraryAdd />}
+            icon={<Icon as={AddToPhotosOutlinedIcon} />}
             colorScheme={"blue"}
             variant={"outline"}
             boxShadow={"md"}
@@ -86,13 +74,7 @@ const Events = ({ user, setHeaderTitle }) => {
         <List>
           {eventsLoading ? (
             <Flex justifyContent=" center" alignItems="center">
-              <Spinner
-                thickness="4px"
-                speed="0.65s"
-                emptyColor="gray.200"
-                color="blue.500"
-                size="xl"
-              />
+              <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
             </Flex>
           ) : (
             events?.docs.map((event) => (
@@ -119,15 +101,10 @@ const Events = ({ user, setHeaderTitle }) => {
                     </Box>
 
                     <Box>
-                      <Tooltip
-                        label="Edit Series"
-                        hasArrow
-                        bg="blue.300"
-                        placement="bottom-start"
-                      >
+                      <Tooltip label="Edit Series" hasArrow bg="blue.300" placement="bottom-start">
                         <IconButton
                           aria-label="edit series"
-                          icon={<MdModeEdit />}
+                          icon={<Icon as={EditIcon} />}
                           size={"sm"}
                           variant="ghost"
                           colorScheme={"blue"}
@@ -137,15 +114,10 @@ const Events = ({ user, setHeaderTitle }) => {
                           }}
                         />
                       </Tooltip>
-                      <Tooltip
-                        label="Remove Series"
-                        hasArrow
-                        bg="blue.300"
-                        placement="bottom-start"
-                      >
+                      <Tooltip label="Remove Series" hasArrow bg="blue.300" placement="bottom-start">
                         <IconButton
                           aria-label="Remove series"
-                          icon={<MdClear />}
+                          icon={<Icon as={ClearIcon} />}
                           size={"sm"}
                           variant="ghost"
                           colorScheme={"blue"}

@@ -1,11 +1,11 @@
-import { Box, Divider, Flex, Heading, ListItem, Spinner, Text, UnorderedList } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
 import { Link } from "preact-router";
+import { Box, Divider, Flex, Heading, ListItem, Spinner, Text, UnorderedList } from "@chakra-ui/react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
+import { auth } from "../../util/firebase-config";
 import { SignIn } from "../../components/SignIn";
 import { SignOut } from "../../components/SignOut";
-import { auth } from "../../util/firebase-config";
+import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
 
 const Home = ({ setHeaderTitle }) => {
   const [user, userLoading, userError] = useAuthState(auth);

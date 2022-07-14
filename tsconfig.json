@@ -59,5 +59,6 @@
         /* Advanced Options */
         "skipLibCheck": true                      /* Skip type checking of declaration files. */
     },
-    "include": ["src/**/*", "tests/**/*"]
+    // , "tests/**/*"
+    "include": ["src/**/*"]
 }

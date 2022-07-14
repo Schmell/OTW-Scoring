@@ -1,8 +1,11 @@
+import { h, Fragment } from "preact";
+import { route } from "preact-router";
 import {
   Box,
   Divider,
   Flex,
   Heading,
+  Icon,
   IconButton,
   List,
   ListItem,
@@ -11,32 +14,18 @@ import {
   Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
-// import { style } from "@mui/system";
-import {
-  collection,
-  deleteDoc,
-  doc,
-  query,
-  updateDoc,
-  where,
-} from "firebase/firestore";
-import { h, Fragment } from "preact";
-import { route } from "preact-router";
+import { collection, doc, query, updateDoc, where } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { BsXLg } from "react-icons/bs";
-import {
-  MdModeEdit,
-  MdOutlineAddToPhotos,
-  MdOutlineFileUpload,
-} from "react-icons/md";
-import {
-  FadeInSlideLeft,
-  FadeInSlideRight,
-} from "../../components/animations/FadeSlide";
-import useStorage from "../../hooks/useStorage";
-import style from "./style.css";
 import { db } from "../../util/firebase-config";
+import useStorage from "../../hooks/useStorage";
+import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
 import AddSeriesModal from "./AddSeriesModal";
+import style from "./style.css";
+// Icons
+import EditIcon from "@mui/icons-material/Edit";
+import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
+import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
+import CloseIcon from "@mui/icons-material/Close";
 
 const EventList = ({ setHeaderTitle }) => {
   setHeaderTitle("Events Series");
@@ -68,12 +57,7 @@ const EventList = ({ setHeaderTitle }) => {
 
         {/* Sub header buttons */}
         <FadeInSlideLeft>
-          <Tooltip
-            label="Upload file"
-            hasArrow
-            bg="blue.300"
-            placement="bottom-start"
-          >
+          <Tooltip label="Upload file" hasArrow bg="blue.300" placement="bottom-start">
             <IconButton
               aria-label="upload"
               colorScheme="blue"
@@ -82,16 +66,11 @@ const EventList = ({ setHeaderTitle }) => {
               mr={2}
               _visited={{ color: "blue" }}
               onClick={() => route("/upload")}
-              icon={<MdOutlineFileUpload />}
+              icon={<Icon as={FileUploadOutlinedIcon} />}
             />
           </Tooltip>
 
-          <Tooltip
-            label="Add Series"
-            hasArrow
-            bg="blue.300"
-            placement="bottom-start"
-          >
+          <Tooltip label="Add Series" hasArrow bg="blue.300" placement="bottom-start">
             <IconButton
               aria-label="add series"
               colorScheme="blue"
@@ -99,7 +78,7 @@ const EventList = ({ setHeaderTitle }) => {
               boxShadow="md"
               _visited={{ color: "blue" }}
               onClick={onOpen}
-              icon={<MdOutlineAddToPhotos />}
+              icon={<Icon as={AddToPhotosOutlinedIcon} />}
             />
           </Tooltip>
         </FadeInSlideLeft>
@@ -111,13 +90,7 @@ const EventList = ({ setHeaderTitle }) => {
       <List>
         {seriesLoading ? (
           <Flex justifyContent="center" alignItems="center" mt={8}>
-            <Spinner
-              thickness="4px"
-              speed="0.65s"
-              emptyColor="gray.200"
-              color="blue.500"
-              size="xl"
-            />
+            <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
           </Flex>
         ) : (
           series?.docs.map((series) => (
@@ -141,15 +114,10 @@ const EventList = ({ setHeaderTitle }) => {
                     </Box>
 
                     <Box>
-                      <Tooltip
-                        label="Edit Series"
-                        hasArrow
-                        bg="blue.300"
-                        placement="bottom-start"
-                      >
+                      <Tooltip label="Edit Series" hasArrow bg="blue.300" placement="bottom-start">
                         <IconButton
                           aria-label="edit series"
-                          icon={<MdModeEdit />}
+                          icon={<Icon as={EditIcon} />}
                           size={"sm"}
                           variant="ghost"
                           colorScheme={"blue"}
@@ -159,15 +127,10 @@ const EventList = ({ setHeaderTitle }) => {
                           }}
                         />
                       </Tooltip>
-                      <Tooltip
-                        label="Delete Series"
-                        hasArrow
-                        bg="blue.300"
-                        placement="bottom-start"
-                      >
+                      <Tooltip label="Delete Series" hasArrow bg="blue.300" placement="bottom-start">
                         <IconButton
                           aria-label="Delete series"
-                          icon={<BsXLg />}
+                          icon={<Icon as={CloseIcon} />}
                           size={"sm"}
                           variant="ghost"
                           colorScheme={"blue"}

@@ -16,14 +16,19 @@ import {
   Text,
   Link,
 } from "@chakra-ui/react";
+// Preact
 import { h } from "preact";
+//Firebase
 import { DocumentReference, DocumentData, doc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { MdMenu, MdOutlineNotificationsNone, MdExpandMore } from "react-icons/md";
 import { auth, db } from "../../util/firebase-config";
+// Generic
 import ColorModeToggle from "../generic/ColorToggleMode";
-
+// Icons
+import MdMenu from "@mui/icons-material/Menu";
+import MdExpandMore from "@mui/icons-material/ExpandMore";
+import MdNotificationsNone from "@mui/icons-material/NotificationsNone";
 interface MobileProps extends FlexProps {
   onOpen: () => void;
   headerTitle: string;
@@ -99,7 +104,7 @@ export default function MobileNav({ onOpen, headerTitle, ...rest }: MobileProps)
             size="lg"
             variant="ghost"
             _hover={{ bgColor: "blue.400" }}
-            icon={<MdOutlineNotificationsNone />}
+            icon={<MdNotificationsNone />}
             onClick={() => {}}
           />
         </Flex>

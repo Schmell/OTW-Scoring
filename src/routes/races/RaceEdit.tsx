@@ -1,25 +1,13 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Flex,
-  Heading,
-  Text,
-  useToast,
-} from "@chakra-ui/react";
-import { doc, updateDoc } from "firebase/firestore";
-import { Form, Formik } from "formik";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
 import { useState } from "preact/hooks";
-import { useDocumentData } from "react-firebase-hooks/firestore";
-import {
-  FadeIn,
-  FadeInSlideLeft,
-  FadeInSlideRight,
-} from "../../components/animations/FadeSlide";
-import useStorage from "../../hooks/useStorage";
+import { Box, Button, Divider, Flex, Heading, Text, useToast } from "@chakra-ui/react";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../util/firebase-config";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { Form, Formik } from "formik";
+import { FadeIn, FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
+import useStorage from "../../hooks/useStorage";
 import { formatDate, formatTime } from "../../util/formatters";
 import { Date } from "./raceEdit/Date";
 import { FirstGun } from "./raceEdit/FirstGun";
@@ -94,18 +82,11 @@ export const RaceEdit = ({ setHeaderTitle }) => {
     <Fragment>
       <Box>
         {/* Heading */}
-        <Flex
-          justifyContent="space-between"
-          alignItems="center"
-          minWidth="max-content"
-          wrap="wrap"
-        >
+        <Flex justifyContent="space-between" alignItems="center" minWidth="max-content" wrap="wrap">
           {/* This is the header with race name or number */}
           <FadeInSlideRight>
             <Heading as="h5" color="blue.400">
-              {currentRace?.name
-                ? currentRace.name
-                : `Race ${currentRace?.rank}`}
+              {currentRace?.name ? currentRace.name : `Race ${currentRace?.rank}`}
             </Heading>
           </FadeInSlideRight>
 
@@ -163,11 +144,7 @@ export const RaceEdit = ({ setHeaderTitle }) => {
 
                   <Divider my={3} />
 
-                  <Starts
-                    raceStarts={raceStarts}
-                    docRef={docRef}
-                    values={values}
-                  />
+                  <Starts raceStarts={raceStarts} docRef={docRef} values={values} />
 
                   {/* Notes */}
                   <Notes loading={loading} currentRace={currentRace} />

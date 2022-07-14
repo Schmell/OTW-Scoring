@@ -1,8 +1,10 @@
-import { HStack, Stack, useRadioGroup } from "@chakra-ui/react";
 import { h } from "preact";
+import { HStack, Stack, useRadioGroup } from "@chakra-ui/react";
 import { useState } from "preact/hooks";
-import { MdContentCopy, MdWebStories } from "react-icons/md";
 import { IconRadio } from "./IconRadio";
+// Icons
+import MdContentCopy from "@mui/icons-material/ContentCopy";
+import SaveIcon from "@mui/icons-material/Save";
 
 export function DuplicateOptions({ item }) {
   const [val, setVal] = useState();
@@ -25,16 +27,11 @@ export function DuplicateOptions({ item }) {
   return (
     <Stack {...getRootProps()}>
       <HStack>
-        <IconRadio
-          label="Make a copy"
-          name="copy"
-          icon={MdContentCopy}
-          {...getRadioProps({ value: "copy" })}
-        />
+        <IconRadio label="Make a copy" name="copy" icon={MdContentCopy} {...getRadioProps({ value: "copy" })} />
         <IconRadio
           label="Overwrite existing"
           name="overwrite"
-          icon={MdWebStories}
+          icon={SaveIcon}
           {...getRadioProps({ value: "overwrite" })}
         />
       </HStack>

@@ -1,25 +1,10 @@
-import {
-  Box,
-  Divider,
-  Flex,
-  Heading,
-  IconButton,
-  List,
-  ListItem,
-  Text,
-  Tooltip,
-  useRadioGroup,
-} from "@chakra-ui/react";
+import { Box, Divider, Flex, Heading, IconButton, List, ListItem, Text, Tooltip } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
-import { MdClear } from "react-icons/md";
 import { DuplicateOptions } from "./DuplicateOptions";
 import { importProps } from "./importTypes";
+import MdClear from "@mui/icons-material/Clear";
 
 const ImportList = ({ listItems, listState, setListState, duplicates }: importProps) => {
-  const { value, getRadioProps, getRootProps } = useRadioGroup({
-    defaultValue: "copy",
-  });
-
   return (
     <Fragment>
       {listItems &&

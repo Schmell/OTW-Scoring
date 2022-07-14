@@ -1,9 +1,8 @@
-import { collection, doc } from "firebase/firestore";
 import { Fragment, h } from "preact";
-import { useEffect, useMemo, useState } from "preact/compat";
+import { useEffect, useMemo, useState } from "preact/hooks";
+import { collection, doc } from "firebase/firestore";
 import { useCollectionData, useDocumentData } from "react-firebase-hooks/firestore";
 import { db } from "../../util/firebase-config";
-import "./style.css";
 
 import { compConverter } from "../../model/Comp";
 import FleetsTables from "./components/FleetsTables";
