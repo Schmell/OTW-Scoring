@@ -84,7 +84,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
               mr={2}
               _visited={{ color: "blue" }}
               onClick={() => route("/upload")}
-              icon={<Icon as={FileUploadOutlinedIcon} boxSize={4} />}
+              icon={(<Icon as={FileUploadOutlinedIcon} boxSize={4} />) as any}
             />
           </Tooltip>
 
@@ -96,7 +96,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
               boxShadow="md"
               _visited={{ color: "blue" }}
               // onClick={() => route("/series/edit")}
-              icon={<Icon as={AddToPhotosOutlinedIcon} boxSize={4} />}
+              icon={(<Icon as={AddToPhotosOutlinedIcon} boxSize={4} />) as any}
             />
           </Tooltip>
         </FadeInSlideLeft>

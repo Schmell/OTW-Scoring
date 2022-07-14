@@ -39,7 +39,7 @@ const ImportList = ({ listItems, listState, setListState, duplicates }: importPr
                             <Tooltip label="Remove from Upload" hasArrow bg="blue.300" placement="bottom-start">
                               <IconButton
                                 aria-label="Remove from Upload"
-                                icon={<MdClear />}
+                                icon={(<MdClear />) as any}
                                 size={"sm"}
                                 variant="ghost"
                                 colorScheme={"blue"}

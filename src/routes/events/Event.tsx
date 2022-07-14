@@ -66,7 +66,7 @@ const EventList = ({ setHeaderTitle }) => {
               mr={2}
               _visited={{ color: "blue" }}
               onClick={() => route("/upload")}
-              icon={<Icon as={FileUploadOutlinedIcon} />}
+              icon={(<Icon as={FileUploadOutlinedIcon} />) as any}
             />
           </Tooltip>
 
@@ -78,7 +78,7 @@ const EventList = ({ setHeaderTitle }) => {
               boxShadow="md"
               _visited={{ color: "blue" }}
               onClick={onOpen}
-              icon={<Icon as={AddToPhotosOutlinedIcon} />}
+              icon={(<Icon as={AddToPhotosOutlinedIcon} />) as any}
             />
           </Tooltip>
         </FadeInSlideLeft>
@@ -117,7 +117,7 @@ const EventList = ({ setHeaderTitle }) => {
                       <Tooltip label="Edit Series" hasArrow bg="blue.300" placement="bottom-start">
                         <IconButton
                           aria-label="edit series"
-                          icon={<Icon as={EditIcon} />}
+                          icon={(<Icon as={EditIcon} />) as any}
                           size={"sm"}
                           variant="ghost"
                           colorScheme={"blue"}
@@ -130,7 +130,7 @@ const EventList = ({ setHeaderTitle }) => {
                       <Tooltip label="Delete Series" hasArrow bg="blue.300" placement="bottom-start">
                         <IconButton
                           aria-label="Delete series"
-                          icon={<Icon as={CloseIcon} />}
+                          icon={(<Icon as={CloseIcon} />) as any}
                           size={"sm"}
                           variant="ghost"
                           colorScheme={"blue"}

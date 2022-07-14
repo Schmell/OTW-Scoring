@@ -78,7 +78,7 @@ export default function MobileNav({ onOpen, headerTitle, ...rest }: MobileProps)
           _active={{
             bgcolor: "blue.700",
           }}
-          icon={<MdMenu />}
+          icon={(<MdMenu />) as any}
           onClick={onOpen}
         />
 
@@ -104,7 +104,7 @@ export default function MobileNav({ onOpen, headerTitle, ...rest }: MobileProps)
             size="lg"
             variant="ghost"
             _hover={{ bgColor: "blue.400" }}
-            icon={<MdNotificationsNone />}
+            icon={(<MdNotificationsNone />) as any}
             onClick={() => {}}
           />
         </Flex>

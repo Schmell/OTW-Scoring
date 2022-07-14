@@ -63,7 +63,7 @@ const Series = ({ user, setHeaderTitle }) => {
               mr={2}
               _visited={{ color: "blue" }}
               onClick={() => route("/import")}
-              icon={<Icon as={FileUploadOutlinedIcon} />}
+              icon={(<Icon as={FileUploadOutlinedIcon} />) as any}
             />
           </Tooltip>
 
@@ -75,7 +75,7 @@ const Series = ({ user, setHeaderTitle }) => {
               boxShadow="md"
               _visited={{ color: "blue" }}
               // onClick={() => route("/series/edit")}
-              icon={<Icon as={AddToPhotosOutlinedIcon} />}
+              icon={(<Icon as={AddToPhotosOutlinedIcon} />) as any}
             />
           </Tooltip>
         </FadeInSlideLeft>
@@ -113,7 +113,7 @@ const Series = ({ user, setHeaderTitle }) => {
                       <Tooltip label="Edit Series" hasArrow bg="blue.300" placement="bottom-start">
                         <IconButton
                           aria-label="edit series"
-                          icon={<Icon as={EditIcon} />}
+                          icon={(<Icon as={EditIcon} />) as any}
                           size={"sm"}
                           variant="ghost"
                           colorScheme={"blue"}
@@ -126,7 +126,7 @@ const Series = ({ user, setHeaderTitle }) => {
                       <Tooltip label="Delete Series" hasArrow bg="blue.300" placement="bottom-start">
                         <IconButton
                           aria-label="Delete series"
-                          icon={<Icon as={CloseIcon} />}
+                          icon={(<Icon as={CloseIcon} />) as any}
                           size={"sm"}
                           variant="ghost"
                           colorScheme={"blue"}

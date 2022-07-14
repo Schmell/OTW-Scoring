@@ -87,7 +87,7 @@ const RacesList = ({ setHeaderTitle }) => {
                             colorScheme="green"
                             className={style.startRaceButton}
                             size="xs"
-                            rightIcon={<Icon as={ChevronRightIcon} />}
+                            rightIcon={(<Icon as={ChevronRightIcon} />) as any}
                           >
                             Start race
                           </Button>
@@ -113,7 +113,7 @@ const RacesList = ({ setHeaderTitle }) => {
                             colorScheme="blue"
                             size="xs"
                             _visited={{ color: "white" }}
-                            icon={<Icon as={EditIcon} boxSize={4} />}
+                            icon={(<Icon as={EditIcon} boxSize={4} />) as any}
                             disabled={race.data().sailed === "1"}
                             onClick={() => {
                               setRaceId(race.id);
@@ -136,7 +136,7 @@ const RacesList = ({ setHeaderTitle }) => {
                             aria-label="View results "
                             colorScheme="blue"
                             size="xs"
-                            icon={<Icon as={VisibilityIcon} boxSize={4} />}
+                            icon={(<Icon as={VisibilityIcon} boxSize={4} />) as any}
                             disabled={race.data().sailed !== "1"}
                             onClick={({ target }) => {
                               route(`/result/${race.data()._seriesid}/${race.data().raceid}`);

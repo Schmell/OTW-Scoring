@@ -22,7 +22,7 @@ export const Starts = ({ raceStarts, docRef, values }) => {
             colorScheme="blue"
             variant="outline"
             boxShadow="md"
-            icon={<Icon as={AddIcon} />}
+            icon={(<Icon as={AddIcon} />) as any}
             onClick={onOpen}
           />
         </Tooltip>
@@ -57,7 +57,7 @@ export const Starts = ({ raceStarts, docRef, values }) => {
                   />
                   <IconButton
                     aria-label="Delete start"
-                    icon={<Icon as={CloseIcon} />}
+                    icon={(<Icon as={CloseIcon} />) as any}
                     variant="ghost"
                     colorScheme="blue"
                     size="xs"

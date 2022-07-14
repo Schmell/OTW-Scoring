@@ -31,7 +31,7 @@ const Competitors = ({ user, setHeaderTitle }) => {
 
         <IconButton
           aria-label="Add Event"
-          icon={<Icon as={AddToPhotosOutlinedIcon} />}
+          icon={(<Icon as={AddToPhotosOutlinedIcon} />) as any}
           colorScheme={"blue"}
           variant={"outline"}
           boxShadow={"md"}

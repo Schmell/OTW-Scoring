@@ -69,7 +69,7 @@ const EventEdit = ({ user, setHeaderTitle }) => {
           <Tooltip label="Delete event" hasArrow bg="blue.300" placement="bottom-start">
             <IconButton
               aria-label="Delete Event"
-              icon={<Icon as={DeleteIcon} />}
+              icon={(<Icon as={DeleteIcon} />) as any}
               colorScheme={"blue"}
               mr={2}
               variant={"outline"}
@@ -84,7 +84,7 @@ const EventEdit = ({ user, setHeaderTitle }) => {
           <Tooltip label="Clear form" hasArrow bg="blue.300" placement="bottom-start">
             <IconButton
               aria-label="Add Event"
-              icon={<Icon as={ClearAllIcon} />}
+              icon={(<Icon as={ClearAllIcon} />) as any}
               colorScheme={"blue"}
               variant={"outline"}
               boxShadow={"md"}

@@ -59,7 +59,7 @@ const Events = ({ user, setHeaderTitle }) => {
         <Tooltip label="Add Event" hasArrow bgColor={"blue.300"} placement="bottom-start">
           <IconButton
             aria-label="Add Event"
-            icon={<Icon as={AddToPhotosOutlinedIcon} />}
+            icon={(<Icon as={AddToPhotosOutlinedIcon} />) as any}
             colorScheme={"blue"}
             variant={"outline"}
             boxShadow={"md"}
@@ -104,7 +104,7 @@ const Events = ({ user, setHeaderTitle }) => {
                       <Tooltip label="Edit Series" hasArrow bg="blue.300" placement="bottom-start">
                         <IconButton
                           aria-label="edit series"
-                          icon={<Icon as={EditIcon} />}
+                          icon={(<Icon as={EditIcon} />) as any}
                           size={"sm"}
                           variant="ghost"
                           colorScheme={"blue"}
@@ -117,7 +117,7 @@ const Events = ({ user, setHeaderTitle }) => {
                       <Tooltip label="Remove Series" hasArrow bg="blue.300" placement="bottom-start">
                         <IconButton
                           aria-label="Remove series"
-                          icon={<Icon as={ClearIcon} />}
+                          icon={(<Icon as={ClearIcon} />) as any}
                           size={"sm"}
                           variant="ghost"
                           colorScheme={"blue"}
