@@ -29,7 +29,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DoNotDisturbIcon from "@mui/icons-material/DoNotDisturb";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
-const RacesList = ({ setHeaderTitle }) => {
+const ___RacesList = ({ setHeaderTitle }) => {
   setHeaderTitle("Races");
   const [seriesId, setSeriesId] = useStorage("seriesId");
   const [raceId, setRaceId] = useStorage("raceId", { initVal: "1" });
@@ -161,4 +161,4 @@ const RacesList = ({ setHeaderTitle }) => {
   );
 };
 
-export default RacesList;
+// export default RacesList;
