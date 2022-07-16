@@ -1,4 +1,4 @@
-@import "https://unpkg.com/open-props";
+/* @import "https://unpkg.com/open-props"; */
 
 * {
   box-sizing: border-box;
@@ -24,8 +24,6 @@ h3 {
 }
 
 .page {
-  /* padding-inline: var(--size-3); */
-  
   padding-block: var(--size-8);
   overflow: hidden;
   /* margin-inline: auto; */

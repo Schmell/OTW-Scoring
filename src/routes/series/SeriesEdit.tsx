@@ -47,7 +47,6 @@ const SeriesEdit = ({ setHeaderTitle }) => {
   const submitHandler = async (values: any) => {
     Object.keys(values).forEach((key) => (values[key] === undefined ? delete values[key] : {}));
     // here we may need to add modified flag or something
-    // values.__fileInfo.lastModified = Date.now();
     // update the firestore doc
     await updateDoc(docRef, values);
 
@@ -74,7 +73,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
         </FadeInSlideRight>
 
         {/* Sub header buttons */}
-        <FadeInSlideLeft>
+        {/* <FadeInSlideLeft>
           <Tooltip label="Upload" hasArrow bgColor={"blue.300"} placement="bottom-start">
             <IconButton
               aria-label="upload"
@@ -95,11 +94,10 @@ const SeriesEdit = ({ setHeaderTitle }) => {
               variant="outline"
               boxShadow="md"
               _visited={{ color: "blue" }}
-              // onClick={() => route("/series/edit")}
               icon={(<Icon as={AddToPhotosOutlinedIcon} boxSize={4} />) as any}
             />
           </Tooltip>
-        </FadeInSlideLeft>
+        </FadeInSlideLeft> */}
       </Flex>
 
       <Divider my={3} border="8px" />
@@ -121,7 +119,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
               lastModifiedDate: currentSeries.__fileInfo.lastModifiedDate,
               size: currentSeries.__fileInfo.size,
               resultType: currentSeries.resultType,
-              rowTitle: currentSeries.rowTitle,
+              rowTitle: currentSeries.rowTitle || "boat",
             }}
             onSubmit={submitHandler}
           >
