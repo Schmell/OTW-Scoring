@@ -9,14 +9,14 @@ import { colors, components } from "./theme";
 
 const App: FunctionalComponent = () => {
   const theme = extendTheme({ colors, components });
-  const [user, userLoading, userError] = useAuthState(auth);
+  const [user] = useAuthState(auth);
 
   const [headerTitle, setHeaderTitle] = useState("Blw Me");
 
   return (
     <ChakraProvider resetCSS theme={theme}>
       <SidebarWithHeader headerTitle={headerTitle}>
-        <Container className="page">
+        <Container mt={12}>
           <Routing user={user} setHeaderTitle={setHeaderTitle} />
         </Container>
       </SidebarWithHeader>
