@@ -1,0 +1,16 @@
+sail scene
+sail all
+sail any
+wind all
+wind any
+halyard hub
+halyrd
+SailNG - good if it was angular
+on the water RC 
+On the Water Scoring - good name for opensource
+Hank hub
+GenJab
+Genie Jab
+Jibjab
+JibJab ***
+

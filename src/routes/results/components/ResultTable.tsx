@@ -298,34 +298,11 @@ function Table({ data, fleetName, serInfo }: ITable) {
           </Modal>
         </Box>
       </Flex>
-      {/* <Divider my={2} />
-      <Flex justifyContent={"space-between"} alignItems={"center"}>
-        <RadioGroup onChange={setResultType} value={resultType}>
-          <Stack direction="row">
-            <Radio value="points">Points</Radio>
-            <Radio value="elapsed">Elapsed</Radio>
-            <Radio value="corrected">Corrected</Radio>
-            <Radio value="finish">Finish</Radio>
-          </Stack>
-        </RadioGroup>
-
-        <Box pr={2} color={"gray.300"}>
-          {table.getRowModel().rows.length} Rows
-        </Box>
-      </Flex>
-      <Divider my={3} />
-      <RadioGroup onChange={setRowTitle} value={rowTitle}>
-        <Stack direction="row">
-          <Radio value="boat">Boat</Radio>
-          <Radio value="helmname">Helm</Radio>
-          <Radio value="sailno">SailNo.</Radio>
-        </Stack>
-      </RadioGroup> */}
 
       <Divider my={3} />
 
       <Box>
-        <MyTable>
+        <MyTable maxWidth={"400px"}>
           <Thead bgColor="blue.300">
             {table.getHeaderGroups().map((headerGroup) => (
               <Tr key={headerGroup.id}>
@@ -342,11 +319,11 @@ function Table({ data, fleetName, serInfo }: ITable) {
                         >
                           <Flex>
                             <Box>{flexRender(header.column.columnDef.header, header.getContext())}</Box>
-                            <Box>
+                            <Box ml={2}>
                               {" "}
                               {{
-                                asc: <Icon as={ArrowUpwardIcon} />,
-                                desc: <Icon as={ArrowDownwardIcon} />,
+                                asc: <Icon as={ArrowUpwardIcon} boxSize={4} />,
+                                desc: <Icon as={ArrowDownwardIcon} boxSize={4} />,
                               }[header.column.getIsSorted() as string] ?? null}
                             </Box>
                           </Flex>
