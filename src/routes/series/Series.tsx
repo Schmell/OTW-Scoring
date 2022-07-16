@@ -1,5 +1,3 @@
-import { Fragment, h } from "preact";
-import { route } from "preact-router";
 import {
   Box,
   Divider,
@@ -12,33 +10,32 @@ import {
   Spinner,
   Text,
   Tooltip,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { collection, deleteDoc, doc, query, where } from "firebase/firestore";
+import { collection, query, where } from "firebase/firestore";
+import { Fragment, h } from "preact";
+import { route } from "preact-router";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { db } from "../../util/firebase-config";
-import useStorage from "../../hooks/useStorage";
 import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
+import useStorage from "../../hooks/useStorage";
+import { db } from "../../util/firebase-config";
 import style from "./style.css";
 // Icons
-import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
-import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
+import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
+import { AreYouSure } from "../../components/generic/AreYouSure";
 
 const Series = ({ user, setHeaderTitle }) => {
   setHeaderTitle("Series");
   // Get users series
   const seriesRef = collection(db, "series");
   const [series, seriesLoading] = useCollection(query(seriesRef, where("__owner", "==", user && user.uid)));
-  //   console.log("series: ", series?.docs);
-
-  const removeSeries = async (id: any) => {
-    // Uses cloud function to remove any sub-collections
-    await deleteDoc(doc(db, "series", id));
-  };
+  const deleteSeriesDisclosure = useDisclosure();
 
   // useStorage option (modified to be used as context)
-  const [seriesId, setSeriesId] = useStorage("seriesId", {
+  const [_seriesId, setSeriesId] = useStorage("seriesId", {
     initVal: "",
     bool: false,
   });
@@ -123,6 +120,7 @@ const Series = ({ user, setHeaderTitle }) => {
                           }}
                         />
                       </Tooltip>
+
                       <Tooltip label="Delete Series" hasArrow bg="blue.300" placement="bottom-start">
                         <IconButton
                           aria-label="Delete series"
@@ -130,14 +128,15 @@ const Series = ({ user, setHeaderTitle }) => {
                           size={"sm"}
                           variant="ghost"
                           colorScheme={"blue"}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            removeSeries(series.id);
-                          }}
+                          onClick={deleteSeriesDisclosure.onOpen}
                         />
                       </Tooltip>
                     </Box>
                   </Flex>
+                  <AreYouSure disclosure={deleteSeriesDisclosure} colPath="series" itemId={series.id}>
+                    <Box>This will delete the series and is not undo-able</Box>
+                    <Box>You will loose any work you have done with this Series</Box>
+                  </AreYouSure>
 
                   <Text fontSize="xs" color="gray.400">
                     {series.data().venue}

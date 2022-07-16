@@ -1,6 +1,6 @@
 import { h } from "preact";
-import { Box } from "@chakra-ui/react";
+import { Box, Container } from "@chakra-ui/react";
 
 export const Page = ({ children }) => {
-  return <Box className="page">{children}</Box>;
+  return <Container mt={8}>{children}</Container>;
 };

@@ -12,6 +12,7 @@ import {
   Spinner,
   Text,
   Tooltip,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { addDoc, collection, deleteDoc, doc, query, where } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
@@ -23,6 +24,7 @@ import style from "./style.css";
 import ClearIcon from "@mui/icons-material/Clear";
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
 import EditIcon from "@mui/icons-material/Edit";
+import { AreYouSure } from "../../components/generic/AreYouSure";
 
 const Events = ({ user, setHeaderTitle }) => {
   setHeaderTitle("Events");
@@ -33,6 +35,7 @@ const Events = ({ user, setHeaderTitle }) => {
   const ownerEvents = query(colRef, where("__owner", "==", user.uid));
 
   const [events, eventsLoading] = useCollection(ownerEvents);
+  const deleteEventDisclosure = useDisclosure();
 
   const addEventHandler = async () => {
     const docRef = await addDoc(colRef, {
@@ -114,21 +117,22 @@ const Events = ({ user, setHeaderTitle }) => {
                           }}
                         />
                       </Tooltip>
-                      <Tooltip label="Remove Series" hasArrow bg="blue.300" placement="bottom-start">
+                      <Tooltip label="Delete Event" hasArrow bg="blue.300" placement="bottom-start">
                         <IconButton
-                          aria-label="Remove series"
+                          aria-label="Delete Event"
                           icon={(<Icon as={ClearIcon} />) as any}
                           size={"sm"}
                           variant="ghost"
                           colorScheme={"blue"}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            removeEvent(event.id);
-                          }}
+                          onClick={deleteEventDisclosure.onOpen}
                         />
                       </Tooltip>
                     </Box>
                   </Flex>
+                  <AreYouSure disclosure={deleteEventDisclosure} colPath="events" itemId={event.id}>
+                    <Box>This will delete the event and is not undo-able</Box>
+                    <Box>You will loose any work you have done with this Event</Box>
+                  </AreYouSure>
                 </ListItem>
               </FadeInSlideLeft>
             ))

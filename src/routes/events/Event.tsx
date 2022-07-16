@@ -26,6 +26,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import CloseIcon from "@mui/icons-material/Close";
+import { AreYouSure } from "../../components/generic/AreYouSure";
 
 const EventList = ({ setHeaderTitle }) => {
   setHeaderTitle("Events Series");
@@ -45,6 +46,7 @@ const EventList = ({ setHeaderTitle }) => {
   };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const deleteEventDisclosure = useDisclosure();
 
   return (
     <Fragment>
@@ -114,9 +116,9 @@ const EventList = ({ setHeaderTitle }) => {
                     </Box>
 
                     <Box>
-                      <Tooltip label="Edit Series" hasArrow bg="blue.300" placement="bottom-start">
+                      <Tooltip label="Edit Event" hasArrow bg="blue.300" placement="bottom-start">
                         <IconButton
-                          aria-label="edit series"
+                          aria-label="edit Event"
                           icon={(<Icon as={EditIcon} />) as any}
                           size={"sm"}
                           variant="ghost"
@@ -127,22 +129,21 @@ const EventList = ({ setHeaderTitle }) => {
                           }}
                         />
                       </Tooltip>
-                      <Tooltip label="Delete Series" hasArrow bg="blue.300" placement="bottom-start">
+                      <Tooltip label="Delete Event" hasArrow bg="blue.300" placement="bottom-start">
                         <IconButton
-                          aria-label="Delete series"
+                          aria-label="Delete Event"
                           icon={(<Icon as={CloseIcon} />) as any}
                           size={"sm"}
                           variant="ghost"
                           colorScheme={"blue"}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            removeSeries(series.id);
-                          }}
+                          onClick={deleteEventDisclosure.onOpen}
                         />
                       </Tooltip>
                     </Box>
                   </Flex>
-
+                  <AreYouSure disclosure={deleteEventDisclosure} callback={removeSeries} itemId={series.id} risk="low">
+                    <Box>You can always add this back if you want</Box>
+                  </AreYouSure>
                   <Text fontSize="xs" color="gray.400">
                     {series.data().venue}
                   </Text>
