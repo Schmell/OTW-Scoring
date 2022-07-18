@@ -1,9 +1,9 @@
-import { ChakraProvider, Container, extendTheme } from "@chakra-ui/react";
+import { Box, ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { FunctionalComponent, h } from "preact";
 import { useState } from "preact/hooks";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../util/firebase-config";
-import SidebarWithHeader from "./header/SidebarWithHeader";
+import { auth } from "../../util/firebase-config";
+import SidebarWithHeader from "../header/SidebarWithHeader";
 import Routing from "./Routing";
 import { colors, components } from "./theme";
 
@@ -16,9 +16,9 @@ const App: FunctionalComponent = () => {
   return (
     <ChakraProvider resetCSS theme={theme}>
       <SidebarWithHeader headerTitle={headerTitle}>
-        <Container mt={12}>
+        <Box mt={12}>
           <Routing user={user} setHeaderTitle={setHeaderTitle} />
-        </Container>
+        </Box>
       </SidebarWithHeader>
     </ChakraProvider>
   );

@@ -3,8 +3,8 @@ import { Link } from "preact-router";
 import { Box, Divider, Flex, Heading, ListItem, Spinner, Text, UnorderedList } from "@chakra-ui/react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../util/firebase-config";
-import { SignIn } from "../../components/SignIn";
-import { SignOut } from "../../components/SignOut";
+import { SignIn } from "../../components/page/SignIn";
+import { SignOut } from "../../components/page/SignOut";
 import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
 
 const Home = ({ setHeaderTitle }) => {

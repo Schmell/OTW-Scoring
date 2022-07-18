@@ -1,7 +1,18 @@
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
 import { useState } from "preact/hooks";
-import { Box, Button, Divider, Flex, Heading, Text, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Divider,
+  Editable,
+  EditableInput,
+  EditablePreview,
+  Flex,
+  Heading,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../util/firebase-config";
 import { useDocumentData } from "react-firebase-hooks/firestore";
@@ -37,6 +48,7 @@ export const RaceEdit = ({ setHeaderTitle }) => {
   const [raceStarts, setRaceStarts] = useState<IraceStarts[]>();
   const [postponed, setPostponed] = useState<string>("");
   const [postponedDate, setPostponedDate] = useState("");
+  const [title, setTitle] = useState("");
 
   const submittedToast = useToast();
 
@@ -53,9 +65,6 @@ export const RaceEdit = ({ setHeaderTitle }) => {
   }
 
   const submitHandler = async (values: any) => {
-    console.log("values: ", values);
-
-    // not sure i need this
     // remove undefined's from values
     Object.keys(values).map((m) => {
       if (values[m] === undefined) return (values[m] = "");
@@ -86,7 +95,15 @@ export const RaceEdit = ({ setHeaderTitle }) => {
           {/* This is the header with race name or number */}
           <FadeInSlideRight>
             <Heading as="h5" color="blue.400">
-              {currentRace?.name ? currentRace.name : `Race ${currentRace?.rank}`}
+              <Editable defaultValue={currentRace?.name ? currentRace.name : `Race ${currentRace?.rank}`}>
+                <EditablePreview />
+                <EditableInput
+                  onChange={({ target }) => {
+                    console.log("target: ", target.value);
+                    setTitle(target.value);
+                  }}
+                />
+              </Editable>
             </Heading>
           </FadeInSlideRight>
 
@@ -114,11 +131,13 @@ export const RaceEdit = ({ setHeaderTitle }) => {
                 time: raceTime,
                 starts: raceStarts,
                 notes: currentRace?.notes,
+                name: title,
               }}
               onSubmit={submitHandler}
             >
               {({ values }) => (
                 <Form className={style.raceform}>
+                  {}
                   {/* Result Type */}
                   <ResultType />
 

@@ -3,7 +3,7 @@ import { Box, Button } from "@chakra-ui/react";
 // Firebase
 import { GithubAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { auth, db } from "../util/firebase-config";
+import { auth, db } from "../../util/firebase-config";
 
 export function SignIn() {
   // const [user, userLoading] = useAuthState(auth);

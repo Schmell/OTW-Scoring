@@ -1,23 +1,24 @@
 import { FunctionalComponent, h } from "preact";
 import Router, { Route } from "preact-router";
 
-import Competitors from "../routes/competitors/Competitors";
-import EventList from "../routes/events/Event";
-import EventEdit from "../routes/events/EventEdit";
-import Events from "../routes/events/Events";
-import Home from "../routes/home";
-import Import from "../routes/import/Import";
-import NotFoundPage from "../routes/notfound";
-import { RaceEdit } from "../routes/races/RaceEdit";
-import RacesList from "../routes/races/RacesList";
-import Result from "../routes/results";
+import Competitors from "../../routes/competitors/Competitors";
+import EventList from "../../routes/events/Event";
+import EventEdit from "../../routes/events/EventEdit";
+import Events from "../../routes/events/Events";
+import Home from "../../routes/home";
+import Import from "../../routes/import/Import";
+import NotFoundPage from "../../routes/notfound";
+import { RaceEdit } from "../../routes/races/RaceEdit";
+import Races from "../../routes/races/Races";
+
+import Result from "../../routes/results";
 // import Results from "../routes/results";
-import Series from "../routes/series/Series";
-import SeriesEdit from "../routes/series/SeriesEdit";
-import UserLanding from "../routes/user/UserLanding";
-import UserProfile from "../routes/user/UserProfile";
-import UserSettings from "../routes/user/UserSettings";
-import { AuthRoute } from "../util/AuthenticatedRoute ";
+import Series from "../../routes/series/Series";
+import SeriesEdit from "../../routes/series/SeriesEdit";
+import UserLanding from "../../routes/user/UserLanding";
+import UserProfile from "../../routes/user/UserProfile";
+import UserSettings from "../../routes/user/UserSettings";
+import { AuthRoute } from "../../util/AuthenticatedRoute ";
 import { SignIn } from "./SignIn";
 
 interface IRouting {
@@ -43,7 +44,7 @@ const Routing: FunctionalComponent<IRouting> = (props) => {
       <AuthRoute path="/events/edit" component={EventEdit} {...props} />
       <AuthRoute path="/events/event" component={EventList} {...props} />
 
-      <AuthRoute path="/races" component={RacesList} {...props} />
+      <AuthRoute path="/races" component={Races} {...props} />
       <AuthRoute path="/races/edit" component={RaceEdit} {...props} />
 
       <AuthRoute path="/competitors" component={Competitors} {...props} />

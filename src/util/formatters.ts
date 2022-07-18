@@ -29,9 +29,11 @@ const DIVISIONS = [
   { amount: 12, name: "months" },
   { amount: Number.POSITIVE_INFINITY, name: "years" },
 ];
+
 const RELATIVE_DATE_FORMATTER = new Intl.RelativeTimeFormat(undefined, {
   numeric: "auto",
 });
+
 export function formatRelativeDate(toDate, fromDate: any = new Date()) {
   let duration = (toDate - fromDate) / 1000;
 
@@ -51,8 +53,6 @@ export const formatDate = (date: string) => {
   // this Obviously has holes in its theroy
   // I hate dates and i would encourage people to update there sailwave files or
   // just as the scorer just input the date at this stage
-
-  // if (!date) return "";
   if (date) {
     if (date.toString().includes("/")) {
       const rearrange = date.toString().split("/");
@@ -78,6 +78,7 @@ export const formatDate = (date: string) => {
       return date;
     }
   }
+  return ""
 };
 //
 
@@ -115,3 +116,8 @@ export const formatTime = (s: string): string => {
 
   return "";
 };
+
+export const capitalizeFirstLetter = (string: string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+

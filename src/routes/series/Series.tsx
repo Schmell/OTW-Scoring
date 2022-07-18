@@ -1,3 +1,5 @@
+import { Fragment, h } from "preact";
+import { route } from "preact-router";
 import {
   Box,
   Divider,
@@ -13,18 +15,16 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { collection, query, where } from "firebase/firestore";
-import { Fragment, h } from "preact";
-import { route } from "preact-router";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
-import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
+import useStorage from "../../hooks/useStorage";
+import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
 import style from "./style.css";
 // Icons
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
+import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
-import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import { AreYouSure } from "../../components/generic/AreYouSure";
 
 const Series = ({ user, setHeaderTitle }) => {
@@ -89,7 +89,7 @@ const Series = ({ user, setHeaderTitle }) => {
           series?.docs.map((series) => (
             <Fragment>
               <FadeInSlideLeft>
-                <ListItem key={series.id} className={style.selectList}>
+                <ListItem key={series.id} pb={4}>
                   <Flex justifyContent="space-between">
                     <Box
                       w="80%"
