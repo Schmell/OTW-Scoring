@@ -171,7 +171,7 @@ function Table({ data, fleetName, serInfo }: ITable) {
           {
             accessorKey: "nett",
             id: "nett",
-            enableHiding: false,
+            enableHiding: true,
             footer: (props) => props.column.id,
           },
         ],
@@ -262,47 +262,47 @@ function Table({ data, fleetName, serInfo }: ITable) {
             variant={"ghost"}
             onClick={onOpen}
           />
-          <Modal isOpen={isOpen} onClose={onClose}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalHeader>Settings</ModalHeader>
-              <ModalCloseButton />
-              <ModalBody>
-                <Heading size={"sm"} pb={3}>
-                  View Columns
-                </Heading>
-                <RadioGroup onChange={setRowTitle} value={rowTitle}>
-                  <Stack direction="row">
-                    <Radio value="boat">Boat</Radio>
-                    <Radio value="helmname">Helm</Radio>
-                    <Radio value="sailno">SailNo.</Radio>
-                  </Stack>
-                </RadioGroup>
-                <Divider my={3} />
-                <RadioGroup onChange={setResultType} value={resultType}>
-                  <Stack direction="row">
-                    <Radio value="points">Points</Radio>
-                    <Radio value="elapsed">Elapsed</Radio>
-                    <Radio value="corrected">Corrected</Radio>
-                    <Radio value="finish">Finish</Radio>
-                  </Stack>
-                </RadioGroup>
-              </ModalBody>
-
-              <ModalFooter>
-                <Button colorScheme="blue" mr={3} onClick={onClose}>
-                  Close
-                </Button>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
         </Box>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Settings</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Heading size={"sm"} pb={3}>
+                View Columns
+              </Heading>
+              <RadioGroup onChange={setRowTitle} value={rowTitle}>
+                <Stack direction="row">
+                  <Radio value="boat">Boat</Radio>
+                  <Radio value="helmname">Helm</Radio>
+                  <Radio value="sailno">SailNo.</Radio>
+                </Stack>
+              </RadioGroup>
+              <Divider my={3} />
+              <RadioGroup onChange={setResultType} value={resultType}>
+                <Stack direction="row">
+                  <Radio value="points">Points</Radio>
+                  <Radio value="elapsed">Elapsed</Radio>
+                  <Radio value="corrected">Corrected</Radio>
+                  <Radio value="finish">Finish</Radio>
+                </Stack>
+              </RadioGroup>
+            </ModalBody>
+
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} onClick={onClose}>
+                Close
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </Flex>
 
       <Divider my={3} />
 
       <Box>
-        <MyTable maxWidth={"400px"}>
+        <MyTable>
           <Thead bgColor="blue.300">
             {table.getHeaderGroups().map((headerGroup) => (
               <Tr key={headerGroup.id}>

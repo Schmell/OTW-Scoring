@@ -1,11 +1,6 @@
-import { Box, Flex, Icon, Text } from "@chakra-ui/react";
+import { Box, Divider, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
 //Icons
-import AddIcon from "@mui/icons-material/Add";
-import CalendarIcon from "@mui/icons-material/CalendarToday";
-import CheckIcon from "@mui/icons-material/Check";
-import DoNotDisturbIcon from "@mui/icons-material/DoNotDisturb";
-import { capitalizeFirstLetter } from "../../../util/formatters";
 
 export default function TopLeft({ race, action }) {
   return (
@@ -17,9 +12,12 @@ export default function TopLeft({ race, action }) {
           action(race);
         }}
       >
-        <Text px={3} fontSize={22} fontWeight={"semibold"} color="gray.600">
-          {race.data().name ? race.data().name : `Race ${race.data().rank}`}
-        </Text>
+        <Box w="100%">
+          <Text px={3} fontSize={22} fontWeight={"semibold"} color={useColorModeValue("gray.600", "whiteAlpha.700")}>
+            {race.data().name ? race.data().name : `Race ${race.data().rank}`}
+          </Text>
+          <Divider />
+        </Box>
       </Flex>
     </Fragment>
   );

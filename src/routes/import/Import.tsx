@@ -1,6 +1,6 @@
 import { h } from "preact";
 import { route } from "preact-router";
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import { collection, deleteDoc, getDocs, query, where } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../util/firebase-config";
@@ -113,6 +113,10 @@ const Import = ({ setHeaderTitle }) => {
       Populate(user, file);
     });
   };
+
+  useEffect(() => {
+    handleChooseFile();
+  }, []);
 
   return (
     <Box px={2}>

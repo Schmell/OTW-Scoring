@@ -1,4 +1,4 @@
-import { Box, Flex, Icon, IconButton, Tooltip, useDisclosure } from "@chakra-ui/react";
+import { Box, Flex, Icon, IconButton, Tooltip, useDisclosure, useColorModeValue } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
 import { AreYouSure } from "../../../components/generic/AreYouSure";
@@ -10,7 +10,7 @@ export default function EditButtons({ setRaceId, race }) {
   const deleteRaceDisclosure = useDisclosure();
   return (
     <Fragment>
-      <Flex pb={2} align={"center"} color={"blue.400"}>
+      <Flex pb={2} align={"center"} color={useColorModeValue("blue.400", "whiteAlpha.400")}>
         <Tooltip
           hasArrow
           label="Edit race settings"

@@ -15,6 +15,7 @@ a {
   margin: auto
 }
 
+
 h1,
 h2,
 h3 {
@@ -24,7 +25,7 @@ h3 {
 }
 
 .page {
-  padding-block: var(--size-8);
+  /* padding-block: var(--size-8); */
   overflow: hidden;
   /* margin-inline: auto; */
   /* min-height: 100%; */

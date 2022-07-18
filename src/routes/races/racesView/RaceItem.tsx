@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, GridItem, useDisclosure } from "@chakra-ui/react";
+import { Box, Flex, Grid, GridItem, useColorModeValue, useDisclosure } from "@chakra-ui/react";
 import { QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
@@ -32,14 +32,18 @@ export default function RaceItem({ race, raceId, setRaceId }: RaceItemProps) {
     <Fragment>
       <Box
         key={race.id}
-        borderRightRadius={18}
+        borderWidth={1}
+        borderColor={useColorModeValue("gray.200", "gray.800")}
+        borderBottomRightRadius={18}
         borderBottomWidth={4}
-        borderColor={checkIfSailed({
+        borderBottomColor={checkIfSailed({
           race,
-          sailed: "green.500",
-          unsailed: "blue.500",
-          postponed: "blue.500",
+          sailed: "green.400",
+          unsailed: "blue.400",
+          postponed: "blue.200",
+          cancelled: useColorModeValue("gray.100", "gray.400"),
         })}
+        bgColor={useColorModeValue("white", "gray.900")}
         shadow="md"
         my={4}
       >

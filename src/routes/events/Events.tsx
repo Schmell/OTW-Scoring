@@ -82,7 +82,7 @@ const Events = ({ user, setHeaderTitle }) => {
           ) : (
             events?.docs.map((event) => (
               <FadeInSlideLeft>
-                <ListItem key={event.id} className={style.selectList}>
+                <ListItem key={event.id} pb={4}>
                   <Flex justifyContent={"space-between"}>
                     <Box
                       w="80%"
@@ -94,7 +94,7 @@ const Events = ({ user, setHeaderTitle }) => {
                     >
                       <Text as="h2">{event.data().name}</Text>
 
-                      <Text fontSize={"sm"} color={"gray.400"}>
+                      <Text fontSize={"sm"} color={"gray.600"}>
                         {event.data().venue}
                       </Text>
 

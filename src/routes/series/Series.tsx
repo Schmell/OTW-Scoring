@@ -89,7 +89,7 @@ const Series = ({ user, setHeaderTitle }) => {
           series?.docs.map((series) => (
             <Fragment>
               <FadeInSlideLeft>
-                <ListItem key={series.id} className={style.selectList}>
+                <ListItem key={series.id} pb={4}>
                   <Flex justifyContent="space-between">
                     <Box
                       w="80%"

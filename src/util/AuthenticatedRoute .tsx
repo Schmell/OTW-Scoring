@@ -9,13 +9,7 @@ export const AuthRoute = ({ component: C, ...props }) => {
   return (
     <Route
       {...props}
-      component={(routeProps) =>
-        user ? (
-          <C {...routeProps} />
-        ) : (
-          <Route path="/signin" component={Unauthed} />
-        )
-      }
+      component={(routeProps) => (user ? <C {...routeProps} /> : <Route path="/signin" component={Unauthed} />)}
     />
   );
 };

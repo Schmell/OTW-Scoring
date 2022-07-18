@@ -10,6 +10,9 @@ import {
   Button,
   Text,
   Box,
+  IconButton,
+  Icon,
+  Flex,
 } from "@chakra-ui/react";
 import { collection, doc, DocumentData, query, QueryDocumentSnapshot, where } from "firebase/firestore";
 import { ComponentChildren, Fragment, h } from "preact";
@@ -17,6 +20,7 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 import useStorage from "../../../hooks/useStorage";
 import { db } from "../../../util/firebase-config";
 import { formatDate, formatRelativeDate, formatTime } from "../../../util/formatters";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface SartTheRaceProps {
   disclosure: {
@@ -36,26 +40,13 @@ export default function StartTheRaceModal({ disclosure, race, callback }: SartTh
   const { isOpen, onOpen, onClose } = disclosure;
 
   const timeDifference = () => {
-    // const thenTime =
-    console.log("date: ", formatDate(race!.data().date));
-    console.log("time: ", `${formatDate(race!.data().date)} ${formatTime(race!.data().time)}`);
-
     const then = new Date(`${formatDate(race.data().date)} ${formatTime(race.data().time)}`);
-    console.log("then: ", then);
-    const now = new Date();
-    const newThen = new Date(formatDate(race!.data().date));
-    console.log("newThen: ", formatDate(race!.data().date));
-    // console.log("now: ", now);
-    // const diff = diffMinutes(then, now);
-    // console.log("diff: ", diff);
-    // console.log("relative date: ", formatRelativeDate(then, now));
-
-    // return formatRelativeDate(then);
+    return formatRelativeDate(then);
   };
 
   return (
     <Fragment>
-      <Modal isOpen={isOpen} onClose={onClose} size="lg">
+      <Modal isOpen={isOpen} onClose={onClose} size="sm">
         <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="2px" />
         <ModalContent>
           <ModalHeader bgColor={useColorModeValue("blackAlpha.200", "blackAlpha.500")}>
@@ -65,31 +56,38 @@ export default function StartTheRaceModal({ disclosure, race, callback }: SartTh
           <ModalBody>
             <Box>
               <Text>{race.data().name}</Text>
-              <Text>This Race is scheduled to start at {race.data().time}</Text>
+              <Text>
+                This Race is scheduled to start{" "}
+                <Text fontWeight={"bold"}>{race && race.data() && timeDifference()}</Text> at {race.data().time}
+              </Text>
               <Text>on {new Date(formatDate(race.data().date)).toDateString()}</Text>
             </Box>
-            <Box>
-              <Text>{race && race.data() && timeDifference()}</Text>
-            </Box>
+            <Box></Box>
           </ModalBody>
 
           <ModalFooter>
-            <Button
-              bgColor={"green.500"}
-              mr={3}
-              onClick={() => {
-                // callback?.(itemId);
-                onClose();
-              }}
-            >
-              Start the race now?
-            </Button>
-            <Button colorScheme="blue" variant="outline" onClick={onClose}>
-              Use scheduled time
-            </Button>
-            <Button colorScheme="blue" variant="outline" onClick={onClose}>
-              Cancel
-            </Button>
+            <Flex gap={2}>
+              <Button
+                color={"white"}
+                bgColor={"green.500"}
+                onClick={() => {
+                  // callback?.(itemId);
+                  onClose();
+                }}
+              >
+                Now
+              </Button>
+              <Button colorScheme="blue" variant="outline" onClick={onClose}>
+                Scheduled
+              </Button>
+              <IconButton
+                aria-label="cancel"
+                icon={(<Icon as={CloseIcon} />) as any}
+                colorScheme="blue"
+                variant="outline"
+                onClick={onClose}
+              />
+            </Flex>
           </ModalFooter>
         </ModalContent>
       </Modal>

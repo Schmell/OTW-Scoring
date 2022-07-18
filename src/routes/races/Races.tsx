@@ -26,12 +26,10 @@ export default function Races({ setHeaderTitle }) {
   const addRaceHandler = async () => {
     const docRef = await addDoc(racesRef, {
       name: "Race ",
-      date: formatDate(new Date().toDateString()),
-      time: new Date().toTimeString(),
+      date: new Date().toLocaleDateString("en-UK"),
+      time: new Date().toLocaleTimeString("en-US", { hour12: false }),
       sailed: "0",
-      raceid: "",
       _seriesid: seriesId,
-      rank: "100",
       starts: [],
     });
     setRaceId(docRef.id);
@@ -47,7 +45,6 @@ export default function Races({ setHeaderTitle }) {
               {series && series.event}
             </Heading>
           </FadeInSlideRight>
-
           {/* Sub header buttons */}
           <FadeInSlideLeft>
             <Tooltip label="Add Race" hasArrow bg="blue.300" placement="bottom-start">
