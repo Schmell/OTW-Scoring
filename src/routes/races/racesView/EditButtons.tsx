@@ -1,27 +1,48 @@
-import { Tooltip, IconButton, Icon } from "@chakra-ui/react";
+import { Box, Flex, Icon, IconButton, Tooltip, useDisclosure } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
-
+import { AreYouSure } from "../../../components/generic/AreYouSure";
 // Icons
+import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 
 export default function EditButtons({ setRaceId, race }) {
+  const deleteRaceDisclosure = useDisclosure();
   return (
     <Fragment>
-      <Tooltip hasArrow label="Edit race settings" aria-label="Edit race settings" placement="top-start" bg="blue.300">
-        <span>
+      <Flex pb={2} align={"center"} color={"blue.400"}>
+        <Tooltip
+          hasArrow
+          label="Edit race settings"
+          aria-label="Edit race settings"
+          placement="top-start"
+          bg="blue.300"
+        >
+          <span>
+            <IconButton
+              aria-label="Edit race settings"
+              variant={"ghost"}
+              icon={(<Icon as={EditIcon} />) as any}
+              onClick={() => {
+                setRaceId(race.id);
+                route("/races/edit");
+              }}
+            />
+          </span>
+        </Tooltip>
+        <Tooltip label="Delete Series" hasArrow bg="blue.300" placement="bottom-start">
           <IconButton
-            aria-label="Edit race settings"
-            variant={"ghost"}
-            color={"gray.400"}
-            icon={(<Icon as={EditIcon} />) as any}
-            onClick={() => {
-              setRaceId(race.id);
-              route("/races/edit");
-            }}
+            aria-label="Delete series"
+            icon={(<Icon as={CloseIcon} />) as any}
+            variant="ghost"
+            onClick={deleteRaceDisclosure.onOpen}
           />
-        </span>
-      </Tooltip>
+        </Tooltip>
+      </Flex>
+      <AreYouSure disclosure={deleteRaceDisclosure} colPath="races" itemId={race.id}>
+        <Box>This will delete the race and is not undo-able</Box>
+        <Box>You will loose any work you have done with this Race</Box>
+      </AreYouSure>
     </Fragment>
   );
 }

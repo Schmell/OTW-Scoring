@@ -1,35 +1,51 @@
-import { Box, Button, Flex, Grid, GridItem, Icon, IconButton, Text, Tooltip } from "@chakra-ui/react";
+import { Box, Flex, Grid, GridItem, useDisclosure } from "@chakra-ui/react";
+import { QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
 import { Fragment, h } from "preact";
-import { capitalizeFirstLetter } from "../../../util/formatters";
-import { style } from "@mui/system";
 import { route } from "preact-router";
-// Icons
-import AddIcon from "@mui/icons-material/Add";
-import CalendarIcon from "@mui/icons-material/CalendarToday";
-import CheckCircleIcon from "@mui/icons-material/CheckCircleOutline";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import DoNotDisturbIcon from "@mui/icons-material/DoNotDisturb";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import TopLeft from "./TopLeft";
-import EditButtons from "./EditButtons";
-import BottomLeft from "./BottomLeft";
+import useStorage from "../../../hooks/useStorage";
 import BottomEnd from "./BottomEnd";
+// Icons
+import BottomLeft from "./BottomLeft";
+import { checkIfSailed } from "./checkIfRaceSailed";
+import EditButtons from "./EditButtons";
+import StartTheRaceModal from "./StartTheRaceModal";
+import TopLeft from "./TopLeft";
+interface RaceItemProps {
+  race: QueryDocumentSnapshot<DocumentData>;
+  setRaceId: string;
+  key: string;
+  raceId?: string;
+}
 
-export default function RaceItem({ race, setRaceId }) {
-  const rd = race.data();
+export default function RaceItem({ race, raceId, setRaceId }: RaceItemProps) {
+  //
+  const [seriesId] = useStorage("serieId");
+  const startTheRaceDisclosure = useDisclosure();
+
+  const handleOnClick = (race) => {
+    if (race.data().sailed === "1") route(`/result/${race.data()._seriesid}/${race.data().raceid}`);
+    if (race.data().sailed === "0") startTheRaceDisclosure.onOpen();
+    if (race.data().sailed === "postponed") startTheRaceDisclosure.onOpen();
+  };
+
   return (
     <Fragment>
       <Box
-        borderRadius={5}
-        borderWidth="1px"
-        borderTopColor={"blue.200"}
-        borderLeftColor={"blue.500"}
+        key={race.id}
+        borderRightRadius={18}
+        borderBottomWidth={4}
+        borderColor={checkIfSailed({
+          race,
+          sailed: "green.500",
+          unsailed: "blue.500",
+          postponed: "blue.500",
+        })}
         shadow="md"
-        my={3}
+        my={4}
       >
-        <Grid minH={8} templateRows="repeat(2, 1fr)" templateColumns="repeat(5, 1fr)">
-          <GridItem colSpan={4} ml={2} mt={2}>
-            <TopLeft race={race} />
+        <Grid templateColumns="repeat(5, 1fr)">
+          <GridItem colSpan={4} ml={2} mt={1}>
+            <TopLeft race={race} action={handleOnClick} />
           </GridItem>
           <GridItem colSpan={1} ml={2}>
             <Flex justifyContent={"end"}>
@@ -37,13 +53,14 @@ export default function RaceItem({ race, setRaceId }) {
             </Flex>
           </GridItem>
           <GridItem colSpan={2} ml={2}>
-            <BottomLeft />
+            <BottomLeft race={race} />
           </GridItem>
-          <GridItem>
-            <BottomEnd />
+          <GridItem colSpan={3}>
+            <BottomEnd race={race} />
           </GridItem>
         </Grid>
       </Box>
+      <StartTheRaceModal race={race} disclosure={startTheRaceDisclosure} />
     </Fragment>
   );
 }

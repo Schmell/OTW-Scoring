@@ -1,54 +1,69 @@
 import { Fragment, h } from "preact";
-import { route } from "preact-router";
-import {
-  Box,
-  Button,
-  Container,
-  Divider,
-  Flex,
-  Heading,
-  Icon,
-  IconButton,
-  List,
-  ListItem,
-  Spinner,
-  Text,
-  Tooltip,
-  VStack,
-} from "@chakra-ui/react";
-import { collection } from "firebase/firestore";
-import { db } from "../../util/firebase-config";
-import { useCollection } from "react-firebase-hooks/firestore";
+import { Box, Divider, Flex, Heading, Icon, IconButton, Spinner, Tooltip, useDisclosure } from "@chakra-ui/react";
+import { addDoc, collection, doc } from "firebase/firestore";
+import { useCollection, useDocumentData } from "react-firebase-hooks/firestore";
+import { auth, db } from "../../util/firebase-config";
 import useStorage from "../../hooks/useStorage";
-import { formatDate } from "../../util/formatters";
 import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
-import style from "./style.css";
-// Icons
-import AddIcon from "@mui/icons-material/Add";
-import CalendarIcon from "@mui/icons-material/CalendarToday";
-import CheckCircleIcon from "@mui/icons-material/CheckCircleOutline";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import EditIcon from "@mui/icons-material/Edit";
-import DoNotDisturbIcon from "@mui/icons-material/DoNotDisturb";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import RaceItem from "./racesView/RaceItem";
+// Icons
+import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
+import StartTheRaceModal from "./racesView/StartTheRaceModal";
+import { route } from "preact-router";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { formatDate, formatTime } from "../../util/formatters";
 
 export default function Races({ setHeaderTitle }) {
   setHeaderTitle("Races");
   const [seriesId, setSeriesId] = useStorage("seriesId");
   const [raceId, setRaceId] = useStorage("raceId", { initVal: "1" });
-  const seriesRef = collection(db, `/series/${seriesId}/races`);
-  const [races, racesLoading] = useCollection(seriesRef);
+  const seriesRef = doc(db, "series", seriesId);
+  const racesRef = collection(db, "series", seriesId, "races");
+  const [races, racesLoading] = useCollection(racesRef);
+  const [series, seriesLoading] = useDocumentData(seriesRef);
+  const [user] = useAuthState(auth);
+
+  const addRaceHandler = async () => {
+    const docRef = await addDoc(racesRef, {
+      name: "Race ",
+      date: formatDate(new Date().toDateString()),
+      time: new Date().toTimeString(),
+      sailed: "0",
+      raceid: "",
+      _seriesid: seriesId,
+      rank: "100",
+      starts: [],
+    });
+    setRaceId(docRef.id);
+    route("/races/edit");
+  };
 
   return (
     <Fragment>
-      <Container>
-        <FadeInSlideRight>
-          <Heading as="h3" color="blue.400" w="100%" mt={2}>
-            Select a race
-          </Heading>
-          <Divider my={2} />
-        </FadeInSlideRight>
+      <Box>
+        <Flex justifyContent="space-between" alignItems="end">
+          <FadeInSlideRight>
+            <Heading as="h4" color="blue.400">
+              {series && series.event}
+            </Heading>
+          </FadeInSlideRight>
+
+          {/* Sub header buttons */}
+          <FadeInSlideLeft>
+            <Tooltip label="Add Race" hasArrow bg="blue.300" placement="bottom-start">
+              <IconButton
+                aria-label="add race"
+                colorScheme="blue"
+                variant="outline"
+                boxShadow="md"
+                _visited={{ color: "blue" }}
+                onClick={addRaceHandler}
+                icon={(<Icon as={AddToPhotosOutlinedIcon} />) as any}
+              />
+            </Tooltip>
+          </FadeInSlideLeft>
+        </Flex>
+        <Divider my={4} />
 
         <Box mt={2}>
           {/* Loading Spinner */}
@@ -62,7 +77,7 @@ export default function Races({ setHeaderTitle }) {
             </Fragment>
           )}
         </Box>
-      </Container>
+      </Box>
     </Fragment>
   );
 }

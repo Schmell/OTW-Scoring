@@ -1,7 +1,18 @@
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
 import { useState } from "preact/hooks";
-import { Box, Button, Divider, Flex, Heading, Text, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Divider,
+  Editable,
+  EditableInput,
+  EditablePreview,
+  Flex,
+  Heading,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../util/firebase-config";
 import { useDocumentData } from "react-firebase-hooks/firestore";
