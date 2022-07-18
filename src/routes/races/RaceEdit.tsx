@@ -48,7 +48,6 @@ export const RaceEdit = ({ setHeaderTitle }) => {
   const [raceStarts, setRaceStarts] = useState<IraceStarts[]>();
   const [postponed, setPostponed] = useState<string>("");
   const [postponedDate, setPostponedDate] = useState("");
-  const [title, setTitle] = useState("");
 
   const submittedToast = useToast();
 
@@ -57,8 +56,10 @@ export const RaceEdit = ({ setHeaderTitle }) => {
   // Get the currentRace data
   const docRef = doc(db, "series", seriesId, "races", raceId);
   const [currentRace, loading, error] = useDocumentData(docRef);
+  const [title, setTitle] = useState(currentRace?.name);
 
   if (!loading) {
+    setTitle(currentRace?.name);
     setRaceTime(formatTime(currentRace?.time));
     setRaceStarts(currentRace?.starts);
     setPostponedDate(currentRace?.postponedDate);
