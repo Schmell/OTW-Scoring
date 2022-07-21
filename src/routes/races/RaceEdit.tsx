@@ -1,6 +1,6 @@
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import {
   Box,
   Button,
@@ -10,13 +10,15 @@ import {
   EditablePreview,
   Flex,
   Heading,
+  Input,
   Text,
   useToast,
+  VisuallyHidden,
 } from "@chakra-ui/react";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "../../util/firebase-config";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { Form, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import { FadeIn, FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
 import useStorage from "../../hooks/useStorage";
 import { formatDate, formatTime } from "../../util/formatters";
@@ -55,14 +57,14 @@ export const RaceEdit = ({ setHeaderTitle }) => {
 
   // Get the currentRace data
   const docRef = doc(db, "series", seriesId, "races", raceId);
-  const [currentRace, loading, error] = useDocumentData(docRef);
-  const [title, setTitle] = useState(currentRace?.name);
+  const [currentRace, loading] = useDocumentData(docRef);
+  const [raceName, setRaceName] = useState("");
 
-  if (!loading) {
-    setTitle(currentRace?.name);
-    setRaceTime(formatTime(currentRace?.time));
-    setRaceStarts(currentRace?.starts);
-    setPostponedDate(currentRace?.postponedDate);
+  if (!loading && currentRace) {
+    if (currentRace.time) setRaceTime(formatTime(currentRace.time));
+
+    setRaceStarts(currentRace.starts);
+    setPostponedDate(currentRace.postponedDate);
   }
 
   const submitHandler = async (values: any) => {
@@ -73,6 +75,9 @@ export const RaceEdit = ({ setHeaderTitle }) => {
     });
     // update the firestore doc
     // here we may need to add modified flag or something
+
+    // const lastMod = {new Date()}
+    values.lastModifiedDate = serverTimestamp();
     await updateDoc(docRef, values);
 
     // show submitted toast
@@ -88,97 +93,108 @@ export const RaceEdit = ({ setHeaderTitle }) => {
     route("/races");
   };
 
+  useEffect(() => {
+    setRaceName(currentRace?.name ? currentRace.name : `Race ${currentRace?.rank}`);
+  }, [loading]);
+
   return (
     <Fragment>
-      <Box>
-        {/* Heading */}
-        <Flex justifyContent="space-between" alignItems="center" minWidth="max-content" wrap="wrap">
-          {/* This is the header with race name or number */}
-          <FadeInSlideRight>
-            <Heading as="h5" color="blue.400">
-              <Editable defaultValue={currentRace?.name ? currentRace.name : `Race ${currentRace?.rank}`}>
-                <EditablePreview />
-                <EditableInput
-                  onChange={({ target }) => {
-                    console.log("target: ", target.value);
-                    setTitle(target.value);
-                  }}
-                />
-              </Editable>
-            </Heading>
-          </FadeInSlideRight>
+      {!loading && currentRace && (
+        <Formik
+          enableReinitialize
+          initialValues={{
+            resultType: "finish",
+            date: formatDate(currentRace.date),
+            sailed: currentRace.sailed,
+            postponed: postponed,
+            postponedDate: currentRace.postponedDate,
+            time: raceTime,
+            starts: raceStarts,
+            notes: currentRace.notes,
+            name: raceName,
+          }}
+          onSubmit={submitHandler}
+        >
+          {({ values }) => (
+            <Form>
+              {}
+              <Box>
+                {/* Heading */}
+                <Flex justifyContent="space-between" alignItems="center" minWidth="max-content" wrap="wrap" mx={4}>
+                  {/* This is the header with race name or number */}
+                  <FadeInSlideRight>
+                    <Heading as="h5" color="blue.400">
+                      <Editable
+                        defaultValue={currentRace?.name ? currentRace.name : `Race ${currentRace?.rank}`}
+                        isPreviewFocusable={true}
+                      >
+                        <EditablePreview />
+                        <EditableInput
+                          onChange={({ target }) => {
+                            setRaceName(target.value);
+                          }}
+                        />
+                      </Editable>
+                    </Heading>
+                  </FadeInSlideRight>
 
-          {/* For Dev purposes only */}
-          <FadeInSlideLeft>
-            <Text fontSize="sm" color="lightgray">
-              id: {currentRace?.raceid} - {currentRace?._seriesid}
-            </Text>
-          </FadeInSlideLeft>
-        </Flex>
+                  {/* For Dev purposes only */}
+                  <FadeInSlideLeft>
+                    <Text fontSize="sm" color="lightgray">
+                      id: {currentRace?.raceid} - {currentRace?._seriesid}
+                    </Text>
+                  </FadeInSlideLeft>
+                </Flex>
 
-        <Divider my={3} />
+                <Divider my={3} />
 
-        {/* Start the form */}
-        <FadeIn>
-          <Box mx={4}>
-            <Formik
-              enableReinitialize
-              initialValues={{
-                resultType: "finish",
-                date: formatDate(currentRace?.date),
-                sailed: currentRace?.sailed,
-                postponed: postponed,
-                postponedDate: currentRace?.postponedDate,
-                time: raceTime,
-                starts: raceStarts,
-                notes: currentRace?.notes,
-                name: title,
-              }}
-              onSubmit={submitHandler}
-            >
-              {({ values }) => (
-                <Form className={style.raceform}>
-                  {}
-                  {/* Result Type */}
-                  <ResultType />
+                {/* Start the form */}
+                <FadeIn>
+                  <Box mx={4}>
+                    <VisuallyHidden>
+                      <Field name="name"></Field>
+                    </VisuallyHidden>
+                    {/* Result Type */}
+                    <ResultType />
 
-                  <Divider my={3} />
+                    <Divider my={3} />
 
-                  {/* Date */}
-                  <Date />
+                    {/* Date */}
+                    <Date />
 
-                  <Divider my={3} />
+                    <Divider my={3} />
 
-                  {/* Sailed */}
-                  <Sailed
-                    postponed={postponed}
-                    postponedDate={postponedDate}
-                    setPostponedDate={setPostponedDate}
-                    currentRace={currentRace}
-                  />
+                    {/* Sailed */}
+                    <Sailed
+                      postponed={postponed}
+                      postponedDate={postponedDate}
+                      setPostponedDate={setPostponedDate}
+                      currentRace={currentRace}
+                    />
 
-                  <Divider my={3} />
+                    <Divider my={3} />
 
-                  {/* First gun  */}
-                  <FirstGun docRef={docRef} setRaceTime={setRaceTime} />
+                    {/* First gun  */}
+                    <FirstGun docRef={docRef} setRaceTime={setRaceTime} />
 
-                  <Divider my={3} />
+                    <Divider my={3} />
 
-                  <Starts raceStarts={raceStarts} docRef={docRef} values={values} />
+                    <Starts raceStarts={raceStarts} docRef={docRef} values={values} />
 
-                  {/* Notes */}
-                  <Notes loading={loading} currentRace={currentRace} />
+                    {/* Notes */}
+                    <Notes loading={loading} currentRace={currentRace} />
 
-                  {/* Submit Button */}
-                  <Button type="submit" colorScheme="blue" w="100%" my={4}>
-                    Submit
-                  </Button>
-                </Form>
-              )}
-            </Formik>
-          </Box>
-        </FadeIn>
-      </Box>
+                    {/* Submit Button */}
+                    <Button type="submit" colorScheme="blue" w="100%" my={4}>
+                      Submit
+                    </Button>
+                  </Box>
+                </FadeIn>
+              </Box>
+            </Form>
+          )}
+        </Formik>
+      )}
     </Fragment>
   );
 };

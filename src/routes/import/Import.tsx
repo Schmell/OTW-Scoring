@@ -152,7 +152,7 @@ const Import = ({ setHeaderTitle }) => {
         </Box>
       ) : (
         <Box>
-          <Text as="p">Use the choose files button to select your Sailwave file to import</Text>
+          <Text as="p">Use the choose files button to select your Sailwave file(s) to import</Text>
         </Box>
       )}
     </Box>

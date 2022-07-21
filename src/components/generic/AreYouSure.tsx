@@ -34,10 +34,22 @@ interface AreYouSureProps {
   risk?: "low" | "medium" | "high";
 }
 
-export function AreYouSure({ disclosure, callback, itemId, children, title, colPath, risk }: AreYouSureProps) {
-  /* Modal component for deleting documents
+export function AreYouSure({ disclosure, callback, title, itemId, colPath, risk, children }: AreYouSureProps) {
+  /**
+   * Modal component for deleting documents
+   * expects chidren for modal text
+   * you must pass a callback or a colPath
    *
+   * @params disclosure, pass in a disclosure from controlling component
+   * @params callback?: ()=>void, the optional action for deleting
+   * @params title?: string, optional if you want to change the are you sure?
+   * @params itemId: string, required for the item to be deleted
+   * @params colPath?: string, optional collection path for item to delete
+   * @params risk?: string, "low" | "medium" | "high"
+   * @params children, child components
+   * @returns jsx
    */
+
   // destructure the useDisclosure prop passed in
   const { isOpen, onClose } = disclosure;
 

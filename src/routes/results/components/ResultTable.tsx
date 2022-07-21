@@ -171,7 +171,7 @@ function Table({ data, fleetName, serInfo }: ITable) {
           {
             accessorKey: "nett",
             id: "nett",
-            enableHiding: true,
+            enableHiding: false,
             footer: (props) => props.column.id,
           },
         ],
@@ -251,8 +251,8 @@ function Table({ data, fleetName, serInfo }: ITable) {
 
   return (
     <Fragment>
-      <Flex justifyContent={"space-between"}>
-        <Heading>{fleetName}</Heading>
+      <Flex justifyContent={"space-between"} px={4}>
+        <Heading color="blue.400">{fleetName}</Heading>
         <Box>
           <IconButton
             aria-label="settings"
@@ -299,9 +299,9 @@ function Table({ data, fleetName, serInfo }: ITable) {
         </Modal>
       </Flex>
 
-      <Divider my={3} />
+      <Divider my={3} border={4} />
 
-      <Box>
+      <Box px={2}>
         <MyTable>
           <Thead bgColor="blue.300">
             {table.getHeaderGroups().map((headerGroup) => (

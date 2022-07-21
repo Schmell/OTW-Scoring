@@ -15,24 +15,19 @@ import {
   FormLabel,
   Heading,
   HStack,
-  Icon,
-  IconButton,
   Input,
   Radio,
   RadioGroup,
   Text,
-  Tooltip,
   useToast,
 } from "@chakra-ui/react";
-import { doc, updateDoc } from "firebase/firestore";
-import { useDocumentData } from "react-firebase-hooks/firestore";
+import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "../../util/firebase-config";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 import { Field, Form, Formik } from "formik";
 import useStorage from "../../hooks/useStorage";
-import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
+import { FadeInSlideRight } from "../../components/animations/FadeSlide";
 // Icons
-import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
-import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 
 const SeriesEdit = ({ setHeaderTitle }) => {
   setHeaderTitle("Edit Series");
@@ -45,8 +40,10 @@ const SeriesEdit = ({ setHeaderTitle }) => {
   const submittedToast = useToast();
 
   const submitHandler = async (values: any) => {
+    // remove undefined's
     Object.keys(values).forEach((key) => (values[key] === undefined ? delete values[key] : {}));
     // here we may need to add modified flag or something
+    values.lastModified = serverTimestamp();
     // update the firestore doc
     await updateDoc(docRef, values);
 
@@ -65,39 +62,12 @@ const SeriesEdit = ({ setHeaderTitle }) => {
 
   return (
     <Fragment>
-      <Flex justifyContent="space-between" alignItems="end">
+      <Flex justifyContent="space-between" alignItems="end" mx={2}>
         <FadeInSlideRight>
           <Heading as="h4" color="blue.400">
             Edit Series
           </Heading>
         </FadeInSlideRight>
-
-        {/* Sub header buttons */}
-        {/* <FadeInSlideLeft>
-          <Tooltip label="Upload" hasArrow bgColor={"blue.300"} placement="bottom-start">
-            <IconButton
-              aria-label="upload"
-              colorScheme="blue"
-              variant="outline"
-              boxShadow="md"
-              mr={2}
-              _visited={{ color: "blue" }}
-              onClick={() => route("/upload")}
-              icon={(<Icon as={FileUploadOutlinedIcon} boxSize={4} />) as any}
-            />
-          </Tooltip>
-
-          <Tooltip label="Add Series" hasArrow bgColor={"blue.300"} placement="bottom-start">
-            <IconButton
-              aria-label="Add series"
-              colorScheme="blue"
-              variant="outline"
-              boxShadow="md"
-              _visited={{ color: "blue" }}
-              icon={(<Icon as={AddToPhotosOutlinedIcon} boxSize={4} />) as any}
-            />
-          </Tooltip>
-        </FadeInSlideLeft> */}
       </Flex>
 
       <Divider my={3} border="8px" />

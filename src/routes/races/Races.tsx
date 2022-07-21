@@ -1,27 +1,28 @@
 import { Fragment, h } from "preact";
-import { Box, Divider, Flex, Heading, Icon, IconButton, Spinner, Tooltip, useDisclosure } from "@chakra-ui/react";
+import { route } from "preact-router";
+import { Box, Divider, Flex, Heading, Icon, IconButton, Spinner, Tooltip } from "@chakra-ui/react";
 import { addDoc, collection, doc } from "firebase/firestore";
+import { db } from "../../util/firebase-config";
 import { useCollection, useDocumentData } from "react-firebase-hooks/firestore";
-import { auth, db } from "../../util/firebase-config";
 import useStorage from "../../hooks/useStorage";
-import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
 import RaceItem from "./racesView/RaceItem";
+import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
 // Icons
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
-import StartTheRaceModal from "./racesView/StartTheRaceModal";
-import { route } from "preact-router";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { formatDate, formatTime } from "../../util/formatters";
 
 export default function Races({ setHeaderTitle }) {
   setHeaderTitle("Races");
-  const [seriesId, setSeriesId] = useStorage("seriesId");
-  const [raceId, setRaceId] = useStorage("raceId", { initVal: "1" });
-  const seriesRef = doc(db, "series", seriesId);
+
+  const [seriesId, _setSeriesId] = useStorage("seriesId");
+  const [_raceId, setRaceId] = useStorage("raceId", { initVal: "1" });
+
   const racesRef = collection(db, "series", seriesId, "races");
   const [races, racesLoading] = useCollection(racesRef);
-  const [series, seriesLoading] = useDocumentData(seriesRef);
-  const [user] = useAuthState(auth);
+
+  const seriesRef = doc(db, "series", seriesId);
+  const [series, _seriesLoading] = useDocumentData(seriesRef);
+
+  // const [user] = useAuthState(auth);
 
   const addRaceHandler = async () => {
     const docRef = await addDoc(racesRef, {
@@ -39,7 +40,7 @@ export default function Races({ setHeaderTitle }) {
   return (
     <Fragment>
       <Box>
-        <Flex justifyContent="space-between" alignItems="end">
+        <Flex justifyContent="space-between" alignItems="end" px={4}>
           <FadeInSlideRight>
             <Heading as="h4" color="blue.400">
               {series && series.event}
@@ -60,9 +61,9 @@ export default function Races({ setHeaderTitle }) {
             </Tooltip>
           </FadeInSlideLeft>
         </Flex>
-        <Divider my={4} />
+        <Divider my={4} border={4} shadow={"lg"} />
 
-        <Box mt={2}>
+        <Box mt={2} my={4}>
           {/* Loading Spinner */}
           {racesLoading ? (
             <Flex justifyContent=" center" alignItems="center">
