@@ -1,4 +1,4 @@
-import { Box, Flex, Icon, Text } from "@chakra-ui/react";
+import { Box, Flex, Icon, LinkBox, LinkOverlay, Text } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
 import { capitalizeFirstLetter } from "../../../util/formatters";
 import AddIcon from "@mui/icons-material/Add";
@@ -7,10 +7,12 @@ import CheckIcon from "@mui/icons-material/Check";
 import DoNotDisturbIcon from "@mui/icons-material/DoNotDisturb";
 import { checkIfSailed } from "./checkIfRaceSailed";
 
-export default function BottomLeft({ race }) {
+export default function BottomLeft({ race, action }) {
   return (
     <Fragment>
-      <Flex
+      <LinkBox
+        as={Flex}
+        href="#"
         ml={2}
         alignItems={"center"}
         color={checkIfSailed({
@@ -20,26 +22,31 @@ export default function BottomLeft({ race }) {
           cancelled: "gray.500",
           postponed: "blue.500",
         })}
+        onClick={() => {
+          action(race);
+        }}
       >
-        <Box pr={1}>
-          {checkIfSailed({
-            race,
-            sailed: <Icon as={CheckIcon} boxSize={4} />,
-            unsailed: <Icon as={AddIcon} boxSize={4} />,
-            cancelled: <Icon as={DoNotDisturbIcon} boxSize={4} />,
-            postponed: <Icon as={CalendarIcon} boxSize={4} />,
-          })}
-        </Box>
-        <Text>
-          {checkIfSailed({
-            race,
-            sailed: "Sailed",
-            unsailed: "Not Sailed",
-            cancelled: capitalizeFirstLetter(race.data().sailed),
-            postponed: capitalizeFirstLetter(race.data().sailed),
-          })}
-        </Text>
-      </Flex>
+        <LinkOverlay as={Flex} href="#">
+          <Box pr={1}>
+            {checkIfSailed({
+              race,
+              sailed: <Icon as={CheckIcon} boxSize={4} />,
+              unsailed: <Icon as={AddIcon} boxSize={4} />,
+              cancelled: <Icon as={DoNotDisturbIcon} boxSize={4} />,
+              postponed: <Icon as={CalendarIcon} boxSize={4} />,
+            })}
+          </Box>
+          <Text>
+            {checkIfSailed({
+              race,
+              sailed: "Sailed",
+              unsailed: "Not Sailed",
+              cancelled: capitalizeFirstLetter(race.data().sailed),
+              postponed: capitalizeFirstLetter(race.data().sailed),
+            })}
+          </Text>
+        </LinkOverlay>
+      </LinkBox>
     </Fragment>
   );
 }

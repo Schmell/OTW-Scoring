@@ -6,8 +6,8 @@ import SailingIcon from "@mui/icons-material/Sailing";
 export default function BottomEnd({ race }) {
   return (
     <Fragment>
-      <Flex pb={2} ml={9} color="gray.400" direction={"column"} align="end" pr={2}>
-        <Text fontSize={16}>{race.data().date}</Text>
+      <Flex py={4} color="gray.400" justifyContent={"end"} pr={2}>
+        <Text fontSize={16}>{race.data().date} - </Text>
         <Text>{race.data().time}</Text>
       </Flex>
     </Fragment>

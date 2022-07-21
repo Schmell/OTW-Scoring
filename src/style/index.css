@@ -12,7 +12,8 @@ a {
 
 #preact_root {
   height: 100%;
-  margin: auto
+  margin: auto;
+ 
 }
 
 
@@ -26,6 +27,7 @@ h3 {
 
 .page {
   /* padding-block: var(--size-8); */
+  
   overflow: hidden;
   /* margin-inline: auto; */
   /* min-height: 100%; */

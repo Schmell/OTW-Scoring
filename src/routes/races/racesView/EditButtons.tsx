@@ -4,7 +4,7 @@ import { route } from "preact-router";
 import { AreYouSure } from "../../../components/generic/AreYouSure";
 // Icons
 import CloseIcon from "@mui/icons-material/Close";
-import EditIcon from "@mui/icons-material/Edit";
+import EditIcon from "@mui/icons-material/EditOutlined";
 
 export default function EditButtons({ setRaceId, race }) {
   const deleteRaceDisclosure = useDisclosure();
@@ -18,30 +18,28 @@ export default function EditButtons({ setRaceId, race }) {
           placement="top-start"
           bg="blue.300"
         >
-          <span>
-            <IconButton
-              aria-label="Edit race settings"
-              variant={"ghost"}
-              icon={(<Icon as={EditIcon} />) as any}
-              onClick={() => {
-                setRaceId(race.id);
-                route("/races/edit");
-              }}
-            />
-          </span>
+          <IconButton
+            aria-label="Edit race settings"
+            variant={"ghost"}
+            icon={(<Icon as={EditIcon} boxSize={7} />) as any}
+            onClick={() => {
+              setRaceId(race.id);
+              route("/races/edit");
+            }}
+          />
         </Tooltip>
         <Tooltip label="Delete Series" hasArrow bg="blue.300" placement="bottom-start">
           <IconButton
             aria-label="Delete series"
-            icon={(<Icon as={CloseIcon} />) as any}
+            icon={(<Icon as={CloseIcon} boxSize={7} />) as any}
             variant="ghost"
             onClick={deleteRaceDisclosure.onOpen}
           />
         </Tooltip>
       </Flex>
       <AreYouSure disclosure={deleteRaceDisclosure} colPath="races" itemId={race.id}>
-        <Box>This will delete the race and is not undo-able</Box>
-        <Box>You will loose any work you have done with this Race</Box>
+        <Box>This will permanently delete the race and can not be un-done</Box>
+        <Box>You will loose any work you have done with this race</Box>
       </AreYouSure>
     </Fragment>
   );

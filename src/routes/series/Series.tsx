@@ -19,7 +19,6 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { db } from "../../util/firebase-config";
 import useStorage from "../../hooks/useStorage";
 import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
-import style from "./style.css";
 // Icons
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
@@ -42,7 +41,7 @@ const Series = ({ user, setHeaderTitle }) => {
 
   return (
     <Fragment>
-      <Flex justifyContent="space-between" alignItems="end">
+      <Flex justifyContent="space-between" alignItems="end" px={4}>
         <FadeInSlideRight>
           <Heading as="h4" color="blue.400">
             Select series
@@ -78,9 +77,9 @@ const Series = ({ user, setHeaderTitle }) => {
         </FadeInSlideLeft>
       </Flex>
 
-      <Divider mt={3} />
+      <Divider my={4} border={4} />
 
-      <List>
+      <List px={4}>
         {seriesLoading ? (
           <Flex justifyContent="center" alignItems="center" mt={8}>
             <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
@@ -89,7 +88,7 @@ const Series = ({ user, setHeaderTitle }) => {
           series?.docs.map((series) => (
             <Fragment>
               <FadeInSlideLeft>
-                <ListItem key={series.id} pb={4}>
+                <ListItem key={series.id} py={4} borderRightRadius={8} shadow={"md"} my={6}>
                   <Flex justifyContent="space-between">
                     <Box
                       w="80%"
@@ -98,11 +97,15 @@ const Series = ({ user, setHeaderTitle }) => {
                         setSeriesId(series.id);
                         route("/races");
                       }}
+                      mx={2}
                     >
-                      <Text>{series.data().event}</Text>
+                      <Text fontSize={"lg"}>{series.data().event}</Text>
+                      <Text fontSize="lg" color="gray.600">
+                        {series.data().venue}
+                      </Text>
 
-                      <Text fontSize="xs" color="gray.400">
-                        {series.id}
+                      <Text fontSize="sm" color="gray.400">
+                        {series.data().venuewebsite}
                       </Text>
                     </Box>
 
@@ -137,10 +140,6 @@ const Series = ({ user, setHeaderTitle }) => {
                     <Box>This will delete the series and is not undo-able</Box>
                     <Box>You will loose any work you have done with this Series</Box>
                   </AreYouSure>
-
-                  <Text fontSize="xs" color="gray.400">
-                    {series.data().venue}
-                  </Text>
                 </ListItem>
               </FadeInSlideLeft>
             </Fragment>

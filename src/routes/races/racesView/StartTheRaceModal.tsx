@@ -1,26 +1,22 @@
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  useColorModeValue,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Button,
-  Text,
   Box,
-  IconButton,
-  Icon,
+  Button,
   Flex,
+  Icon,
+  IconButton,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
-import { collection, doc, DocumentData, query, QueryDocumentSnapshot, where } from "firebase/firestore";
-import { ComponentChildren, Fragment, h } from "preact";
-import { useDocumentData } from "react-firebase-hooks/firestore";
-import useStorage from "../../../hooks/useStorage";
-import { db } from "../../../util/firebase-config";
-import { formatDate, formatRelativeDate, formatTime } from "../../../util/formatters";
 import CloseIcon from "@mui/icons-material/Close";
+import { ComponentChildren, Fragment, h } from "preact";
+import { formatDate, formatRelativeDate, formatTime } from "../../../util/formatters";
 
 interface SartTheRaceProps {
   disclosure: {
@@ -37,9 +33,12 @@ interface SartTheRaceProps {
   children?: ComponentChildren;
 }
 export default function StartTheRaceModal({ disclosure, race, callback }: SartTheRaceProps) {
-  const { isOpen, onOpen, onClose } = disclosure;
+  const { isOpen, onClose } = disclosure;
 
   const timeDifference = () => {
+    if (!race.data().date || race.data().time) {
+      return;
+    }
     const then = new Date(`${formatDate(race.data().date)} ${formatTime(race.data().time)}`);
     return formatRelativeDate(then);
   };
@@ -55,18 +54,18 @@ export default function StartTheRaceModal({ disclosure, race, callback }: SartTh
           <ModalCloseButton />
           <ModalBody>
             <Box>
-              <Text>{race.data().name}</Text>
+              <Text fontSize="2xl">{race.data().name}</Text>
               <Text>
                 This Race is scheduled to start{" "}
-                <Text fontWeight={"bold"}>{race && race.data() && timeDifference()}</Text> at {race.data().time}
+                <Text fontWeight={"bold"}>{race && race.data() && timeDifference()}</Text>
+                <Text>
+                  {" "}
+                  at {race.data().time} on {new Date(formatDate(race.data().date)).toDateString()}
+                </Text>
+                <Text>To use the On the Water Scoring App select one from below</Text>
               </Text>
-              <Text>on {new Date(formatDate(race.data().date)).toDateString()}</Text>
             </Box>
-            <Box></Box>
-          </ModalBody>
-
-          <ModalFooter>
-            <Flex gap={2}>
+            <Flex gap={2} justify={"end"}>
               <Button
                 color={"white"}
                 bgColor={"green.500"}
@@ -80,6 +79,14 @@ export default function StartTheRaceModal({ disclosure, race, callback }: SartTh
               <Button colorScheme="blue" variant="outline" onClick={onClose}>
                 Scheduled
               </Button>
+            </Flex>
+          </ModalBody>
+
+          <ModalFooter>
+            <Box>
+              <Button colorScheme="blue" variant="outline" onClick={onClose}>
+                Enter results manually
+              </Button>
               <IconButton
                 aria-label="cancel"
                 icon={(<Icon as={CloseIcon} />) as any}
@@ -87,7 +94,7 @@ export default function StartTheRaceModal({ disclosure, race, callback }: SartTh
                 variant="outline"
                 onClick={onClose}
               />
-            </Flex>
+            </Box>
           </ModalFooter>
         </ModalContent>
       </Modal>

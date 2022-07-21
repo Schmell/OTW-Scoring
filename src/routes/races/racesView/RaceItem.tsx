@@ -1,25 +1,22 @@
-import { Box, Flex, Grid, GridItem, useColorModeValue, useDisclosure } from "@chakra-ui/react";
-import { QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
-import useStorage from "../../../hooks/useStorage";
+import { Box, Flex, Grid, GridItem, useColorModeValue, useDisclosure } from "@chakra-ui/react";
+import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
 import BottomEnd from "./BottomEnd";
-// Icons
 import BottomLeft from "./BottomLeft";
-import { checkIfSailed } from "./checkIfRaceSailed";
 import EditButtons from "./EditButtons";
 import StartTheRaceModal from "./StartTheRaceModal";
 import TopLeft from "./TopLeft";
+import { checkIfSailed } from "./checkIfRaceSailed";
+
 interface RaceItemProps {
   race: QueryDocumentSnapshot<DocumentData>;
   setRaceId: string;
   key: string;
-  raceId?: string;
 }
 
-export default function RaceItem({ race, raceId, setRaceId }: RaceItemProps) {
+export default function RaceItem({ race, setRaceId }: RaceItemProps) {
   //
-  const [seriesId] = useStorage("serieId");
   const startTheRaceDisclosure = useDisclosure();
 
   const handleOnClick = (race) => {
@@ -43,9 +40,9 @@ export default function RaceItem({ race, raceId, setRaceId }: RaceItemProps) {
           postponed: "blue.200",
           cancelled: useColorModeValue("gray.100", "gray.400"),
         })}
-        bgColor={useColorModeValue("white", "gray.900")}
+        bgColor={useColorModeValue("white", "blackAlpha.300")}
         shadow="md"
-        my={4}
+        m={4}
       >
         <Grid templateColumns="repeat(5, 1fr)">
           <GridItem colSpan={4} ml={2} mt={1}>
@@ -57,7 +54,7 @@ export default function RaceItem({ race, raceId, setRaceId }: RaceItemProps) {
             </Flex>
           </GridItem>
           <GridItem colSpan={2} ml={2}>
-            <BottomLeft race={race} />
+            <BottomLeft race={race} action={handleOnClick} />
           </GridItem>
           <GridItem colSpan={3}>
             <BottomEnd race={race} />

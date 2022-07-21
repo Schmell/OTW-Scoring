@@ -28,7 +28,7 @@ export default function SidebarWithHeader({ children, headerTitle }) {
       <MobileNav onOpen={onOpen} headerTitle={headerTitle} />
 
       {/* This is where content lives */}
-      <Box ml={{ base: 0, md: 60 }} p={4}>
+      <Box ml={{ base: 0, md: 60 }} py={1}>
         {children}
       </Box>
     </Box>

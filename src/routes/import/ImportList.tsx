@@ -1,8 +1,9 @@
-import { Box, Divider, Flex, Heading, IconButton, List, ListItem, Text, Tooltip } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
+import { Box, Divider, Flex, Heading, IconButton, List, ListItem, Text, Tooltip } from "@chakra-ui/react";
 import { DuplicateOptions } from "./DuplicateOptions";
 import { importProps } from "./importTypes";
-import MdClear from "@mui/icons-material/Clear";
+// Icons
+import ClearIcon from "@mui/icons-material/Clear";
 
 const ImportList = ({ listItems, listState, setListState, duplicates }: importProps) => {
   return (
@@ -39,7 +40,7 @@ const ImportList = ({ listItems, listState, setListState, duplicates }: importPr
                             <Tooltip label="Remove from Upload" hasArrow bg="blue.300" placement="bottom-start">
                               <IconButton
                                 aria-label="Remove from Upload"
-                                icon={(<MdClear />) as any}
+                                icon={(<ClearIcon />) as any}
                                 size={"sm"}
                                 variant="ghost"
                                 colorScheme={"blue"}

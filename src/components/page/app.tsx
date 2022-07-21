@@ -7,7 +7,7 @@ import SidebarWithHeader from "../header/SidebarWithHeader";
 import Routing from "./Routing";
 import { colors, components } from "./theme";
 
-const App: FunctionalComponent = () => {
+const App = () => {
   const theme = extendTheme({ colors, components });
   const [user] = useAuthState(auth);
 
@@ -16,7 +16,7 @@ const App: FunctionalComponent = () => {
   return (
     <ChakraProvider resetCSS theme={theme}>
       <SidebarWithHeader headerTitle={headerTitle}>
-        <Box mt={12}>
+        <Box mt={16}>
           <Routing user={user} setHeaderTitle={setHeaderTitle} />
         </Box>
       </SidebarWithHeader>
