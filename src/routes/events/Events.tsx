@@ -23,7 +23,7 @@ import { AreYouSure } from "../../components/generic/AreYouSure";
 // Icons
 import ClearIcon from "@mui/icons-material/Clear";
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
-import EditIcon from "@mui/icons-material/EditOutlined";
+import EditIcon from "@mui/icons-material/Edit";
 
 const Events = ({ user, setHeaderTitle }) => {
   setHeaderTitle("Events");

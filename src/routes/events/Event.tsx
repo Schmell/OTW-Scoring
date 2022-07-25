@@ -20,13 +20,12 @@ import { db } from "../../util/firebase-config";
 import useStorage from "../../hooks/useStorage";
 import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
 import AddSeriesModal from "./AddSeriesModal";
-import style from "./style.css";
+import { AreYouSure } from "../../components/generic/AreYouSure";
 // Icons
-import EditIcon from "@mui/icons-material/EditOutlined";
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
+import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
-import { AreYouSure } from "../../components/generic/AreYouSure";
 
 const EventList = ({ setHeaderTitle }) => {
   setHeaderTitle("Event");
@@ -63,14 +62,26 @@ const EventList = ({ setHeaderTitle }) => {
 
             {/* Sub header buttons */}
             <FadeInSlideLeft>
-              <Flex>
-                <Tooltip label="Upload file" hasArrow bg="blue.300" placement="bottom-start">
+              <Flex gap={2}>
+                <Tooltip label="Edit Event Details" hasArrow bg="blue.300" placement="bottom-start">
                   <IconButton
-                    aria-label="upload"
+                    aria-label="edit event details"
                     colorScheme="blue"
                     variant="outline"
                     boxShadow="md"
-                    mr={2}
+                    _visited={{ color: "blue" }}
+                    onClick={() => {
+                      route("/events/edit");
+                    }}
+                    icon={(<Icon as={EditIcon} />) as any}
+                  />
+                </Tooltip>
+                <Tooltip label="Import series" hasArrow bg="blue.300" placement="bottom-start">
+                  <IconButton
+                    aria-label="Import series"
+                    colorScheme="blue"
+                    variant="outline"
+                    boxShadow="md"
                     _visited={{ color: "blue" }}
                     onClick={() => route("/import")}
                     icon={(<Icon as={FileUploadOutlinedIcon} />) as any}
@@ -96,7 +107,7 @@ const EventList = ({ setHeaderTitle }) => {
 
           <Divider my={3} border={2} shadow={"md"} />
 
-          <List px={4}>
+          <List px={4} mb={8}>
             {seriesLoading ? (
               <Flex justifyContent="center" alignItems="center" mt={8}>
                 <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
@@ -116,7 +127,9 @@ const EventList = ({ setHeaderTitle }) => {
                             route("/races");
                           }}
                         >
-                          <Text fontSize="lg">{series.data().event}</Text>
+                          <Text fontSize="lg" fontWeight={"semibold"}>
+                            {series.data().event}
+                          </Text>
 
                           <Text fontSize="lg" colorScheme={"gray"}>
                             {series.data().venue}

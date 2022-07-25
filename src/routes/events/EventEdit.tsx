@@ -59,7 +59,7 @@ const EventEdit = ({ user, setHeaderTitle }) => {
 
   return (
     <Fragment>
-      <Flex justifyContent="space-between" alignItems="end">
+      <Flex justifyContent="space-between" alignItems="end" px={4}>
         <FadeInSlideRight>
           <Heading as="h4" color="blue.400">
             Event Edit
@@ -93,9 +93,9 @@ const EventEdit = ({ user, setHeaderTitle }) => {
         </Box>
       </Flex>
 
-      <Divider mt={3} />
+      <Divider my={4} border={4} shadow={"md"} />
 
-      <Box>
+      <Box mx={4} mb={8}>
         {currentEvent && (
           <Formik
             initialValues={{
