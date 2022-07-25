@@ -55,7 +55,7 @@ export const components = {
       // 6. We can overwrite defaultProps
       defaultProps: {
         // size: "lg", // default is md
-        variant: "ghost", // default is solid
+        variant: "outline", // default is solid
         colorScheme: "blue", // default is gray
       },
     },

@@ -14,9 +14,9 @@ import {
   Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
-import { collection, query, where } from "firebase/firestore";
+import { addDoc, collection, query, where } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { db } from "../../util/firebase-config";
+import { auth, db } from "../../util/firebase-config";
 import useStorage from "../../hooks/useStorage";
 import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
 // Icons
@@ -25,6 +25,7 @@ import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import { AreYouSure } from "../../components/generic/AreYouSure";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const Series = ({ user, setHeaderTitle }) => {
   setHeaderTitle("Series");
@@ -32,6 +33,7 @@ const Series = ({ user, setHeaderTitle }) => {
   const seriesRef = collection(db, "series");
   const [series, seriesLoading] = useCollection(query(seriesRef, where("__owner", "==", user && user.uid)));
   const deleteSeriesDisclosure = useDisclosure();
+  // const [user] = useAuthState(auth)
 
   // useStorage option (modified to be used as context)
   const [_seriesId, setSeriesId] = useStorage("seriesId", {
@@ -39,12 +41,26 @@ const Series = ({ user, setHeaderTitle }) => {
     bool: false,
   });
 
+  const addSeriesHandler = async () => {
+    let __fileInfo = {
+      lastModifiedDate: new Date().toLocaleDateString("en-UK"),
+      lastModified: new Date().toTimeString(),
+    };
+    const docRef = await addDoc(seriesRef, {
+      name: "Series ",
+      __fileInfo,
+      __owner: user.uid,
+    });
+    setSeriesId(docRef.id);
+    route("/series/edit");
+  };
+
   return (
     <Fragment>
       <Flex justifyContent="space-between" alignItems="end" px={4}>
         <FadeInSlideRight>
           <Heading as="h4" color="blue.400">
-            Select series
+            All Series
           </Heading>
         </FadeInSlideRight>
 
@@ -57,7 +73,6 @@ const Series = ({ user, setHeaderTitle }) => {
               variant="outline"
               boxShadow="md"
               mr={2}
-              _visited={{ color: "blue" }}
               onClick={() => route("/import")}
               icon={(<Icon as={FileUploadOutlinedIcon} />) as any}
             />
@@ -69,15 +84,14 @@ const Series = ({ user, setHeaderTitle }) => {
               colorScheme="blue"
               variant="outline"
               boxShadow="md"
-              _visited={{ color: "blue" }}
-              // onClick={() => route("/series/edit")}
               icon={(<Icon as={AddToPhotosOutlinedIcon} />) as any}
+              onClick={addSeriesHandler}
             />
           </Tooltip>
         </FadeInSlideLeft>
       </Flex>
 
-      <Divider my={4} border={4} />
+      <Divider mt={4} border={4} />
 
       <List px={4}>
         {seriesLoading ? (
@@ -88,18 +102,20 @@ const Series = ({ user, setHeaderTitle }) => {
           series?.docs.map((series) => (
             <Fragment>
               <FadeInSlideLeft>
-                <ListItem key={series.id} py={4} borderRightRadius={8} shadow={"md"} my={6}>
+                <ListItem key={series.id} py={2} borderRightRadius={8} shadow={"md"} my={6}>
                   <Flex justifyContent="space-between">
                     <Box
                       w="80%"
+                      mx={2}
                       cursor={"pointer"}
                       onClick={() => {
                         setSeriesId(series.id);
                         route("/races");
                       }}
-                      mx={2}
                     >
-                      <Text fontSize={"lg"}>{series.data().event}</Text>
+                      <Text fontSize={"lg"} fontWeight="semibold">
+                        {series.data().event}
+                      </Text>
                       <Text fontSize="lg" color="gray.600">
                         {series.data().venue}
                       </Text>

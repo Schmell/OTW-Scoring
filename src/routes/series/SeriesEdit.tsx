@@ -9,6 +9,9 @@ import {
   Box,
   Button,
   Divider,
+  Editable,
+  EditableInput,
+  EditablePreview,
   Flex,
   FormControl,
   FormErrorMessage,
@@ -27,16 +30,19 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 import { Field, Form, Formik } from "formik";
 import useStorage from "../../hooks/useStorage";
 import { FadeInSlideRight } from "../../components/animations/FadeSlide";
+import { useState } from "preact/hooks";
 // Icons
 
 const SeriesEdit = ({ setHeaderTitle }) => {
   setHeaderTitle("Edit Series");
 
   const [seriesId] = useStorage("seriesId");
+  const [seriesName, setSeriesName] = useState("");
 
   // Get the currentRace data
   const docRef = doc(db, "series", seriesId);
   const [currentSeries, seriesLoading, error] = useDocumentData(docRef);
+
   const submittedToast = useToast();
 
   const submitHandler = async (values: any) => {
@@ -62,39 +68,49 @@ const SeriesEdit = ({ setHeaderTitle }) => {
 
   return (
     <Fragment>
-      <Flex justifyContent="space-between" alignItems="end" mx={2}>
-        <FadeInSlideRight>
-          <Heading as="h4" color="blue.400">
-            Edit Series
-          </Heading>
-        </FadeInSlideRight>
-      </Flex>
+      {currentSeries && (
+        <Formik
+          initialValues={{
+            event: currentSeries.event,
+            eventwebsite: currentSeries.eventwebsite,
+            eventburgee: currentSeries.eventburgee,
+            eventemail: currentSeries.eventemail,
+            venue: currentSeries.venue,
+            venuewebsite: currentSeries.venuewebsite,
+            venueburgee: currentSeries.venueburgee,
+            venueemail: currentSeries.venueemail,
+            name: currentSeries.__fileInfo.name,
+            lastModified: currentSeries.__fileInfo.lastModified,
+            lastModifiedDate: currentSeries.__fileInfo.lastModifiedDate,
+            size: currentSeries.__fileInfo.size,
+            resultType: currentSeries.resultType,
+            rowTitle: currentSeries.rowTitle || "boat",
+          }}
+          onSubmit={submitHandler}
+        >
+          <Form>
+            <Flex justifyContent="space-between" alignItems="end" mx={2}>
+              <FadeInSlideRight>
+                <Heading as="h5" color="blue.400">
+                  <Editable defaultValue={currentSeries.name} isPreviewFocusable={true}>
+                    <EditablePreview />
+                    <EditableInput
+                      onChange={({ target }) => {
+                        setSeriesName(target.value);
+                      }}
+                    />
+                  </Editable>
+                </Heading>
+                <Text fontSize="sm" color="lightgray">
+                  id: {currentSeries.id}
+                </Text>
+              </FadeInSlideRight>
+            </Flex>
 
-      <Divider my={3} border="8px" />
+            <Divider my={3} border="8px" />
 
-      <Box>
-        {currentSeries && (
-          <Formik
-            initialValues={{
-              event: currentSeries.event,
-              eventwebsite: currentSeries.eventwebsite,
-              eventburgee: currentSeries.eventburgee,
-              eventemail: currentSeries.eventemail,
-              venue: currentSeries.venue,
-              venuewebsite: currentSeries.venuewebsite,
-              venueburgee: currentSeries.venueburgee,
-              venueemail: currentSeries.venueemail,
-              name: currentSeries.__fileInfo.name,
-              lastModified: currentSeries.__fileInfo.lastModified,
-              lastModifiedDate: currentSeries.__fileInfo.lastModifiedDate,
-              size: currentSeries.__fileInfo.size,
-              resultType: currentSeries.resultType,
-              rowTitle: currentSeries.rowTitle || "boat",
-            }}
-            onSubmit={submitHandler}
-          >
-            <Form>
-              <Accordion>
+            <Box mb={6}>
+              <Accordion defaultIndex={[0]}>
                 <AccordionItem>
                   <Text as={"h2"} mb={3}>
                     <AccordionButton>
@@ -255,10 +271,10 @@ const SeriesEdit = ({ setHeaderTitle }) => {
               <Button type="submit" colorScheme="blue" w="100%" my={4}>
                 Submit
               </Button>
-            </Form>
-          </Formik>
-        )}
-      </Box>
+            </Box>
+          </Form>
+        </Formik>
+      )}
     </Fragment>
   );
 };

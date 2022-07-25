@@ -11,8 +11,7 @@ export default function FleetsTable({ tableData, serInfo }) {
       })
     )
   );
-  // console.log("unique: ", unique);
-  // console.log("tableData: ", tableData);
+
   unique.forEach((fleetName) => {
     const push = tableData.filter((td) => {
       if (td.fleet || td.division === fleetName) return td;
@@ -22,7 +21,7 @@ export default function FleetsTable({ tableData, serInfo }) {
 
   return (
     <Fragment>
-      {fleetsArray.map((fleet) => (
+      {fleetsArray.sort().map((fleet) => (
         <Fragment>
           <ResultTable tableData={fleet} fleetName={fleet[0].fleet || fleet[0].division} serInfo={serInfo} />
           <Divider my={4} />
