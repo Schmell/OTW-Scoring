@@ -4,7 +4,7 @@ import { route } from "preact-router";
 import { AreYouSure } from "../../../components/generic/AreYouSure";
 // Icons
 import CloseIcon from "@mui/icons-material/Close";
-import EditIcon from "@mui/icons-material/EditOutlined";
+import EditIcon from "@mui/icons-material/Edit";
 
 export default function EditButtons({ setRaceId, race }) {
   const deleteRaceDisclosure = useDisclosure();

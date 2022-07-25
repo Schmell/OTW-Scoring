@@ -136,14 +136,13 @@ export const RaceEdit = ({ setHeaderTitle }) => {
                         />
                       </Editable>
                     </Heading>
-                  </FadeInSlideRight>
-
-                  {/* For Dev purposes only */}
-                  <FadeInSlideLeft>
                     <Text fontSize="sm" color="lightgray">
                       id: {currentRace?.raceid} - {currentRace?._seriesid}
                     </Text>
-                  </FadeInSlideLeft>
+                  </FadeInSlideRight>
+
+                  {/* For Dev purposes only */}
+                  {/* <FadeInSlideLeft></FadeInSlideLeft> */}
                 </Flex>
 
                 <Divider my={3} />

@@ -1,5 +1,5 @@
 import { Box, ChakraProvider, extendTheme } from "@chakra-ui/react";
-import { FunctionalComponent, h } from "preact";
+import { h } from "preact";
 import { useState } from "preact/hooks";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../util/firebase-config";
@@ -8,7 +8,7 @@ import Routing from "./Routing";
 import { colors, components } from "./theme";
 
 const App = () => {
-  const theme = extendTheme({ colors, components });
+  const theme = extendTheme({ colors: colors, components: components });
   const [user] = useAuthState(auth);
 
   const [headerTitle, setHeaderTitle] = useState("Blw Me");

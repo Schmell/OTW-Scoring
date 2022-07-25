@@ -44,6 +44,7 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import SettingsIcon from "@mui/icons-material/Settings";
+import SettingsModal from "./SettingsModal";
 
 type ResultRow = {
   boat: string;
@@ -125,7 +126,11 @@ function Table({ data, fleetName, serInfo }: ITable) {
             accessorKey: "points",
             id: "points",
             enableHiding: false,
-            cell: (props) => parseFloat(props.getValue()),
+            cell: (props) => (
+              <Flex justify={"center"} m={0}>
+                {parseFloat(props.getValue())}
+              </Flex>
+            ),
             footer: (props) => props.column.id,
             sortingFn: "alphanumeric",
           },
@@ -133,6 +138,7 @@ function Table({ data, fleetName, serInfo }: ITable) {
             accessorKey: "elapsed",
             id: "elapsed",
             enableHiding: true,
+            cell: (props) => <Flex justify={"center"}>{parseFloat(props.getValue())}</Flex>,
             footer: (props) => props.column.id,
             sortingFn: (rowA, rowB, columnId) => {
               if (rowA.getValue("elapsed") === "---") return 1;
@@ -146,6 +152,7 @@ function Table({ data, fleetName, serInfo }: ITable) {
             accessorKey: "corrected",
             id: "corrected",
             enableHiding: true,
+            cell: (props) => <Flex justify={"center"}>{props.getValue()}</Flex>,
             footer: (props) => props.column.id,
             sortingFn: (rowA, rowB, columnId) => {
               if (rowA.getValue("corrected") === "---") return 1;
@@ -159,6 +166,11 @@ function Table({ data, fleetName, serInfo }: ITable) {
             accessorKey: "finish",
             id: "finish",
             enableHiding: true,
+            cell: (props) => (
+              <Flex justify={"center"} m={0}>
+                {props.getValue()}
+              </Flex>
+            ),
             footer: (props) => props.column.id,
             sortingFn: (rowA, rowB, columnId) => {
               if (rowA.getValue("finish") === "---") return 1;
@@ -172,6 +184,11 @@ function Table({ data, fleetName, serInfo }: ITable) {
             accessorKey: "nett",
             id: "nett",
             enableHiding: false,
+            cell: (props) => (
+              <Flex justify={"center"} m={0}>
+                {props.getValue()}
+              </Flex>
+            ),
             footer: (props) => props.column.id,
           },
         ],
@@ -263,7 +280,15 @@ function Table({ data, fleetName, serInfo }: ITable) {
             onClick={onOpen}
           />
         </Box>
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <SettingsModal
+          isOpen={isOpen}
+          onClose={onClose}
+          rowTitle={rowTitle}
+          setRowTitle={setRowTitle}
+          setResultType={setResultType}
+          resultType={resultType}
+        />
+        {/* <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>Settings</ModalHeader>
@@ -296,13 +321,13 @@ function Table({ data, fleetName, serInfo }: ITable) {
               </Button>
             </ModalFooter>
           </ModalContent>
-        </Modal>
+        </Modal> */}
       </Flex>
 
       <Divider my={3} border={4} />
 
       <Box px={2}>
-        <MyTable>
+        <MyTable variant="striped" colorScheme="blue">
           <Thead bgColor="blue.300">
             {table.getHeaderGroups().map((headerGroup) => (
               <Tr key={headerGroup.id}>
