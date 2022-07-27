@@ -3,8 +3,25 @@ import { Fragment, h } from "preact";
 import { route } from "preact-router";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
+import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
 
-export function SideListButtons({ setStorage, item, disclosure, listType }) {
+interface SiteListButtonProps {
+  item: QueryDocumentSnapshot<DocumentData>;
+  listType: string;
+  setStorage: (id: string) => void;
+  disclosure: {
+    isOpen: boolean;
+    onOpen: () => void;
+    onClose: () => void;
+    onToggle: () => void;
+    isControlled: boolean;
+    getButtonProps: (props?: any) => any;
+    getDisclosureProps: (props?: any) => any;
+  };
+  // children: any;
+}
+
+export function SiteListButtons({ setStorage, item, disclosure, listType }: SiteListButtonProps) {
   return (
     <Fragment>
       <Flex gap={3}>

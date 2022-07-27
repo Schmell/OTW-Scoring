@@ -19,7 +19,7 @@ interface SiteListProps {
   children: any;
 }
 
-export function SitelIstItem({ item, disclosure, listType, children }: SiteListProps) {
+export function SiteListItem({ item, disclosure, listType, children }: SiteListProps) {
   return (
     <Fragment>
       <FadeInSlideLeft>
@@ -29,15 +29,17 @@ export function SitelIstItem({ item, disclosure, listType, children }: SiteListP
           my={6}
           borderWidth="1px"
           borderBottomWidth={4}
-          borderColor={useColorModeValue("gray.200", "gray.600")}
+          borderColor={useColorModeValue("gray.200", "gray.700")}
+          borderBottomColor={useColorModeValue("gray.100", "gray.400")}
           borderBottomRightRadius={18}
           shadow={"md"}
+          bgColor={useColorModeValue("white", "blackAlpha.300")}
         >
           {children}
-          <AreYouSure disclosure={disclosure} colPath={listType} itemId={item.id}>
+          {/* <AreYouSure disclosure={disclosure} colPath={listType} itemId={item.id}>
             <Box>{`This will delete the ${listType} and is not undo-able`}</Box>
             <Box>{`You will loose any work you have done with this ${listType}`}</Box>
-          </AreYouSure>
+          </AreYouSure> */}
         </ListItem>
       </FadeInSlideLeft>
     </Fragment>

@@ -63,7 +63,8 @@ const SeriesEdit = ({ setHeaderTitle }) => {
     });
 
     // route back to races
-    route("/races");
+    history.back();
+    // route("/races");
   };
 
   return (

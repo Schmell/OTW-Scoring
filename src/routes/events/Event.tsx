@@ -1,34 +1,23 @@
-import { h, Fragment } from "preact";
-import { route } from "preact-router";
-import {
-  Box,
-  Divider,
-  Flex,
-  Heading,
-  Icon,
-  IconButton,
-  List,
-  ListItem,
-  Spinner,
-  Text,
-  Tooltip,
-  useColorModeValue,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Divider, Flex, Heading, Icon, IconButton, Tooltip, useDisclosure } from "@chakra-ui/react";
 import { collection, doc, query, updateDoc, where } from "firebase/firestore";
+import { Fragment, h } from "preact";
+import { route } from "preact-router";
 import { useCollection, useDocumentData } from "react-firebase-hooks/firestore";
-import { db } from "../../util/firebase-config";
-import useStorage from "../../hooks/useStorage";
 import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
-import AddSeriesModal from "./AddSeriesModal";
 import { AreYouSure } from "../../components/generic/AreYouSure";
+import { SiteList } from "../../components/generic/SiteList";
+import { SiteListButtons } from "../../components/generic/SiteList/SiteListButtons";
+import { SiteListItem } from "../../components/generic/SiteList/SiteListItem";
+import { SiteListText } from "../../components/generic/SiteList/SiteListText";
+import useStorage from "../../hooks/useStorage";
+import { db } from "../../util/firebase-config";
+import AddSeriesModal from "./AddSeriesModal";
 // Icons
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
-import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import EditIcon from "@mui/icons-material/Edit";
-import CloseIcon from "@mui/icons-material/Close";
+import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 
-const EventList = ({ setHeaderTitle }) => {
+export default function EventList({ setHeaderTitle }) {
   setHeaderTitle("Event");
 
   const [eventId] = useStorage("eventId");
@@ -107,76 +96,35 @@ const EventList = ({ setHeaderTitle }) => {
 
           <Divider my={3} border={2} shadow={"md"} />
 
-          <List px={4} mb={8}>
-            {seriesLoading ? (
-              // i wanna make this a skeleton instead
-              <Flex justifyContent="center" alignItems="center" mt={8}>
-                <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
-              </Flex>
-            ) : (
-              series?.docs.map((series) => (
-                <Fragment>
-                  <FadeInSlideLeft>
-                    <ListItem key={series.id} py={4} borderRightRadius={8} shadow={"md"} my={6}>
-                      <Flex justifyContent="space-between">
-                        <Box
-                          w="80%"
-                          mx={2}
-                          cursor="pointer"
-                          onClick={() => {
-                            setSeriesId(series.id);
-                            route("/races");
-                          }}
-                        >
-                          <Text fontSize="lg" fontWeight={"semibold"} colorScheme={"gray"}>
-                            {series.data().event}
-                          </Text>
-
-                          <Text fontSize="lg" colorScheme={"gray"}>
-                            {series.data().venue}
-                          </Text>
-                          <Text fontSize="sm" colorScheme={"blue"}>
-                            <a href={series.data().venuewebsite}>{series.data().venuewebsite}</a>
-                          </Text>
-                        </Box>
-
-                        <Flex gap={1}>
-                          <Tooltip label="Edit Series" hasArrow bg="blue.300" placement="bottom-start">
-                            <IconButton
-                              aria-label="edit series"
-                              icon={(<Icon as={EditIcon} boxSize={7} />) as any}
-                              variant="ghost"
-                              colorScheme={"blue"}
-                              onClick={() => {
-                                setSeriesId(series.id);
-                                route("/series/edit");
-                              }}
-                            />
-                          </Tooltip>
-                          <Tooltip label="Remove Series from Event" hasArrow bg="blue.300" placement="bottom-start">
-                            <IconButton
-                              aria-label="Remove Series from Event"
-                              icon={(<Icon as={CloseIcon} boxSize={7} />) as any}
-                              variant="ghost"
-                              colorScheme={"blue"}
-                              onClick={deleteEventDisclosure.onOpen}
-                            />
-                          </Tooltip>
-                        </Flex>
-                      </Flex>
-                    </ListItem>
-                  </FadeInSlideLeft>
-                  <AreYouSure disclosure={deleteEventDisclosure} callback={removeSeries} itemId={series.id} risk="low">
+          <SiteList loading={seriesLoading}>
+            {series?.docs.map((item) => {
+              console.log("item: ", item.data());
+              return (
+                <SiteListItem key={item.id} item={item} disclosure={deleteEventDisclosure} listType="series">
+                  <SiteListText
+                    item={item}
+                    setStorage={setSeriesId}
+                    forward="races"
+                    textItems={{ head: item.data().event, sub: item.data().venue, foot: item.data().venuewebsite }}
+                  >
+                    <SiteListButtons
+                      setStorage={setSeriesId}
+                      item={item}
+                      listType="series"
+                      disclosure={deleteEventDisclosure}
+                    />
+                  </SiteListText>
+                  <AreYouSure disclosure={deleteEventDisclosure} callback={removeSeries} itemId={item.id} risk="low">
+                    <Box>This action will remove this series from the event</Box>
                     <Box>You can always add this back if you want</Box>
                   </AreYouSure>
-                </Fragment>
-              ))
-            )}
-          </List>
+                </SiteListItem>
+              );
+            })}
+            {/* series?.docs.map */}
+          </SiteList>
         </Fragment>
       )}
     </Fragment>
   );
-};
-
-export default EventList;
+}

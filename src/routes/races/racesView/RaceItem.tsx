@@ -30,7 +30,7 @@ export default function RaceItem({ race, setRaceId }: RaceItemProps) {
       <Box
         key={race.id}
         borderWidth={1}
-        borderColor={useColorModeValue("gray.200", "gray.800")}
+        borderColor={useColorModeValue("gray.200", "gray.700")}
         borderBottomRightRadius={18}
         borderBottomWidth={4}
         borderBottomColor={checkIfSailed({

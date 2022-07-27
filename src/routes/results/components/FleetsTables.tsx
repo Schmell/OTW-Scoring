@@ -2,7 +2,7 @@ import { Fragment, h } from "preact";
 import { Divider } from "@chakra-ui/react";
 import ResultTable from "./ResultTable";
 
-export default function FleetsTable({ tableData, serInfo }) {
+export default function FleetsTable({ tableData, serInfo, raceId }) {
   let fleetsArray: any = [];
   const unique = Array.from(
     new Set(
@@ -23,7 +23,12 @@ export default function FleetsTable({ tableData, serInfo }) {
     <Fragment>
       {fleetsArray.sort().map((fleet) => (
         <Fragment>
-          <ResultTable tableData={fleet} fleetName={fleet[0].fleet || fleet[0].division} serInfo={serInfo} />
+          <ResultTable
+            tableData={fleet}
+            fleetName={fleet[0].fleet || fleet[0].division}
+            serInfo={serInfo}
+            raceId={raceId}
+          />
           <Divider my={4} />
         </Fragment>
       ))}
