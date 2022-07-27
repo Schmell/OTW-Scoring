@@ -20,12 +20,12 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { auth, db } from "../../util/firebase-config";
 import useStorage from "../../hooks/useStorage";
 import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
+import { AreYouSure } from "../../components/generic/AreYouSure";
 // Icons
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
-import { AreYouSure } from "../../components/generic/AreYouSure";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 const Series = ({ user, setHeaderTitle }) => {
@@ -109,7 +109,7 @@ const Series = ({ user, setHeaderTitle }) => {
                   my={6}
                   borderWidth="1px"
                   borderBottomWidth={4}
-                  borderColor={useColorModeValue("gray.200", "gray.800")}
+                  borderColor={useColorModeValue("gray.200", "gray.600")}
                   borderBottomRightRadius={18}
                   shadow={"md"}
                 >
