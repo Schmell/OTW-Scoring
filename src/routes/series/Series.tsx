@@ -12,6 +12,7 @@ import {
   Spinner,
   Text,
   Tooltip,
+  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import { addDoc, collection, query, where } from "firebase/firestore";
@@ -102,7 +103,16 @@ const Series = ({ user, setHeaderTitle }) => {
           series?.docs.map((series) => (
             <Fragment>
               <FadeInSlideLeft>
-                <ListItem key={series.id} py={2} borderRightRadius={8} shadow={"md"} my={6}>
+                <ListItem
+                  key={series.id}
+                  p={4}
+                  my={6}
+                  borderWidth="1px"
+                  borderBottomWidth={4}
+                  borderColor={useColorModeValue("gray.200", "gray.800")}
+                  borderBottomRightRadius={18}
+                  shadow={"md"}
+                >
                   <Flex justifyContent="space-between">
                     <Box
                       w="80%"
@@ -113,23 +123,21 @@ const Series = ({ user, setHeaderTitle }) => {
                         route("/races");
                       }}
                     >
-                      <Text fontSize={"lg"} fontWeight="semibold">
-                        {series.data().event}
-                      </Text>
-                      <Text fontSize="lg" color="gray.600">
+                      <Text fontSize={"xl"}>{series.data().event}</Text>
+                      <Text fontSize="lg" color={useColorModeValue("gray.500", "gray.300")}>
                         {series.data().venue}
                       </Text>
 
-                      <Text fontSize="sm" color="gray.400">
+                      <Text fontSize="md" color={useColorModeValue("gray.500", "gray.300")}>
                         {series.data().venuewebsite}
                       </Text>
                     </Box>
 
-                    <Box>
+                    <Flex gap={3}>
                       <Tooltip label="Edit Series" hasArrow bg="blue.300" placement="bottom-start">
                         <IconButton
                           aria-label="edit series"
-                          icon={(<Icon as={EditIcon} />) as any}
+                          icon={(<Icon as={EditIcon} boxSize={7} />) as any}
                           size={"sm"}
                           variant="ghost"
                           colorScheme={"blue"}
@@ -143,14 +151,14 @@ const Series = ({ user, setHeaderTitle }) => {
                       <Tooltip label="Delete Series" hasArrow bg="blue.300" placement="bottom-start">
                         <IconButton
                           aria-label="Delete series"
-                          icon={(<Icon as={CloseIcon} />) as any}
+                          icon={(<Icon as={CloseIcon} boxSize={7} />) as any}
                           size={"sm"}
                           variant="ghost"
                           colorScheme={"blue"}
                           onClick={deleteSeriesDisclosure.onOpen}
                         />
                       </Tooltip>
-                    </Box>
+                    </Flex>
                   </Flex>
                   <AreYouSure disclosure={deleteSeriesDisclosure} colPath="series" itemId={series.id}>
                     <Box>This will delete the series and is not undo-able</Box>

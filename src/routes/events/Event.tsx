@@ -12,6 +12,7 @@ import {
   Spinner,
   Text,
   Tooltip,
+  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import { collection, doc, query, updateDoc, where } from "firebase/firestore";
@@ -44,7 +45,6 @@ const EventList = ({ setHeaderTitle }) => {
   };
   const docRef = doc(db, "events", eventId);
   const [eventDoc, eventDocLoading] = useDocumentData(docRef);
-  console.log("eventDoc: ", eventDoc);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const deleteEventDisclosure = useDisclosure();
@@ -109,6 +109,7 @@ const EventList = ({ setHeaderTitle }) => {
 
           <List px={4} mb={8}>
             {seriesLoading ? (
+              // i wanna make this a skeleton instead
               <Flex justifyContent="center" alignItems="center" mt={8}>
                 <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
               </Flex>
@@ -127,7 +128,7 @@ const EventList = ({ setHeaderTitle }) => {
                             route("/races");
                           }}
                         >
-                          <Text fontSize="lg" fontWeight={"semibold"}>
+                          <Text fontSize="lg" fontWeight={"semibold"} colorScheme={"gray"}>
                             {series.data().event}
                           </Text>
 
@@ -165,7 +166,6 @@ const EventList = ({ setHeaderTitle }) => {
                       </Flex>
                     </ListItem>
                   </FadeInSlideLeft>
-                  <Divider mx={2} />
                   <AreYouSure disclosure={deleteEventDisclosure} callback={removeSeries} itemId={series.id} risk="low">
                     <Box>You can always add this back if you want</Box>
                   </AreYouSure>

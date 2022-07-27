@@ -1,5 +1,5 @@
 import { Fragment, h } from "preact";
 
-export default function SiteList() {
+export function SiteList() {
   return <Fragment></Fragment>;
 }

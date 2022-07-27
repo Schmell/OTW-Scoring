@@ -11,10 +11,7 @@ import {
   WithFieldValue,
 } from "firebase/firestore";
 
-// import { eRef } from "../util/firebase-config";
-
-// import { eventRef } from "./App";
-
+// interfaces
 export interface IResult {
   id: string;
   ref: DocumentReference<DocumentData>;
@@ -44,18 +41,15 @@ export class Result implements IResult {
     Object.assign(this, props);
   }
 
-  async mergeComp?() {
+  async mergeComp() {
     // eventRef is not always constructed ??
     // How to set this check on the class automatically ??
-    // console.log("result mergeComp");
     if (!this.eventRef) {
       this.eventRef = this.ref?.parent?.parent;
     }
+    
     // get the comp for this result
     const compsQuery = query(
-      // ///////////////////////////////////////////////////////////////////////////////
-      // I CHANGED THIS FROM eRef wich was a hard coded value for testing
-      // ///////////////////////////////////////////////////////////////////////////////
       collection(this.ref, "comps"),
       where("compid", "==", this.compid)
     );
@@ -65,7 +59,7 @@ export class Result implements IResult {
     return Object.assign(this, { comp: comps.docs[0].data() });
   }
 
-  async mergeRace?() {
+  async mergeRace() {
     // eventRef is not always constructed ??
     // How to set this check on the class automatically ??
     if (!this.eventRef) {
@@ -73,9 +67,6 @@ export class Result implements IResult {
     }
 
     const racesQuery = query(
-      // ///////////////////////////////////////////////////////////////////////////////
-      // I CHANGED THIS FROM eRef wich was a hard coded value for testing
-      // ///////////////////////////////////////////////////////////////////////////////
       collection(this.ref, "races"),
       where("raceid", "==", this.raceid)
     );
@@ -87,8 +78,6 @@ export class Result implements IResult {
 }
 
 export const resultConverter: FirestoreDataConverter<Result> = {
-  // not too sure if this works for writting to db yet
-  // probably need to add more propeties etc..
   toFirestore(result: WithFieldValue<Result>): DocumentData {
     return { compid: result.compid, raceid: result.raceid };
   },

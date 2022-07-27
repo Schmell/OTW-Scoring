@@ -1,5 +1,6 @@
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
+import { useState } from "preact/hooks";
 import {
   Accordion,
   AccordionButton,
@@ -30,7 +31,6 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 import { Field, Form, Formik } from "formik";
 import useStorage from "../../hooks/useStorage";
 import { FadeInSlideRight } from "../../components/animations/FadeSlide";
-import { useState } from "preact/hooks";
 // Icons
 
 const SeriesEdit = ({ setHeaderTitle }) => {
@@ -46,7 +46,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
   const submittedToast = useToast();
 
   const submitHandler = async (values: any) => {
-    // remove undefined's
+    // Remove undefined's
     Object.keys(values).forEach((key) => (values[key] === undefined ? delete values[key] : {}));
     // here we may need to add modified flag or something
     values.lastModified = serverTimestamp();
@@ -92,18 +92,19 @@ const SeriesEdit = ({ setHeaderTitle }) => {
             <Flex justifyContent="space-between" alignItems="end" mx={2}>
               <FadeInSlideRight>
                 <Heading as="h5" color="blue.400">
-                  <Editable defaultValue={currentSeries.name} isPreviewFocusable={true}>
+                  <Editable defaultValue={currentSeries.event} isPreviewFocusable={true}>
                     <EditablePreview />
                     <EditableInput
+                      name="event"
                       onChange={({ target }) => {
                         setSeriesName(target.value);
                       }}
                     />
                   </Editable>
                 </Heading>
-                <Text fontSize="sm" color="lightgray">
+                {/* <Text fontSize="sm" color="lightgray">
                   id: {currentSeries.id}
-                </Text>
+                </Text> */}
               </FadeInSlideRight>
             </Flex>
 
