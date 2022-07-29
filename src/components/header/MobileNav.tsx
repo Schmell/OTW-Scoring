@@ -94,7 +94,9 @@ export default function MobileNav({ onOpen, headerTitle, ...rest }: MobileProps)
             aria-label="Color Mode"
             color={"white"}
             variant="ghost"
-            _hover={{ bgColor: "blue.400" }}
+            _hover={{ bgColor: "transparent" }}
+            _active={{ bgColor: "transparent" }}
+            _focus={{ bgColor: "transparent" }}
             mr={-4}
           />
 
@@ -103,7 +105,9 @@ export default function MobileNav({ onOpen, headerTitle, ...rest }: MobileProps)
             color={"white"}
             size="lg"
             variant="ghost"
-            _hover={{ bgColor: "blue.400" }}
+            _hover={{ bgColor: "transparent" }}
+            _active={{ bgColor: "transparent" }}
+            _focus={{ bgColor: "transparent" }}
             icon={(<MdNotificationsNone />) as any}
             onClick={() => {}}
           />
