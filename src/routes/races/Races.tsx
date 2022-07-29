@@ -40,8 +40,8 @@ export default function Races({ setHeaderTitle }) {
 
   return (
     <Fragment>
-      <Box>
-        <Flex justifyContent="space-between" alignItems="end" px={4}>
+      <Box pb={4}>
+        <Flex justifyContent="space-between" alignItems="end" px={6}>
           <FadeInSlideRight>
             <Heading as="h4" color="blue.400">
               <Link href="/series/edit">{series && series.event}</Link>
