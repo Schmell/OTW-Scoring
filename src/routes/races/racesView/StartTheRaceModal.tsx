@@ -76,25 +76,16 @@ export default function StartTheRaceModal({ disclosure, race, callback }: SartTh
               >
                 Now
               </Button>
-              <Button colorScheme="blue" variant="outline" onClick={onClose}>
+              <Button colorScheme="blue" onClick={onClose}>
                 Scheduled
               </Button>
             </Flex>
           </ModalBody>
 
           <ModalFooter>
-            <Box>
-              <Button colorScheme="blue" variant="outline" onClick={onClose}>
-                Enter results manually
-              </Button>
-              <IconButton
-                aria-label="cancel"
-                icon={(<Icon as={CloseIcon} />) as any}
-                colorScheme="blue"
-                variant="outline"
-                onClick={onClose}
-              />
-            </Box>
+            <Button colorScheme="blue" variant="outline" onClick={onClose}>
+              Enter results manually
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

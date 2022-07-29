@@ -7,7 +7,9 @@ import { db } from "../../util/firebase-config";
 import { compConverter } from "../../model/Comp";
 import FleetsTables from "./components/FleetsTables";
 
-export default function Result({ seriesId, raceId }) {
+export default function Result({ seriesId, raceId, setHeaderTitle }) {
+  setHeaderTitle("Results");
+  // console.log("raceId: ", raceId);
   const seriesRef = doc(db, "series", seriesId);
 
   const [tableData, setTableData] = useState([{}]);
@@ -76,7 +78,7 @@ export default function Result({ seriesId, raceId }) {
     <Fragment>
       {!compsLoading && data && (
         <Fragment>
-          <FleetsTables tableData={tableData} serInfo={serInfo} />
+          <FleetsTables tableData={tableData} serInfo={serInfo} raceId={raceId} />
         </Fragment>
       )}
     </Fragment>

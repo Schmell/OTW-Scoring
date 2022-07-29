@@ -11,6 +11,7 @@ import {
   Text,
   useColorMode,
   useColorModeValue,
+  Flex,
 } from "@chakra-ui/react";
 import { deleteDoc, doc } from "firebase/firestore";
 import { ComponentChildren, Fragment, h } from "preact";
@@ -83,19 +84,21 @@ export function AreYouSure({ disclosure, callback, title, itemId, colPath, risk,
         </ModalBody>
 
         <ModalFooter>
-          <Button
-            bgColor={riskColor()}
-            mr={3}
-            onClick={() => {
-              callback?.(itemId);
-              onClose();
-            }}
-          >
-            Delete
-          </Button>
-          <Button colorScheme="blue" variant="outline" onClick={onClose}>
-            Cancel
-          </Button>
+          <Flex>
+            <Button
+              bgColor={riskColor()}
+              mr={3}
+              onClick={() => {
+                callback?.(itemId);
+                onClose();
+              }}
+            >
+              Delete
+            </Button>
+            <Button colorScheme="blue" variant="outline" onClick={onClose}>
+              Cancel
+            </Button>
+          </Flex>
         </ModalFooter>
       </ModalContent>
     </Modal>

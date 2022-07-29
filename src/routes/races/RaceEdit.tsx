@@ -1,6 +1,3 @@
-import { Fragment, h } from "preact";
-import { route } from "preact-router";
-import { useEffect, useState } from "preact/hooks";
 import {
   Box,
   Button,
@@ -10,17 +7,19 @@ import {
   EditablePreview,
   Flex,
   Heading,
-  Input,
   Text,
   useToast,
   VisuallyHidden,
 } from "@chakra-ui/react";
+import { Fragment, h } from "preact";
+import { route } from "preact-router";
+import { useEffect, useState } from "preact/hooks";
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
-import { db } from "../../util/firebase-config";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { Field, Form, Formik } from "formik";
-import { FadeIn, FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
+import { FadeIn, FadeInSlideRight } from "../../components/animations/FadeSlide";
 import useStorage from "../../hooks/useStorage";
+import { db } from "../../util/firebase-config";
 import { formatDate, formatTime } from "../../util/formatters";
 import { Date } from "./raceEdit/Date";
 import { FirstGun } from "./raceEdit/FirstGun";
@@ -28,7 +27,7 @@ import { Notes } from "./raceEdit/Notes";
 import { ResultType } from "./raceEdit/ResultType";
 import { Sailed } from "./raceEdit/Sailed";
 import { Starts } from "./raceEdit/Starts";
-import style from "./style.css";
+// import style from "./style.css";
 
 export const RaceEdit = ({ setHeaderTitle }) => {
   setHeaderTitle("Edit Race");
@@ -38,7 +37,6 @@ export const RaceEdit = ({ setHeaderTitle }) => {
     start: string;
   }
 
-  //
   // Get the current navigation id's
   // only need the getters here
   const [raceId] = useStorage("raceId");
@@ -52,8 +50,6 @@ export const RaceEdit = ({ setHeaderTitle }) => {
   const [postponedDate, setPostponedDate] = useState("");
 
   const submittedToast = useToast();
-
-  // Need this for the AddStartModal
 
   // Get the currentRace data
   const docRef = doc(db, "series", seriesId, "races", raceId);
@@ -73,10 +69,9 @@ export const RaceEdit = ({ setHeaderTitle }) => {
       if (values[m] === undefined) return (values[m] = "");
       return values;
     });
+
     // update the firestore doc
     // here we may need to add modified flag or something
-
-    // const lastMod = {new Date()}
     values.lastModifiedDate = serverTimestamp();
     await updateDoc(docRef, values);
 
@@ -90,6 +85,7 @@ export const RaceEdit = ({ setHeaderTitle }) => {
     });
 
     // route back to races
+    // maybe history.back()
     route("/races");
   };
 
@@ -140,9 +136,6 @@ export const RaceEdit = ({ setHeaderTitle }) => {
                       id: {currentRace?.raceid} - {currentRace?._seriesid}
                     </Text>
                   </FadeInSlideRight>
-
-                  {/* For Dev purposes only */}
-                  {/* <FadeInSlideLeft></FadeInSlideLeft> */}
                 </Flex>
 
                 <Divider my={3} />
