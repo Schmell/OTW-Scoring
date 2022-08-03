@@ -1,4 +1,4 @@
-import { Box, Divider, Flex, Heading, Icon, IconButton, Tooltip, useDisclosure } from "@chakra-ui/react";
+import { Box, Divider, Flex, Heading, Icon, Text, IconButton, Tooltip, useDisclosure } from "@chakra-ui/react";
 import { addDoc, collection, query, where } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";

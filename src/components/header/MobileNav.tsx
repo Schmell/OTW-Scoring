@@ -94,7 +94,9 @@ export default function MobileNav({ onOpen, headerTitle, ...rest }: MobileProps)
             aria-label="Color Mode"
             color={"white"}
             variant="ghost"
-            _hover={{ bgColor: "blue.400" }}
+            _hover={{ bgColor: "transparent" }}
+            _active={{ bgColor: "transparent" }}
+            _focus={{ bgColor: "transparent" }}
             mr={-4}
           />
 
@@ -103,7 +105,9 @@ export default function MobileNav({ onOpen, headerTitle, ...rest }: MobileProps)
             color={"white"}
             size="lg"
             variant="ghost"
-            _hover={{ bgColor: "blue.400" }}
+            _hover={{ bgColor: "transparent" }}
+            _active={{ bgColor: "transparent" }}
+            _focus={{ bgColor: "transparent" }}
             icon={(<MdNotificationsNone />) as any}
             onClick={() => {}}
           />
@@ -142,36 +146,38 @@ export default function MobileNav({ onOpen, headerTitle, ...rest }: MobileProps)
                     bg={useColorModeValue("white", "gray.700")}
                     borderColor={useColorModeValue("gray.700", "gray.100")}
                   >
-                    <MenuItem>
-                      <Link
-                        href="/user/profile"
-                        _visited={{
-                          color: useColorModeValue("gray.700", "gray.100"),
-                        }}
-                      >
-                        Profile
-                      </Link>
-                    </MenuItem>
-                    <MenuItem>
-                      <Link
-                        href="/user/settings"
-                        _visited={{
-                          color: useColorModeValue("gray.700", "gray.100"),
-                        }}
-                      >
-                        Settings
-                      </Link>
-                    </MenuItem>
-                    <MenuItem>
-                      <Link
-                        href="/billing"
-                        _visited={{
-                          color: useColorModeValue("gray.700", "gray.100"),
-                        }}
-                      >
-                        Billing
-                      </Link>
-                    </MenuItem>
+                    <Link
+                      href="/user/profile"
+                      _hover={{
+                        color: useColorModeValue("gray.700", "gray.100"),
+                        textDecor: "none",
+                      }}
+                    >
+                      <MenuItem _hover={{ color: useColorModeValue("gray.700", "gray.100") }}>Profile</MenuItem>
+                    </Link>
+
+                    <Link
+                      href="/user/settings"
+                      _hover={{
+                        color: useColorModeValue("gray.700", "gray.100"),
+                        textDecor: "none",
+                      }}
+                    >
+                      <MenuItem>Settings</MenuItem>
+                    </Link>
+
+                    <Link
+                      href="/billing"
+                      _visited={{
+                        color: useColorModeValue("gray.700", "gray.100"),
+                      }}
+                      _hover={{
+                        color: useColorModeValue("gray.700", "gray.100"),
+                        textDecor: "none",
+                      }}
+                    >
+                      <MenuItem>Billing</MenuItem>
+                    </Link>
                     <MenuDivider />
                     <MenuItem>
                       <Link

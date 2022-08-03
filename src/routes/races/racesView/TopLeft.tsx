@@ -10,6 +10,7 @@ export default function TopLeft({ race, action }) {
         alignItems={"center"}
         color="gray.500"
         onClick={() => {
+          // here we need to add race data
           action(race);
         }}
       >

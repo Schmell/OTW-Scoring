@@ -3,21 +3,21 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 import { collection, doc } from "firebase/firestore";
 import { useCollectionData, useDocumentData } from "react-firebase-hooks/firestore";
 import { db } from "../../util/firebase-config";
+import { Text } from "@chakra-ui/react";
 
 import { compConverter } from "../../model/Comp";
 import FleetsTables from "./components/FleetsTables";
 
-export default function Result({ seriesId, raceId, setHeaderTitle }) {
+export default function Result({ seriesId, raceId, setHeaderTitle, raceName }) {
   setHeaderTitle("Results");
-  // console.log("raceId: ", raceId);
-  const seriesRef = doc(db, "series", seriesId);
 
   const [tableData, setTableData] = useState([{}]);
-  // const [seriesInfo, setSeriesInfo] = useState([{}]);
 
+  const seriesRef = doc(db, "series", seriesId);
   const compsRef = collection(seriesRef, "/comps").withConverter(compConverter);
-  const [compsCol, compsLoading, _compsError] = useCollectionData(compsRef);
   const [serInfo, serInfoLoading] = useDocumentData(seriesRef);
+
+  const [compsCol, compsLoading, _compsError] = useCollectionData(compsRef);
 
   const getSeriesData = async () => {
     if (!compsLoading) {
@@ -50,6 +50,7 @@ export default function Result({ seriesId, raceId, setHeaderTitle }) {
 
   const makeTableData = async () => {
     const seriesData = await getSeriesData();
+    console.log("seriesData: ", seriesData);
 
     let tableData: object[] = [];
 
@@ -71,14 +72,18 @@ export default function Result({ seriesId, raceId, setHeaderTitle }) {
   }, [compsCol]);
 
   const data = useMemo(() => {
+    console.log("tableData: ", tableData);
     return tableData;
   }, [tableData]);
 
   return (
     <Fragment>
+      <Text px={4} pb={2}>
+        {serInfo && serInfo.event}
+      </Text>
       {!compsLoading && data && (
         <Fragment>
-          <FleetsTables tableData={tableData} serInfo={serInfo} raceId={raceId} />
+          <FleetsTables tableData={tableData} serInfo={serInfo} raceId={raceId} raceName={raceName} />
         </Fragment>
       )}
     </Fragment>

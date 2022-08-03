@@ -15,6 +15,7 @@ import {
   Thead,
   Tooltip,
   Tr,
+  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import {
@@ -28,10 +29,13 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
+import { doc, DocumentData } from "firebase/firestore";
 import { Fragment, h } from "preact";
-
 import { route } from "preact-router";
 import { useEffect, useMemo, useState } from "preact/hooks";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import useStorage from "../../../hooks/useStorage";
+import { db } from "../../../util/firebase-config";
 import SettingsModal from "./SettingsModal";
 
 // Icons
@@ -39,9 +43,7 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import EditIcon from "@mui/icons-material/Edit";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../../util/firebase-config";
-import { useDocumentData } from "react-firebase-hooks/firestore";
+import { Page } from "../../../components/page/Page";
 
 type ResultRow = {
   boat: string;
@@ -57,9 +59,27 @@ type ResultRow = {
   sailno?: string;
 };
 
-export default function ResultTable({ tableData, fleetName, serInfo, raceId }) {
+export default function ResultTable({ tableData, fleetName, serInfo, raceId, raceName }) {
   // this state is for the table data
   const [data, setData] = useState<ResultRow[]>([]);
+
+  // const raceRef = doc(db, "races", raceId);
+  // const [race, raceLoading] = useDocumentData(raceRef);
+  // const [raceName, setRaceName] = useState("");
+
+  // useEffect(() => {
+  //   setRaceName(race?.name);
+  //   console.log("race: ", race);
+  // }, [race]);
+
+  const [seriesId, setSeriesId] = useStorage("seriesId");
+  const seriesRef = doc(db, "series", seriesId);
+  const [series, seriesLoading] = useDocumentData();
+  const [seriesData, setSeriesData] = useState<DocumentData>();
+  useEffect(() => {
+    setSeriesData(series);
+    console.log("seriesData: ", series);
+  }, [series]);
 
   // set
   useEffect(() => {
@@ -70,7 +90,7 @@ export default function ResultTable({ tableData, fleetName, serInfo, raceId }) {
     <Fragment>
       {data && (
         <Fragment>
-          <Table data={data} fleetName={fleetName} serInfo={serInfo} raceId={raceId} />
+          <Table data={data} fleetName={fleetName} serInfo={serInfo} raceId={raceId} raceName={raceName} />
         </Fragment>
       )}
     </Fragment>
@@ -80,13 +100,15 @@ export default function ResultTable({ tableData, fleetName, serInfo, raceId }) {
 interface TableProps {
   data: ResultRow[];
   fleetName: string;
-  serInfo: { resultType: string; rowTitle: string };
-  raceId: string;
+  serInfo: { event: string; resultType: string; rowTitle: string };
+  raceId?: string;
+  raceName: string;
 }
 
-function Table({ data, fleetName, serInfo, raceId }: TableProps) {
+function Table({ data, fleetName, serInfo, raceId, raceName }: TableProps) {
   if (!fleetName) fleetName = "Fleet";
   // console.log("raceId: ", raceId);
+
   // States
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     boat: true,
@@ -100,14 +122,6 @@ function Table({ data, fleetName, serInfo, raceId }: TableProps) {
   const [sorting, setSorting] = useState<SortingState>([{ id: "points", desc: false }]);
   const [resultType, setResultType] = useState("points");
   const [columnPinning, setColumnPinning] = useState({});
-  const [raceName, setRaceName] = useState();
-
-  const raceRef = doc(db, "races", raceId);
-  const [race, raceLoading] = useDocumentData(raceRef);
-  if (!raceLoading) {
-    console.log("race: ", race);
-    console.log("raceName: ", raceName);
-  }
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [rowTitle, setRowTitle] = useState("boat");
@@ -236,10 +250,6 @@ function Table({ data, fleetName, serInfo, raceId }: TableProps) {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  useEffect(() => {
-    setRaceName(race?.name);
-  }, [race]);
-
   // this useEffect is to set up visible columns and sorting columns
   useEffect(() => {
     const setVisibleColumns = () => {
@@ -284,184 +294,195 @@ function Table({ data, fleetName, serInfo, raceId }: TableProps) {
       setRowTitle(serInfo.rowTitle);
     }
   }, []);
+  // const what = () => {
+  //   setSeriesData(series);
+  //   console.log("series: ", series);
+  // };
+  // setTimeout(what, 5000);
 
   return (
     <Fragment>
-      {!raceLoading && (
-        <Fragment>
-          <Flex justifyContent={"space-between"} px={4}>
-            {/* ////////////////////////////// */}
-            <Heading color="blue.400">{`${fleetName} - ${raceName}`}</Heading>
+      <Fragment>
+        <Flex justifyContent={"space-between"} px={6}>
+          {/* ////////////////////////////// */}
+          {/* {seriesData && <Text>{seriesData.event}</Text>} */}
+          <Box>
+            <Text fontWeight={"semibold"} colorScheme={"gray"}>
+              {raceName}
+            </Text>
+            <Heading color="blue.400">{`${fleetName}`}</Heading>
+          </Box>
 
-            <Flex gap={2}>
-              <Tooltip label="Edit Series" hasArrow bg="blue.300" placement="bottom-start">
-                <IconButton
-                  aria-label="edit series"
-                  icon={(<Icon as={EditIcon} boxSize={7} />) as any} // not sure why??
-                  size="md"
-                  colorScheme={"blue"}
-                  variant={"ghost"}
-                  onClick={() => {
-                    route("/series/edit");
-                  }}
-                />
-              </Tooltip>
-              <Tooltip label="Settings" hasArrow bg="blue.300" placement="bottom-start">
-                <IconButton
-                  aria-label="settings"
-                  icon={(<Icon as={SettingsIcon} boxSize={7} />) as any} // not sure why??
-                  size="md"
-                  colorScheme={"blue"}
-                  variant={"ghost"}
-                  onClick={onOpen}
-                />
-              </Tooltip>
-            </Flex>
-            <SettingsModal
-              isOpen={isOpen}
-              onClose={onClose}
-              rowTitle={rowTitle}
-              setRowTitle={setRowTitle}
-              setResultType={setResultType}
-              resultType={resultType}
-            />
+          <Flex gap={2}>
+            <Tooltip label="Edit Series" hasArrow bg="blue.300" placement="bottom-start">
+              <IconButton
+                aria-label="edit series"
+                icon={(<Icon as={EditIcon} boxSize={7} />) as any} // not sure why??
+                size="md"
+                colorScheme={"blue"}
+                variant={"outline"}
+                boxShadow="md"
+                onClick={() => {
+                  route("/series/edit");
+                }}
+              />
+            </Tooltip>
+            <Tooltip label="Settings" hasArrow bg="blue.300" placement="bottom-start">
+              <IconButton
+                aria-label="settings"
+                icon={(<Icon as={SettingsIcon} boxSize={7} />) as any} // not sure why??
+                size="md"
+                colorScheme={"blue"}
+                variant={"outline"}
+                boxShadow="md"
+                onClick={onOpen}
+              />
+            </Tooltip>
           </Flex>
+          <SettingsModal
+            isOpen={isOpen}
+            onClose={onClose}
+            rowTitle={rowTitle}
+            setRowTitle={setRowTitle}
+            setResultType={setResultType}
+            resultType={resultType}
+          />
+        </Flex>
 
-          <Divider my={3} border={4} />
+        <Divider my={3} border={4} />
 
-          <Box p={2}>
-            <MyTable variant="striped" colorScheme="blue">
-              <Thead bgColor="blue.300">
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <Tr key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                      return (
-                        <Th key={header.id} colSpan={header.colSpan} color={"gray.800"}>
-                          {header.isPlaceholder ? null : (
-                            <Box
-                              {...{
-                                userSelect: "none",
-                                cursor: header.column.getCanSort() ? "pointer" : "",
-                                onClick: header.column.getToggleSortingHandler(),
-                              }}
-                            >
-                              <Flex>
-                                <Box>{flexRender(header.column.columnDef.header, header.getContext())}</Box>
-                                <Box ml={2}>
-                                  {" "}
-                                  {{
-                                    asc: <Icon as={ArrowUpwardIcon} boxSize={4} />,
-                                    desc: <Icon as={ArrowDownwardIcon} boxSize={4} />,
-                                  }[header.column.getIsSorted() as string] ?? null}
-                                </Box>
-                              </Flex>
-                            </Box>
-                          )}
-                        </Th>
-                      );
+        <Box p={2}>
+          <MyTable variant="striped" colorScheme="blue">
+            <Thead bgColor="blue.300">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <Tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <Th key={header.id} colSpan={header.colSpan} color={"gray.800"}>
+                        {header.isPlaceholder ? null : (
+                          <Box
+                            {...{
+                              userSelect: "none",
+                              cursor: header.column.getCanSort() ? "pointer" : "",
+                              onClick: header.column.getToggleSortingHandler(),
+                            }}
+                          >
+                            <Flex>
+                              <Box>{flexRender(header.column.columnDef.header, header.getContext())}</Box>
+                              <Box ml={2}>
+                                {" "}
+                                {{
+                                  asc: <Icon as={ArrowUpwardIcon} boxSize={4} />,
+                                  desc: <Icon as={ArrowDownwardIcon} boxSize={4} />,
+                                }[header.column.getIsSorted() as string] ?? null}
+                              </Box>
+                            </Flex>
+                          </Box>
+                        )}
+                      </Th>
+                    );
+                  })}
+                </Tr>
+              ))}
+            </Thead>
+            <Tbody>
+              {table.getRowModel().rows.map((row) => {
+                return (
+                  <Tr key={row.id}>
+                    {row.getVisibleCells().map((cell) => {
+                      return <Td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</Td>;
                     })}
                   </Tr>
-                ))}
-              </Thead>
-              <Tbody>
-                {table.getRowModel().rows.map((row) => {
-                  return (
-                    <Tr key={row.id}>
-                      {row.getVisibleCells().map((cell) => {
-                        return <Td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</Td>;
-                      })}
-                    </Tr>
-                  );
-                })}
-              </Tbody>
-            </MyTable>
+                );
+              })}
+            </Tbody>
+          </MyTable>
 
-            <Box className="h-2" />
+          <Box className="h-2" />
 
-            {/* This is the pagination navigation */}
-            {table.getRowModel().rows.length > table.getState().pagination.pageSize && (
-              <Flex alignItems={"start"} justifyContent={"space-evenly"} gap={1} py={3}>
-                <Flex alignItems={"center"} gap={1} mr={3}>
-                  <Button
-                    size={"xs"}
-                    variant={"outline"}
-                    colorScheme={"blue"}
-                    onClick={() => table.setPageIndex(0)}
-                    disabled={!table.getCanPreviousPage()}
-                  >
-                    {"<<"}
-                  </Button>
-                  <Button
-                    size={"xs"}
-                    variant={"outline"}
-                    colorScheme={"blue"}
-                    onClick={() => table.previousPage()}
-                    disabled={!table.getCanPreviousPage()}
-                  >
-                    {"<"}
-                  </Button>
-                  <Button
-                    size={"xs"}
-                    variant={"outline"}
-                    colorScheme={"blue"}
-                    onClick={() => table.nextPage()}
-                    disabled={!table.getCanNextPage()}
-                  >
-                    {">"}
-                  </Button>
-                  <Button
-                    size={"xs"}
-                    variant={"outline"}
-                    colorScheme={"blue"}
-                    onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                    disabled={!table.getCanNextPage()}
-                  >
-                    {">>"}
-                  </Button>
-                </Flex>
+          {/* This is the pagination navigation */}
+          {table.getRowModel().rows.length > table.getState().pagination.pageSize && (
+            <Flex alignItems={"start"} justifyContent={"space-evenly"} gap={1} py={3}>
+              <Flex alignItems={"center"} gap={1} mr={3}>
+                <Button
+                  size={"xs"}
+                  variant={"outline"}
+                  colorScheme={"blue"}
+                  onClick={() => table.setPageIndex(0)}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  {"<<"}
+                </Button>
+                <Button
+                  size={"xs"}
+                  variant={"outline"}
+                  colorScheme={"blue"}
+                  onClick={() => table.previousPage()}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  {"<"}
+                </Button>
+                <Button
+                  size={"xs"}
+                  variant={"outline"}
+                  colorScheme={"blue"}
+                  onClick={() => table.nextPage()}
+                  disabled={!table.getCanNextPage()}
+                >
+                  {">"}
+                </Button>
+                <Button
+                  size={"xs"}
+                  variant={"outline"}
+                  colorScheme={"blue"}
+                  onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                  disabled={!table.getCanNextPage()}
+                >
+                  {">>"}
+                </Button>
+              </Flex>
 
-                <Flex alignItems={"center"} gap={1}>
-                  <Box>
-                    <strong>
-                      {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-                    </strong>
-                  </Box>
-                </Flex>
+              <Flex alignItems={"center"} gap={1}>
                 <Box>
-                  <Input
-                    type="number"
-                    size={"xs"}
-                    borderRadius={"5px"}
-                    defaultValue={table.getState().pagination.pageIndex + 1}
-                    onChange={(e) => {
-                      const page = e.target.value ? Number(e.target.value) - 1 : 0;
-                      table.setPageIndex(page);
-                    }}
-                  />
-                  Goto:
+                  <strong>
+                    {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+                  </strong>
                 </Box>
-                <Select
+              </Flex>
+              <Box>
+                <Input
+                  type="number"
                   size={"xs"}
                   borderRadius={"5px"}
-                  value={table.getState().pagination.pageSize}
+                  defaultValue={table.getState().pagination.pageIndex + 1}
                   onChange={(e) => {
-                    table.setPageSize(Number(e.target.value));
+                    const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                    table.setPageIndex(page);
                   }}
-                >
-                  {[10, 20, 30, 40, 50].map((pageSize) => (
-                    <option key={pageSize} value={pageSize}>
-                      Show {pageSize}
-                    </option>
-                  ))}
-                </Select>
-              </Flex>
-            )}
+                />
+                Goto:
+              </Box>
+              <Select
+                size={"xs"}
+                borderRadius={"5px"}
+                value={table.getState().pagination.pageSize}
+                onChange={(e) => {
+                  table.setPageSize(Number(e.target.value));
+                }}
+              >
+                {[10, 20, 30, 40, 50].map((pageSize) => (
+                  <option key={pageSize} value={pageSize}>
+                    Show {pageSize}
+                  </option>
+                ))}
+              </Select>
+            </Flex>
+          )}
 
-            <Box mr={"auto"}>{table.getRowModel().rows.length} Rows</Box>
-            {/* <Box>{table.getState().pagination.pageSize} page size</Box> */}
-          </Box>
-        </Fragment>
-      )}
+          <Box mr={"auto"}>{table.getRowModel().rows.length} Rows</Box>
+          {/* <Box>{table.getState().pagination.pageSize} page size</Box> */}
+        </Box>
+      </Fragment>
     </Fragment>
   );
 }
