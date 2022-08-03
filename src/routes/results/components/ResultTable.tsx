@@ -59,18 +59,18 @@ type ResultRow = {
   sailno?: string;
 };
 
-export default function ResultTable({ tableData, fleetName, serInfo, raceId }) {
+export default function ResultTable({ tableData, fleetName, serInfo, raceId, raceName }) {
   // this state is for the table data
   const [data, setData] = useState<ResultRow[]>([]);
 
-  const raceRef = doc(db, "races", raceId);
-  const [race, raceLoading] = useDocumentData(raceRef);
-  const [raceName, setRaceName] = useState("");
+  // const raceRef = doc(db, "races", raceId);
+  // const [race, raceLoading] = useDocumentData(raceRef);
+  // const [raceName, setRaceName] = useState("");
 
-  useEffect(() => {
-    setRaceName(race?.name);
-    console.log("race: ", race);
-  }, [race]);
+  // useEffect(() => {
+  //   setRaceName(race?.name);
+  //   console.log("race: ", race);
+  // }, [race]);
 
   const [seriesId, setSeriesId] = useStorage("seriesId");
   const seriesRef = doc(db, "series", seriesId);
@@ -307,7 +307,10 @@ function Table({ data, fleetName, serInfo, raceId, raceName }: TableProps) {
           {/* ////////////////////////////// */}
           {/* {seriesData && <Text>{seriesData.event}</Text>} */}
           <Box>
-            <Heading color="blue.400">{`${fleetName} - ${raceName}`}</Heading>
+            <Text fontWeight={"semibold"} colorScheme={"gray"}>
+              {raceName}
+            </Text>
+            <Heading color="blue.400">{`${fleetName}`}</Heading>
           </Box>
 
           <Flex gap={2}>

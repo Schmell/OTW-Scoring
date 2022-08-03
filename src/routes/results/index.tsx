@@ -3,11 +3,12 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 import { collection, doc } from "firebase/firestore";
 import { useCollectionData, useDocumentData } from "react-firebase-hooks/firestore";
 import { db } from "../../util/firebase-config";
+import { Text } from "@chakra-ui/react";
 
 import { compConverter } from "../../model/Comp";
 import FleetsTables from "./components/FleetsTables";
 
-export default function Result({ seriesId, raceId, setHeaderTitle }) {
+export default function Result({ seriesId, raceId, setHeaderTitle, raceName }) {
   setHeaderTitle("Results");
 
   const [tableData, setTableData] = useState([{}]);
@@ -49,6 +50,7 @@ export default function Result({ seriesId, raceId, setHeaderTitle }) {
 
   const makeTableData = async () => {
     const seriesData = await getSeriesData();
+    console.log("seriesData: ", seriesData);
 
     let tableData: object[] = [];
 
@@ -76,9 +78,12 @@ export default function Result({ seriesId, raceId, setHeaderTitle }) {
 
   return (
     <Fragment>
+      <Text px={4} pb={2}>
+        {serInfo && serInfo.event}
+      </Text>
       {!compsLoading && data && (
         <Fragment>
-          <FleetsTables tableData={tableData} serInfo={serInfo} raceId={raceId} />
+          <FleetsTables tableData={tableData} serInfo={serInfo} raceId={raceId} raceName={raceName} />
         </Fragment>
       )}
     </Fragment>

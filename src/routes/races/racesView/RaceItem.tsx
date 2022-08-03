@@ -20,7 +20,7 @@ export default function RaceItem({ race, setRaceId }: RaceItemProps) {
   const startTheRaceDisclosure = useDisclosure();
 
   const handleOnClick = (race) => {
-    if (race.data().sailed === "1") route(`/result/${race.data()._seriesid}/${race.data().raceid}`);
+    if (race.data().sailed === "1") route(`/result/${race.data()._seriesid}/${race.data().raceid}/${race.data().name}`);
     if (race.data().sailed === "0") startTheRaceDisclosure.onOpen();
     if (race.data().sailed === "postponed") startTheRaceDisclosure.onOpen();
   };
