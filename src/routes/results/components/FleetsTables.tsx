@@ -7,11 +7,15 @@ export default function FleetsTable({ tableData, serInfo, raceId, raceName }) {
   const unique = Array.from(
     new Set(
       tableData.map((item) => {
-        return item.fleet || item.division;
+        if (item.fleet && item.division) {
+          return `${item.fleet} - ${item.division}`;
+        }
+        if (item.division) return item.division;
+
+        return item.fleet;
       })
     )
   );
-  // console.log("unique: ", unique);
 
   unique.forEach((fleetName) => {
     const push = tableData.filter((td) => {
@@ -21,7 +25,6 @@ export default function FleetsTable({ tableData, serInfo, raceId, raceName }) {
         return td;
       }
     });
-    console.log("push: ", push);
     fleetsArray.push(push);
   });
 
@@ -29,7 +32,6 @@ export default function FleetsTable({ tableData, serInfo, raceId, raceName }) {
     <Fragment>
       {fleetsArray &&
         fleetsArray.sort().map((fleet) => {
-          console.log("fleet: ", fleetsArray);
           return (
             <Fragment>
               <ResultTable
