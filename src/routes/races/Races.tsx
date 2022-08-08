@@ -74,6 +74,7 @@ export default function Races({ setHeaderTitle }) {
             </Flex>
           </FadeInSlideLeft>
         </Flex>
+
         <Divider my={4} border={4} shadow={"lg"} />
 
         <Box mt={2} my={4}>

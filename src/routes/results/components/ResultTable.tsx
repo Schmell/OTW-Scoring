@@ -63,22 +63,13 @@ export default function ResultTable({ tableData, fleetName, serInfo, raceId, rac
   // this state is for the table data
   const [data, setData] = useState<ResultRow[]>([]);
 
-  // const raceRef = doc(db, "races", raceId);
-  // const [race, raceLoading] = useDocumentData(raceRef);
-  // const [raceName, setRaceName] = useState("");
-
-  // useEffect(() => {
-  //   setRaceName(race?.name);
-  //   console.log("race: ", race);
-  // }, [race]);
-
   const [seriesId, setSeriesId] = useStorage("seriesId");
   const seriesRef = doc(db, "series", seriesId);
   const [series, seriesLoading] = useDocumentData();
   const [seriesData, setSeriesData] = useState<DocumentData>();
+
   useEffect(() => {
     setSeriesData(series);
-    console.log("seriesData: ", series);
   }, [series]);
 
   // set
@@ -107,7 +98,6 @@ interface TableProps {
 
 function Table({ data, fleetName, serInfo, raceId, raceName }: TableProps) {
   if (!fleetName) fleetName = "Fleet";
-  // console.log("raceId: ", raceId);
 
   // States
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
@@ -294,18 +284,12 @@ function Table({ data, fleetName, serInfo, raceId, raceName }: TableProps) {
       setRowTitle(serInfo.rowTitle);
     }
   }, []);
-  // const what = () => {
-  //   setSeriesData(series);
-  //   console.log("series: ", series);
-  // };
-  // setTimeout(what, 5000);
 
   return (
     <Fragment>
       <Fragment>
         <Flex justifyContent={"space-between"} px={6}>
           {/* ////////////////////////////// */}
-          {/* {seriesData && <Text>{seriesData.event}</Text>} */}
           <Box>
             <Text fontWeight={"semibold"} colorScheme={"gray"}>
               {raceName}
