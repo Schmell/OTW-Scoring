@@ -64,13 +64,13 @@ export default function ResultTable({ tableData, fleetName, serInfo, raceId, rac
   const [data, setData] = useState<ResultRow[]>([]);
 
   const [seriesId, setSeriesId] = useStorage("seriesId");
-  const seriesRef = doc(db, "series", seriesId);
-  const [series, seriesLoading] = useDocumentData();
-  const [seriesData, setSeriesData] = useState<DocumentData>();
+  // const seriesRef = doc(db, "series", seriesId);
+  // const [series, seriesLoading] = useDocumentData();
+  // const [seriesData, setSeriesData] = useState<DocumentData>();
 
-  useEffect(() => {
-    setSeriesData(series);
-  }, [series]);
+  // useEffect(() => {
+  //   setSeriesData(series);
+  // }, [series]);
 
   // set
   useEffect(() => {
@@ -291,10 +291,10 @@ function Table({ data, fleetName, serInfo, raceId, raceName }: TableProps) {
         <Flex justifyContent={"space-between"} px={6}>
           {/* ////////////////////////////// */}
           <Box>
-            <Text fontWeight={"semibold"} colorScheme={"gray"}>
+            {/* <Text fontWeight={"semibold"} colorScheme={"gray"}>
               {raceName}
-            </Text>
-            <Heading color="blue.400">{`${fleetName}`}</Heading>
+            </Text> */}
+            <Heading color="blue.400" size="2xl">{`${fleetName}`}</Heading>
           </Box>
 
           <Flex gap={2}>
@@ -463,7 +463,9 @@ function Table({ data, fleetName, serInfo, raceId, raceName }: TableProps) {
             </Flex>
           )}
 
-          <Box mr={"auto"}>{table.getRowModel().rows.length} Rows</Box>
+          <Box ml={2} color="blue.300">
+            {table.getRowModel().rows.length} Competitors
+          </Box>
           {/* <Box>{table.getState().pagination.pageSize} page size</Box> */}
         </Box>
       </Fragment>

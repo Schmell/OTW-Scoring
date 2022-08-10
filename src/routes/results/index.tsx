@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 import { collection, doc } from "firebase/firestore";
 import { useCollectionData, useDocumentData } from "react-firebase-hooks/firestore";
 import { db } from "../../util/firebase-config";
-import { Flex, Skeleton, Spinner, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Skeleton, Spinner, Text } from "@chakra-ui/react";
 
 import { compConverter } from "../../model/Comp";
 import FleetsTables from "./components/FleetsTables";
@@ -77,9 +77,13 @@ export default function Result({ seriesId, raceId, setHeaderTitle, raceName }) {
 
   return (
     <Fragment>
-      <Text px={4} pb={2}>
-        {serInfo && serInfo.event} - {raceName}
-      </Text>
+      <Box px={4} pb={2} color={"blue.500"}>
+        <Heading size="lg" py={2}>
+          {serInfo && serInfo.event} - {raceName}
+        </Heading>
+        {/* <Heading size="sm">{serInfo && serInfo.event}</Heading> */}
+      </Box>
+
       {compsLoading ? (
         <Flex justify={"center"} pt={16}>
           <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />

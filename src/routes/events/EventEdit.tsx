@@ -50,7 +50,8 @@ const EventEdit = ({ user, setHeaderTitle }) => {
     });
 
     // route back to races
-    route("/events");
+    history.back();
+    // route("/events");
   };
 
   const deleteEvent = async () => {
