@@ -41,7 +41,7 @@ export default function FleetsTable({ tableData, serInfo, raceId, raceName }) {
                 raceId={raceId}
                 raceName={raceName}
               />
-              <Divider my={4} />
+              <Divider mb={4} mt={8} />
             </Fragment>
           );
         })}

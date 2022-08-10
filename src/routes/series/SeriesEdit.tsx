@@ -1,5 +1,5 @@
 import { Fragment, h } from "preact";
-import { route } from "preact-router";
+import Router, { Route, route } from "preact-router";
 import { useState } from "preact/hooks";
 import {
   Accordion,
@@ -62,9 +62,9 @@ const SeriesEdit = ({ setHeaderTitle }) => {
       isClosable: true,
     });
 
-    // route back to races
+    // route back to previous page
     history.back();
-    // route("/races");
+    // route("/races", true);
   };
 
   return (

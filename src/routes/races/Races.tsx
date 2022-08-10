@@ -56,7 +56,9 @@ export default function Races({ setHeaderTitle }) {
                   colorScheme="blue"
                   variant="outline"
                   boxShadow="md"
-                  onClick={() => route("/series/edit")}
+                  onClick={(e) => {
+                    route("/series/edit");
+                  }}
                   icon={(<Icon as={EditIcon} />) as any}
                 />
               </Tooltip>
