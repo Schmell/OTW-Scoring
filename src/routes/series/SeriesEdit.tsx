@@ -103,9 +103,11 @@ const SeriesEdit = ({ setHeaderTitle }) => {
                     />
                   </Editable>
                 </Heading>
-                {/* <Text fontSize="sm" color="lightgray">
+                {/* // For dev purposes
+                <Text fontSize="sm" color="lightgray">
                   id: {currentSeries.id}
-                </Text> */}
+                </Text> 
+                */}
               </FadeInSlideRight>
             </Flex>
 
