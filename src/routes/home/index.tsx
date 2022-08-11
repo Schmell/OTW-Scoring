@@ -1,6 +1,6 @@
 import { Fragment, h } from "preact";
 import { Link } from "preact-router";
-import { Box, Divider, Flex, Heading, ListItem, Spinner, Text, UnorderedList, Image } from "@chakra-ui/react";
+import { Box, Divider, Flex, Heading, ListItem, Spinner, Text, UnorderedList, Image, Progress } from "@chakra-ui/react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../util/firebase-config";
 import { SignIn } from "../../components/page/SignIn";
@@ -43,7 +43,7 @@ const Home = ({ setHeaderTitle }) => {
       </FadeInSlideRight>
 
       {userLoading ? (
-        <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
+        <Progress size="xs" isIndeterminate />
       ) : (
         <Box px={4} mb={10}>
           <Divider my={5} />
