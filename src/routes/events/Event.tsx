@@ -98,7 +98,7 @@ export default function EventList({ setHeaderTitle }) {
 
           <SiteList loading={seriesLoading}>
             {series?.docs.map((item) => {
-              console.log("item: ", item.data());
+              // console.log("item: ", item.data());
               return (
                 <SiteListItem key={item.id} item={item} disclosure={deleteEventDisclosure} listType="series">
                   <SiteListText

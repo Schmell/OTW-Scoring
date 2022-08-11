@@ -1,8 +1,7 @@
-import { Box, ListItem, useColorModeValue } from "@chakra-ui/react";
+import { ListItem, useColorModeValue } from "@chakra-ui/react";
 import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
 import { Fragment, h } from "preact";
-import { FadeInSlideLeft } from "../../animations/FadeSlide";
-import { AreYouSure } from "../AreYouSure";
+import { SiteListAnimation } from "../../animations/FadeSlide";
 
 interface SiteListProps {
   item: QueryDocumentSnapshot<DocumentData>;
@@ -19,10 +18,10 @@ interface SiteListProps {
   children: any;
 }
 
-export function SiteListItem({ item, disclosure, listType, children }: SiteListProps) {
+export function SiteListItem({ item, children }: SiteListProps) {
   return (
     <Fragment>
-      <FadeInSlideLeft>
+      <SiteListAnimation>
         <ListItem
           key={item.id}
           p={4}
@@ -41,7 +40,7 @@ export function SiteListItem({ item, disclosure, listType, children }: SiteListP
             <Box>{`You will loose any work you have done with this ${listType}`}</Box>
           </AreYouSure> */}
         </ListItem>
-      </FadeInSlideLeft>
+      </SiteListAnimation>
     </Fragment>
   );
 }

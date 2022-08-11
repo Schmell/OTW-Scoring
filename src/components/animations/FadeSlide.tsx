@@ -1,5 +1,5 @@
 import { FunctionalComponent, h } from "preact";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 export const FadeInSlideLeft: FunctionalComponent = ({ children }) => {
   return (
@@ -17,6 +17,34 @@ export const FadeInSlideLeft: FunctionalComponent = ({ children }) => {
     >
       {children}
     </motion.div>
+  );
+};
+
+export const SiteListAnimation: FunctionalComponent = ({ children }) => {
+  return (
+    <AnimatePresence>
+      <motion.div
+        transition={{ ease: "easeOut", duration: 0.25 }}
+        initial={{
+          x: 20,
+          opacity: 0,
+          height: 0,
+        }}
+        animate={{
+          x: 0,
+          opacity: 1,
+          height: "auto",
+        }}
+        exit={{
+          x: 20,
+          opacity: 0,
+          height: 0,
+        }}
+        //
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
   );
 };
 
