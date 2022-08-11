@@ -1,14 +1,14 @@
+import { Box, Divider, Flex, Heading, Image, ListItem, Progress, Text, UnorderedList } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
 import { Link } from "preact-router";
-import { Box, Divider, Flex, Heading, ListItem, Spinner, Text, UnorderedList, Image } from "@chakra-ui/react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../../util/firebase-config";
+import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
 import { SignIn } from "../../components/page/SignIn";
 import { SignOut } from "../../components/page/SignOut";
-import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
+import { auth } from "../../util/firebase-config";
 
 const Home = ({ setHeaderTitle }) => {
-  const [user, userLoading, userError] = useAuthState(auth);
+  const [user, userLoading, _userError] = useAuthState(auth);
 
   setHeaderTitle("Home");
 
@@ -43,7 +43,7 @@ const Home = ({ setHeaderTitle }) => {
       </FadeInSlideRight>
 
       {userLoading ? (
-        <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
+        <Progress size="xs" isIndeterminate />
       ) : (
         <Box px={4} mb={10}>
           <Divider my={5} />

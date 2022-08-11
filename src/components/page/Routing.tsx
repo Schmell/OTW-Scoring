@@ -40,9 +40,9 @@ const Routing: FunctionalComponent<IRouting> = (props) => {
       <Route path="/series" component={Series} {...props} />
       <Route path="/series/edit" component={SeriesEdit} {...props} />
 
-      <Route path="/events" component={Events} {...props} />
-      <Route path="/events/edit" component={EventEdit} {...props} />
-      <Route path="/events/event" component={EventList} {...props} />
+      <AuthRoute path="/events" component={Events} {...props} />
+      <AuthRoute path="/events/edit" component={EventEdit} {...props} />
+      <AuthRoute path="/events/event" component={EventList} {...props} />
 
       <Route path="/races" component={Races} {...props} />
       <Route path="/races/edit" component={RaceEdit} {...props} />

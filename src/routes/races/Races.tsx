@@ -1,6 +1,6 @@
 import { Fragment, h } from "preact";
 import { Link, route } from "preact-router";
-import { Box, Divider, Flex, Heading, Icon, IconButton, Spinner, Tooltip } from "@chakra-ui/react";
+import { Box, Divider, Flex, Heading, Icon, IconButton, Progress, Spinner, Tooltip } from "@chakra-ui/react";
 import { addDoc, collection, doc } from "firebase/firestore";
 import { db } from "../../util/firebase-config";
 import { useCollection, useDocumentData } from "react-firebase-hooks/firestore";
@@ -22,8 +22,6 @@ export default function Races({ setHeaderTitle }) {
 
   const seriesRef = doc(db, "series", seriesId);
   const [series, _seriesLoading] = useDocumentData(seriesRef);
-
-  // const [user] = useAuthState(auth);
 
   const addRaceHandler = async () => {
     const docRef = await addDoc(racesRef, {
@@ -80,11 +78,9 @@ export default function Races({ setHeaderTitle }) {
         <Divider my={4} border={4} shadow={"lg"} />
 
         <Box mt={2} my={4}>
-          {/* Loading Spinner */}
+          {/* Loading bar */}
           {racesLoading ? (
-            <Flex justifyContent=" center" alignItems="center">
-              <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
-            </Flex>
+            <Progress size="xs" isIndeterminate top={-4} />
           ) : (
             <Fragment>
               {races && races.docs.map((race) => <RaceItem key={race.id} race={race} setRaceId={setRaceId}></RaceItem>)}

@@ -14,13 +14,15 @@ const App = () => {
   const [headerTitle, setHeaderTitle] = useState("Blw Me");
 
   return (
-    <ChakraProvider resetCSS theme={theme}>
-      <SidebarWithHeader headerTitle={headerTitle}>
-        <Box mt={16}>
-          <Routing user={user} setHeaderTitle={setHeaderTitle} />
-        </Box>
-      </SidebarWithHeader>
-    </ChakraProvider>
+    <div id="preact_root">
+      <ChakraProvider resetCSS theme={theme}>
+        <SidebarWithHeader headerTitle={headerTitle}>
+          <Box mt={16}>
+            <Routing user={user} setHeaderTitle={setHeaderTitle} />
+          </Box>
+        </SidebarWithHeader>
+      </ChakraProvider>
+    </div>
   );
 };
 

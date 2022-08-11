@@ -89,7 +89,8 @@ interface TableProps {
   raceName: string;
 }
 
-function Table({ data, fleetName, serInfo, raceId, raceName }: TableProps) {
+function Table(props: TableProps) {
+  let { data, fleetName, serInfo, raceId, raceName } = props;
   if (!fleetName) fleetName = "Fleet";
 
   // States

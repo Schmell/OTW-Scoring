@@ -5,9 +5,17 @@ import { AreYouSure } from "../../../components/generic/AreYouSure";
 // Icons
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
+import { useEffect } from "preact/hooks";
 
+let _isMounted = false;
 export default function EditButtons({ setRaceId, race }) {
   const deleteRaceDisclosure = useDisclosure();
+
+  useEffect(() => {
+    _isMounted = true;
+    return () => (_isMounted = false);
+  }, []);
+
   return (
     <Fragment>
       <Flex pb={2} align={"center"}>
