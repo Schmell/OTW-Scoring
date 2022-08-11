@@ -80,7 +80,7 @@ export default function Races({ setHeaderTitle }) {
         <Box mt={2} my={4}>
           {/* Loading bar */}
           {racesLoading ? (
-            <Progress size="xs" isIndeterminate top={-4} />
+            <Progress size="xs" isIndeterminate top={-5} />
           ) : (
             <Fragment>
               {races && races.docs.map((race) => <RaceItem key={race.id} race={race} setRaceId={setRaceId}></RaceItem>)}
