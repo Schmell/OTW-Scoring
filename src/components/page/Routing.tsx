@@ -33,25 +33,25 @@ const Routing: FunctionalComponent<IRouting> = (props) => {
 
       <Route path="/signin" component={SignIn} {...props} />
 
-      <AuthRoute path="/import" component={Import} {...props} />
+      <Route path="/import" component={Import} {...props} />
 
       <Route path="/result/:seriesId/:raceId/:raceName" component={Result} {...props} />
 
-      <AuthRoute path="/series" component={Series} {...props} />
-      <AuthRoute path="/series/edit" component={SeriesEdit} {...props} />
+      <Route path="/series" component={Series} {...props} />
+      <Route path="/series/edit" component={SeriesEdit} {...props} />
 
-      <AuthRoute path="/events" component={Events} {...props} />
-      <AuthRoute path="/events/edit" component={EventEdit} {...props} />
-      <AuthRoute path="/events/event" component={EventList} {...props} />
+      <Route path="/events" component={Events} {...props} />
+      <Route path="/events/edit" component={EventEdit} {...props} />
+      <Route path="/events/event" component={EventList} {...props} />
 
-      <AuthRoute path="/races" component={Races} {...props} />
-      <AuthRoute path="/races/edit" component={RaceEdit} {...props} />
+      <Route path="/races" component={Races} {...props} />
+      <Route path="/races/edit" component={RaceEdit} {...props} />
 
-      <AuthRoute path="/competitors" component={Competitors} {...props} />
+      <Route path="/competitors" component={Competitors} {...props} />
 
-      <AuthRoute path="/user" component={UserLanding} {...props} />
-      <AuthRoute path="/user/settings" component={UserSettings} {...props} />
-      <AuthRoute path="/user/profile" component={UserProfile} {...props} />
+      <Route path="/user" component={UserLanding} {...props} />
+      <Route path="/user/settings" component={UserSettings} {...props} />
+      <Route path="/user/profile" component={UserProfile} {...props} />
 
       <NotFoundPage default />
     </Router>

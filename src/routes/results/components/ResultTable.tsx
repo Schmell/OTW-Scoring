@@ -64,13 +64,6 @@ export default function ResultTable({ tableData, fleetName, serInfo, raceId, rac
   const [data, setData] = useState<ResultRow[]>([]);
 
   const [seriesId, setSeriesId] = useStorage("seriesId");
-  // const seriesRef = doc(db, "series", seriesId);
-  // const [series, seriesLoading] = useDocumentData();
-  // const [seriesData, setSeriesData] = useState<DocumentData>();
-
-  // useEffect(() => {
-  //   setSeriesData(series);
-  // }, [series]);
 
   // set
   useEffect(() => {
@@ -121,7 +114,7 @@ function Table({ data, fleetName, serInfo, raceId, raceName }: TableProps) {
   const columns = useMemo<ColumnDef<ResultRow>[]>(
     () => [
       {
-        header: fleetName,
+        header: `${raceName} - ${serInfo.event}`,
         columns: [
           {
             accessorKey: "boat",
@@ -291,9 +284,6 @@ function Table({ data, fleetName, serInfo, raceId, raceName }: TableProps) {
         <Flex justifyContent={"space-between"} px={6}>
           {/* ////////////////////////////// */}
           <Box>
-            {/* <Text fontWeight={"semibold"} colorScheme={"gray"}>
-              {raceName}
-            </Text> */}
             <Heading color="blue.400" size="2xl">{`${fleetName}`}</Heading>
           </Box>
 
@@ -342,7 +332,7 @@ function Table({ data, fleetName, serInfo, raceId, raceName }: TableProps) {
                 <Tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
-                      <Th key={header.id} colSpan={header.colSpan} color={"gray.800"}>
+                      <Th key={header.id} fontSize={"sm"} colSpan={header.colSpan} color={"gray.700"}>
                         {header.isPlaceholder ? null : (
                           <Box
                             {...{

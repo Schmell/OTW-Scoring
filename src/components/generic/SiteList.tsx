@@ -1,4 +1,4 @@
-import { List, Skeleton } from "@chakra-ui/react";
+import { List, Progress, Skeleton } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
 // Icons
 
@@ -10,9 +10,13 @@ interface SiteListProps {
 export function SiteList({ loading, children }: SiteListProps) {
   return (
     <Fragment>
-      <List px={4}>
-        <Skeleton isLoaded={!loading}>{children}</Skeleton>
-      </List>
+      {loading ? (
+        <Progress size="xs" isIndeterminate top={-1} />
+      ) : (
+        <List px={4} mb={16}>
+          {children}
+        </List>
+      )}
     </Fragment>
   );
 }

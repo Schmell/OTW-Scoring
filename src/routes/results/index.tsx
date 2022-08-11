@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 import { collection, doc } from "firebase/firestore";
 import { useCollectionData, useDocumentData } from "react-firebase-hooks/firestore";
 import { db } from "../../util/firebase-config";
-import { Box, Flex, Heading, Skeleton, Spinner, Text } from "@chakra-ui/react";
+import { Box, Divider, Flex, Heading, Progress, Skeleton, Spinner, Text } from "@chakra-ui/react";
 
 import { compConverter } from "../../model/Comp";
 import FleetsTables from "./components/FleetsTables";
@@ -77,17 +77,19 @@ export default function Result({ seriesId, raceId, setHeaderTitle, raceName }) {
 
   return (
     <Fragment>
-      <Box px={4} pb={2} color={"blue.500"}>
-        <Heading size="lg" py={2}>
-          {serInfo && serInfo.event} - {raceName}
-        </Heading>
-        {/* <Heading size="sm">{serInfo && serInfo.event}</Heading> */}
-      </Box>
-
       {compsLoading ? (
-        <Flex justify={"center"} pt={16}>
-          <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
-        </Flex>
+        // <Flex justify={"center"} pt={16}>
+        //   <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
+        // </Flex>
+        <Fragment>
+          <Box px={6}>
+            <Heading color="blue.400" size="xl">
+              Loading...
+            </Heading>
+          </Box>
+          <Divider my={3} border={4} />
+          <Progress size="xs" isIndeterminate top={-4} />
+        </Fragment>
       ) : (
         data && (
           <Fragment>
