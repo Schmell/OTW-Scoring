@@ -58,7 +58,7 @@ export default function ResultTable(props) {
     <Fragment>
       {data && (
         <Fragment>
-          <SingleTable data={data} fleetName={fleetName} serInfo={serInfo} raceId={raceId} raceName={raceName} />
+          <FleetTable data={data} fleetName={fleetName} serInfo={serInfo} raceId={raceId} raceName={raceName} />
         </Fragment>
       )}
     </Fragment>
@@ -72,7 +72,7 @@ interface TableProps {
   raceName: string;
 }
 
-function SingleTable(props: TableProps) {
+function FleetTable(props: TableProps) {
   let { data, fleetName, serInfo, raceId, raceName } = props;
   if (!fleetName) fleetName = "Fleet";
 
