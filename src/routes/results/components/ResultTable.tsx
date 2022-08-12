@@ -1,23 +1,12 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Flex,
-  Heading,
-  Icon,
-  IconButton,
-  Input,
-  Select,
-  Table as MyTable,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tooltip,
-  Tr,
-  Text,
-  useDisclosure,
-} from "@chakra-ui/react";
+// Chakra layout imports
+import { Box, Button, Divider, Flex, Heading, Icon, IconButton, Tooltip } from "@chakra-ui/react";
+// Chakra hooks
+import { useColorModeValue, useDisclosure } from "@chakra-ui/react";
+// Chakra table
+import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+// Chakra form
+import { Input, Select } from "@chakra-ui/react";
+
 import {
   ColumnDef,
   flexRender,
@@ -29,13 +18,9 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { doc, DocumentData } from "firebase/firestore";
 import { Fragment, h } from "preact";
-import { route } from "preact-router";
+import { Link, route } from "preact-router";
 import { useEffect, useMemo, useState } from "preact/hooks";
-import { useDocumentData } from "react-firebase-hooks/firestore";
-import useStorage from "../../../hooks/useStorage";
-import { db } from "../../../util/firebase-config";
 import SettingsModal from "./SettingsModal";
 
 // Icons
@@ -43,9 +28,9 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import EditIcon from "@mui/icons-material/Edit";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { Page } from "../../../components/page/Page";
 
 type ResultRow = {
+  id: number;
   boat: string;
   helmname: string;
   fleet: string;
@@ -59,11 +44,10 @@ type ResultRow = {
   sailno?: string;
 };
 
-export default function ResultTable({ tableData, fleetName, serInfo, raceId, raceName }) {
+export default function ResultTable(props) {
+  const { tableData, fleetName, serInfo, raceId, raceName } = props;
   // this state is for the table data
   const [data, setData] = useState<ResultRow[]>([]);
-
-  const [seriesId, setSeriesId] = useStorage("seriesId");
 
   // set
   useEffect(() => {
@@ -74,13 +58,12 @@ export default function ResultTable({ tableData, fleetName, serInfo, raceId, rac
     <Fragment>
       {data && (
         <Fragment>
-          <Table data={data} fleetName={fleetName} serInfo={serInfo} raceId={raceId} raceName={raceName} />
+          <SingleTable data={data} fleetName={fleetName} serInfo={serInfo} raceId={raceId} raceName={raceName} />
         </Fragment>
       )}
     </Fragment>
   );
 }
-
 interface TableProps {
   data: ResultRow[];
   fleetName: string;
@@ -89,7 +72,7 @@ interface TableProps {
   raceName: string;
 }
 
-function Table(props: TableProps) {
+function SingleTable(props: TableProps) {
   let { data, fleetName, serInfo, raceId, raceName } = props;
   if (!fleetName) fleetName = "Fleet";
 
@@ -114,98 +97,106 @@ function Table(props: TableProps) {
   // Define the columns
   const columns = useMemo<ColumnDef<ResultRow>[]>(
     () => [
+      // {
+      //   header: `${raceName} - ${serInfo.event}`,
+      //   footer: (props) => props.column.id,
+      //   columns: [
       {
-        header: `${raceName} - ${serInfo.event}`,
-        columns: [
-          {
-            accessorKey: "boat",
-            id: "boat",
-            enableHiding: true,
-            footer: (props) => props.column.id,
-          },
-          {
-            accessorKey: "helmname",
-            id: "helmname",
-            enableHiding: true,
-            footer: (props) => props.column.id,
-          },
-          {
-            accessorKey: "sailno",
-            id: "sailno",
-            enableHiding: true,
-            footer: (props) => props.column.id,
-          },
-          {
-            accessorKey: "points",
-            id: "points",
-            enableHiding: false,
-            cell: (props) => (
-              <Flex justify={"center"} m={0}>
-                {parseFloat(props.getValue())}
-              </Flex>
-            ),
-            footer: (props) => props.column.id,
-            sortingFn: "alphanumeric",
-          },
-          {
-            accessorKey: "elapsed",
-            id: "elapsed",
-            enableHiding: true,
-            cell: (props) => <Flex justify={"center"}>{parseFloat(props.getValue())}</Flex>,
-            footer: (props) => props.column.id,
-            sortingFn: (rowA, rowB, columnId) => {
-              if (rowA.getValue("elapsed") === "---") return 1;
-              if (rowB.getValue("elapsed") === "---") return -1;
-              if (rowA.getValue("elapsed") < rowB.getValue("elapsed")) return -1;
-              if (rowA.getValue("elapsed") > rowB.getValue("elapsed")) return 1;
-              return 0;
-            },
-          },
-          {
-            accessorKey: "corrected",
-            id: "corrected",
-            enableHiding: true,
-            cell: (props) => <Flex justify={"center"}>{props.getValue()}</Flex>,
-            footer: (props) => props.column.id,
-            sortingFn: (rowA, rowB, columnId) => {
-              if (rowA.getValue("corrected") === "---") return 1;
-              if (rowB.getValue("corrected") === "---") return -1;
-              if (rowA.getValue("corrected") < rowB.getValue("corrected")) return -1;
-              if (rowA.getValue("corrected") > rowB.getValue("corrected")) return 1;
-              return 0;
-            },
-          },
-          {
-            accessorKey: "finish",
-            id: "finish",
-            enableHiding: true,
-            cell: (props) => (
-              <Flex justify={"center"} m={0}>
-                {props.getValue()}
-              </Flex>
-            ),
-            footer: (props) => props.column.id,
-            sortingFn: (rowA, rowB, columnId) => {
-              if (rowA.getValue("finish") === "---") return 1;
-              if (rowB.getValue("finish") === "---") return -1;
-              if (rowA.getValue("finish") < rowB.getValue("finish")) return -1;
-              if (rowA.getValue("finish") > rowB.getValue("finish")) return 1;
-              return 0;
-            },
-          },
-          {
-            accessorKey: "nett",
-            id: "nett",
-            enableHiding: false,
-            cell: (props) => (
-              <Flex justify={"center"} m={0}>
-                {props.getValue()}
-              </Flex>
-            ),
-            footer: (props) => props.column.id,
-          },
-        ],
+        accessorKey: "boat",
+        id: "boat",
+        enableHiding: true,
+        cell: (info) => {
+          return <Link href={`/competitors/${info.row.original?.id}`}>{info.getValue()}</Link>;
+        },
+        footer: (props) => props.column.id,
       },
+      {
+        accessorKey: "helmname",
+        id: "helmname",
+        enableHiding: true,
+        cell: (info) => {
+          return <Link href={`/competitors/${info.row.original?.id}`}>{info.getValue()}</Link>;
+        },
+        footer: (props) => props.column.id,
+      },
+      {
+        accessorKey: "sailno",
+        id: "sailno",
+        enableHiding: true,
+        cell: (info) => {
+          return <Link href={`/competitors/${info.row.original?.id}`}>{info.getValue()}</Link>;
+        },
+        footer: (props) => props.column.id,
+      },
+      {
+        accessorKey: "points",
+        id: "points",
+        enableHiding: false,
+        header: () => <span style="text-align: left">Points</span>,
+        cell: (info) => <Flex justifyContent={"center"}>{parseFloat(info.getValue())}</Flex>,
+        footer: (props) => props.column.id,
+        sortingFn: "alphanumeric",
+      },
+      {
+        accessorKey: "elapsed",
+        id: "elapsed",
+        enableHiding: true,
+        cell: (props) => <Flex justify={"center"}>{parseFloat(props.getValue())}</Flex>,
+        footer: (props) => props.column.id,
+        sortingFn: (rowA, rowB, columnId) => {
+          if (rowA.getValue("elapsed") === "---") return 1;
+          if (rowB.getValue("elapsed") === "---") return -1;
+          if (rowA.getValue("elapsed") < rowB.getValue("elapsed")) return -1;
+          if (rowA.getValue("elapsed") > rowB.getValue("elapsed")) return 1;
+          return 0;
+        },
+      },
+      {
+        accessorKey: "corrected",
+        id: "corrected",
+        enableHiding: true,
+        cell: (props) => <Flex justifyContent={"center"}>{props.getValue()}</Flex>,
+        footer: (props) => props.column.id,
+        sortingFn: (rowA, rowB, columnId) => {
+          if (rowA.getValue("corrected") === "---") return 1;
+          if (rowB.getValue("corrected") === "---") return -1;
+          if (rowA.getValue("corrected") < rowB.getValue("corrected")) return -1;
+          if (rowA.getValue("corrected") > rowB.getValue("corrected")) return 1;
+          return 0;
+        },
+      },
+      {
+        accessorKey: "finish",
+        id: "finish",
+        enableHiding: true,
+        cell: (props) => (
+          <Flex justify={"center"} m={0}>
+            {props.getValue()}
+          </Flex>
+        ),
+        footer: (props) => props.column.id,
+        sortingFn: (rowA, rowB, columnId) => {
+          if (rowA.getValue("finish") === "---") return 1;
+          if (rowB.getValue("finish") === "---") return -1;
+          if (rowA.getValue("finish") < rowB.getValue("finish")) return -1;
+          if (rowA.getValue("finish") > rowB.getValue("finish")) return 1;
+          return 0;
+        },
+      },
+      {
+        accessorKey: "nett",
+        id: "nett",
+        enableHiding: false,
+        cell: (props) => (
+          <Flex justify={"center"} m={0}>
+            {props.getValue()}
+          </Flex>
+        ),
+        footer: (props) => props.column.id,
+      },
+
+      //   ],
+      // },
     ],
     []
   ); //////////////////////////////////////////////////////
@@ -288,6 +279,7 @@ function Table(props: TableProps) {
             <Heading color="blue.400" size="2xl">{`${fleetName}`}</Heading>
           </Box>
 
+          {/* Header buttons */}
           <Flex gap={2}>
             <Tooltip label="Edit Series" hasArrow bg="blue.300" placement="bottom-start">
               <IconButton
@@ -314,6 +306,7 @@ function Table(props: TableProps) {
               />
             </Tooltip>
           </Flex>
+
           <SettingsModal
             isOpen={isOpen}
             onClose={onClose}
@@ -327,7 +320,17 @@ function Table(props: TableProps) {
         <Divider my={3} border={4} />
 
         <Box p={2}>
-          <MyTable variant="striped" colorScheme="blue">
+          <Heading
+            fontSize={"xl"}
+            py={3}
+            pl={4}
+            mb={1}
+            color={useColorModeValue("gray.600", "blue.100")}
+            borderTopRadius={16}
+            bgGradient={useColorModeValue("linear(to-r, gray.100, blue.200)", "linear(to-r, whiteAlpha.100, blue.200)")}
+          >{`${raceName} - ${serInfo.event}`}</Heading>
+
+          <Table variant="striped" colorScheme="blue">
             <Thead bgColor="blue.300">
               {table.getHeaderGroups().map((headerGroup) => (
                 <Tr key={headerGroup.id}>
@@ -371,7 +374,7 @@ function Table(props: TableProps) {
                 );
               })}
             </Tbody>
-          </MyTable>
+          </Table>
 
           <Box className="h-2" />
 
@@ -454,7 +457,7 @@ function Table(props: TableProps) {
             </Flex>
           )}
 
-          <Box ml={2} color="blue.300">
+          <Box ml={2} mt={2} color="blue.300">
             {table.getRowModel().rows.length} Competitors
           </Box>
           {/* <Box>{table.getState().pagination.pageSize} page size</Box> */}
