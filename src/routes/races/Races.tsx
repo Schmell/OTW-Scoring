@@ -1,15 +1,16 @@
+import { Box, Divider, Flex, Heading, Progress } from "@chakra-ui/react";
+import { addDoc, collection, doc } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { Link, route } from "preact-router";
-import { Box, Divider, Flex, Heading, Icon, IconButton, Progress, Spinner, Tooltip } from "@chakra-ui/react";
-import { addDoc, collection, doc } from "firebase/firestore";
-import { db } from "../../util/firebase-config";
 import { useCollection, useDocumentData } from "react-firebase-hooks/firestore";
-import useStorage from "../../hooks/useStorage";
-import RaceItem from "./racesView/RaceItem";
 import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
+import useStorage from "../../hooks/useStorage";
+import { db } from "../../util/firebase-config";
+import RaceItem from "./racesView/RaceItem";
 // Icons
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
 import EditIcon from "@mui/icons-material/Edit";
+import ToolIconBtn from "../../components/generic/ToolIconBtn";
 
 export default function Races({ setHeaderTitle }) {
   setHeaderTitle("Races");
@@ -45,32 +46,12 @@ export default function Races({ setHeaderTitle }) {
               <Link href="/series/edit">{series && series.event}</Link>
             </Heading>
           </FadeInSlideRight>
+
           {/* Sub header buttons */}
           <FadeInSlideLeft>
             <Flex gap={2}>
-              <Tooltip label="Edit Series" hasArrow bg="blue.300" placement="bottom-start">
-                <IconButton
-                  aria-label="Edit Serie"
-                  colorScheme="blue"
-                  variant="outline"
-                  boxShadow="md"
-                  onClick={(e) => {
-                    route("/series/edit");
-                  }}
-                  icon={(<Icon as={EditIcon} />) as any}
-                />
-              </Tooltip>
-              <Tooltip label="Add Race" hasArrow bg="blue.300" placement="bottom-start">
-                <IconButton
-                  aria-label="add race"
-                  colorScheme="blue"
-                  variant="outline"
-                  boxShadow="md"
-                  _visited={{ color: "blue" }}
-                  onClick={addRaceHandler}
-                  icon={(<Icon as={AddToPhotosOutlinedIcon} />) as any}
-                />
-              </Tooltip>
+              <ToolIconBtn action={() => route("/series/edit")} label="Edit Series" icon={EditIcon} />
+              <ToolIconBtn action={addRaceHandler} label="Add Race" icon={AddToPhotosOutlinedIcon} />
             </Flex>
           </FadeInSlideLeft>
         </Flex>

@@ -9,6 +9,7 @@ import { compConverter } from "../../model/Comp";
 import FleetsTables from "./components/FleetsTables";
 
 export default function Result({ seriesId, raceId, setHeaderTitle, raceName }) {
+  //
   setHeaderTitle(raceName);
 
   const [tableData, setTableData] = useState([{}]);

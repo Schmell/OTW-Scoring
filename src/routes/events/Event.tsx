@@ -1,4 +1,4 @@
-import { Box, Divider, Flex, Heading, Icon, IconButton, Tooltip, useDisclosure } from "@chakra-ui/react";
+import { Box, Divider, Flex, Heading, useDisclosure } from "@chakra-ui/react";
 import { collection, doc, query, updateDoc, where } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
@@ -16,6 +16,7 @@ import AddSeriesModal from "./AddSeriesModal";
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
+import ToolIconBtn from "../../components/generic/ToolIconBtn";
 
 export default function EventList({ setHeaderTitle }) {
   setHeaderTitle("Event");
@@ -52,42 +53,9 @@ export default function EventList({ setHeaderTitle }) {
             {/* Sub header buttons */}
             <FadeInSlideLeft>
               <Flex gap={2}>
-                <Tooltip label="Edit Event Details" hasArrow bg="blue.300" placement="bottom-start">
-                  <IconButton
-                    aria-label="edit event details"
-                    colorScheme="blue"
-                    variant="outline"
-                    boxShadow="md"
-                    _visited={{ color: "blue" }}
-                    onClick={() => {
-                      route("/events/edit");
-                    }}
-                    icon={(<Icon as={EditIcon} />) as any}
-                  />
-                </Tooltip>
-                <Tooltip label="Import series" hasArrow bg="blue.300" placement="bottom-start">
-                  <IconButton
-                    aria-label="Import series"
-                    colorScheme="blue"
-                    variant="outline"
-                    boxShadow="md"
-                    _visited={{ color: "blue" }}
-                    onClick={() => route("/import")}
-                    icon={(<Icon as={FileUploadOutlinedIcon} />) as any}
-                  />
-                </Tooltip>
-
-                <Tooltip label="Add Series" hasArrow bg="blue.300" placement="bottom-start">
-                  <IconButton
-                    aria-label="add series"
-                    colorScheme="blue"
-                    variant="outline"
-                    boxShadow="md"
-                    _visited={{ color: "blue" }}
-                    onClick={onOpen}
-                    icon={(<Icon as={AddToPhotosOutlinedIcon} />) as any}
-                  />
-                </Tooltip>
+                <ToolIconBtn label="Edit Event Details" action={() => route("/events/edit")} icon={EditIcon} />
+                <ToolIconBtn label="Import file" action={() => route("/import")} icon={FileUploadOutlinedIcon} />
+                <ToolIconBtn label="Add Series" action={onOpen} icon={AddToPhotosOutlinedIcon} />
               </Flex>
             </FadeInSlideLeft>
 
@@ -121,7 +89,6 @@ export default function EventList({ setHeaderTitle }) {
                 </SiteListItem>
               );
             })}
-            {/* series?.docs.map */}
           </SiteList>
         </Fragment>
       )}

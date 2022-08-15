@@ -1,17 +1,15 @@
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
   Button,
-  Box,
-  Text,
-  useColorMode,
-  useColorModeValue,
   Flex,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { deleteDoc, doc } from "firebase/firestore";
 import { ComponentChildren, Fragment, h } from "preact";

@@ -5,10 +5,14 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../util/firebase-config";
 import SidebarWithHeader from "../header/SidebarWithHeader";
 import Routing from "./Routing";
-import { colors, components } from "./theme";
+import { theme } from "./theme";
 
 const App = () => {
-  const theme = extendTheme({ colors: colors, components: components });
+  // { colors: colors, components: components, fonts: fonts }
+  // const theme = extendTheme({
+  //   colors, components, fonts
+
+  // });
   const [user] = useAuthState(auth);
 
   const [headerTitle, setHeaderTitle] = useState("Blw Me");
