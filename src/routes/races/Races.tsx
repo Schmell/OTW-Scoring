@@ -11,9 +11,15 @@ import RaceItem from "./racesView/RaceItem";
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import ToolIconBtn from "../../components/generic/ToolIconBtn";
+import { useContext, useEffect } from "preact/hooks";
+import { RacesCtx } from "../../components/page/Routing";
 
-export default function Races({ setHeaderTitle }) {
+export default function Races(props) {
+  const { setHeaderTitle, ...rest } = props;
+
   setHeaderTitle("Races");
+
+  const { raceCtx, setRaceCtx, racesCtx, setRacesCtx } = useContext(RacesCtx);
 
   const [seriesId, _setSeriesId] = useStorage("seriesId");
   const [_raceId, setRaceId] = useStorage("raceId", { initVal: "1" });
@@ -36,6 +42,9 @@ export default function Races({ setHeaderTitle }) {
     setRaceId(docRef.id);
     route("/races/edit");
   };
+  useEffect(() => {
+    setRacesCtx(races);
+  }, []);
 
   return (
     <Fragment>

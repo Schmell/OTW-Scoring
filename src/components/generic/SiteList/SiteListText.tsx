@@ -13,6 +13,7 @@ interface SiteListTextProps {
     sub: string;
     foot: string;
   };
+  // data: any;
 }
 
 export function SiteListText({ children, setStorage, item, forward, textItems }: SiteListTextProps) {
@@ -36,15 +37,11 @@ export function SiteListText({ children, setStorage, item, forward, textItems }:
 
           <Text fontSize="md" color={useColorModeValue("gray.500", "gray.300")}>
             {textItems.foot}
+            <Divider />
+            {item.id}
           </Text>
         </Box>
         {children}
-        {/* <SiteListButtons
-                setStorage={setSeriesId}
-                item={series}
-                listType="series"
-                disclosure={deleteSeriesDisclosure}
-              /> */}
       </Flex>
     </Fragment>
   );

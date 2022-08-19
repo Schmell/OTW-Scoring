@@ -6,19 +6,9 @@ interface SecBtnProps {
   [x: string | number]: any;
 }
 
-const SecBtn: FunctionalComponent<SecBtnProps> = ({
-  children,
-  onClick,
-  width,
-}) => {
+const SecBtn: FunctionalComponent<SecBtnProps> = ({ children, onClick, width, type }) => {
   return (
-    <Button
-      colorScheme={"blue"}
-      variant="outline"
-      boxShadow="md"
-      width={width}
-      onClick={onClick}
-    >
+    <Button type={type} width={width} onClick={onClick}>
       {children}
     </Button>
   );

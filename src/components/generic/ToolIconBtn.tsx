@@ -19,7 +19,6 @@ export default function ToolIconBtn({ action, icon, label }) {
           <IconButton
             aria-label={label}
             icon={(<Icon as={icon} boxSize={7} />) as any} // not sure why??
-            boxShadow="md"
             onClick={action}
           />
         </Tooltip>

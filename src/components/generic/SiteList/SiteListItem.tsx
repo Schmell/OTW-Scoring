@@ -35,10 +35,6 @@ export function SiteListItem({ item, children }: SiteListProps) {
           bgColor={useColorModeValue("white", "blackAlpha.300")}
         >
           {children}
-          {/* <AreYouSure disclosure={disclosure} colPath={listType} itemId={item.id}>
-            <Box>{`This will delete the ${listType} and is not undo-able`}</Box>
-            <Box>{`You will loose any work you have done with this ${listType}`}</Box>
-          </AreYouSure> */}
         </ListItem>
       </SiteListAnimation>
     </Fragment>

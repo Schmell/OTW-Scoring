@@ -16,7 +16,8 @@ import { SiteListItem } from "../../components/generic/SiteList/SiteListItem";
 import { SiteListText } from "../../components/generic/SiteList/SiteListText";
 import ToolIconBtn from "../../components/generic/ToolIconBtn";
 
-export default function Series({ user, setHeaderTitle }) {
+export default function Series(props) {
+  const { user, setHeaderTitle, ...rest } = props;
   setHeaderTitle("Series");
   // Get users series
   const seriesRef = collection(db, "series");
@@ -73,18 +74,24 @@ export default function Series({ user, setHeaderTitle }) {
               setStorage={setSeriesId}
               forward="races"
               textItems={{ head: series.data().event, sub: series.data().venue, foot: series.data().venuewebsite }}
+              // data={series}
             >
               <SiteListButtons
                 setStorage={setSeriesId}
                 item={series}
                 listType="series"
                 disclosure={deleteSeriesDisclosure}
-              />
+              >
+                <Box>This will delete the series and is not undo-able</Box>
+                <Box>You will loose any work you have done with this Series</Box>
+              </SiteListButtons>
             </SiteListText>
-            <AreYouSure disclosure={deleteSeriesDisclosure} colPath="series" itemId={series.id}>
+            {/* {console.log(series.id)} */}
+            {/* <AreYouSure colPath="series" itemId={series.id} disclosure={deleteSeriesDisclosure}>
               <Box>This will delete the series and is not undo-able</Box>
               <Box>You will loose any work you have done with this Series</Box>
-            </AreYouSure>
+              <Box>{series.id}</Box>
+            </AreYouSure> */}
           </SiteListItem>
         ))}
       </SiteList>

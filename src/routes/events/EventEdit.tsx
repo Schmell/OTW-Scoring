@@ -1,28 +1,21 @@
+import { Box, Button, Divider, Flex, FormLabel, forwardRef, Heading, Input, useToast } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
-import {
-  Box,
-  Button,
-  Divider,
-  Flex,
-  FormLabel,
-  Heading,
-  Icon,
-  IconButton,
-  Input,
-  Tooltip,
-  useToast,
-} from "@chakra-ui/react";
+import { useEffect, useRef } from "preact/hooks";
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
-import { db } from "../../util/firebase-config";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { Formik, Form, Field } from "formik";
-import useStorage from "../../hooks/useStorage";
+import { db } from "../../util/firebase-config";
+import { Field, Form, Formik, useFormik } from "formik";
 import { FadeInSlideRight } from "../../components/animations/FadeSlide";
+import useStorage from "../../hooks/useStorage";
+import ToolIconBtn from "../../components/generic/ToolIconBtn";
+// Icons
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 import DeleteIcon from "@mui/icons-material/Delete";
+import PriBtn from "../../components/generic/PriBtn";
+import SecBtn from "../../components/generic/SecBtn";
 
-const EventEdit = ({ user, setHeaderTitle }) => {
+export default function EventEdit({ user, setHeaderTitle }) {
   setHeaderTitle("Event Edit");
 
   const [eventId] = useStorage("eventId");
@@ -31,9 +24,12 @@ const EventEdit = ({ user, setHeaderTitle }) => {
   const docRef = doc(db, "events", eventId);
   const [currentEvent, eventLoading] = useDocumentData(docRef);
 
+  const formRef = useRef();
+
   const submittedToast = useToast();
 
-  const submitHandler = async (values: any) => {
+  const submitHandler = async (values: any, { setSubmitting }) => {
+    setSubmitting(true);
     // update the firestore doc
     // here we may need to add modified flag or something
     await updateDoc(docRef, values);
@@ -47,9 +43,9 @@ const EventEdit = ({ user, setHeaderTitle }) => {
       isClosable: true,
     });
 
+    setSubmitting(false);
     // route back to races
     history.back();
-    // route("/events");
   };
 
   const deleteEvent = async () => {
@@ -64,32 +60,18 @@ const EventEdit = ({ user, setHeaderTitle }) => {
             Event Edit
           </Heading>
         </FadeInSlideRight>
-        <Box>
-          <Tooltip label="Delete event" hasArrow bg="blue.300" placement="bottom-start">
-            <IconButton
-              aria-label="Delete Event"
-              icon={(<Icon as={DeleteIcon} />) as any}
-              colorScheme={"blue"}
-              mr={2}
-              variant={"outline"}
-              boxShadow={"md"}
-              onClick={() => {
-                deleteEvent();
-                route("/events");
-              }}
-            />
-          </Tooltip>
 
-          <Tooltip label="Clear form" hasArrow bg="blue.300" placement="bottom-start">
-            <IconButton
-              aria-label="Add Event"
-              icon={(<Icon as={ClearAllIcon} />) as any}
-              colorScheme={"blue"}
-              variant={"outline"}
-              boxShadow={"md"}
-            />
-          </Tooltip>
-        </Box>
+        <Flex gap={2}>
+          <ToolIconBtn
+            label="Delete event"
+            action={() => {
+              deleteEvent();
+              route("/events");
+            }}
+            icon={DeleteIcon}
+          />
+          <ToolIconBtn label="Clear form" action={() => {}} icon={ClearAllIcon} />
+        </Flex>
       </Flex>
 
       <Divider my={4} border={4} shadow={"md"} />
@@ -120,14 +102,17 @@ const EventEdit = ({ user, setHeaderTitle }) => {
 
               <Divider my={3} />
 
-              <Button type="submit" variant="solid" w="100%" my={4}>
-                Submit
-              </Button>
+              <Flex gap={2}>
+                <PriBtn type="submit" width="100%">
+                  Submit
+                </PriBtn>
+                <SecBtn type="reset">Reset</SecBtn>
+              </Flex>
             </Form>
           </Formik>
         )}
       </Box>
     </Fragment>
   );
-};
-export default EventEdit;
+}
+// export default EventEdit;
