@@ -1,23 +1,25 @@
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
   Button,
-  Box,
-  Text,
-  useColorMode,
-  useColorModeValue,
   Flex,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { deleteDoc, doc } from "firebase/firestore";
 import { ComponentChildren, Fragment, h } from "preact";
 import { db } from "../../util/firebase-config";
 
-interface AreYouSureProps {
+type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyof T, Keys>> &
+  {
+    [K in Keys]-?: Required<Pick<T, K>> & Partial<Record<Exclude<Keys, K>, undefined>>;
+  }[Keys];
+interface BaseProps {
   disclosure: {
     isOpen: boolean;
     onOpen: () => void;
@@ -27,13 +29,15 @@ interface AreYouSureProps {
     getButtonProps: (props?: any) => any;
     getDisclosureProps: (props?: any) => any;
   };
-  callback?: (id: string) => Promise<void>;
+  callback: (id: string) => Promise<void>;
   itemId: string;
   children: ComponentChildren;
   title?: string;
-  colPath?: string;
+  colPath: string;
   risk?: "low" | "medium" | "high";
 }
+
+type AreYouSureProps = RequireOnlyOne<BaseProps, "callback" | "colPath">;
 
 export function AreYouSure({ disclosure, callback, title, itemId, colPath, risk, children }: AreYouSureProps) {
   /**

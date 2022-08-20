@@ -1,33 +1,15 @@
 import { Fragment, h } from "preact";
-import Router, { Route, route } from "preact-router";
 import { useState } from "preact/hooks";
-import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Box,
-  Button,
-  Divider,
-  Editable,
-  EditableInput,
-  EditablePreview,
-  Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Heading,
-  HStack,
-  Input,
-  Radio,
-  RadioGroup,
-  Text,
-  useToast,
-} from "@chakra-ui/react";
+// Chakra
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel } from "@chakra-ui/react";
+import { Button, Input, Radio, RadioGroup, Editable, EditableInput, EditablePreview } from "@chakra-ui/react";
+import { FormControl, FormErrorMessage, FormLabel } from "@chakra-ui/react";
+import { Box, Divider, Flex, Heading, HStack, Text, useToast } from "@chakra-ui/react";
+// Firebase
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
-import { db } from "../../util/firebase-config";
 import { useDocumentData } from "react-firebase-hooks/firestore";
+import { db } from "../../util/firebase-config";
+//
 import { Field, Form, Formik } from "formik";
 import useStorage from "../../hooks/useStorage";
 import { FadeInSlideRight } from "../../components/animations/FadeSlide";
@@ -80,7 +62,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
             venuewebsite: currentSeries.venuewebsite,
             venueburgee: currentSeries.venueburgee,
             venueemail: currentSeries.venueemail,
-            name: currentSeries.__fileInfo.name,
+            name: seriesName,
             lastModified: currentSeries.__fileInfo.lastModified,
             lastModifiedDate: currentSeries.__fileInfo.lastModifiedDate,
             size: currentSeries.__fileInfo.size,
@@ -90,9 +72,9 @@ const SeriesEdit = ({ setHeaderTitle }) => {
           onSubmit={submitHandler}
         >
           <Form>
-            <Flex justifyContent="space-between" alignItems="end" mx={2}>
+            <Flex justifyContent="space-between" alignItems="end">
               <FadeInSlideRight>
-                <Heading as="h5" color="blue.400">
+                <Heading as="h5" color="blue.400" mx={4}>
                   <Editable defaultValue={currentSeries.event} isPreviewFocusable={true}>
                     <EditablePreview />
                     <EditableInput
@@ -103,17 +85,12 @@ const SeriesEdit = ({ setHeaderTitle }) => {
                     />
                   </Editable>
                 </Heading>
-                {/* // For dev purposes
-                <Text fontSize="sm" color="lightgray">
-                  id: {currentSeries.id}
-                </Text> 
-                */}
               </FadeInSlideRight>
             </Flex>
 
             <Divider my={3} border="8px" />
 
-            <Box mb={6}>
+            <Box mb={6} mx={4}>
               <Accordion defaultIndex={[0]}>
                 <AccordionItem>
                   <Text as={"h2"} mb={3}>
@@ -272,7 +249,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
                 </AccordionItem>
               </Accordion>
               {/* Submit Button */}
-              <Button type="submit" colorScheme="blue" w="100%" my={4}>
+              <Button type="submit" variant="solid" w="100%" my={4}>
                 Submit
               </Button>
             </Box>

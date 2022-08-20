@@ -14,6 +14,7 @@ import { SiteList } from "../../components/generic/SiteList";
 import { SiteListButtons } from "../../components/generic/SiteList/SiteListButtons";
 import { SiteListItem } from "../../components/generic/SiteList/SiteListItem";
 import { SiteListText } from "../../components/generic/SiteList/SiteListText";
+import ToolIconBtn from "../../components/generic/ToolIconBtn";
 
 export default function Events({ user, setHeaderTitle }) {
   setHeaderTitle("Events");
@@ -46,28 +47,10 @@ export default function Events({ user, setHeaderTitle }) {
 
         {/* Sub header buttons */}
         <FadeInSlideLeft>
-          <Tooltip label="Import file" hasArrow bg="blue.300" placement="bottom-start">
-            <IconButton
-              aria-label="import"
-              colorScheme="blue"
-              variant="outline"
-              boxShadow="md"
-              mr={2}
-              onClick={() => route("/import")}
-              icon={(<Icon as={FileUploadOutlinedIcon} />) as any}
-            />
-          </Tooltip>
-
-          <Tooltip label="Add Event" hasArrow bg="blue.300" placement="bottom-start">
-            <IconButton
-              aria-label="add event"
-              colorScheme="blue"
-              variant="outline"
-              boxShadow="md"
-              icon={(<Icon as={AddToPhotosOutlinedIcon} />) as any}
-              onClick={addEventHandler}
-            />
-          </Tooltip>
+          <Flex gap={2}>
+            <ToolIconBtn label="Import file" action={() => route("/import")} icon={FileUploadOutlinedIcon} />
+            <ToolIconBtn label="Add Series" action={addEventHandler} icon={AddToPhotosOutlinedIcon} />
+          </Flex>
         </FadeInSlideLeft>
       </Flex>
 
@@ -85,7 +68,7 @@ export default function Events({ user, setHeaderTitle }) {
               <SiteListButtons
                 setStorage={setEventId}
                 item={item}
-                listType="series"
+                listType="events"
                 disclosure={deleteEventDisclosure}
               />
             </SiteListText>

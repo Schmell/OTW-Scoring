@@ -24,9 +24,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 const EventEdit = ({ user, setHeaderTitle }) => {
   setHeaderTitle("Event Edit");
-  //   console.log("EventForm - user: ", user);
+
   const [eventId] = useStorage("eventId");
-  console.log("eventId: ", eventId);
+
   // Get the currentRace data
   const docRef = doc(db, "events", eventId);
   const [currentEvent, eventLoading] = useDocumentData(docRef);
@@ -34,8 +34,6 @@ const EventEdit = ({ user, setHeaderTitle }) => {
   const submittedToast = useToast();
 
   const submitHandler = async (values: any) => {
-    console.log("values: ", values);
-
     // update the firestore doc
     // here we may need to add modified flag or something
     await updateDoc(docRef, values);
@@ -122,7 +120,7 @@ const EventEdit = ({ user, setHeaderTitle }) => {
 
               <Divider my={3} />
 
-              <Button type="submit" colorScheme="blue" w="100%" my={4}>
+              <Button type="submit" variant="solid" w="100%" my={4}>
                 Submit
               </Button>
             </Form>

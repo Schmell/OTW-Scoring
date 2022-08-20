@@ -28,6 +28,9 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import EditIcon from "@mui/icons-material/Edit";
 import SettingsIcon from "@mui/icons-material/Settings";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ToolIconBtn from "../../../components/generic/ToolIconBtn";
 
 type ResultRow = {
   id: number;
@@ -75,6 +78,11 @@ interface TableProps {
 function FleetTable(props: TableProps) {
   let { data, fleetName, serInfo, raceId, raceName } = props;
   if (!fleetName) fleetName = "Fleet";
+
+  // Next / Previous race
+  // Need to get get and array of raceIds to this component
+  // and then a pointer to tell what race we are currently in
+  // and pass the id back up to change the race
 
   // States
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
@@ -274,37 +282,17 @@ function FleetTable(props: TableProps) {
     <Fragment>
       <Fragment>
         <Flex justifyContent={"space-between"} px={6}>
-          {/* ////////////////////////////// */}
+          {/* // Fleet Header */}
           <Box>
             <Heading color="blue.400" size="2xl">{`${fleetName}`}</Heading>
           </Box>
 
           {/* Header buttons */}
           <Flex gap={2}>
-            <Tooltip label="Edit Series" hasArrow bg="blue.300" placement="bottom-start">
-              <IconButton
-                aria-label="edit series"
-                icon={(<Icon as={EditIcon} boxSize={7} />) as any} // not sure why??
-                size="md"
-                colorScheme={"blue"}
-                variant={"outline"}
-                boxShadow="md"
-                onClick={() => {
-                  route("/series/edit");
-                }}
-              />
-            </Tooltip>
-            <Tooltip label="Settings" hasArrow bg="blue.300" placement="bottom-start">
-              <IconButton
-                aria-label="settings"
-                icon={(<Icon as={SettingsIcon} boxSize={7} />) as any} // not sure why??
-                size="md"
-                colorScheme={"blue"}
-                variant={"outline"}
-                boxShadow="md"
-                onClick={onOpen}
-              />
-            </Tooltip>
+            <ToolIconBtn action={() => {}} label="Previous race" icon={ChevronLeftIcon} />
+            <ToolIconBtn action={() => {}} label="Next race" icon={ChevronRightIcon} />
+            <ToolIconBtn action={() => route("/series/edit")} label="Edit Series" icon={EditIcon} />
+            <ToolIconBtn action={onOpen} label="Settings" icon={SettingsIcon} />
           </Flex>
 
           <SettingsModal
@@ -457,7 +445,14 @@ function FleetTable(props: TableProps) {
             </Flex>
           )}
 
-          <Box ml={2} mt={2} color="blue.300">
+          <Box
+            py={3}
+            pl={4}
+            mt={1}
+            color={useColorModeValue("gray.600", "blue.100")}
+            borderBottomRadius={16}
+            bgGradient={useColorModeValue("linear(to-r, blue.200, gray.100)", "linear(to-r, whiteAlpha.100, blue.200)")}
+          >
             {table.getRowModel().rows.length} Competitors
           </Box>
           {/* <Box>{table.getState().pagination.pageSize} page size</Box> */}
