@@ -1,7 +1,7 @@
 // Chakra layout imports
-import { Box, Button, Divider, Flex, Heading, Icon, IconButton, Tooltip } from "@chakra-ui/react";
+import { Box, Button, Divider, Flex, Heading, Icon, Text } from "@chakra-ui/react";
 // Chakra hooks
-import { useColorModeValue, useDisclosure } from "@chakra-ui/react";
+import { useColorModeValue, useDisclosure, useBreakpointValue } from "@chakra-ui/react";
 // Chakra table
 import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 // Chakra form
@@ -31,6 +31,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ToolIconBtn from "../../../components/generic/ToolIconBtn";
+import { DocumentData } from "firebase/firestore";
 
 type ResultRow = {
   id: number;
@@ -48,7 +49,7 @@ type ResultRow = {
 };
 
 export default function ResultTable(props) {
-  const { tableData, fleetName, serInfo, raceId, raceName } = props;
+  const { tableData, ...rest } = props;
   // this state is for the table data
   const [data, setData] = useState<ResultRow[]>([]);
 
@@ -61,28 +62,45 @@ export default function ResultTable(props) {
     <Fragment>
       {data && (
         <Fragment>
-          <FleetTable data={data} fleetName={fleetName} serInfo={serInfo} raceId={raceId} raceName={raceName} />
+          <FleetTable data={data} {...rest} />
         </Fragment>
       )}
     </Fragment>
   );
 }
+
 interface TableProps {
   data: ResultRow[];
   fleetName: string;
   serInfo: { event: string; resultType: string; rowTitle: string };
   raceId?: string;
   raceName: string;
+  setRaceName: (arg0: string) => void;
+  racesArray: [];
+  position: number;
+  setSelectedRace: (arg0: number) => void;
+  selectedRace: number;
+  raceDoc: DocumentData | undefined;
 }
 
 function FleetTable(props: TableProps) {
-  let { data, fleetName, serInfo, raceId, raceName } = props;
-  if (!fleetName) fleetName = "Fleet";
+  const {
+    data,
+    serInfo,
+    raceName,
+    // raceDoc,
+    setRaceName,
+    fleetName,
+    racesArray,
+    setSelectedRace,
+    selectedRace,
+    ...rest
+  } = props;
+  // console.log("raceName: ", raceName);
+  // console.log("props: ", props);
+  // console.log("raceDoc: ", raceDoc);
 
-  // Next / Previous race
-  // Need to get get and array of raceIds to this component
-  // and then a pointer to tell what race we are currently in
-  // and pass the id back up to change the race
+  // console.log("selectedRace: ", selectedRace);
 
   // States
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
@@ -92,6 +110,12 @@ function FleetTable(props: TableProps) {
     corrected: false,
     elapsed: false,
     finish: false,
+  });
+  const [isRaceName, setIsRaceName] = useState(raceName);
+
+  const tableSize = useBreakpointValue({
+    base: "md",
+    md: "sm",
   });
 
   const [sorting, setSorting] = useState<SortingState>([{ id: "points", desc: false }]);
@@ -105,10 +129,6 @@ function FleetTable(props: TableProps) {
   // Define the columns
   const columns = useMemo<ColumnDef<ResultRow>[]>(
     () => [
-      // {
-      //   header: `${raceName} - ${serInfo.event}`,
-      //   footer: (props) => props.column.id,
-      //   columns: [
       {
         accessorKey: "boat",
         id: "boat",
@@ -202,14 +222,11 @@ function FleetTable(props: TableProps) {
         ),
         footer: (props) => props.column.id,
       },
-
-      //   ],
-      // },
     ],
     []
   ); //////////////////////////////////////////////////////
 
-  // set up the table
+  // Set up the table
   const table = useReactTable({
     data,
     columns,
@@ -232,6 +249,11 @@ function FleetTable(props: TableProps) {
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
+  useEffect(() => {
+    // console.log('raceName: ', raceName);
+    setIsRaceName(raceName);
+  }, [raceName]);
 
   // this useEffect is to set up visible columns and sorting columns
   useEffect(() => {
@@ -264,13 +286,14 @@ function FleetTable(props: TableProps) {
     //
   }, [resultType, rowTitle]);
 
-  // set the result type
+  // Set the result type
   useEffect(() => {
     if (!serInfo.resultType) {
       setResultType("points");
     } else {
       setResultType(serInfo.resultType);
     }
+
     if (!serInfo.rowTitle) {
       setRowTitle("boat");
     } else {
@@ -282,15 +305,30 @@ function FleetTable(props: TableProps) {
     <Fragment>
       <Fragment>
         <Flex justifyContent={"space-between"} px={6}>
-          {/* // Fleet Header */}
           <Box>
-            <Heading color="blue.400" size="2xl">{`${fleetName}`}</Heading>
+            <Heading color="blue.400" size="2xl">
+              {fleetName ? fleetName : "Fleet"}
+            </Heading>
           </Box>
 
           {/* Header buttons */}
           <Flex gap={2}>
-            <ToolIconBtn action={() => {}} label="Previous race" icon={ChevronLeftIcon} />
-            <ToolIconBtn action={() => {}} label="Next race" icon={ChevronRightIcon} />
+            <ToolIconBtn
+              disabled={selectedRace <= 0}
+              action={() => {
+                setSelectedRace(selectedRace - 1);
+              }}
+              label="Previous race"
+              icon={ChevronLeftIcon}
+            />
+            <ToolIconBtn
+              disabled={selectedRace >= racesArray.length - 1}
+              action={() => {
+                setSelectedRace(selectedRace + 1);
+              }}
+              label="Next race"
+              icon={ChevronRightIcon}
+            />
             <ToolIconBtn action={() => route("/series/edit")} label="Edit Series" icon={EditIcon} />
             <ToolIconBtn action={onOpen} label="Settings" icon={SettingsIcon} />
           </Flex>
@@ -315,16 +353,23 @@ function FleetTable(props: TableProps) {
             mb={1}
             color={useColorModeValue("gray.600", "blue.100")}
             borderTopRadius={16}
-            bgGradient={useColorModeValue("linear(to-r, gray.100, blue.200)", "linear(to-r, whiteAlpha.100, blue.200)")}
-          >{`${raceName} - ${serInfo.event}`}</Heading>
+            bgGradient={useColorModeValue(
+              "linear(to-r, whiteAlpha.100, blue.100)",
+              "linear(to-r, whiteAlpha.100, blue.600)"
+            )}
+          >
+            <Text fontSize={"2xl"}>{isRaceName}</Text>
+            <Text fontSize={"md"}>{serInfo.event}</Text>
+            {/* {`$ - $`} */}
+          </Heading>
 
-          <Table variant="striped" colorScheme="blue">
+          <Table variant="striped" size={tableSize} colorScheme="blue">
             <Thead bgColor="blue.300">
               {table.getHeaderGroups().map((headerGroup) => (
                 <Tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
-                      <Th key={header.id} fontSize={"sm"} colSpan={header.colSpan} color={"gray.700"}>
+                      <Th key={header.id} colSpan={header.colSpan} color={"gray.700"}>
                         {header.isPlaceholder ? null : (
                           <Box
                             {...{
@@ -451,7 +496,10 @@ function FleetTable(props: TableProps) {
             mt={1}
             color={useColorModeValue("gray.600", "blue.100")}
             borderBottomRadius={16}
-            bgGradient={useColorModeValue("linear(to-r, blue.200, gray.100)", "linear(to-r, whiteAlpha.100, blue.200)")}
+            bgGradient={useColorModeValue(
+              "linear(to-r, blue.100, whiteAlpha.100)",
+              "linear(to-r, whiteAlpha.100, blue.600)"
+            )}
           >
             {table.getRowModel().rows.length} Competitors
           </Box>

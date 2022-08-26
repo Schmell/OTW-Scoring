@@ -1,8 +1,11 @@
 import { Fragment, h } from "preact";
 import { Divider, Text } from "@chakra-ui/react";
 import ResultTable from "./ResultTable";
+import { useEffect } from "preact/hooks";
 
-export default function FleetsTable({ tableData, serInfo, raceId, raceName }) {
+export default function FleetsTable(props) {
+  const { tableData, raceName, ...rest } = props;
+
   let fleetsArray: any = [];
   const unique = Array.from(
     new Set(
@@ -28,19 +31,17 @@ export default function FleetsTable({ tableData, serInfo, raceId, raceName }) {
     fleetsArray.push(push);
   });
 
+  useEffect(() => {
+    console.log("raceName: ", raceName);
+  }, [tableData]);
+
   return (
     <Fragment>
       {fleetsArray &&
         fleetsArray.sort().map((fleet) => {
           return (
             <Fragment>
-              <ResultTable
-                tableData={fleet}
-                fleetName={fleet[0].fleet}
-                serInfo={serInfo}
-                raceId={raceId}
-                raceName={raceName}
-              />
+              <ResultTable tableData={fleet} fleetName={fleet[0].fleet} raceName={raceName} {...rest} />
               <Divider mb={4} mt={8} />
             </Fragment>
           );

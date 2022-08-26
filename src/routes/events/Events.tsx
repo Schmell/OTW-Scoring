@@ -76,7 +76,7 @@ export default function Events({ user, setHeaderTitle }) {
                 >
                   <Box>This will delete the event and is not undo-able</Box>
                   <Box>You will loose any work you have done with this Event</Box>
-                  <Box>{item.id}</Box>
+                  {/* <Box>{item.id}</Box> */}
                 </SiteListButtons>
               </SiteListText>
             </SiteListItem>

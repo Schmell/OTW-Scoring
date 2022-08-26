@@ -8,11 +8,6 @@ import Routing from "./Routing";
 import { theme } from "./theme";
 
 const App = () => {
-  // { colors: colors, components: components, fonts: fonts }
-  // const theme = extendTheme({
-  //   colors, components, fonts
-
-  // });
   const [user] = useAuthState(auth);
 
   const [headerTitle, setHeaderTitle] = useState("Blw Me");

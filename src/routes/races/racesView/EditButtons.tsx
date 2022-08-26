@@ -6,10 +6,13 @@ import { AreYouSure } from "../../../components/generic/AreYouSure";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect } from "preact/hooks";
+import useStorage from "../../../hooks/useStorage";
 
 let _isMounted = false;
 export default function EditButtons({ setRaceId, race }) {
   const deleteRaceDisclosure = useDisclosure();
+
+  const [seriesId] = useStorage("seriesId");
 
   useEffect(() => {
     _isMounted = true;
@@ -47,9 +50,10 @@ export default function EditButtons({ setRaceId, race }) {
           />
         </Tooltip>
       </Flex>
-      <AreYouSure disclosure={deleteRaceDisclosure} colPath="races" itemId={race.id}>
+      <AreYouSure disclosure={deleteRaceDisclosure} colPath={`/series/${seriesId}/races`} itemId={race.id}>
         <Box>This will permanently delete the race and can not be un-done</Box>
         <Box>You will loose any work you have done with this race</Box>
+        <Box>{race.id}</Box>
       </AreYouSure>
     </Fragment>
   );

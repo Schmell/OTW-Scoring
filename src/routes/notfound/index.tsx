@@ -6,14 +6,19 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 const Notfound: FunctionalComponent = () => {
   return (
-    <Box>
+    <Box m={16}>
       <Heading color={"blue.400"}>Error 404</Heading>
       <Text as={"p"}>That page doesn&apos;t exist.</Text>
-      <Link href="/">
+      <Link
+        href="#"
+        onClick={() => {
+          history.back();
+        }}
+      >
         <Flex>
           <Heading size={"sm"} color="black" my={4}>
             <Icon as={ChevronLeftIcon} mr={2} />
-            Back to Home
+            Back
           </Heading>
         </Flex>
       </Link>

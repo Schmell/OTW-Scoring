@@ -1,4 +1,6 @@
-import { createContext, FunctionalComponent, h } from "preact";
+import { createContext, h } from "preact";
+import { FC } from "preact/compat";
+
 import Router, { Route } from "preact-router";
 import { StateUpdater, useMemo, useState } from "preact/hooks";
 import useStorage from "../../hooks/useStorage";
@@ -34,9 +36,10 @@ interface IRacesContext {
   setRacesCtx: any;
 }
 
-export const RacesCtx = createContext<IRacesContext>({} as IRacesContext);
+export const RacesCtx = createContext({} as IRacesContext);
+// export const RacesCtx = createContext("");
 
-const Routing: FunctionalComponent<IRouting> = (props) => {
+const Routing: FC<IRouting> = (props) => {
   // console.log(props);
   const [raceCtx, setRaceCtx] = useState({});
   const [racesCtx, setRacesCtx] = useState({});
@@ -49,9 +52,10 @@ const Routing: FunctionalComponent<IRouting> = (props) => {
 
       <Route path="/signin" component={SignIn} {...props} />
 
+      {/* <RacesCtx.Provider value={racesContextProvider}> */}
       <Route path="/import" component={Import} {...props} />
-
       <Route path="/result/:seriesId/:raceId/:raceName" component={Result} {...props} />
+      {/* </RacesCtx.Provider> */}
 
       <Route path="/series" component={Series} {...props} />
       <Route path="/series/edit" component={SeriesEdit} {...props} />
@@ -60,10 +64,8 @@ const Routing: FunctionalComponent<IRouting> = (props) => {
       <AuthRoute path="/events/edit" component={EventEdit} {...props} />
       <AuthRoute path="/events/event" component={EventList} {...props} />
 
-      {/* <RacesCtx.Provider value={racesContextProvider}> */}
       <Route path="/races" component={Races} {...props} />
       <Route path="/races/edit" component={RaceEdit} {...props} />
-      {/* </RacesCtx.Provider> */}
 
       <Route path="/competitors" component={Competitors} {...props} />
 

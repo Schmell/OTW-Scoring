@@ -77,6 +77,7 @@ export default function MobileNav({ onOpen, headerTitle, ...rest }: MobileProps)
           }}
           _active={{
             bgcolor: "blue.700",
+            border: "none",
           }}
           icon={(<MdMenu />) as any}
           onClick={onOpen}

@@ -60,8 +60,8 @@ export function AreYouSure({ disclosure, callback, title, itemId, colPath, risk,
 
   if (!callback) {
     callback = async () => {
-      console.log("colPath: ", colPath);
-      console.log("itemId: ", itemId);
+      // console.log("colPath: ", colPath);
+      // console.log("itemId: ", itemId);
       if (!colPath) return;
       await deleteDoc(doc(db, colPath, itemId));
     };

@@ -5,20 +5,30 @@ import { FadeInSlideRight } from "../../components/animations/FadeSlide";
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
 import { query, collectionGroup, where, orderBy, collection } from "firebase/firestore";
 import { db } from "../../util/firebase-config";
-import { useCollectionData } from "react-firebase-hooks/firestore";
+import { useCollection, useCollectionData } from "react-firebase-hooks/firestore";
+import { useMemo } from "preact/hooks";
 
 const Competitors = ({ user, setHeaderTitle }) => {
   setHeaderTitle("Competitors");
   // trying to get a ref for the users collections
   //   const eventRef = collection(db, "events", )
   const compsQ = query(collectionGroup(db, "comps"), orderBy("boat"));
-  const [comps, compsLoading] = useCollectionData(compsQ);
+  const [comps, compsLoading] = useCollection(compsQ);
 
   if (!compsLoading) {
     console.log("comps: ", comps);
+    //
   }
 
   console.log("events - user: ", user);
+  const uniqueComps = useMemo(() => {
+    return new Set(
+      comps?.docs.map((comp) => {
+        return comp.id;
+      })
+    );
+  }, [comps]);
+  console.log("uniqueComps: ", uniqueComps);
 
   return (
     <Fragment>
@@ -44,9 +54,9 @@ const Competitors = ({ user, setHeaderTitle }) => {
         {compsLoading ? (
           <Spinner />
         ) : (
-          comps?.map((comp) => (
+          comps?.docs.map((comp) => (
             <List>
-              <ListItem>{comp.boat}</ListItem>
+              <ListItem>{comp.data().boat}</ListItem>
             </List>
           ))
         )}

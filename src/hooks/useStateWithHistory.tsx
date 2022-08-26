@@ -1,8 +1,8 @@
 import { useCallback, useRef, useState } from "preact/hooks";
 
-export default function useStateWithHistory(defaultValue, { capacity = 10 } = {}) {
-  const [value, setValue] = useState(defaultValue);
-  const historyRef = useRef([value]);
+export default function useStateWithHistory(defaultValue?, { capacity = 10 } = {}) {
+  const [value, setValue] = useState(defaultValue ? defaultValue : null);
+  let historyRef = useRef([value]);
   const pointerRef = useRef(0);
 
   const set = useCallback(

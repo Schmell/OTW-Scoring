@@ -47,6 +47,7 @@ export default function SidebarContent({ onClose, headerTitle, ...rest }: Sideba
         bg={useColorModeValue("blue.500", "blue.900")}
         borderBottom={1}
         borderBottomColor={useColorModeValue("gray.200", "gray.700")}
+        borderBottomLeftRadius={16}
         color={"white"}
         w={"100%"}
         mb={4}
