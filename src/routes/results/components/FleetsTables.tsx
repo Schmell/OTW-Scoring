@@ -4,7 +4,7 @@ import ResultTable from "./ResultTable";
 import { useEffect } from "preact/hooks";
 
 export default function FleetsTable(props) {
-  const { tableData, raceName, ...rest } = props;
+  const { tableData, ...rest } = props;
 
   let fleetsArray: any = [];
   const unique = Array.from(
@@ -31,17 +31,13 @@ export default function FleetsTable(props) {
     fleetsArray.push(push);
   });
 
-  useEffect(() => {
-    console.log("raceName: ", raceName);
-  }, [tableData]);
-
   return (
     <Fragment>
       {fleetsArray &&
         fleetsArray.sort().map((fleet) => {
           return (
             <Fragment>
-              <ResultTable tableData={fleet} fleetName={fleet[0].fleet} raceName={raceName} {...rest} />
+              <ResultTable tableData={fleet} fleetName={fleet[0].fleet} {...rest} />
               <Divider mb={4} mt={8} />
             </Fragment>
           );

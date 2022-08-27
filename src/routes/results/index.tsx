@@ -82,13 +82,10 @@ export default function Result(props) {
   }, [compsCol, selectedRace]);
 
   useEffect(() => {
-    if (!raceLoading) {
-      (async () => {
-        const name = await raceDoc?.name;
-        console.log("name: ", name);
-        setRaceName(name);
-      })();
-    }
+    (async () => {
+      const name = await raceDoc?.name;
+      setRaceName(name);
+    })();
   }, [raceDoc, tableData]);
 
   const data = useMemo(() => {
@@ -110,21 +107,23 @@ export default function Result(props) {
       ) : (
         data && (
           <Fragment>
-            {console.log("index: ", raceName)}
             <FleetsTables
-              raceName={raceName}
-              setRaceName={setRaceName}
+              sailed={raceDoc?.sailed}
+              race={raceDoc}
               tableData={tableData}
               serInfo={serInfo}
-              raceId={raceId}
               racesArray={racesArray}
-              position={position}
-              setSelectedRace={setSelectedRace}
               selectedRace={selectedRace}
+              setSelectedRace={setSelectedRace}
               {...rest}
             />
           </Fragment>
         )
+        // : (
+        //   <Fragment>
+        //     <Heading>un-Sailed</Heading>
+        //   </Fragment>
+        // )
       )}
     </Fragment>
   );

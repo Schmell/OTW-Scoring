@@ -17,7 +17,7 @@ const App = () => {
       <ChakraProvider resetCSS theme={theme}>
         <SidebarWithHeader headerTitle={headerTitle}>
           <Box mt={16}>
-            <Routing user={user} setHeaderTitle={setHeaderTitle} />
+            <Routing user={user} setHeaderTitle={setHeaderTitle} headerTitle={headerTitle} />
           </Box>
         </SidebarWithHeader>
       </ChakraProvider>
