@@ -19,7 +19,7 @@ import ToolIconBtn from "../../components/generic/ToolIconBtn";
 export default function Events({ user, setHeaderTitle }) {
   setHeaderTitle("Events");
 
-  const [_eventId, setEventId] = useStorage("eventId");
+  const [eventId, setEventId] = useStorage("eventId");
 
   const colRef = collection(db, "events");
   const ownerEvents = query(colRef, where("__owner", "==", user.uid));
@@ -57,27 +57,31 @@ export default function Events({ user, setHeaderTitle }) {
       <Divider mt={4} border={4} />
 
       <SiteList loading={eventsLoading}>
-        {events?.docs.map((item) => (
-          <SiteListItem key={item.id} item={item} disclosure={deleteEventDisclosure} listType="series">
-            <SiteListText
-              item={item}
-              setStorage={setEventId}
-              forward="events/event"
-              textItems={{ head: item.data().name, sub: item.data().venue, foot: item.data().date }}
-            >
-              <SiteListButtons
-                setStorage={setEventId}
+        {events?.docs.map((item) => {
+          const data = item.data();
+          // setEventId(item.id);
+          return (
+            <SiteListItem key={item.id} item={item} disclosure={deleteEventDisclosure} listType="series">
+              <SiteListText
                 item={item}
-                listType="events"
-                disclosure={deleteEventDisclosure}
-              />
-            </SiteListText>
-            <AreYouSure disclosure={deleteEventDisclosure} colPath="series" itemId={item.id}>
-              <Box>This will delete the event and is not undo-able</Box>
-              <Box>You will loose any work you have done with this Event</Box>
-            </AreYouSure>
-          </SiteListItem>
-        ))}
+                setStorage={setEventId}
+                forward="events/event"
+                textItems={{ head: data.name, sub: data.venue, foot: data.date }}
+              >
+                <SiteListButtons
+                  setStorage={setEventId}
+                  item={item}
+                  listType="events"
+                  disclosure={deleteEventDisclosure}
+                >
+                  <Box>This will delete the event and is not undo-able</Box>
+                  <Box>You will loose any work you have done with this Event</Box>
+                  {/* <Box>{item.id}</Box> */}
+                </SiteListButtons>
+              </SiteListText>
+            </SiteListItem>
+          );
+        })}
         {/* series?.docs.map */}
       </SiteList>
     </Fragment>

@@ -60,6 +60,8 @@ export function AreYouSure({ disclosure, callback, title, itemId, colPath, risk,
 
   if (!callback) {
     callback = async () => {
+      // console.log("colPath: ", colPath);
+      // console.log("itemId: ", itemId);
       if (!colPath) return;
       await deleteDoc(doc(db, colPath, itemId));
     };
@@ -73,7 +75,7 @@ export function AreYouSure({ disclosure, callback, title, itemId, colPath, risk,
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="xs">
+    <Modal id={itemId} isOpen={isOpen} onClose={onClose} size="xs">
       <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="2px" />
       <ModalContent>
         <ModalHeader bgColor={useColorModeValue("blackAlpha.200", "blackAlpha.500")}>
@@ -99,9 +101,7 @@ export function AreYouSure({ disclosure, callback, title, itemId, colPath, risk,
             >
               Delete
             </Button>
-            <Button colorScheme="blue" variant="outline" onClick={onClose}>
-              Cancel
-            </Button>
+            <Button onClick={onClose}>Cancel</Button>
           </Flex>
         </ModalFooter>
       </ModalContent>

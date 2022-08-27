@@ -27,6 +27,8 @@ import { Notes } from "./raceEdit/Notes";
 import { ResultType } from "./raceEdit/ResultType";
 import { Sailed } from "./raceEdit/Sailed";
 import { Starts } from "./raceEdit/Starts";
+import PriBtn from "../../components/generic/PriBtn";
+import SecBtn from "../../components/generic/SecBtn";
 // import style from "./style.css";
 
 export const RaceEdit = ({ setHeaderTitle }) => {
@@ -63,7 +65,8 @@ export const RaceEdit = ({ setHeaderTitle }) => {
     setPostponedDate(currentRace.postponedDate);
   }
 
-  const submitHandler = async (values: any) => {
+  const submitHandler = async (values: any, { setSubmitting }) => {
+    setSubmitting(true);
     // remove undefined's from values
     Object.keys(values).map((m) => {
       if (values[m] === undefined) return (values[m] = "");
@@ -83,10 +86,10 @@ export const RaceEdit = ({ setHeaderTitle }) => {
       duration: 2000,
       isClosable: true,
     });
-
+    setSubmitting(false);
     // route back to races
-    // maybe history.back()
-    route("/races");
+    history.back();
+    // route("/races");
   };
 
   useEffect(() => {
@@ -177,9 +180,12 @@ export const RaceEdit = ({ setHeaderTitle }) => {
                     <Notes loading={loading} currentRace={currentRace} />
 
                     {/* Submit Button */}
-                    <Button type="submit" colorScheme="blue" w="100%" my={4}>
-                      Submit
-                    </Button>
+                    <Flex gap={2}>
+                      <PriBtn type="submit" width="100%">
+                        Submit
+                      </PriBtn>
+                      <SecBtn type="reset">Reset</SecBtn>
+                    </Flex>
                   </Box>
                 </FadeIn>
               </Box>

@@ -10,11 +10,12 @@ import {
   where,
   WithFieldValue,
 } from "firebase/firestore";
+import { Comp, IComp } from "./Comp";
 import { IResult, Result } from "./Result";
 
 export interface IRace {
-  id: string;
-  ref: DocumentReference<DocumentData>;
+  // id: string;
+  // ref: DocumentReference<DocumentData>;
   raceid: string;
   [x: string | number]: any;
 }
@@ -56,7 +57,7 @@ export class Race implements IRace {
     const comps = await getDocs(compsQuery);
     let compArray: object[] = [];
     comps.forEach((item) => {
-      compArray.push(item.data());
+      compArray.push(new Comp(item.data() as IComp));
     });
     // console.log("this: ", this);
     // return "merged";

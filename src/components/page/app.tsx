@@ -8,11 +8,6 @@ import Routing from "./Routing";
 import { theme } from "./theme";
 
 const App = () => {
-  // { colors: colors, components: components, fonts: fonts }
-  // const theme = extendTheme({
-  //   colors, components, fonts
-
-  // });
   const [user] = useAuthState(auth);
 
   const [headerTitle, setHeaderTitle] = useState("Blw Me");
@@ -22,7 +17,7 @@ const App = () => {
       <ChakraProvider resetCSS theme={theme}>
         <SidebarWithHeader headerTitle={headerTitle}>
           <Box mt={16}>
-            <Routing user={user} setHeaderTitle={setHeaderTitle} />
+            <Routing user={user} setHeaderTitle={setHeaderTitle} headerTitle={headerTitle} />
           </Box>
         </SidebarWithHeader>
       </ChakraProvider>

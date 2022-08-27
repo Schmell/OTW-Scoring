@@ -1,27 +1,27 @@
 import { Button } from "@chakra-ui/react";
 import { FunctionalComponent, h } from "preact";
 
-interface SecBtnProps {
-  onClick?: any;
+interface PriBtnProps {
+  onClick?: () => void;
   [x: string | number]: any;
 }
 
-const PriBtn: FunctionalComponent<SecBtnProps> = ({
-  children,
-  onClick,
-  width,
-}) => {
+export default function PriBtn(props) {
+  const { children, onClick, width, type } = props;
   return (
     <Button
-      colorScheme={"blue"}
-      //   variant="outline"
+      {...props}
+      variant="solid"
       boxShadow="md"
-      width={width}
-      onClick={onClick}
+      // width={width}
+      // type={type}
+      // onClick={() => {
+      //   onClick?.();
+      // }}
     >
       {children}
     </Button>
   );
-};
+}
 
-export default PriBtn;
+// export default PriBtn;

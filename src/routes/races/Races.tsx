@@ -7,13 +7,21 @@ import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/F
 import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
 import RaceItem from "./racesView/RaceItem";
+import { useContext, useEffect } from "preact/hooks";
+import { RacesCtx } from "../../components/page/Routing";
 // Icons
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import ToolIconBtn from "../../components/generic/ToolIconBtn";
 
-export default function Races({ setHeaderTitle }) {
+export default function Races(props) {
+  const { setHeaderTitle, ...rest } = props;
+
   setHeaderTitle("Races");
+
+  const { racesCtx, setRacesCtx } = useContext(RacesCtx);
+  const [racesArray, setRacesArray] = useStorage("racesArray");
+  // const { raceCtx, setRaceCtx, racesCtx, setRacesCtx } = useContext(RacesCtx);
 
   const [seriesId, _setSeriesId] = useStorage("seriesId");
   const [_raceId, setRaceId] = useStorage("raceId", { initVal: "1" });
@@ -36,6 +44,14 @@ export default function Races({ setHeaderTitle }) {
     setRaceId(docRef.id);
     route("/races/edit");
   };
+
+  useEffect(() => {
+    const raceIdArray = races?.docs.map((race) => {
+      return race.id;
+    });
+    // console.log("raceIdArray: ", raceIdArray);
+    setRacesArray(raceIdArray);
+  }, [racesLoading]);
 
   return (
     <Fragment>

@@ -1,5 +1,9 @@
-import { FunctionalComponent, h } from "preact";
+import { createContext, h } from "preact";
+import { FC } from "preact/compat";
+
 import Router, { Route } from "preact-router";
+import { StateUpdater, useMemo, useState } from "preact/hooks";
+import useStorage from "../../hooks/useStorage";
 
 import Competitors from "../../routes/competitors/Competitors";
 import EventList from "../../routes/events/Event";
@@ -25,17 +29,33 @@ interface IRouting {
   [x: string | number]: any;
 }
 
-const Routing: FunctionalComponent<IRouting> = (props) => {
+interface IRacesContext {
+  raceCtx?: {};
+  setRaceCtx?: any;
+  racesCtx: {};
+  setRacesCtx: any;
+}
+
+export const RacesCtx = createContext({} as IRacesContext);
+// export const RacesCtx = createContext("");
+
+const Routing: FC<IRouting> = (props) => {
   // console.log(props);
+  const [raceCtx, setRaceCtx] = useState({});
+  const [racesCtx, setRacesCtx] = useState({});
+
+  const racesContextProvider = useMemo(() => ({ raceCtx, setRaceCtx, racesCtx, setRacesCtx }), [raceCtx, racesCtx]);
+
   return (
     <Router>
       <Route path="/" component={Home} {...props} />
 
       <Route path="/signin" component={SignIn} {...props} />
 
+      {/* <RacesCtx.Provider value={racesContextProvider}> */}
       <Route path="/import" component={Import} {...props} />
-
       <Route path="/result/:seriesId/:raceId/:raceName" component={Result} {...props} />
+      {/* </RacesCtx.Provider> */}
 
       <Route path="/series" component={Series} {...props} />
       <Route path="/series/edit" component={SeriesEdit} {...props} />
