@@ -3,12 +3,15 @@ import { addDoc, collection, doc } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { Link, route } from "preact-router";
 import { useCollection, useDocumentData } from "react-firebase-hooks/firestore";
-import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
+import {
+  FadeInSlideLeft,
+  FadeInSlideRight,
+} from "../../components/animations/FadeSlide";
 import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
 import RaceItem from "./racesView/RaceItem";
 import { useContext, useEffect } from "preact/hooks";
-import { RacesCtx } from "../../components/page/Routing";
+// import { RacesCtx } from "../../components/page/Routing";
 // Icons
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
 import EditIcon from "@mui/icons-material/Edit";
@@ -19,7 +22,7 @@ export default function Races(props) {
 
   setHeaderTitle("Races");
 
-  const { racesCtx, setRacesCtx } = useContext(RacesCtx);
+  // const { racesCtx, setRacesCtx } = useContext(RacesCtx);
   const [racesArray, setRacesArray] = useStorage("racesArray");
   // const { raceCtx, setRaceCtx, racesCtx, setRacesCtx } = useContext(RacesCtx);
 
@@ -66,8 +69,16 @@ export default function Races(props) {
           {/* Sub header buttons */}
           <FadeInSlideLeft>
             <Flex gap={2}>
-              <ToolIconBtn action={() => route("/series/edit")} label="Edit Series" icon={EditIcon} />
-              <ToolIconBtn action={addRaceHandler} label="Add Race" icon={AddToPhotosOutlinedIcon} />
+              <ToolIconBtn
+                action={() => route("/series/edit")}
+                label="Edit Series"
+                icon={EditIcon}
+              />
+              <ToolIconBtn
+                action={addRaceHandler}
+                label="Add Race"
+                icon={AddToPhotosOutlinedIcon}
+              />
             </Flex>
           </FadeInSlideLeft>
         </Flex>
@@ -80,7 +91,14 @@ export default function Races(props) {
             <Progress size="xs" isIndeterminate top={-5} />
           ) : (
             <Fragment>
-              {races && races.docs.map((race) => <RaceItem key={race.id} race={race} setRaceId={setRaceId}></RaceItem>)}
+              {races &&
+                races.docs.map((race) => (
+                  <RaceItem
+                    key={race.id}
+                    race={race}
+                    setRaceId={setRaceId}
+                  ></RaceItem>
+                ))}
             </Fragment>
           )}
         </Box>
