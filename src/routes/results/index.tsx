@@ -2,7 +2,10 @@ import { Box, Divider, Heading, Progress } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
 import { collection, doc } from "firebase/firestore";
-import { useCollectionData, useDocumentData } from "react-firebase-hooks/firestore";
+import {
+  useCollectionData,
+  useDocumentData,
+} from "react-firebase-hooks/firestore";
 import { db } from "../../util/firebase-config";
 // customs
 import useStorage from "../../hooks/useStorage";
@@ -108,7 +111,6 @@ export default function Result(props) {
         data && (
           <Fragment>
             <FleetsTables
-              sailed={raceDoc?.sailed}
               race={raceDoc}
               tableData={tableData}
               serInfo={serInfo}

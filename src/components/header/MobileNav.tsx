@@ -34,7 +34,11 @@ interface MobileProps extends FlexProps {
   headerTitle: string;
 }
 
-export default function MobileNav({ onOpen, headerTitle, ...rest }: MobileProps) {
+export default function MobileNav({
+  onOpen,
+  headerTitle,
+  ...rest
+}: MobileProps) {
   // Need to get user from the db instead
   const [user, userLoading] = useAuthState(auth);
 
@@ -83,7 +87,13 @@ export default function MobileNav({ onOpen, headerTitle, ...rest }: MobileProps)
           onClick={onOpen}
         />
 
-        <Text display={{ base: "flex", md: "none" }} fontSize="2xl" color="white" ml={4}>
+        <Text
+          display={{ base: "flex", md: "none" }}
+          fontSize="2xl"
+          fontWeight="semibold"
+          color="white"
+          ml={4}
+        >
           {headerTitle}
         </Text>
       </Flex>
@@ -93,7 +103,7 @@ export default function MobileNav({ onOpen, headerTitle, ...rest }: MobileProps)
           {/* This is the right menu */}
           <ColorModeToggle
             aria-label="Color Mode"
-            color={"white"}
+            color="white"
             variant="ghost"
             _hover={{ bgColor: "transparent" }}
             _active={{ bgColor: "transparent" }}
@@ -118,14 +128,27 @@ export default function MobileNav({ onOpen, headerTitle, ...rest }: MobileProps)
         {userInfo && (
           <Flex alignItems={"center"}>
             <Menu>
-              <MenuButton py={2} transition="all 0.3s" _focus={{ boxShadow: "none" }}>
+              <MenuButton
+                py={2}
+                transition="all 0.3s"
+                _focus={{ boxShadow: "none" }}
+              >
                 <HStack>
                   <Avatar
                     size={"sm"}
                     name={userInfo?.nickname ? userInfo.nickname : "Unknown"}
-                    src={userInfo?.photoURL ? userInfo.photoURL : "../assets/icons/favicon-16x16.png"}
+                    src={
+                      userInfo?.photoURL
+                        ? userInfo.photoURL
+                        : "../assets/icons/favicon-16x16.png"
+                    }
                   />
-                  <VStack display={{ base: "none", md: "flex" }} alignItems="flex-start" spacing="1px" ml="2">
+                  <VStack
+                    display={{ base: "none", md: "flex" }}
+                    alignItems="flex-start"
+                    spacing="1px"
+                    ml="2"
+                  >
                     <Text fontSize="sm" color={"white"}>
                       {userInfo?.nickname}
                     </Text>
@@ -154,7 +177,13 @@ export default function MobileNav({ onOpen, headerTitle, ...rest }: MobileProps)
                         textDecor: "none",
                       }}
                     >
-                      <MenuItem _hover={{ color: useColorModeValue("gray.700", "gray.100") }}>Profile</MenuItem>
+                      <MenuItem
+                        _hover={{
+                          color: useColorModeValue("gray.700", "gray.100"),
+                        }}
+                      >
+                        Profile
+                      </MenuItem>
                     </Link>
 
                     <Link

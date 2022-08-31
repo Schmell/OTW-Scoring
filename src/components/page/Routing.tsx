@@ -29,23 +29,7 @@ interface IRouting {
   [x: string | number]: any;
 }
 
-interface IRacesContext {
-  raceCtx?: {};
-  setRaceCtx?: any;
-  racesCtx: {};
-  setRacesCtx: any;
-}
-
-export const RacesCtx = createContext({} as IRacesContext);
-// export const RacesCtx = createContext("");
-
 const Routing: FC<IRouting> = (props) => {
-  // console.log(props);
-  const [raceCtx, setRaceCtx] = useState({});
-  const [racesCtx, setRacesCtx] = useState({});
-
-  const racesContextProvider = useMemo(() => ({ raceCtx, setRaceCtx, racesCtx, setRacesCtx }), [raceCtx, racesCtx]);
-
   return (
     <Router>
       <Route path="/" component={Home} {...props} />
@@ -54,7 +38,11 @@ const Routing: FC<IRouting> = (props) => {
 
       {/* <RacesCtx.Provider value={racesContextProvider}> */}
       <Route path="/import" component={Import} {...props} />
-      <Route path="/result/:seriesId/:raceId/:raceName" component={Result} {...props} />
+      <Route
+        path="/result/:seriesId/:raceId/:raceName"
+        component={Result}
+        {...props}
+      />
       {/* </RacesCtx.Provider> */}
 
       <Route path="/series" component={Series} {...props} />

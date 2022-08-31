@@ -1,4 +1,11 @@
-import { BoxProps, Box, useColorModeValue, Flex, CloseButton, Text } from "@chakra-ui/react";
+import {
+  BoxProps,
+  Box,
+  useColorModeValue,
+  Flex,
+  CloseButton,
+  Text,
+} from "@chakra-ui/react";
 import { h } from "preact";
 import { Link as PLink } from "preact-router";
 // import { IconType } from "react-icons";
@@ -17,7 +24,11 @@ interface SidebarProps extends BoxProps {
   headerTitle: string;
 }
 
-export default function SidebarContent({ onClose, headerTitle, ...rest }: SidebarProps) {
+export default function SidebarContent({
+  onClose,
+  headerTitle,
+  ...rest
+}: SidebarProps) {
   const LinkItems = [
     { name: "Home", icon: Home, href: "/" },
     { name: "Import", icon: MdCloudUpload, href: "/import" },
@@ -52,7 +63,7 @@ export default function SidebarContent({ onClose, headerTitle, ...rest }: Sideba
         w={"100%"}
         mb={4}
       >
-        <Text fontSize="2xl" mx={8}>
+        <Text fontSize="2xl" fontWeight="semibold" mx={8}>
           {headerTitle}
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
