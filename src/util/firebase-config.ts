@@ -3,21 +3,29 @@ import { initializeApp } from "firebase/app";
 import { connectAuthEmulator, getAuth } from "firebase/auth";
 import {
   connectFirestoreEmulator,
-  doc,
   enableIndexedDbPersistence,
   getFirestore,
 } from "firebase/firestore";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
 
+// const firebaseConfig = {
+//   apiKey: "AIzaSyC7SFX9Qyr_b4AMGlM6bAUiG3BZBrh72B8",
+//   authDomain: "schmell-first-try.firebaseapp.com",
+//   databaseURL: "https://schmell-first-try-default-rtdb.firebaseio.com",
+//   projectId: "schmell-first-try",
+//   storageBucket: "schmell-first-try.appspot.com",
+//   messagingSenderId: "464776014382",
+//   appId: "1:464776014382:web:8667afbe5dec4c4408cdbf",
+//   measurementId: "G-Q077CT5BYW"
+// };
 const firebaseConfig = {
-  apiKey: "AIzaSyC7SFX9Qyr_b4AMGlM6bAUiG3BZBrh72B8",
-  authDomain: "schmell-first-try.firebaseapp.com",
-  databaseURL: "https://schmell-first-try-default-rtdb.firebaseio.com",
-  projectId: "schmell-first-try",
-  storageBucket: "schmell-first-try.appspot.com",
-  messagingSenderId: "464776014382",
-  appId: "1:464776014382:web:8667afbe5dec4c4408cdbf",
-  measurementId: "G-Q077CT5BYW"
+  apiKey: "AIzaSyCbGouPxwVKd5GkLJAoNGMhIIlDz2CViw4",
+  authDomain: "otw-scoring.firebaseapp.com",
+  projectId: "otw-scoring",
+  storageBucket: "otw-scoring.appspot.com",
+  messagingSenderId: "96838791893",
+  appId: "1:96838791893:web:65ca4be060160b8bf9285c",
+  measurementId: "G-C492SFLJ7P"
 };
 
 export const app = initializeApp(firebaseConfig);
@@ -31,7 +39,7 @@ if (location.hostname === "localhost"){
   connectAuthEmulator(auth, "http://localhost:9099");
   connectStorageEmulator(storage, "localhost", 9199);
 }else{
-  // const app = initializeApp(firebaseConfig);
+  const app = initializeApp(firebaseConfig);
 }
 
 
