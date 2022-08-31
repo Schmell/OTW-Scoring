@@ -9,3 +9,5 @@ It utilizes realtime data subriscriptions so that all will be viewing the absolu
 ### Installation:
 
 This application can be installed simply by navigating to the url and you will be presented with the option to install on your device or you can just continue to use it in the browser if you wish.
+
+you can try at here
