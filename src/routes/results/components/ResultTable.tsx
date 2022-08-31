@@ -11,6 +11,12 @@ import {
   Spinner,
   Text,
 } from "@chakra-ui/react";
+import {
+  Editable,
+  EditableInput,
+  EditableTextarea,
+  EditablePreview,
+} from "@chakra-ui/react";
 // Chakra hooks
 import {
   useColorModeValue,
@@ -158,6 +164,7 @@ function FleetTable(props: TableProps) {
         accessorKey: "helmname",
         id: "helmname",
         enableHiding: true,
+        header: () => "Skipper",
         cell: (info) => {
           return (
             <Link href={`/competitors/${info.row.original?.id}`}>
@@ -315,7 +322,7 @@ function FleetTable(props: TableProps) {
 
     const setSortingColumns = () => {
       let sortCols = [{ id: resultType, desc: false }];
-      console.log("race?.sailed : ", race?.sailed);
+      // console.log("race?.sailed : ", race?.sailed);
       if (race?.sailed !== "1") {
         sortCols = [{ id: "nett", desc: false }];
       }
@@ -447,9 +454,10 @@ function FleetTable(props: TableProps) {
                       <Th
                         key={header.id}
                         colSpan={header.colSpan}
-                        color="gray.700"
+                        color="gray.600"
                         fontSize="sm"
-                        h={16}
+                        fontWeight="extrabold"
+                        h={14}
                       >
                         {header.isPlaceholder ? null : (
                           <Flex
@@ -467,6 +475,7 @@ function FleetTable(props: TableProps) {
                                 ? ""
                                 : "center"
                             }
+                            alignItems="center"
                           >
                             <Flex>
                               <Box>
@@ -502,9 +511,20 @@ function FleetTable(props: TableProps) {
                     {row.getVisibleCells().map((cell) => {
                       return (
                         <Td key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
+                          {cell.getContext().column.id !== "finish" &&
+                          cell.getContext().column.id !== "elapsed" ? (
+                            flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )
+                          ) : (
+                            <Editable
+                              defaultValue={cell.getValue()}
+                              textAlign="center"
+                            >
+                              <EditablePreview />
+                              <EditableInput type="time" />
+                            </Editable>
                           )}
                         </Td>
                       );

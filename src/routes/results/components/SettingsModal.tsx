@@ -1,34 +1,35 @@
 import {
+  chakra,
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  Heading,
-  RadioGroup,
-  Stack,
-  Radio,
-  Divider,
   ModalFooter,
-  Button,
-  useRadio,
-  chakra,
-  Box,
-  Image,
-  Input,
+  Stack,
+  Divider,
   Flex,
+  Box,
+  Button,
+  Input,
+  Radio,
   FormControl,
   FormErrorMessage,
   FormLabel,
+  ButtonGroup,
+  RadioGroup,
+  useRadio,
   useColorModeValue,
+  HStack,
 } from "@chakra-ui/react";
-import { doc, updateDoc } from "firebase/firestore";
-import { Field, Form, Formik } from "formik";
 import { Fragment, h } from "preact";
 import { StateUpdater, useEffect } from "preact/hooks";
-import useStorage from "../../../hooks/useStorage";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../util/firebase-config";
+import { Field, Form, Formik } from "formik";
+import SecBtn from "../../../components/generic/SecBtn";
+import useStorage from "../../../hooks/useStorage";
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -68,7 +69,9 @@ export default function SettingsModal({
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader bgColor={useColorModeValue("blue.200", "blue.800")}>Settings</ModalHeader>
+        <ModalHeader bgColor={useColorModeValue("blue.200", "blue.800")}>
+          Settings
+        </ModalHeader>
         <ModalCloseButton />
         <Formik
           initialValues={{
@@ -80,31 +83,48 @@ export default function SettingsModal({
           <Form>
             <ModalBody>
               <Field name="rowTitle">
-                {({ field, form }) => (
-                  <FormControl isInvalid={form.errors.name && form.touched.name}>
+                {({ field, form, values }) => (
+                  <FormControl
+                    isInvalid={form.errors.name && form.touched.name}
+                  >
                     <FormLabel htmlFor="rowTitle">Row Title</FormLabel>
 
                     <RadioGroup
                       {...field}
                       id="rowTitle"
                       onChange={(val) => {
-                        console.log("resultType: ", resultType);
                         setResultType(resultType);
                         setRowTitle(val);
+                        handleSubmit(values);
                       }}
                       value={rowTitle}
                     >
-                      <Stack direction="row">
-                        <Field type="radio" name="rowTitle" value="boat" as={Radio}>
+                      <HStack>
+                        <Field
+                          type="radio"
+                          name="rowTitle"
+                          value="boat"
+                          as={Radio}
+                        >
                           Boat
                         </Field>
-                        <Field type="radio" name="rowTitle" value="helmname" as={Radio}>
-                          Helm
+                        <Field
+                          type="radio"
+                          name="rowTitle"
+                          value="helmname"
+                          as={Radio}
+                        >
+                          Skipper
                         </Field>
-                        <Field type="radio" name="rowTitle" value="sailno" as={Radio}>
-                          SailNo.
+                        <Field
+                          type="radio"
+                          name="rowTitle"
+                          value="sailno"
+                          as={Radio}
+                        >
+                          Sail no.
                         </Field>
-                      </Stack>
+                      </HStack>
                     </RadioGroup>
 
                     <FormErrorMessage>{form.errors.name}</FormErrorMessage>
@@ -117,7 +137,9 @@ export default function SettingsModal({
 
               <Field name="resultType">
                 {({ field, form }) => (
-                  <FormControl isInvalid={form.errors.name && form.touched.name}>
+                  <FormControl
+                    isInvalid={form.errors.name && form.touched.name}
+                  >
                     <FormLabel htmlFor="resultType">View Column</FormLabel>
 
                     <RadioGroup
@@ -130,16 +152,37 @@ export default function SettingsModal({
                       value={resultType}
                     >
                       <Stack direction="row">
-                        <Field type="radio" name="resultType" value="points" as={Radio}>
+                        <Field
+                          type="radio"
+                          name="resultType"
+                          value="points"
+                          as={Radio}
+                        >
                           Points
                         </Field>
-                        <Field type="radio" name="resultType" value="elapsed" as={Radio}>
+                        <Field
+                          type="radio"
+                          name="resultType"
+                          value="elapsed"
+                          as={Radio}
+                        >
                           Elapsed
                         </Field>
-                        <Field type="radio" name="resultType" value="corrected" as={Radio}>
+                        <Field
+                          type="radio"
+                          name="resultType"
+                          value="corrected"
+                          as={Radio}
+                        >
                           Corrected
                         </Field>
-                        <Field type="radio" name="resultType" io value="finish" as={Radio}>
+                        <Field
+                          type="radio"
+                          name="resultType"
+                          io
+                          value="finish"
+                          as={Radio}
+                        >
                           Finish
                         </Field>
                       </Stack>
@@ -153,7 +196,12 @@ export default function SettingsModal({
 
             <ModalFooter>
               <Flex>
-                <Button type="submit" colorScheme="blue" variant="outline" mr={3}>
+                <Button
+                  type="submit"
+                  variant="outline"
+                  mr={3}
+                  onClick={handleSetForSeries}
+                >
                   Set for Series
                 </Button>
                 <Button colorScheme="blue" mr={3} onClick={onClose}>
@@ -170,7 +218,8 @@ export default function SettingsModal({
 
 function RadioButton(props) {
   const { value, children, ...radioProps } = props;
-  const { state, getInputProps, getCheckboxProps, htmlProps, getLabelProps } = useRadio(radioProps);
+  const { state, getInputProps, getCheckboxProps, htmlProps, getLabelProps } =
+    useRadio(radioProps);
   return (
     <Fragment>
       <chakra.label {...htmlProps} cursor="pointer">

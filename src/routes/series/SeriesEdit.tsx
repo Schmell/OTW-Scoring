@@ -1,10 +1,32 @@
 import { Fragment, h } from "preact";
 import { useState } from "preact/hooks";
 // Chakra
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel } from "@chakra-ui/react";
-import { Button, Input, Radio, RadioGroup, Editable, EditableInput, EditablePreview } from "@chakra-ui/react";
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+} from "@chakra-ui/react";
+import {
+  Button,
+  Input,
+  Radio,
+  RadioGroup,
+  Editable,
+  EditableInput,
+  EditablePreview,
+} from "@chakra-ui/react";
 import { FormControl, FormErrorMessage, FormLabel } from "@chakra-ui/react";
-import { Box, Divider, Flex, Heading, HStack, Text, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Divider,
+  Flex,
+  Heading,
+  HStack,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 // Firebase
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { useDocumentData } from "react-firebase-hooks/firestore";
@@ -29,7 +51,9 @@ const SeriesEdit = ({ setHeaderTitle }) => {
 
   const submitHandler = async (values: any) => {
     // Remove undefined's
-    Object.keys(values).forEach((key) => (values[key] === undefined ? delete values[key] : {}));
+    Object.keys(values).forEach((key) =>
+      values[key] === undefined ? delete values[key] : {}
+    );
     // here we may need to add modified flag or something
     values.lastModified = serverTimestamp();
     // update the firestore doc
@@ -75,7 +99,10 @@ const SeriesEdit = ({ setHeaderTitle }) => {
             <Flex justifyContent="space-between" alignItems="end">
               <FadeInSlideRight>
                 <Heading as="h5" color="blue.400" mx={4}>
-                  <Editable defaultValue={currentSeries.event} isPreviewFocusable={true}>
+                  <Editable
+                    defaultValue={currentSeries.event}
+                    isPreviewFocusable={true}
+                  >
                     <EditablePreview />
                     <EditableInput
                       name="event"
@@ -112,26 +139,56 @@ const SeriesEdit = ({ setHeaderTitle }) => {
                     {/* <FormLabel htmlFor="resutlType">Series name</FormLabel> */}
                     <Field name="resultType">
                       {({ field, form }) => (
-                        <FormControl isInvalid={form.errors.name && form.touched.name}>
-                          <FormLabel htmlFor="resultType">Default result type</FormLabel>
+                        <FormControl
+                          isInvalid={form.errors.name && form.touched.name}
+                        >
+                          <FormLabel htmlFor="resultType">
+                            Default result type
+                          </FormLabel>
 
-                          <RadioGroup {...field} id="resultType" colorScheme="blue">
+                          <RadioGroup
+                            {...field}
+                            id="resultType"
+                            colorScheme="blue"
+                          >
                             <HStack>
-                              <Field type="radio" name="resultType" value="points" as={Radio}>
-                                Position
+                              <Field
+                                type="radio"
+                                name="resultType"
+                                value="points"
+                                as={Radio}
+                              >
+                                Points
                               </Field>
-                              <Field type="radio" name="resultType" value="elapsed" as={Radio}>
+                              <Field
+                                type="radio"
+                                name="resultType"
+                                value="elapsed"
+                                as={Radio}
+                              >
                                 Elapsed
                               </Field>
-                              <Field type="radio" name="resultType" value="finish" as={Radio}>
+                              <Field
+                                type="radio"
+                                name="resultType"
+                                value="finish"
+                                as={Radio}
+                              >
                                 Finishes
                               </Field>
-                              <Field type="radio" name="resultType" value="corrected" as={Radio}>
+                              <Field
+                                type="radio"
+                                name="resultType"
+                                value="corrected"
+                                as={Radio}
+                              >
                                 Corrected
                               </Field>
                             </HStack>
                           </RadioGroup>
-                          <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+                          <FormErrorMessage>
+                            {form.errors.name}
+                          </FormErrorMessage>
                         </FormControl>
                       )}
                     </Field>
@@ -141,23 +198,48 @@ const SeriesEdit = ({ setHeaderTitle }) => {
                     {/* <FormLabel htmlFor="resutlType">Series name</FormLabel> */}
                     <Field name="rowTitle">
                       {({ field, form }) => (
-                        <FormControl isInvalid={form.errors.name && form.touched.name}>
-                          <FormLabel htmlFor="resultType">Default row title</FormLabel>
+                        <FormControl
+                          isInvalid={form.errors.name && form.touched.name}
+                        >
+                          <FormLabel htmlFor="resultType">
+                            Default row title
+                          </FormLabel>
 
-                          <RadioGroup {...field} id="rowTitle" colorScheme="blue">
+                          <RadioGroup
+                            {...field}
+                            id="rowTitle"
+                            colorScheme="blue"
+                          >
                             <HStack>
-                              <Field type="radio" name="rowTitle" value="boat" as={Radio}>
+                              <Field
+                                type="radio"
+                                name="rowTitle"
+                                value="boat"
+                                as={Radio}
+                              >
                                 Boat
                               </Field>
-                              <Field type="radio" name="rowTitle" value="helmname" as={Radio}>
-                                Helm
+                              <Field
+                                type="radio"
+                                name="rowTitle"
+                                value="helmname"
+                                as={Radio}
+                              >
+                                Skipper
                               </Field>
-                              <Field type="radio" name="rowTitle" value="sailno" as={Radio}>
+                              <Field
+                                type="radio"
+                                name="rowTitle"
+                                value="sailno"
+                                as={Radio}
+                              >
                                 Sail no.
                               </Field>
                             </HStack>
                           </RadioGroup>
-                          <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+                          <FormErrorMessage>
+                            {form.errors.name}
+                          </FormErrorMessage>
                         </FormControl>
                       )}
                     </Field>
@@ -236,7 +318,9 @@ const SeriesEdit = ({ setHeaderTitle }) => {
 
                     <Divider mt={3} />
 
-                    <FormLabel htmlFor="lastModifiedDate">Last Modified Date</FormLabel>
+                    <FormLabel htmlFor="lastModifiedDate">
+                      Last Modified Date
+                    </FormLabel>
                     <Field name="lastModifiedDate" as={Input} />
 
                     <Divider mt={3} />

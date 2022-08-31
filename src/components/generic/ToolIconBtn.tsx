@@ -10,7 +10,7 @@ interface ToolIconBtnProps {
 }
 
 export default function ToolIconBtn<ToolIconBtnProps>(props) {
-  const { action, icon, label, disabled } = props;
+  const { action, icon, label, disabled, ...rest } = props;
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -29,6 +29,7 @@ export default function ToolIconBtn<ToolIconBtnProps>(props) {
             aria-label={label}
             icon={(<Icon as={icon} boxSize={7} />) as any} // not sure why??
             onClick={action}
+            {...rest}
           />
         </Tooltip>
       )}

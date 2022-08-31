@@ -1,7 +1,7 @@
 import { h } from "preact";
 import { Button, ButtonProps, useColorMode } from "@chakra-ui/react";
-import MdDarkModeIcon from "@mui/icons-material/DarkMode";
-import MdLightModeIcon from "@mui/icons-material/LightMode";
+import MdDarkModeIcon from "@mui/icons-material/DarkModeOutlined";
+import MdLightModeIcon from "@mui/icons-material/LightModeOutlined";
 
 export default function ColorModeToggle(props: ButtonProps) {
   const { colorMode, toggleColorMode } = useColorMode();

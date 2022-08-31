@@ -1,16 +1,35 @@
 import { h } from "preact";
 import { route } from "preact-router";
 import { useEffect, useState } from "preact/hooks";
-import { collection, deleteDoc, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../util/firebase-config";
-import { Box, Button, Divider, Flex, Heading, Text } from "@chakra-ui/react";
+import {
+  background,
+  border,
+  Box,
+  Button,
+  ButtonGroup,
+  Divider,
+  Flex,
+  Heading,
+  Text,
+} from "@chakra-ui/react";
 import fileDialog from "file-dialog";
 //
 import PriBtn from "../../components/generic/PriBtn";
 import ImportList from "./ImportList";
 import { importFileObj } from "./importTypes";
 import { Populate } from "./populate";
+import SecBtn from "../../components/generic/SecBtn";
+import BtnGrp from "../../components/generic/ButtonGroup";
+import { Form, Formik } from "formik";
 
 const Import = ({ setHeaderTitle }) => {
   setHeaderTitle("Import");
@@ -19,6 +38,12 @@ const Import = ({ setHeaderTitle }) => {
 
   const [duplicates, setDuplicates] = useState([{} as importFileObj]);
   const [newSeries, setNewSeries] = useState([{} as importFileObj]);
+
+  const [selectedButton, setSelectedButton] = useState("");
+
+  useEffect(() => {
+    console.log("selectedButton: ", selectedButton);
+  }, [selectedButton]);
 
   const showDialog = async () => {
     return await fileDialog({ multiple: true, accept: ".blw" });
@@ -122,16 +147,24 @@ const Import = ({ setHeaderTitle }) => {
     <Box px={2}>
       <Flex justifyContent={"space-between"}>
         <Heading color="blue.400">Select File</Heading>
-        <Button variant={"outline"} boxShadow="md" colorScheme={"blue"} onClick={handleChooseFile}>
-          Choose File(s)
-        </Button>
+        <SecBtn onClick={handleChooseFile}>Choose File(s)</SecBtn>
       </Flex>
 
       <Divider my={4} />
 
-      <ImportList listItems={duplicates} listState={duplicates} setListState={setDuplicates} duplicates={true} />
+      <ImportList
+        listItems={duplicates}
+        listState={duplicates}
+        setListState={setDuplicates}
+        duplicates={true}
+      />
 
-      <ImportList listItems={newSeries} listState={newSeries} setListState={setNewSeries} duplicates={false} />
+      <ImportList
+        listItems={newSeries}
+        listState={newSeries}
+        setListState={setNewSeries}
+        duplicates={false}
+      />
 
       {newSeries.find((ups) => {
         if (ups.name) return true;
@@ -152,7 +185,94 @@ const Import = ({ setHeaderTitle }) => {
         </Box>
       ) : (
         <Box>
-          <Text as="p">Use the choose files button to select your Sailwave file(s) to import</Text>
+          <Formik
+            onSubmit={(vals) => {
+              console.log("values: ", vals);
+            }}
+            initialValues={{
+              labels: selectedButton,
+              resultType: selectedButton,
+            }}
+          >
+            {({
+              values: { labels },
+              setFieldValue,
+              handleChange,
+              submitForm,
+            }) => {
+              return (
+                <Form>
+                  <BtnGrp
+                    labels={["points", "elapsed", "corrected", "finishes"]}
+                    mb={2}
+                    size="sm"
+                    onChange={handleChange}
+                    setSelectedButton={setSelectedButton}
+                    selectedButton={selectedButton}
+                    // name="resultType"
+                  />
+                  <Divider m={4} />
+
+                  <ButtonGroup isAttached>
+                    <Button
+                      name="resultType"
+                      onClick={(e) => {
+                        console.log("e: ", e.target);
+                        setSelectedButton("one");
+                      }}
+                      borderRight={"none"}
+                      isActive={selectedButton === "one" ? true : false}
+                      _active={{
+                        boxShadow: "none",
+                        background: "blue.100",
+                        color: "blue.600",
+                      }}
+                    >
+                      one
+                    </Button>
+                    <Button
+                      name="resultType"
+                      onClick={(e) => {
+                        console.log("e: ", e.target);
+                        setSelectedButton("two");
+                      }}
+                      borderRight={"none"}
+                      isActive={selectedButton === "two" ? true : false}
+                      _active={{
+                        boxShadow: "none",
+                        background: "blue.100",
+                        color: "blue.600",
+                      }}
+                    >
+                      two
+                    </Button>
+                    <Button
+                      name="resultType"
+                      onClick={(e) => {
+                        console.log("e: ", e.target);
+                        setSelectedButton("three");
+                      }}
+                      // borderRight={"none"}
+                      isActive={selectedButton === "three" ? true : false}
+                      _active={{
+                        boxShadow: "none",
+                        background: "blue.100",
+                        color: "blue.600",
+                      }}
+                    >
+                      three
+                    </Button>
+                  </ButtonGroup>
+                  <Divider m={4} />
+                  <Button type="submit"> go </Button>
+                </Form>
+              );
+            }}
+          </Formik>
+          <Text as="p">
+            Use the choose files button to select your Sailwave file(s) to
+            import
+          </Text>
         </Box>
       )}
     </Box>
