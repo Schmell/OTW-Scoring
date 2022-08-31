@@ -103,7 +103,7 @@ export default function MobileNav({
           {/* This is the right menu */}
           <ColorModeToggle
             aria-label="Color Mode"
-            color={"white"}
+            color="white"
             variant="ghost"
             _hover={{ bgColor: "transparent" }}
             _active={{ bgColor: "transparent" }}
