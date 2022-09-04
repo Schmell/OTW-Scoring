@@ -1,0 +1,37 @@
+/* @import "https://unpkg.com/open-props"; */
+
+* {
+  box-sizing: border-box;
+}
+
+
+a {
+  text-decoration: none;
+  color: var(--gray-9);
+}
+
+#preact_root {
+  height: 100%;
+  margin: auto;
+ 
+}
+
+
+h1,
+h2,
+h3 {
+  line-height: var(--font-lineheight-0);
+  padding-block: var(--size-0);
+  margin-block: var(--size-1);
+}
+
+.page {
+  /* padding-block: var(--size-8); */
+  
+  overflow: hidden;
+  /* margin-inline: auto; */
+  /* min-height: 100%; */
+} 
+
+
+

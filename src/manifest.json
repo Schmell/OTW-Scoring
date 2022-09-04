@@ -1,0 +1,21 @@
+{
+  "name": "On The Water Scoring",
+  "short_name": "OTW-RC",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#fff",
+  "theme_color": "#3182CE",
+  "icons": [
+    {
+      "src": "/assets/icons/xxxhdpi.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/assets/icons/GooglePlayStore.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
