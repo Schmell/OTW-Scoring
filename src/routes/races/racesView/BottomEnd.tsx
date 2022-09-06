@@ -1,7 +1,6 @@
-import { Tooltip, IconButton, Icon, Button, Box, Text, Flex } from "@chakra-ui/react";
-import { Fragment, h } from "preact";
+import { Flex, Text } from "@chakra-ui/react";
+import { Fragment } from "preact";
 // Icons
-import SailingIcon from "@mui/icons-material/Sailing";
 
 export default function BottomEnd({ race }) {
   return (

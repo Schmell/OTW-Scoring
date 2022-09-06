@@ -102,7 +102,7 @@ export default function Series(props) {
               textItems={{
                 head: series.data().event,
                 sub: series.data().venue,
-                foot: series.data().venuewebsite,
+                foot: series.data().venuewebsite || series.data().email,
               }}
               // data={series}
             >

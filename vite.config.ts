@@ -6,14 +6,14 @@ import { VitePWA } from 'vite-plugin-pwa'
 export default defineConfig({
   plugins: [
     preact(),
-  //   VitePWA({ 
-  //     registerType: 'autoUpdate',
-  //     devOptions: {
-  //       enabled: true
-  //     },
-  //     workbox: {
-  //       globPatterns: ['**/*.{js,css,html,ico,png,svg}']
-  //     }
-  // })
+    VitePWA({ 
+      registerType: 'autoUpdate',
+      devOptions: {
+        enabled: true
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}']
+      }
+  })
   ]
 })
