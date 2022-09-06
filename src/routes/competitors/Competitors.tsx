@@ -1,5 +1,4 @@
 import {
-  Box,
   Container,
   Divider,
   Flex,
@@ -10,23 +9,14 @@ import {
   ListItem,
   Spinner,
 } from "@chakra-ui/react";
-import { Fragment, h } from "preact";
+import { Fragment } from "preact";
 import { FadeInSlideRight } from "../../components/animations/FadeSlide";
 // import { MdLibraryAdd } from "react-icons/md";
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
-import {
-  query,
-  collectionGroup,
-  where,
-  orderBy,
-  collection,
-} from "firebase/firestore";
-import { db } from "../../util/firebase-config";
-import {
-  useCollection,
-  useCollectionData,
-} from "react-firebase-hooks/firestore";
+import { collectionGroup, orderBy, query } from "firebase/firestore";
 import { useMemo } from "preact/hooks";
+import { useCollection } from "react-firebase-hooks/firestore";
+import { db } from "../../util/firebase-config";
 
 export default function Competitors({ user, setHeaderTitle }) {
   setHeaderTitle("Competitors");

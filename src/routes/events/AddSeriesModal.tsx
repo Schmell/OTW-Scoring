@@ -1,7 +1,9 @@
 import {
   Box,
-  Checkbox,
   Flex,
+  Checkbox,
+  Spinner,
+  Text,
   List,
   ListItem,
   Modal,
@@ -11,8 +13,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Spinner,
-  Text,
 } from "@chakra-ui/react";
 import { collection, doc, query, updateDoc, where } from "firebase/firestore";
 import { Fragment, h } from "preact";

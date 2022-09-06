@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Divider,
   Editable,
   EditableInput,
@@ -11,16 +10,17 @@ import {
   useToast,
   VisuallyHidden,
 } from "@chakra-ui/react";
-import { Fragment, h } from "preact";
-import { route } from "preact-router";
-import { useEffect, useState } from "preact/hooks";
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
-import { useDocumentData } from "react-firebase-hooks/firestore";
 import { Field, Form, Formik } from "formik";
+import { Fragment } from "preact";
+import { useEffect, useState } from "preact/hooks";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 import {
   FadeIn,
   FadeInSlideRight,
 } from "../../components/animations/FadeSlide";
+import PriBtn from "../../components/generic/PriBtn";
+import SecBtn from "../../components/generic/SecBtn";
 import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
 import { formatDate, formatTime } from "../../util/formatters";
@@ -30,8 +30,6 @@ import { Notes } from "./raceEdit/Notes";
 import { ResultType } from "./raceEdit/ResultType";
 import { Sailed } from "./raceEdit/Sailed";
 import { Starts } from "./raceEdit/Starts";
-import PriBtn from "../../components/generic/PriBtn";
-import SecBtn from "../../components/generic/SecBtn";
 // import style from "./style.css";
 
 export default function RaceEdit({ setHeaderTitle }) {

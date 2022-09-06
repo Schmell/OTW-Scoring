@@ -1,22 +1,12 @@
-import {
-  Box,
-  Divider,
-  Flex,
-  Heading,
-  Icon,
-  IconButton,
-  Tooltip,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Divider, Flex, Heading, useDisclosure } from "@chakra-ui/react";
 import { addDoc, collection, query, where } from "firebase/firestore";
-import { Fragment, h } from "preact";
+import { Fragment } from "preact";
 import { route } from "preact-router";
 import { useCollection } from "react-firebase-hooks/firestore";
 import {
   FadeInSlideLeft,
   FadeInSlideRight,
 } from "../../components/animations/FadeSlide";
-import { AreYouSure } from "../../components/generic/AreYouSure";
 import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
 // Icons

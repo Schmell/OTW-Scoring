@@ -1,5 +1,4 @@
-import { h } from "preact";
-import { Box, HStack, Stack, useRadioGroup } from "@chakra-ui/react";
+import { HStack, Stack, useRadioGroup } from "@chakra-ui/react";
 import { IconRadio } from "./IconRadio";
 // Icons
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";

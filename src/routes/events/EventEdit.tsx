@@ -1,24 +1,22 @@
 import {
   Box,
-  Button,
   Divider,
   Flex,
   FormLabel,
-  forwardRef,
   Heading,
   Input,
   useToast,
 } from "@chakra-ui/react";
-import { Fragment, h } from "preact";
-import { route } from "preact-router";
-import { useEffect, useRef } from "preact/hooks";
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { Field, Form, Formik } from "formik";
+import { Fragment } from "preact";
+import { route } from "preact-router";
+import { useRef } from "preact/hooks";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { db } from "../../util/firebase-config";
-import { Field, Form, Formik, useFormik } from "formik";
 import { FadeInSlideRight } from "../../components/animations/FadeSlide";
-import useStorage from "../../hooks/useStorage";
 import ToolIconBtn from "../../components/generic/ToolIconBtn";
+import useStorage from "../../hooks/useStorage";
+import { db } from "../../util/firebase-config";
 // Icons
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 import DeleteIcon from "@mui/icons-material/Delete";
