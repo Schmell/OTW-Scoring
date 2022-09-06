@@ -1,4 +1,14 @@
-import { Box, Button, Divider, Flex, FormLabel, forwardRef, Heading, Input, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Divider,
+  Flex,
+  FormLabel,
+  forwardRef,
+  Heading,
+  Input,
+  useToast,
+} from "@chakra-ui/react";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
 import { useEffect, useRef } from "preact/hooks";
@@ -56,9 +66,7 @@ export default function EventEdit({ user, setHeaderTitle }) {
     <Fragment>
       <Flex justifyContent="space-between" alignItems="end" px={4}>
         <FadeInSlideRight>
-          <Heading as="h4" color="blue.400">
-            Event Edit
-          </Heading>
+          <Heading color="blue.400">Event Edit</Heading>
         </FadeInSlideRight>
 
         <Flex gap={2}>
@@ -70,7 +78,11 @@ export default function EventEdit({ user, setHeaderTitle }) {
             }}
             icon={DeleteIcon}
           />
-          <ToolIconBtn label="Clear form" action={() => {}} icon={ClearAllIcon} />
+          <ToolIconBtn
+            label="Clear form"
+            action={() => {}}
+            icon={ClearAllIcon}
+          />
         </Flex>
       </Flex>
 

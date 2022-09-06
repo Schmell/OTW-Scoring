@@ -38,8 +38,8 @@ export default function BtnGrp({
               isActive={selectedButton === label ? true : false}
               _active={{
                 boxShadow: "none",
-                background: "blue.100",
-                color: "blue.600",
+                // background: "blue.100",
+                // color: "blue.600",
               }}
             >
               {label}

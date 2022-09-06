@@ -1,23 +1,16 @@
 import { Fragment, h } from "preact";
 import { Box, Container, Heading } from "@chakra-ui/react";
-import { FadeInSlideRight, FadeIn } from "../../components/animations/FadeSlide";
+import {
+  FadeInSlideRight,
+  FadeIn,
+} from "../../components/animations/FadeSlide";
 
-const UserLanding = () => {
+export default function UserLanding() {
   return (
     <Fragment>
       <Container>
         <FadeInSlideRight>
-          <Heading
-            as="h3"
-            color="blue.400"
-            // position={"fixed"}
-            w="100%"
-            mt={2}
-            pb={3}
-            // height={"20px"}
-            // bg={"white"}
-            // zIndex="+1"
-          >
+          <Heading color="blue.400" w="100%" mt={2} pb={3}>
             User area
           </Heading>
         </FadeInSlideRight>
@@ -27,5 +20,5 @@ const UserLanding = () => {
       </Container>
     </Fragment>
   );
-};
-export default UserLanding;
+}
+// export default UserLanding;

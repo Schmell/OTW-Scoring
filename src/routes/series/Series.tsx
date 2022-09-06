@@ -1,9 +1,22 @@
-import { Box, Divider, Flex, Heading, Icon, Text, IconButton, Tooltip, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Divider,
+  Flex,
+  Heading,
+  Icon,
+  Text,
+  IconButton,
+  Tooltip,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { addDoc, collection, query, where } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
+import {
+  FadeInSlideLeft,
+  FadeInSlideRight,
+} from "../../components/animations/FadeSlide";
 import { AreYouSure } from "../../components/generic/AreYouSure";
 import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
@@ -21,7 +34,9 @@ export default function Series(props) {
   setHeaderTitle("Series");
   // Get users series
   const seriesRef = collection(db, "series");
-  const [series, seriesLoading] = useCollection(query(seriesRef, where("__owner", "==", user && user.uid)));
+  const [series, seriesLoading] = useCollection(
+    query(seriesRef, where("__owner", "==", user && user.uid))
+  );
   const deleteSeriesDisclosure = useDisclosure();
 
   // useStorage option (modified to be used as context)
@@ -50,16 +65,22 @@ export default function Series(props) {
     <Fragment>
       <Flex justifyContent="space-between" alignItems="end" px={4}>
         <FadeInSlideRight>
-          <Heading as="h4" color="blue.400">
-            All Series
-          </Heading>
+          <Heading color="blue.400">All Series</Heading>
         </FadeInSlideRight>
 
         {/* Sub header buttons */}
         <FadeInSlideLeft>
           <Flex gap={2}>
-            <ToolIconBtn label="Import file" action={() => route("/import")} icon={FileUploadOutlinedIcon} />
-            <ToolIconBtn label="Add Series" action={addSeriesHandler} icon={AddToPhotosOutlinedIcon} />
+            <ToolIconBtn
+              label="Import file"
+              action={() => route("/import")}
+              icon={FileUploadOutlinedIcon}
+            />
+            <ToolIconBtn
+              label="Add Series"
+              action={addSeriesHandler}
+              icon={AddToPhotosOutlinedIcon}
+            />
           </Flex>
         </FadeInSlideLeft>
       </Flex>
@@ -68,12 +89,21 @@ export default function Series(props) {
 
       <SiteList loading={seriesLoading}>
         {series?.docs.map((series) => (
-          <SiteListItem key={series.id} item={series} disclosure={deleteSeriesDisclosure} listType="series">
+          <SiteListItem
+            key={series.id}
+            item={series}
+            disclosure={deleteSeriesDisclosure}
+            listType="series"
+          >
             <SiteListText
               item={series}
               setStorage={setSeriesId}
               forward="races"
-              textItems={{ head: series.data().event, sub: series.data().venue, foot: series.data().venuewebsite }}
+              textItems={{
+                head: series.data().event,
+                sub: series.data().venue,
+                foot: series.data().venuewebsite,
+              }}
               // data={series}
             >
               <SiteListButtons
@@ -83,7 +113,9 @@ export default function Series(props) {
                 disclosure={deleteSeriesDisclosure}
               >
                 <Box>This will delete the series and is not undo-able</Box>
-                <Box>You will loose any work you have done with this Series</Box>
+                <Box>
+                  You will loose any work you have done with this Series
+                </Box>
               </SiteListButtons>
             </SiteListText>
             {/* {console.log(series.id)} */}

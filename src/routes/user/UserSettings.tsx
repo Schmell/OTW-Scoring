@@ -19,10 +19,13 @@ import { doc, updateDoc } from "firebase/firestore";
 import { Field, Form, Formik } from "formik";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { FadeIn, FadeInSlideRight } from "../../components/animations/FadeSlide";
+import {
+  FadeIn,
+  FadeInSlideRight,
+} from "../../components/animations/FadeSlide";
 import { auth, db } from "../../util/firebase-config";
 
-const UserSettings = () => {
+export default function UserSettings() {
   const submittedToast = useToast();
   const [user, userLoading] = useAuthState(auth);
   const docRef = doc(db, "user", user!.uid); // bang
@@ -64,7 +67,7 @@ const UserSettings = () => {
     <Fragment>
       <Container>
         <FadeInSlideRight>
-          <Heading as="h3" color="blue.400" w="100%" mt={2} pb={3}>
+          <Heading color="blue.400" w="100%" mt={2} pb={3}>
             Settings
           </Heading>
         </FadeInSlideRight>
@@ -81,17 +84,40 @@ const UserSettings = () => {
               <Form>
                 <Field name="defaultResultType">
                   {({ field, form }) => (
-                    <FormControl isInvalid={form.errors.name && form.touched.name}>
-                      <FormLabel htmlFor="defaultResultType">Default scoring type</FormLabel>
-                      <RadioGroup {...field} id="defaultResultType" colorScheme="blue">
+                    <FormControl
+                      isInvalid={form.errors.name && form.touched.name}
+                    >
+                      <FormLabel htmlFor="defaultResultType">
+                        Default scoring type
+                      </FormLabel>
+                      <RadioGroup
+                        {...field}
+                        id="defaultResultType"
+                        colorScheme="blue"
+                      >
                         <HStack>
-                          <Field type="radio" name="defaultResultType" value="position" as={Radio}>
+                          <Field
+                            type="radio"
+                            name="defaultResultType"
+                            value="position"
+                            as={Radio}
+                          >
                             Position
                           </Field>
-                          <Field type="radio" name="defaultResultType" value="elapsed" as={Radio}>
+                          <Field
+                            type="radio"
+                            name="defaultResultType"
+                            value="elapsed"
+                            as={Radio}
+                          >
                             Elapsed
                           </Field>
-                          <Field type="radio" name="defaultResultType" value="finish" as={Radio}>
+                          <Field
+                            type="radio"
+                            name="defaultResultType"
+                            value="finish"
+                            as={Radio}
+                          >
                             Finishes
                           </Field>
                         </HStack>
@@ -127,5 +153,5 @@ const UserSettings = () => {
       </Container>
     </Fragment>
   );
-};
-export default UserSettings;
+}
+// export default UserSettings;

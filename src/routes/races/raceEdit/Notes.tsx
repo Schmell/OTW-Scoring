@@ -2,7 +2,7 @@ import { FormLabel, Textarea } from "@chakra-ui/react";
 import { Field } from "formik";
 import { Fragment, h } from "preact";
 
-export const Notes = ({ loading, currentRace }) => {
+export function Notes({ loading, currentRace }) {
   return (
     <Fragment>
       <FormLabel htmlFor="notes">Notes</FormLabel>
@@ -11,4 +11,4 @@ export const Notes = ({ loading, currentRace }) => {
       </Field>
     </Fragment>
   );
-};
+}

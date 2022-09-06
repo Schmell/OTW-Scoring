@@ -1,14 +1,34 @@
-import { Box, Container, Divider, Flex, Heading, Icon, IconButton, List, ListItem, Spinner } from "@chakra-ui/react";
+import {
+  Box,
+  Container,
+  Divider,
+  Flex,
+  Heading,
+  Icon,
+  IconButton,
+  List,
+  ListItem,
+  Spinner,
+} from "@chakra-ui/react";
 import { Fragment, h } from "preact";
 import { FadeInSlideRight } from "../../components/animations/FadeSlide";
 // import { MdLibraryAdd } from "react-icons/md";
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
-import { query, collectionGroup, where, orderBy, collection } from "firebase/firestore";
+import {
+  query,
+  collectionGroup,
+  where,
+  orderBy,
+  collection,
+} from "firebase/firestore";
 import { db } from "../../util/firebase-config";
-import { useCollection, useCollectionData } from "react-firebase-hooks/firestore";
+import {
+  useCollection,
+  useCollectionData,
+} from "react-firebase-hooks/firestore";
 import { useMemo } from "preact/hooks";
 
-const Competitors = ({ user, setHeaderTitle }) => {
+export default function Competitors({ user, setHeaderTitle }) {
   setHeaderTitle("Competitors");
   // trying to get a ref for the users collections
   //   const eventRef = collection(db, "events", )
@@ -34,9 +54,7 @@ const Competitors = ({ user, setHeaderTitle }) => {
     <Fragment>
       <Flex justifyContent="space-between" alignItems="end">
         <FadeInSlideRight>
-          <Heading as="h4" color="blue.400">
-            Select Competitors
-          </Heading>
+          <Heading color="blue.400">Select Competitors</Heading>
         </FadeInSlideRight>
 
         <IconButton
@@ -63,5 +81,5 @@ const Competitors = ({ user, setHeaderTitle }) => {
       </Container>
     </Fragment>
   );
-};
-export default Competitors;
+}
+// export default Competitors;

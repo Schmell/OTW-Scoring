@@ -2,8 +2,6 @@ import {
   Box,
   Button,
   Flex,
-  Icon,
-  IconButton,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -14,9 +12,12 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import CloseIcon from "@mui/icons-material/Close";
-import { ComponentChildren, Fragment, h } from "preact";
-import { formatDate, formatRelativeDate, formatTime } from "../../../util/formatters";
+import { ComponentChildren, Fragment } from "preact";
+import {
+  formatDate,
+  formatRelativeDate,
+  formatTime,
+} from "../../../util/formatters";
 
 interface SartTheRaceProps {
   disclosure: {
@@ -32,14 +33,20 @@ interface SartTheRaceProps {
   callback?: (id: string) => Promise<void>;
   children?: ComponentChildren;
 }
-export default function StartTheRaceModal({ disclosure, race, callback }: SartTheRaceProps) {
+export default function StartTheRaceModal({
+  disclosure,
+  race,
+  callback,
+}: SartTheRaceProps) {
   const { isOpen, onClose } = disclosure;
 
   const timeDifference = () => {
-    if (!race.data().date || race.data().time) {
+    if (!race.data().date || !race.data().time) {
       return;
     }
-    const then = new Date(`${formatDate(race.data().date)} ${formatTime(race.data().time)}`);
+    const then = new Date(
+      `${formatDate(race.data().date)} ${formatTime(race.data().time)}`
+    );
     return formatRelativeDate(then);
   };
 
@@ -48,7 +55,9 @@ export default function StartTheRaceModal({ disclosure, race, callback }: SartTh
       <Modal isOpen={isOpen} onClose={onClose} size="sm">
         <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="2px" />
         <ModalContent>
-          <ModalHeader bgColor={useColorModeValue("blackAlpha.200", "blackAlpha.500")}>
+          <ModalHeader
+            bgColor={useColorModeValue("blackAlpha.200", "blackAlpha.500")}
+          >
             <Text fontSize="2xl">Start the Race</Text>
           </ModalHeader>
           <ModalCloseButton />
@@ -57,12 +66,17 @@ export default function StartTheRaceModal({ disclosure, race, callback }: SartTh
               <Text fontSize="2xl">{race.data().name}</Text>
               <Text>
                 This Race is scheduled to start{" "}
-                <Text fontWeight={"bold"}>{race && race.data() && timeDifference()}</Text>
+                <Text fontWeight={"bold"}>
+                  {race && race.data() && timeDifference()}
+                </Text>
                 <Text>
                   {" "}
-                  at {race.data().time} on {new Date(formatDate(race.data().date)).toDateString()}
+                  at {race.data().time} on{" "}
+                  {new Date(formatDate(race.data().date)).toDateString()}
                 </Text>
-                <Text>To use the On the Water Scoring App select one from below</Text>
+                <Text>
+                  To use the On the Water Scoring App select one from below
+                </Text>
               </Text>
             </Box>
             <Flex gap={2} justify={"end"}>
@@ -76,14 +90,12 @@ export default function StartTheRaceModal({ disclosure, race, callback }: SartTh
               >
                 Now
               </Button>
-              <Button colorScheme="blue" onClick={onClose}>
-                Scheduled
-              </Button>
+              <Button onClick={onClose}>Scheduled</Button>
             </Flex>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" variant="outline" onClick={onClose}>
+            <Button variant="outline" onClick={onClose}>
               Enter results manually
             </Button>
           </ModalFooter>

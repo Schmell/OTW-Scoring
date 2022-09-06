@@ -7,16 +7,10 @@ import {
   Heading,
   Icon,
   Image,
-  Progress,
   Spinner,
   Text,
 } from "@chakra-ui/react";
-import {
-  Editable,
-  EditableInput,
-  EditableTextarea,
-  EditablePreview,
-} from "@chakra-ui/react";
+import { Editable, EditableInput, EditablePreview } from "@chakra-ui/react";
 // Chakra hooks
 import {
   useColorModeValue,
@@ -53,7 +47,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ToolIconBtn from "../../../components/generic/ToolIconBtn";
 import { DocumentData } from "firebase/firestore";
-import { checkIfSailed } from "../../races/racesView/checkIfRaceSailed";
+import spacer from "../../../assets/img/spacer.gif";
 
 type ResultRow = {
   id: number;
@@ -116,6 +110,7 @@ function FleetTable(props: TableProps) {
     ...rest
   } = props;
 
+  // console.log("race: ", race);
   // States
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     boat: true,
@@ -151,7 +146,8 @@ function FleetTable(props: TableProps) {
         accessorKey: "boat",
         id: "boat",
         enableHiding: true,
-        cell: (info) => {
+        cell: (info: any) => {
+          // typing doesn't work in vite
           return (
             <Link href={`/competitors/${info.row.original?.id}`}>
               {info.getValue()}
@@ -165,7 +161,7 @@ function FleetTable(props: TableProps) {
         id: "helmname",
         enableHiding: true,
         header: () => "Skipper",
-        cell: (info) => {
+        cell: (info: any) => {
           return (
             <Link href={`/competitors/${info.row.original?.id}`}>
               {info.getValue()}
@@ -178,7 +174,7 @@ function FleetTable(props: TableProps) {
         accessorKey: "sailno",
         id: "sailno",
         enableHiding: true,
-        cell: (info) => {
+        cell: (info: any) => {
           return (
             <Link href={`/competitors/${info.row.original?.id}`}>
               {info.getValue()}
@@ -192,7 +188,7 @@ function FleetTable(props: TableProps) {
         id: "points",
         enableHiding: false,
         header: () => <Flex justifyContent={"center"}>Points</Flex>,
-        cell: (info) => (
+        cell: (info: any) => (
           <Flex justifyContent={"center"}>
             {info.getValue() !== "" ? parseFloat(info.getValue()) : "---"}
           </Flex>
@@ -204,11 +200,11 @@ function FleetTable(props: TableProps) {
         accessorKey: "elapsed",
         id: "elapsed",
         enableHiding: true,
-        cell: (props) => (
-          <Flex justify={"center"}>{parseFloat(props.getValue())}</Flex>
+        cell: (info: any) => (
+          <Flex justify={"center"}>{parseFloat(info.getValue())}</Flex>
         ),
         footer: (props) => props.column.id,
-        sortingFn: (rowA, rowB, columnId) => {
+        sortingFn: (rowA: any, rowB: any, columnId) => {
           if (rowA.getValue("elapsed") === "---") return 1;
           if (rowB.getValue("elapsed") === "---") return -1;
           if (rowA.getValue("elapsed") < rowB.getValue("elapsed")) return -1;
@@ -220,11 +216,11 @@ function FleetTable(props: TableProps) {
         accessorKey: "corrected",
         id: "corrected",
         enableHiding: true,
-        cell: (props) => (
-          <Flex justifyContent={"center"}>{props.getValue()}</Flex>
+        cell: (info: any) => (
+          <Flex justifyContent={"center"}>{info.getValue()}</Flex>
         ),
         footer: (props) => props.column.id,
-        sortingFn: (rowA, rowB, columnId) => {
+        sortingFn: (rowA: any, rowB: any, columnId) => {
           if (rowA.getValue("corrected") === "---") return 1;
           if (rowB.getValue("corrected") === "---") return -1;
           if (rowA.getValue("corrected") < rowB.getValue("corrected"))
@@ -237,13 +233,13 @@ function FleetTable(props: TableProps) {
         accessorKey: "finish",
         id: "finish",
         enableHiding: true,
-        cell: (props) => (
+        cell: (info: any) => (
           <Flex justify={"center"} m={0}>
-            {props.getValue()}
+            {info.getValue()}
           </Flex>
         ),
         footer: (props) => props.column.id,
-        sortingFn: (rowA, rowB, columnId) => {
+        sortingFn: (rowA: any, rowB: any, columnId) => {
           if (rowA.getValue("finish") === "---") return 1;
           if (rowB.getValue("finish") === "---") return -1;
           if (rowA.getValue("finish") < rowB.getValue("finish")) return -1;
@@ -256,9 +252,9 @@ function FleetTable(props: TableProps) {
         id: "nett",
         enableHiding: true,
         header: () => <Flex justifyContent={"center"}>Nett</Flex>,
-        cell: (props) => (
+        cell: (info: any) => (
           <Flex justify={"center"} m={0}>
-            {props.getValue()}
+            {info.getValue()}
           </Flex>
         ),
         footer: (props) => props.column.id,
@@ -364,7 +360,7 @@ function FleetTable(props: TableProps) {
       <Fragment>
         <Flex justifyContent={"space-between"} px={6}>
           <Flex>
-            <Image src="../../../assets/img/spacer.gif" w={0} height={50} />
+            <Image src={spacer} w={0} height={50} />
             <Heading color="blue.400" size="2xl">
               {fleetName ? fleetName : "Fleet"}
             </Heading>
@@ -423,11 +419,13 @@ function FleetTable(props: TableProps) {
           >
             <Flex justifyContent="space-between">
               <Flex alignItems="center">
-                <Image src="../../../assets/img/spacer.gif" height={8} w={0} />
-                {headerTitle ? (
-                  <Text fontSize="2xl">{headerTitle}</Text>
+                <Image src={spacer} height={8} w={0} />
+                {race ? (
+                  <Text fontSize="2xl">
+                    {race?.name || `Race ${race?.rank}`}
+                  </Text>
                 ) : (
-                  <Spinner size="xs" colorScheme="blue" />
+                  <Spinner size="xs" />
                 )}
                 {isSailed === undefined ||
                 isSailed === "Sailed" ||
@@ -508,7 +506,7 @@ function FleetTable(props: TableProps) {
               {table.getRowModel().rows.map((row) => {
                 return (
                   <Tr key={row.id}>
-                    {row.getVisibleCells().map((cell) => {
+                    {row.getVisibleCells().map((cell: any) => {
                       return (
                         <Td key={cell.id}>
                           {cell.getContext().column.id !== "finish" &&
@@ -519,7 +517,7 @@ function FleetTable(props: TableProps) {
                             )
                           ) : (
                             <Editable
-                              defaultValue={cell.getValue()}
+                              defaultValue={cell.getValue() || null}
                               textAlign="center"
                             >
                               <EditablePreview />
@@ -594,8 +592,10 @@ function FleetTable(props: TableProps) {
                   type="number"
                   size={"xs"}
                   borderRadius={"5px"}
-                  defaultValue={table.getState().pagination.pageIndex + 1}
-                  onChange={(e) => {
+                  defaultValue={(
+                    table.getState().pagination.pageIndex + 1
+                  ).toString()}
+                  onChange={(e: any) => {
                     const page = e.target.value
                       ? Number(e.target.value) - 1
                       : 0;
@@ -608,7 +608,7 @@ function FleetTable(props: TableProps) {
                 size={"xs"}
                 borderRadius={"5px"}
                 value={table.getState().pagination.pageSize}
-                onChange={(e) => {
+                onChange={(e: any) => {
                   table.setPageSize(Number(e.target.value));
                 }}
               >

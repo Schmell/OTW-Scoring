@@ -3,7 +3,10 @@ import { collection, doc, query, updateDoc, where } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
 import { useCollection, useDocumentData } from "react-firebase-hooks/firestore";
-import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
+import {
+  FadeInSlideLeft,
+  FadeInSlideRight,
+} from "../../components/animations/FadeSlide";
 import { AreYouSure } from "../../components/generic/AreYouSure";
 import { SiteList } from "../../components/generic/SiteList";
 import { SiteListButtons } from "../../components/generic/SiteList/SiteListButtons";
@@ -45,21 +48,35 @@ export default function EventList({ setHeaderTitle }) {
         <Fragment>
           <Flex justifyContent="space-between" alignItems="end" px={4}>
             <FadeInSlideRight>
-              <Heading as="h4" color="blue.400">
-                {eventDoc.name}
-              </Heading>
+              <Heading color="blue.400">{eventDoc.name}</Heading>
             </FadeInSlideRight>
 
             {/* Sub header buttons */}
             <FadeInSlideLeft>
               <Flex gap={2}>
-                <ToolIconBtn label="Edit Event Details" action={() => route("/events/edit")} icon={EditIcon} />
-                <ToolIconBtn label="Import file" action={() => route("/import")} icon={FileUploadOutlinedIcon} />
-                <ToolIconBtn label="Add Series" action={onOpen} icon={AddToPhotosOutlinedIcon} />
+                <ToolIconBtn
+                  label="Edit Event Details"
+                  action={() => route("/events/edit")}
+                  icon={EditIcon}
+                />
+                <ToolIconBtn
+                  label="Import file"
+                  action={() => route("/import")}
+                  icon={FileUploadOutlinedIcon}
+                />
+                <ToolIconBtn
+                  label="Add Series"
+                  action={onOpen}
+                  icon={AddToPhotosOutlinedIcon}
+                />
               </Flex>
             </FadeInSlideLeft>
 
-            <AddSeriesModal isOpen={isOpen} onClose={onClose} eventId={eventId} />
+            <AddSeriesModal
+              isOpen={isOpen}
+              onClose={onClose}
+              eventId={eventId}
+            />
           </Flex>
 
           <Divider my={3} border={2} shadow={"md"} />
@@ -68,12 +85,21 @@ export default function EventList({ setHeaderTitle }) {
             {series?.docs.map((item) => {
               // console.log("item: ", item.data());
               return (
-                <SiteListItem key={item.id} item={item} disclosure={deleteEventDisclosure} listType="series">
+                <SiteListItem
+                  key={item.id}
+                  item={item}
+                  disclosure={deleteEventDisclosure}
+                  listType="series"
+                >
                   <SiteListText
                     item={item}
                     setStorage={setSeriesId}
                     forward="races"
-                    textItems={{ head: item.data().event, sub: item.data().venue, foot: item.data().venuewebsite }}
+                    textItems={{
+                      head: item.data().event,
+                      sub: item.data().venue,
+                      foot: item.data().venuewebsite,
+                    }}
                   >
                     <SiteListButtons
                       setStorage={setSeriesId}
@@ -82,8 +108,15 @@ export default function EventList({ setHeaderTitle }) {
                       disclosure={deleteEventDisclosure}
                     />
                   </SiteListText>
-                  <AreYouSure disclosure={deleteEventDisclosure} callback={removeSeries} itemId={item.id} risk="low">
-                    <Box>This action will remove this series from the event</Box>
+                  <AreYouSure
+                    disclosure={deleteEventDisclosure}
+                    callback={removeSeries}
+                    itemId={item.id}
+                    risk="low"
+                  >
+                    <Box>
+                      This action will remove this series from the event
+                    </Box>
                     <Box>You can always add this back if you want</Box>
                   </AreYouSure>
                 </SiteListItem>

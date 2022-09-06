@@ -18,7 +18,10 @@ import { db } from "../../util/firebase-config";
 import { useCollection } from "react-firebase-hooks/firestore";
 import useStorage from "../../hooks/useStorage";
 import { formatDate } from "../../util/formatters";
-import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
+import {
+  FadeInSlideLeft,
+  FadeInSlideRight,
+} from "../../components/animations/FadeSlide";
 import style from "./style.css";
 // Icons
 import AddIcon from "@mui/icons-material/Add";
@@ -44,7 +47,14 @@ const ___RacesList = ({ setHeaderTitle }) => {
     <Fragment>
       <Container>
         <FadeInSlideRight>
-          <Heading as="h3" color="blue.400" position={"fixed"} w="100%" mt={2} pb={3} zIndex="+1">
+          <Heading
+            color="blue.400"
+            position={"fixed"}
+            w="100%"
+            mt={2}
+            pb={3}
+            zIndex="+1"
+          >
             Select a race
           </Heading>
         </FadeInSlideRight>
@@ -53,7 +63,13 @@ const ___RacesList = ({ setHeaderTitle }) => {
           {/* Loading Spinner */}
           {racesLoading ? (
             <Flex justifyContent=" center" alignItems="center">
-              <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="xl"
+              />
             </Flex>
           ) : (
             // Races loaded make a list
@@ -65,9 +81,17 @@ const ___RacesList = ({ setHeaderTitle }) => {
                     <Flex alignItems="center">
                       {/* Icon for row */}
                       {race.data().sailed === "1" ? (
-                        <Icon as={CheckCircleIcon} color="gray.400" boxSize={3} />
+                        <Icon
+                          as={CheckCircleIcon}
+                          color="gray.400"
+                          boxSize={3}
+                        />
                       ) : race.data().sailed === "cancelled" ? (
-                        <Icon as={DoNotDisturbIcon} color="gray.400" boxSize={3} />
+                        <Icon
+                          as={DoNotDisturbIcon}
+                          color="gray.400"
+                          boxSize={3}
+                        />
                       ) : race.data().sailed === "postponed" ? (
                         <Icon as={CalendarIcon} color="gray.400" boxSize={3} />
                       ) : (
@@ -75,7 +99,11 @@ const ___RacesList = ({ setHeaderTitle }) => {
                       )}
 
                       {/* If Name else R+N */}
-                      <Text px={3}>{race.data().name ? race.data().name : `Race ${race.data().rank}`}</Text>
+                      <Text px={3}>
+                        {race.data().name
+                          ? race.data().name
+                          : `Race ${race.data().rank}`}
+                      </Text>
 
                       <Text color="gray.400" px={3} fontSize="xs">
                         {/* Change the sailwave number to sailed or not and  */}
@@ -136,10 +164,16 @@ const ___RacesList = ({ setHeaderTitle }) => {
                             aria-label="View results "
                             colorScheme="blue"
                             size="xs"
-                            icon={(<Icon as={VisibilityIcon} boxSize={4} />) as any}
+                            icon={
+                              (<Icon as={VisibilityIcon} boxSize={4} />) as any
+                            }
                             disabled={race.data().sailed !== "1"}
                             onClick={({ target }) => {
-                              route(`/result/${race.data()._seriesid}/${race.data().raceid}`);
+                              route(
+                                `/result/${race.data()._seriesid}/${
+                                  race.data().raceid
+                                }`
+                              );
                             }}
                           />
                         </span>

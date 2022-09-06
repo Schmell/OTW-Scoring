@@ -30,7 +30,7 @@ export default function ImportList({
         }) && (
           <Box my={3}>
             <Box>
-              <Heading as="h3" color="blue.300" fontSize="lg">
+              <Heading color="blue.300" fontSize="lg">
                 {duplicates ? "Duplicate files" : "New Files"}
               </Heading>
               <Divider my={3} />

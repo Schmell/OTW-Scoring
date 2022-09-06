@@ -22,7 +22,7 @@ import { FadeInSlideLeft } from "../../components/animations/FadeSlide";
 import PriBtn from "../../components/generic/PriBtn";
 import { db } from "../../util/firebase-config";
 
-const AddSeriesModal = ({ isOpen, onClose, eventId }) => {
+export default function AddSeriesModal({ isOpen, onClose, eventId }) {
   const [seriesList, setSeriesList] = useState([] as any);
 
   const serRef = collection(db, "series");
@@ -109,6 +109,6 @@ const AddSeriesModal = ({ isOpen, onClose, eventId }) => {
       </ModalContent>
     </Modal>
   );
-};
+}
 
-export default AddSeriesModal;
+// export default AddSeriesModal;

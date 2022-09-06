@@ -10,15 +10,14 @@ import { h } from "preact";
 import { Link } from "preact-router/match";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-export default function Notfound() {
+export default function Notfound(props) {
+  //
   return (
     <Box m={8}>
       <Heading color={useColorModeValue("blue.400", "blue.200")}>
         Error 404
       </Heading>
-      <Text as="h3" color="gray.400">
-        That page doesn&apos;t exist.
-      </Text>
+      <Text color="gray.400">That page doesn&apos;t exist.</Text>
       <Link
         href="#"
         onClick={() => {

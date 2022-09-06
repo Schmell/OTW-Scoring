@@ -3,7 +3,6 @@ import {
   Tooltip,
   IconButton,
   Icon,
-  Box,
   useDisclosure,
   Button,
   Modal,
@@ -45,7 +44,12 @@ export function SiteListButtons(props: SiteListButtonProps) {
   return (
     <Fragment>
       <Flex gap={3}>
-        <Tooltip label={`Edit ${listType}`} hasArrow bg="blue.300" placement="bottom-start">
+        <Tooltip
+          label={`Edit ${listType}`}
+          hasArrow
+          bg="blue.300"
+          placement="bottom-start"
+        >
           <IconButton
             aria-label={`Edit ${listType}`}
             icon={(<Icon as={EditIcon} boxSize={7} />) as any}
@@ -58,7 +62,12 @@ export function SiteListButtons(props: SiteListButtonProps) {
           />
         </Tooltip>
 
-        <Tooltip label={`Delete ${listType}`} hasArrow bg="blue.300" placement="bottom-start">
+        <Tooltip
+          label={`Delete ${listType}`}
+          hasArrow
+          bg="blue.300"
+          placement="bottom-start"
+        >
           <IconButton
             aria-label={`Delete ${listType}`}
             icon={(<Icon as={CloseIcon} boxSize={7} />) as any}
@@ -78,7 +87,7 @@ export function SiteListButtons(props: SiteListButtonProps) {
   );
 }
 
-const OpenModal = ({ item, disclosure, children }) => {
+function OpenModal({ item, disclosure, children }) {
   return (
     <Modal isOpen={disclosure.isOpen} onClose={disclosure.onClose}>
       <ModalOverlay />
@@ -96,4 +105,4 @@ const OpenModal = ({ item, disclosure, children }) => {
       </ModalContent>
     </Modal>
   );
-};
+}

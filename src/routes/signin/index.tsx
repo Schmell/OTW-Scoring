@@ -4,7 +4,7 @@ import { auth } from "../../util/firebase-config";
 import { SignIn } from "../../components/page/SignIn";
 import { SignOut } from "../../components/page/SignOut";
 
-const Unauthed = () => {
+export default function Unauthed() {
   const [user] = useAuthState(auth);
 
   return (
@@ -13,6 +13,6 @@ const Unauthed = () => {
       {!user ? <SignIn /> : <SignOut />}
     </div>
   );
-};
+}
 
-export default Unauthed;
+// export default Unauthed;

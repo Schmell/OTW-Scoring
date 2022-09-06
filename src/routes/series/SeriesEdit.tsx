@@ -38,7 +38,7 @@ import { FadeInSlideRight } from "../../components/animations/FadeSlide";
 import { Starts } from "../races/raceEdit/Starts";
 // Icons
 
-const SeriesEdit = ({ setHeaderTitle }) => {
+export default function SeriesEdit({ setHeaderTitle }) {
   setHeaderTitle("Edit Series");
 
   const [seriesId] = useStorage("seriesId");
@@ -99,7 +99,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
           <Form>
             <Flex justifyContent="space-between" alignItems="end">
               <FadeInSlideRight>
-                <Heading as="h5" color="blue.400" mx={4}>
+                <Heading color="blue.400" mx={4}>
                   <Editable
                     defaultValue={currentSeries.event}
                     isPreviewFocusable={true}
@@ -107,7 +107,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
                     <EditablePreview />
                     <EditableInput
                       name="event"
-                      onChange={({ target }) => {
+                      onChange={({ target }: any) => {
                         setSeriesName(target.value);
                       }}
                     />
@@ -121,7 +121,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
             <Box mb={6} mx={4}>
               <Accordion defaultIndex={[0]}>
                 <AccordionItem>
-                  <Text as={"h2"} mb={3}>
+                  <Text mb={3}>
                     <AccordionButton>
                       <Box flex="1" textAlign="left">
                         Series details
@@ -275,7 +275,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
                 </AccordionItem>
 
                 <AccordionItem>
-                  <Text as={"h2"} mb={3}>
+                  <Text mb={3}>
                     <AccordionButton>
                       <Box flex="1" textAlign="left">
                         Venue details
@@ -305,7 +305,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
                 </AccordionItem>
 
                 <AccordionItem>
-                  <Text as={"h2"} mb={3}>
+                  <Text mb={3}>
                     <AccordionButton>
                       <Box flex="1" textAlign="left">
                         File properties
@@ -348,6 +348,6 @@ const SeriesEdit = ({ setHeaderTitle }) => {
       )}
     </Fragment>
   );
-};
+}
 
-export default SeriesEdit;
+// export default SeriesEdit;

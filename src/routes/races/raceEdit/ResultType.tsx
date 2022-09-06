@@ -9,7 +9,7 @@ import {
 import { Field } from "formik";
 import { h } from "preact";
 
-export const ResultType = () => {
+export function ResultType() {
   return (
     <Field name="resultType">
       {({ field, form }) => (
@@ -33,4 +33,4 @@ export const ResultType = () => {
       )}
     </Field>
   );
-};
+}

@@ -1,13 +1,25 @@
 import { h } from "preact";
-import { Box, Button, Container, Divider, FormLabel, Heading, Input, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Container,
+  Divider,
+  FormLabel,
+  Heading,
+  Input,
+  useToast,
+} from "@chakra-ui/react";
 import { doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../util/firebase-config";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { Field, Form, Formik } from "formik";
-import { FadeIn, FadeInSlideRight } from "../../components/animations/FadeSlide";
+import {
+  FadeIn,
+  FadeInSlideRight,
+} from "../../components/animations/FadeSlide";
 
-const UserProfile = () => {
+export default function UserProfile() {
   const submittedToast = useToast();
   const [user, userLoading] = useAuthState(auth);
 
@@ -16,7 +28,9 @@ const UserProfile = () => {
 
   const submitHandler = async (values: any) => {
     // remove undefined's from values
-    Object.keys(values).forEach((key) => (values[key] === undefined ? delete values[key] : {}));
+    Object.keys(values).forEach((key) =>
+      values[key] === undefined ? delete values[key] : {}
+    );
 
     await updateDoc(docRef, values);
 
@@ -35,7 +49,7 @@ const UserProfile = () => {
   return (
     <Container>
       <FadeInSlideRight>
-        <Heading as="h3" color="blue.400" w="100%" mt={2} pb={3}>
+        <Heading color="blue.400" w="100%" mt={2} pb={3}>
           Profile
         </Heading>
       </FadeInSlideRight>
@@ -94,5 +108,5 @@ const UserProfile = () => {
       </FadeIn>
     </Container>
   );
-};
-export default UserProfile;
+}
+// export default UserProfile;

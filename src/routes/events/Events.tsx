@@ -1,9 +1,21 @@
-import { Box, Divider, Flex, Heading, Icon, IconButton, Tooltip, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Divider,
+  Flex,
+  Heading,
+  Icon,
+  IconButton,
+  Tooltip,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { addDoc, collection, query, where } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
+import {
+  FadeInSlideLeft,
+  FadeInSlideRight,
+} from "../../components/animations/FadeSlide";
 import { AreYouSure } from "../../components/generic/AreYouSure";
 import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
@@ -40,16 +52,22 @@ export default function Events({ user, setHeaderTitle }) {
     <Fragment>
       <Flex justifyContent="space-between" alignItems="end" px={4}>
         <FadeInSlideRight>
-          <Heading as="h4" color="blue.400">
-            All Events
-          </Heading>
+          <Heading color="blue.400">All Events</Heading>
         </FadeInSlideRight>
 
         {/* Sub header buttons */}
         <FadeInSlideLeft>
           <Flex gap={2}>
-            <ToolIconBtn label="Import file" action={() => route("/import")} icon={FileUploadOutlinedIcon} />
-            <ToolIconBtn label="Add Series" action={addEventHandler} icon={AddToPhotosOutlinedIcon} />
+            <ToolIconBtn
+              label="Import file"
+              action={() => route("/import")}
+              icon={FileUploadOutlinedIcon}
+            />
+            <ToolIconBtn
+              label="Add Series"
+              action={addEventHandler}
+              icon={AddToPhotosOutlinedIcon}
+            />
           </Flex>
         </FadeInSlideLeft>
       </Flex>
@@ -61,12 +79,21 @@ export default function Events({ user, setHeaderTitle }) {
           const data = item.data();
           // setEventId(item.id);
           return (
-            <SiteListItem key={item.id} item={item} disclosure={deleteEventDisclosure} listType="series">
+            <SiteListItem
+              key={item.id}
+              item={item}
+              disclosure={deleteEventDisclosure}
+              listType="series"
+            >
               <SiteListText
                 item={item}
                 setStorage={setEventId}
                 forward="events/event"
-                textItems={{ head: data.name, sub: data.venue, foot: data.date }}
+                textItems={{
+                  head: data.name,
+                  sub: data.venue,
+                  foot: data.date,
+                }}
               >
                 <SiteListButtons
                   setStorage={setEventId}
@@ -75,7 +102,9 @@ export default function Events({ user, setHeaderTitle }) {
                   disclosure={deleteEventDisclosure}
                 >
                   <Box>This will delete the event and is not undo-able</Box>
-                  <Box>You will loose any work you have done with this Event</Box>
+                  <Box>
+                    You will loose any work you have done with this Event
+                  </Box>
                   {/* <Box>{item.id}</Box> */}
                 </SiteListButtons>
               </SiteListText>

@@ -1,13 +1,27 @@
-import { Box, Divider, Flex, Heading, Image, ListItem, Progress, Text, UnorderedList } from "@chakra-ui/react";
+import {
+  Box,
+  Divider,
+  Flex,
+  Heading,
+  Image,
+  ListItem,
+  Progress,
+  Text,
+  UnorderedList,
+} from "@chakra-ui/react";
+import homeImg from "../../assets/img/homePage.jpeg";
 import { Fragment, h } from "preact";
 import { Link } from "preact-router";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { FadeInSlideLeft, FadeInSlideRight } from "../../components/animations/FadeSlide";
+import {
+  FadeInSlideLeft,
+  FadeInSlideRight,
+} from "../../components/animations/FadeSlide";
 import { SignIn } from "../../components/page/SignIn";
 import { SignOut } from "../../components/page/SignOut";
 import { auth } from "../../util/firebase-config";
 
-const Home = ({ setHeaderTitle }) => {
+export default function Home({ setHeaderTitle }) {
   const [user, userLoading, _userError] = useAuthState(auth);
 
   setHeaderTitle("Home");
@@ -34,10 +48,12 @@ const Home = ({ setHeaderTitle }) => {
           <Divider my={3} />
 
           <Text fontSize="md">
-            <Image src="../assets/img/homePage.jpeg" boxSize="180px" float={"right"} />
-            On The Water Scoring (OTW) is sailboat racing scoring application and companion for the popular Sailwave
-            desktop application. You can Import sailwave .blw files and use them directly in the app. I have added the
-            event collection to help organize your series'. We recommend to start with this.
+            <Image src={homeImg} boxSize="180px" float={"right"} />
+            On The Water Scoring (OTW) is sailboat racing scoring application
+            and companion for the popular Sailwave desktop application. You can
+            Import sailwave .blw files and use them directly in the app. I have
+            added the event collection to help organize your series'. We
+            recommend to start with this.
           </Text>
         </Box>
       </FadeInSlideRight>
@@ -47,9 +63,7 @@ const Home = ({ setHeaderTitle }) => {
       ) : (
         <Box px={4} mb={10}>
           <Divider my={5} />
-          <Heading as="h4" fontSize={"lg"}>
-            Where too from here
-          </Heading>
+          <Heading fontSize={"lg"}>Where too from here</Heading>
           <UnorderedList spacing={1} mt={2}>
             <ListItem>
               <Link href="/import">
@@ -71,6 +85,6 @@ const Home = ({ setHeaderTitle }) => {
       )}
     </Fragment>
   );
-};
+}
 
-export default Home;
+// export default Home;

@@ -1,4 +1,11 @@
-import { Box, Flex, Icon, IconButton, Tooltip, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Icon,
+  IconButton,
+  Tooltip,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
 import { AreYouSure } from "../../../components/generic/AreYouSure";
@@ -32,7 +39,6 @@ export default function EditButtons({ setRaceId, race }) {
           <IconButton
             aria-label="Edit race settings"
             variant={"ghost"}
-            colorScheme="blue"
             icon={(<Icon as={EditIcon} boxSize={7} />) as any}
             onClick={() => {
               setRaceId(race.id);
@@ -40,17 +46,26 @@ export default function EditButtons({ setRaceId, race }) {
             }}
           />
         </Tooltip>
-        <Tooltip label="Delete Series" hasArrow bg="blue.300" placement="bottom-start">
+        <Tooltip
+          label="Delete Series"
+          hasArrow
+          bg="blue.300"
+          placement="bottom-start"
+        >
           <IconButton
             aria-label="Delete series"
             variant="ghost"
-            colorScheme="blue"
+            // colorScheme="blue"
             icon={(<Icon as={CloseIcon} boxSize={7} />) as any}
             onClick={deleteRaceDisclosure.onOpen}
           />
         </Tooltip>
       </Flex>
-      <AreYouSure disclosure={deleteRaceDisclosure} colPath={`/series/${seriesId}/races`} itemId={race.id}>
+      <AreYouSure
+        disclosure={deleteRaceDisclosure}
+        colPath={`/series/${seriesId}/races`}
+        itemId={race.id}
+      >
         <Box>This will permanently delete the race and can not be un-done</Box>
         <Box>You will loose any work you have done with this race</Box>
         <Box>{race.id}</Box>

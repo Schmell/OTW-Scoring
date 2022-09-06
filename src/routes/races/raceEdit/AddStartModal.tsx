@@ -14,7 +14,7 @@ import {
 import { arrayUnion, updateDoc } from "firebase/firestore";
 import { Form, useFormik } from "formik";
 
-export const AddStartModal = ({ isOpen, onClose, docRef }) => {
+export function AddStartModal({ isOpen, onClose, docRef }) {
   const upDate = async (start) => {
     await updateDoc(docRef, { starts: arrayUnion(start) });
   };
@@ -38,22 +38,40 @@ export const AddStartModal = ({ isOpen, onClose, docRef }) => {
         <ModalCloseButton />
         <ModalBody>
           <Form onSubmit={formik.handleSubmit}>
-            <Input type="text" name="startName" onChange={formik.handleChange} value={formik.values.startName} />
+            <Input
+              type="text"
+              name="startName"
+              onChange={formik.handleChange}
+              value={formik.values.startName}
+            />
 
             <Divider mt={3} />
 
-            <Input type="time" name="startTime" onChange={formik.handleChange} value={formik.values.startTime} />
+            <Input
+              type="time"
+              name="startTime"
+              onChange={formik.handleChange}
+              value={formik.values.startTime}
+            />
 
             <Divider mt={3} />
 
-            <Button type="submit" colorScheme="blue" mr={3} w="100%" onClick={onClose}>
+            <Button
+              type="submit"
+              colorScheme="blue"
+              mr={3}
+              w="100%"
+              onClick={onClose}
+            >
               Add
             </Button>
           </Form>
         </ModalBody>
 
-        <ModalFooter>{/* <Button variant='ghost' onClick={onClose}>Cancel</Button> */}</ModalFooter>
+        <ModalFooter>
+          {/* <Button variant='ghost' onClick={onClose}>Cancel</Button> */}
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );
-};
+}
