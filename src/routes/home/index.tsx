@@ -17,7 +17,7 @@ import {
   FadeInSlideLeft,
   FadeInSlideRight,
 } from "../../components/animations/FadeSlide";
-import { SignIn } from "../../components/page/SignIn";
+import SignIn from "../../components/page/SignIn";
 import { SignOut } from "../../components/page/SignOut";
 import { auth } from "../../util/firebase-config";
 

@@ -1,11 +1,15 @@
 import { h } from "preact";
 import { Box, Button } from "@chakra-ui/react";
 // Firebase
-import { GithubAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  GithubAuthProvider,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../util/firebase-config";
 
-export function SignIn() {
+export default function SignIn() {
   // const [user, userLoading] = useAuthState(auth);
   // console.log("user: ", user);
   const setUserData = async ({ user }) => {
@@ -40,11 +44,24 @@ export function SignIn() {
 
   return (
     <Box>
-      <Button className="sign-in" variant="outline" colorScheme="blue" boxShadow="md" mr={3} onClick={signInWithGoogle}>
+      <Button
+        className="sign-in"
+        variant="outline"
+        colorScheme="blue"
+        boxShadow="md"
+        mr={3}
+        onClick={signInWithGoogle}
+      >
         Google Login
       </Button>
 
-      <Button className="sign-in" variant="outline" colorScheme="blue" boxShadow="md" onClick={signInWithGitHub}>
+      <Button
+        className="sign-in"
+        variant="outline"
+        colorScheme="blue"
+        boxShadow="md"
+        onClick={signInWithGitHub}
+      >
         GitHub Login
       </Button>
     </Box>

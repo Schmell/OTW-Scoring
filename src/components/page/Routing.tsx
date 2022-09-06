@@ -2,7 +2,6 @@ import AsyncRoute from "preact-async-route";
 import Router, { Route } from "preact-router";
 import Home from "../../routes/home";
 import NotFoundPage from "../../routes/notfound";
-import { SignIn } from "./SignIn";
 
 interface RoutingProps {
   [x: string | number]: any;
@@ -12,7 +11,15 @@ export default function Routing(props) {
   return (
     <Router>
       <Route path="/" component={Home} {...props} />
-      <Route path="/signin" component={SignIn} {...props} />
+      <AsyncRoute
+        path="/signin"
+        getComponent={() =>
+          import("../../components/page/SignIn").then(
+            (module) => module.default
+          )
+        }
+        {...props}
+      />
       <AsyncRoute
         path="/import"
         getComponent={() =>

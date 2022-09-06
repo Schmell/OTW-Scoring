@@ -14,8 +14,10 @@ import { auth } from "./util/firebase-config";
 
 export function App() {
   const [user] = useAuthState(auth);
+  // REMOVE FOR PRODUCTION
   const annoyingMessage = document.querySelector(".firebase-emulator-warning");
-  annoyingMessage?.removeAttribute("style");
+  annoyingMessage?.remove();
+
   const [headerTitle, setHeaderTitle] = useState("Blw Me");
   const [userColorScheme, setUserColorScheme] = useState("blue");
   const theme = extendTheme(
@@ -36,6 +38,7 @@ export function App() {
               user={user}
               setHeaderTitle={setHeaderTitle}
               headerTitle={headerTitle}
+              setUserColorScheme={setUserColorScheme}
             />
           </Box>
         </SidebarWithHeader>

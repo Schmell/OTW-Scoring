@@ -1,4 +1,4 @@
-import { List, Progress, Skeleton } from "@chakra-ui/react";
+import { List, Progress } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
 // Icons
 
