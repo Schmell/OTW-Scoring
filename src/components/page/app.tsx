@@ -11,13 +11,17 @@ const App = () => {
   const [user] = useAuthState(auth);
 
   const [headerTitle, setHeaderTitle] = useState("Blw Me");
-
+  document.querySelector(".firebase-emulator-warning")?.remove();
   return (
     <div id="preact_root">
       <ChakraProvider resetCSS theme={theme}>
         <SidebarWithHeader headerTitle={headerTitle}>
           <Box mt={16}>
-            <Routing user={user} setHeaderTitle={setHeaderTitle} headerTitle={headerTitle} />
+            <Routing
+              user={user}
+              setHeaderTitle={setHeaderTitle}
+              headerTitle={headerTitle}
+            />
           </Box>
         </SidebarWithHeader>
       </ChakraProvider>

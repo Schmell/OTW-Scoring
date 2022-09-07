@@ -10,9 +10,9 @@ export default function FleetsTable(props) {
   const unique = Array.from(
     new Set(
       tableData.map((item) => {
-        if (item.fleet && item.division) {
-          return `${item.fleet} - ${item.division}`;
-        }
+        // if (item.fleet && item.division) {
+        //   return `${item.fleet} - ${item.division}`;
+        // }
         if (item.division) return item.division;
 
         return item.fleet;
@@ -37,7 +37,11 @@ export default function FleetsTable(props) {
         fleetsArray.sort().map((fleet) => {
           return (
             <Fragment>
-              <ResultTable tableData={fleet} fleetName={fleet[0].fleet} {...rest} />
+              <ResultTable
+                tableData={fleet}
+                fleetName={fleet[0].fleet}
+                {...rest}
+              />
               <Divider mb={4} mt={8} />
             </Fragment>
           );
