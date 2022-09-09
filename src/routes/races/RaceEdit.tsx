@@ -34,7 +34,7 @@ import PriBtn from "../../components/generic/PriBtn";
 import SecBtn from "../../components/generic/SecBtn";
 // import style from "./style.css";
 
-export default function RaceEdit({ setHeaderTitle }) {
+export const RaceEdit = ({ setHeaderTitle }) => {
   setHeaderTitle("Edit Race");
 
   interface IraceStarts {
@@ -133,7 +133,7 @@ export default function RaceEdit({ setHeaderTitle }) {
                 >
                   {/* This is the header with race name or number */}
                   <FadeInSlideRight>
-                    <Heading color="blue.400">
+                    <Heading as="h5" color="blue.400">
                       <Editable
                         defaultValue={
                           currentRace?.name
@@ -144,11 +144,10 @@ export default function RaceEdit({ setHeaderTitle }) {
                       >
                         <EditablePreview />
                         <EditableInput
-                          onChange={({ target }: any) => {
-                            setRaceName(target?.value);
+                          onChange={({ target }) => {
+                            setRaceName(target.value);
                           }}
                         />
-                        {/*  */}
                       </Editable>
                     </Heading>
                     <Text fontSize="sm" color="lightgray">
@@ -200,7 +199,7 @@ export default function RaceEdit({ setHeaderTitle }) {
                     <Notes loading={loading} currentRace={currentRace} />
 
                     {/* Submit Button */}
-                    <Flex gap={2} my={4} mb={8}>
+                    <Flex gap={2}>
                       <PriBtn type="submit" width="100%">
                         Submit
                       </PriBtn>
@@ -215,4 +214,4 @@ export default function RaceEdit({ setHeaderTitle }) {
       )}
     </Fragment>
   );
-}
+};

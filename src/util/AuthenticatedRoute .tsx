@@ -4,7 +4,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase-config";
 import Unauthed from "../routes/signin";
 
-export function AuthRoute({ component: C, ...props }) {
+export const AuthRoute = ({ component: C, ...props }) => {
   const [user] = useAuthState(auth);
   return (
     <Route
@@ -18,5 +18,5 @@ export function AuthRoute({ component: C, ...props }) {
       }
     />
   );
-}
+};
 //

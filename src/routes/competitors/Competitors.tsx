@@ -28,7 +28,7 @@ import {
 } from "react-firebase-hooks/firestore";
 import { useMemo } from "preact/hooks";
 
-export default function Competitors({ user, setHeaderTitle }) {
+const Competitors = ({ user, setHeaderTitle }) => {
   setHeaderTitle("Competitors");
   // trying to get a ref for the users collections
   //   const eventRef = collection(db, "events", )
@@ -54,7 +54,9 @@ export default function Competitors({ user, setHeaderTitle }) {
     <Fragment>
       <Flex justifyContent="space-between" alignItems="end">
         <FadeInSlideRight>
-          <Heading color="blue.400">Select Competitors</Heading>
+          <Heading as="h4" color="blue.400">
+            Select Competitors
+          </Heading>
         </FadeInSlideRight>
 
         <IconButton
@@ -81,5 +83,5 @@ export default function Competitors({ user, setHeaderTitle }) {
       </Container>
     </Fragment>
   );
-}
-// export default Competitors;
+};
+export default Competitors;

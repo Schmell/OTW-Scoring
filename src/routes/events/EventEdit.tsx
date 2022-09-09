@@ -66,7 +66,9 @@ export default function EventEdit({ user, setHeaderTitle }) {
     <Fragment>
       <Flex justifyContent="space-between" alignItems="end" px={4}>
         <FadeInSlideRight>
-          <Heading color="blue.400">Event Edit</Heading>
+          <Heading as="h4" color="blue.400">
+            Event Edit
+          </Heading>
         </FadeInSlideRight>
 
         <Flex gap={2}>

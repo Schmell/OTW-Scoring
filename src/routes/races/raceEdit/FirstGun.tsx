@@ -5,7 +5,7 @@ import { updateDoc } from "firebase/firestore";
 import { Field } from "formik";
 import SecBtn from "../../../components/generic/SecBtn";
 
-export function FirstGun({ docRef, setRaceTime }) {
+export const FirstGun = ({ docRef, setRaceTime }) => {
   const handleSetTime = async () => {
     const theDate = Temporal.Now.plainTimeISO();
     await updateDoc(docRef, { time: `${theDate.round("minutes")}` });
@@ -24,4 +24,4 @@ export function FirstGun({ docRef, setRaceTime }) {
       </Box>
     </Fragment>
   );
-}
+};

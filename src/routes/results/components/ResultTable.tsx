@@ -47,7 +47,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ToolIconBtn from "../../../components/generic/ToolIconBtn";
 import { DocumentData } from "firebase/firestore";
-import spacer from "../../../assets/img/spacer.gif";
+// import spacer from "../../../assets/img/spacer.gif";
 
 type ResultRow = {
   id: number;
@@ -360,7 +360,7 @@ function FleetTable(props: TableProps) {
       <Fragment>
         <Flex justifyContent={"space-between"} px={6}>
           <Flex>
-            <Image src={spacer} w={0} height={50} />
+            <Image src="../../../assets/img/spacer.gif" height={8} w={0} />
             <Heading color="blue.400" size="2xl">
               {fleetName ? fleetName : "Fleet"}
             </Heading>
@@ -419,7 +419,7 @@ function FleetTable(props: TableProps) {
           >
             <Flex justifyContent="space-between">
               <Flex alignItems="center">
-                <Image src={spacer} height={8} w={0} />
+                <Image src="../../../assets/img/spacer.gif" height={8} w={0} />
                 {race ? (
                   <Text fontSize="2xl">
                     {race?.name || `Race ${race?.rank}`}

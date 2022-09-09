@@ -43,8 +43,8 @@ export function SiteListText({
 
           <Text fontSize="md" color={useColorModeValue("gray.500", "gray.300")}>
             {textItems.foot}
-            {/* <Divider />
-            {item.id} */}
+            <Divider />
+            {item.id}
           </Text>
         </Box>
         {children}

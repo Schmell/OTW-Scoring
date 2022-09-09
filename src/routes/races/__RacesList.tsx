@@ -48,6 +48,7 @@ const ___RacesList = ({ setHeaderTitle }) => {
       <Container>
         <FadeInSlideRight>
           <Heading
+            as="h3"
             color="blue.400"
             position={"fixed"}
             w="100%"

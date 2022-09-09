@@ -1,20 +1,20 @@
 import {
-  Flex,
   FlexProps,
-  Box,
+  Flex,
+  useColorModeValue,
+  IconButton,
   HStack,
-  VStack,
-  Link,
-  Text,
-  Avatar,
   Menu,
+  MenuButton,
+  Avatar,
+  VStack,
+  Box,
+  Portal,
   MenuList,
   MenuItem,
   MenuDivider,
-  MenuButton,
-  IconButton,
-  Portal,
-  useColorModeValue,
+  Text,
+  Link,
 } from "@chakra-ui/react";
 // Preact
 import { h } from "preact";
@@ -28,13 +28,17 @@ import ColorModeToggle from "../generic/ColorToggleMode";
 // Icons
 import MdMenu from "@mui/icons-material/Menu";
 import MdExpandMore from "@mui/icons-material/ExpandMore";
-import MdNotificationsNone from "@mui/icons-material/Notifications";
+import MdNotificationsNone from "@mui/icons-material/NotificationsNone";
 interface MobileProps extends FlexProps {
   onOpen: () => void;
   headerTitle: string;
 }
 
-export default function MobileNav({ onOpen, headerTitle, ...rest }) {
+export default function MobileNav({
+  onOpen,
+  headerTitle,
+  ...rest
+}: MobileProps) {
   // Need to get user from the db instead
   const [user, userLoading] = useAuthState(auth);
 

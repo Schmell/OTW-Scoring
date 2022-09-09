@@ -2,7 +2,7 @@ import { Box, FormControl, FormLabel, Input } from "@chakra-ui/react";
 import { Field } from "formik";
 import { Fragment, h } from "preact";
 
-export function Date() {
+export const Date = () => {
   return (
     <Fragment>
       <Box>
@@ -13,4 +13,4 @@ export function Date() {
       </Box>
     </Fragment>
   );
-}
+};

@@ -22,11 +22,11 @@ interface ISailedProps {
   currentRace?: any;
 }
 
-export function Sailed({
+export const Sailed = ({
   postponedDate,
   setPostponedDate,
   currentRace,
-}: ISailedProps) {
+}: ISailedProps) => {
   return (
     <Box>
       <Field name="sailed">
@@ -111,4 +111,4 @@ export function Sailed({
       </Field>
     </Box>
   );
-}
+};

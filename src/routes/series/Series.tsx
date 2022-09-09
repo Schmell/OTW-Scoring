@@ -65,7 +65,9 @@ export default function Series(props) {
     <Fragment>
       <Flex justifyContent="space-between" alignItems="end" px={4}>
         <FadeInSlideRight>
-          <Heading color="blue.400">All Series</Heading>
+          <Heading as="h4" color="blue.400">
+            All Series
+          </Heading>
         </FadeInSlideRight>
 
         {/* Sub header buttons */}

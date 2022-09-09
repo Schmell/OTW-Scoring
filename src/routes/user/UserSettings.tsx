@@ -64,7 +64,7 @@ export default function UserSettings() {
   };
 
   return (
-    <Fragment>
+    <>
       <Container>
         <FadeInSlideRight>
           <Heading color="blue.400" w="100%" mt={2} pb={3}>
@@ -151,7 +151,7 @@ export default function UserSettings() {
           </Box>
         </FadeIn>
       </Container>
-    </Fragment>
+    </>
   );
 }
 // export default UserSettings;

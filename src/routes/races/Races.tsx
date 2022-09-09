@@ -61,7 +61,7 @@ export default function Races(props) {
       <Box pb={4}>
         <Flex justifyContent="space-between" alignItems="end" px={6}>
           <FadeInSlideRight>
-            <Heading color="blue.400">
+            <Heading as="h4" color="blue.400">
               <Link href="/series/edit">{series && series.event}</Link>
             </Heading>
           </FadeInSlideRight>

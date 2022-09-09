@@ -1,5 +1,5 @@
-import { chakra, Box, Flex, Stack, HStack, Divider } from "@chakra-ui/react";
 import {
+  chakra,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -7,22 +7,28 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
-} from "@chakra-ui/react";
-import {
+  Stack,
+  Divider,
+  Flex,
+  Box,
   Button,
   Input,
   Radio,
-  RadioGroup,
   FormControl,
   FormErrorMessage,
   FormLabel,
+  ButtonGroup,
+  RadioGroup,
+  useRadio,
+  useColorModeValue,
+  HStack,
 } from "@chakra-ui/react";
-import { useRadio, useColorModeValue } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
 import { StateUpdater, useEffect } from "preact/hooks";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../util/firebase-config";
 import { Field, Form, Formik } from "formik";
+import SecBtn from "../../../components/generic/SecBtn";
 import useStorage from "../../../hooks/useStorage";
 
 interface SettingsModalProps {
@@ -217,13 +223,13 @@ function RadioButton(props) {
   return (
     <Fragment>
       <chakra.label {...htmlProps} cursor="pointer">
-        <Input {...(getInputProps({}) as any)} hidden />
+        <Input {...getInputProps({})} hidden />
         <Box
-          {...(getCheckboxProps() as any)}
+          {...getCheckboxProps()}
           //   variant="outline"
           bg={state.isChecked ? "blue" : "gray"}
         >
-          <Box {...(getLabelProps() as any)}>{children}</Box>
+          <Box {...getLabelProps()}>{children}</Box>
         </Box>
       </chakra.label>
     </Fragment>

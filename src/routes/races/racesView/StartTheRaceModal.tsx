@@ -2,6 +2,8 @@ import {
   Box,
   Button,
   Flex,
+  Icon,
+  IconButton,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -12,7 +14,8 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { ComponentChildren, Fragment } from "preact";
+import CloseIcon from "@mui/icons-material/Close";
+import { ComponentChildren, Fragment, h } from "preact";
 import {
   formatDate,
   formatRelativeDate,
@@ -41,7 +44,7 @@ export default function StartTheRaceModal({
   const { isOpen, onClose } = disclosure;
 
   const timeDifference = () => {
-    if (!race.data().date || !race.data().time) {
+    if (!race.data().date || race.data().time) {
       return;
     }
     const then = new Date(
@@ -90,12 +93,14 @@ export default function StartTheRaceModal({
               >
                 Now
               </Button>
-              <Button onClick={onClose}>Scheduled</Button>
+              <Button colorScheme="blue" onClick={onClose}>
+                Scheduled
+              </Button>
             </Flex>
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="outline" onClick={onClose}>
+            <Button colorScheme="blue" variant="outline" onClick={onClose}>
               Enter results manually
             </Button>
           </ModalFooter>

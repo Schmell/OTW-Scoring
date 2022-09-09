@@ -1,5 +1,5 @@
 import { h } from "preact";
-import { Box, HStack, Stack, useRadioGroup } from "@chakra-ui/react";
+import { HStack, Stack, useRadioGroup } from "@chakra-ui/react";
 import { IconRadio } from "./IconRadio";
 // Icons
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -24,7 +24,7 @@ export function DuplicateOptions({ item, setCopy }) {
   });
 
   return (
-    <Stack {...(getRootProps() as any)}>
+    <Stack {...getRootProps()}>
       <HStack>
         <IconRadio
           label="Make a copy"

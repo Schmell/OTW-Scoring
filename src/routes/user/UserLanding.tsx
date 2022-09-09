@@ -5,12 +5,22 @@ import {
   FadeIn,
 } from "../../components/animations/FadeSlide";
 
-export default function UserLanding() {
+const UserLanding = () => {
   return (
     <Fragment>
       <Container>
         <FadeInSlideRight>
-          <Heading color="blue.400" w="100%" mt={2} pb={3}>
+          <Heading
+            as="h3"
+            color="blue.400"
+            // position={"fixed"}
+            w="100%"
+            mt={2}
+            pb={3}
+            // height={"20px"}
+            // bg={"white"}
+            // zIndex="+1"
+          >
             User area
           </Heading>
         </FadeInSlideRight>
@@ -20,5 +30,5 @@ export default function UserLanding() {
       </Container>
     </Fragment>
   );
-}
-// export default UserLanding;
+};
+export default UserLanding;

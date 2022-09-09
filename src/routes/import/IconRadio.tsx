@@ -9,13 +9,13 @@ export function IconRadio(props) {
   return (
     <Tooltip label={label} hasArrow bg="blue.300" placement="bottom-start">
       <chakra.label {...htmlProps} cursor="pointer">
-        <Input {...(getInputProps({}) as any)} hidden />
+        <Input {...getInputProps({})} hidden />
 
         <Icon
           as={icon}
           color={state.isChecked ? "limegreen" : "gray.400"}
           bg={state.isChecked ? "green:100" : ""}
-          {...(getLabelProps() as any)}
+          {...getLabelProps()}
         />
       </chakra.label>
     </Tooltip>

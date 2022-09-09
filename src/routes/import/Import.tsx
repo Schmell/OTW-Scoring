@@ -1,5 +1,6 @@
-import { Box, Divider, Flex, Heading, Text } from "@chakra-ui/react";
-import fileDialog from "file-dialog";
+import { h } from "preact";
+import { route } from "preact-router";
+import { useEffect, useState } from "preact/hooks";
 import {
   collection,
   deleteDoc,
@@ -7,22 +8,33 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { route } from "preact-router";
-import { useEffect, useRef, useState } from "preact/hooks";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../util/firebase-config";
+import {
+  background,
+  border,
+  Box,
+  Button,
+  ButtonGroup,
+  Divider,
+  Flex,
+  Heading,
+  Text,
+} from "@chakra-ui/react";
+import fileDialog from "file-dialog";
 //
 import PriBtn from "../../components/generic/PriBtn";
-import SecBtn from "../../components/generic/SecBtn";
 import ImportList from "./ImportList";
 import { importFileObj } from "./importTypes";
 import { Populate } from "./populate";
+import SecBtn from "../../components/generic/SecBtn";
+import BtnGrp from "../../components/generic/ButtonGroup";
+import { Form, Formik } from "formik";
 
-export default function Import({ setHeaderTitle }) {
+const Import = ({ setHeaderTitle }) => {
   setHeaderTitle("Import");
 
   const [user] = useAuthState(auth);
-  const errorBox = useRef();
 
   const [duplicates, setDuplicates] = useState([{} as importFileObj]);
   const [newSeries, setNewSeries] = useState([{} as importFileObj]);
@@ -31,7 +43,6 @@ export default function Import({ setHeaderTitle }) {
 
   useEffect(() => {
     console.log("selectedButton: ", selectedButton);
-    console.log("errorBox.current: ", errorBox.current);
   }, [selectedButton]);
 
   const showDialog = async () => {
@@ -174,7 +185,7 @@ export default function Import({ setHeaderTitle }) {
         </Box>
       ) : (
         <Box>
-          {/* <Formik
+          <Formik
             onSubmit={(vals) => {
               console.log("values: ", vals);
             }}
@@ -190,83 +201,82 @@ export default function Import({ setHeaderTitle }) {
               submitForm,
             }) => {
               return (
-                // <Form>
-                //   <BtnGrp
-                //     labels={["points", "elapsed", "corrected", "finishes"]}
-                //     mb={2}
-                //     size="sm"
-                //     onChange={handleChange}
-                //     setSelectedButton={setSelectedButton}
-                //     selectedButton={selectedButton}
-                //     // name="resultType"
-                //   />
-                //   <Divider m={4} />
+                <Form>
+                  <BtnGrp
+                    labels={["points", "elapsed", "corrected", "finishes"]}
+                    mb={2}
+                    size="sm"
+                    onChange={handleChange}
+                    setSelectedButton={setSelectedButton}
+                    selectedButton={selectedButton}
+                    // name="resultType"
+                  />
+                  <Divider m={4} />
 
-                //   <ButtonGroup isAttached>
-                //     <Button
-                //       name="resultType"
-                //       onClick={(e) => {
-                //         console.log("e: ", e.target);
-                //         setSelectedButton("one");
-                //       }}
-                //       borderRight={"none"}
-                //       isActive={selectedButton === "one" ? true : false}
-                //       _active={{
-                //         boxShadow: "none",
-                //         background: "blue.100",
-                //         color: "blue.600",
-                //       }}
-                //     >
-                //       one
-                //     </Button>
-                //     <Button
-                //       name="resultType"
-                //       onClick={(e) => {
-                //         console.log("e: ", e.target);
-                //         setSelectedButton("two");
-                //       }}
-                //       borderRight={"none"}
-                //       isActive={selectedButton === "two" ? true : false}
-                //       _active={{
-                //         boxShadow: "none",
-                //         background: "blue.100",
-                //         color: "blue.600",
-                //       }}
-                //     >
-                //       two
-                //     </Button>
-                //     <Button
-                //       name="resultType"
-                //       onClick={(e) => {
-                //         console.log("e: ", e.target);
-                //         setSelectedButton("three");
-                //       }}
-                //       // borderRight={"none"}
-                //       isActive={selectedButton === "three" ? true : false}
-                //       _active={{
-                //         boxShadow: "none",
-                //         background: "blue.100",
-                //         color: "blue.600",
-                //       }}
-                //     >
-                //       three
-                //     </Button>
-                //   </ButtonGroup>
-                //   <Divider m={4} />
-                //   <Button type="submit"> go </Button>
-                // </Form>
-          //     );
-          //   }}
-          // </Formik> */}
-          <Text>
+                  <ButtonGroup isAttached>
+                    <Button
+                      name="resultType"
+                      onClick={(e) => {
+                        console.log("e: ", e.target);
+                        setSelectedButton("one");
+                      }}
+                      borderRight={"none"}
+                      isActive={selectedButton === "one" ? true : false}
+                      _active={{
+                        boxShadow: "none",
+                        background: "blue.100",
+                        color: "blue.600",
+                      }}
+                    >
+                      one
+                    </Button>
+                    <Button
+                      name="resultType"
+                      onClick={(e) => {
+                        console.log("e: ", e.target);
+                        setSelectedButton("two");
+                      }}
+                      borderRight={"none"}
+                      isActive={selectedButton === "two" ? true : false}
+                      _active={{
+                        boxShadow: "none",
+                        background: "blue.100",
+                        color: "blue.600",
+                      }}
+                    >
+                      two
+                    </Button>
+                    <Button
+                      name="resultType"
+                      onClick={(e) => {
+                        console.log("e: ", e.target);
+                        setSelectedButton("three");
+                      }}
+                      // borderRight={"none"}
+                      isActive={selectedButton === "three" ? true : false}
+                      _active={{
+                        boxShadow: "none",
+                        background: "blue.100",
+                        color: "blue.600",
+                      }}
+                    >
+                      three
+                    </Button>
+                  </ButtonGroup>
+                  <Divider m={4} />
+                  <Button type="submit"> go </Button>
+                </Form>
+              );
+            }}
+          </Formik>
+          <Text as="p">
             Use the choose files button to select your Sailwave file(s) to
             import
           </Text>
-          <Box ref={errorBox.current}></Box>
         </Box>
       )}
     </Box>
   );
-}
+};
 
-// Import;
+export default Import;

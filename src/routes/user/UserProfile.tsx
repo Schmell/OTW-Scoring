@@ -19,7 +19,7 @@ import {
   FadeInSlideRight,
 } from "../../components/animations/FadeSlide";
 
-export default function UserProfile() {
+const UserProfile = () => {
   const submittedToast = useToast();
   const [user, userLoading] = useAuthState(auth);
 
@@ -49,7 +49,7 @@ export default function UserProfile() {
   return (
     <Container>
       <FadeInSlideRight>
-        <Heading color="blue.400" w="100%" mt={2} pb={3}>
+        <Heading as="h3" color="blue.400" w="100%" mt={2} pb={3}>
           Profile
         </Heading>
       </FadeInSlideRight>
@@ -108,5 +108,5 @@ export default function UserProfile() {
       </FadeIn>
     </Container>
   );
-}
-// export default UserProfile;
+};
+export default UserProfile;

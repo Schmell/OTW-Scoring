@@ -1,7 +1,7 @@
 import { FunctionalComponent, h } from "preact";
 import { AnimatePresence, motion } from "framer-motion";
 
-export function FadeInSlideLeft({ children }) {
+export const FadeInSlideLeft: FunctionalComponent = ({ children }) => {
   return (
     <motion.div
       transition={{ ease: "easeOut", duration: 0.25 }}
@@ -18,9 +18,9 @@ export function FadeInSlideLeft({ children }) {
       {children}
     </motion.div>
   );
-}
+};
 
-export function SiteListAnimation({ children }) {
+export const SiteListAnimation: FunctionalComponent = ({ children }) => {
   return (
     <AnimatePresence>
       <motion.div
@@ -46,9 +46,9 @@ export function SiteListAnimation({ children }) {
       </motion.div>
     </AnimatePresence>
   );
-}
+};
 
-export function FadeInSlideRight({ children }) {
+export const FadeInSlideRight: FunctionalComponent = ({ children }) => {
   return (
     <motion.div
       transition={{ ease: "easeOut", duration: 0.25 }}
@@ -65,9 +65,9 @@ export function FadeInSlideRight({ children }) {
       {children}
     </motion.div>
   );
-}
+};
 
-export function FadeIn({ children }) {
+export const FadeIn: FunctionalComponent = ({ children }) => {
   return (
     <motion.div
       transition={{ ease: "easeOut", duration: 0.25 }}
@@ -84,9 +84,9 @@ export function FadeIn({ children }) {
       {children}
     </motion.div>
   );
-}
+};
 
-export function FadeOut({ children }) {
+export const FadeOut: FunctionalComponent = ({ children }) => {
   return (
     <motion.div
       transition={{ ease: "easeOut", duration: 0.25 }}
@@ -101,4 +101,4 @@ export function FadeOut({ children }) {
       {children}
     </motion.div>
   );
-}
+};

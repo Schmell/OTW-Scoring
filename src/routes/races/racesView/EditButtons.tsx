@@ -39,6 +39,7 @@ export default function EditButtons({ setRaceId, race }) {
           <IconButton
             aria-label="Edit race settings"
             variant={"ghost"}
+            colorScheme="blue"
             icon={(<Icon as={EditIcon} boxSize={7} />) as any}
             onClick={() => {
               setRaceId(race.id);
@@ -55,7 +56,7 @@ export default function EditButtons({ setRaceId, race }) {
           <IconButton
             aria-label="Delete series"
             variant="ghost"
-            // colorScheme="blue"
+            colorScheme="blue"
             icon={(<Icon as={CloseIcon} boxSize={7} />) as any}
             onClick={deleteRaceDisclosure.onOpen}
           />

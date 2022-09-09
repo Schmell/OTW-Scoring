@@ -48,7 +48,9 @@ export default function EventList({ setHeaderTitle }) {
         <Fragment>
           <Flex justifyContent="space-between" alignItems="end" px={4}>
             <FadeInSlideRight>
-              <Heading color="blue.400">{eventDoc.name}</Heading>
+              <Heading as="h4" color="blue.400">
+                {eventDoc.name}
+              </Heading>
             </FadeInSlideRight>
 
             {/* Sub header buttons */}

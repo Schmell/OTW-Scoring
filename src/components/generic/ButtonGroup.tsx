@@ -15,7 +15,7 @@ export default function BtnGrp({
   //   const [selectedButton, setSelectedButton] = useState("");
 
   return (
-    <Fragment>
+    <>
       <ButtonGroup isAttached {...rest}>
         {labels.map((label, idx) => {
           // figure out first and last in array
@@ -38,8 +38,8 @@ export default function BtnGrp({
               isActive={selectedButton === label ? true : false}
               _active={{
                 boxShadow: "none",
-                // background: "blue.100",
-                // color: "blue.600",
+                background: "blue.100",
+                color: "blue.600",
               }}
             >
               {label}
@@ -47,6 +47,6 @@ export default function BtnGrp({
           );
         })}
       </ButtonGroup>
-    </Fragment>
+    </>
   );
 }

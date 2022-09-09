@@ -49,10 +49,12 @@ export default function Events({ user, setHeaderTitle }) {
   };
 
   return (
-    <Fragment>
+    <>
       <Flex justifyContent="space-between" alignItems="end" px={4}>
         <FadeInSlideRight>
-          <Heading color="blue.400">All Events</Heading>
+          <Heading as="h4" color="blue.400">
+            All Events
+          </Heading>
         </FadeInSlideRight>
 
         {/* Sub header buttons */}
@@ -113,6 +115,6 @@ export default function Events({ user, setHeaderTitle }) {
         })}
         {/* series?.docs.map */}
       </SiteList>
-    </Fragment>
+    </>
   );
 }

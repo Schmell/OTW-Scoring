@@ -1,36 +1,29 @@
-import {
-  Box,
-  Flex,
-  Text,
-  Heading,
-  Icon,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import { h } from "preact";
+import { Box, Flex, Heading, Icon, Text } from "@chakra-ui/react";
+import { FunctionalComponent, h } from "preact";
 import { Link } from "preact-router/match";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+// import { MdChevronLeft } from "react-icons/md";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
-export default function Notfound(props) {
-  //
+const Notfound: FunctionalComponent = () => {
   return (
-    <Box m={8}>
-      <Heading color={useColorModeValue("blue.400", "blue.200")}>
-        Error 404
-      </Heading>
-      <Text color="gray.400">That page doesn&apos;t exist.</Text>
+    <Box m={16}>
+      <Heading color={"blue.400"}>Error 404</Heading>
+      <Text as={"p"}>That page doesn&apos;t exist.</Text>
       <Link
         href="#"
         onClick={() => {
           history.back();
         }}
       >
-        <Flex alignItems="center" my={4} gap={2}>
-          <Icon as={ArrowBackIcon} />
-          <Heading size="sm" p={0} m={0}>
+        <Flex>
+          <Heading size={"sm"} color="black" my={4}>
+            <Icon as={ChevronLeftIcon} mr={2} />
             Back
           </Heading>
         </Flex>
       </Link>
     </Box>
   );
-}
+};
+
+export default Notfound;

@@ -3,17 +3,17 @@
   "short_name": "OTW-RC",
   "start_url": "/",
   "display": "standalone",
-  "orientation": "portrait-primary",
+  "orientation": "portrait",
   "background_color": "#fff",
-  "theme_color": "#3182CE",
+  "theme_color": "#314ff7",
   "icons": [
     {
-      "src": "/assets/icons/xxxhdpi.png",
+      "src": "/assets/icons/android-chrome-192x192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/assets/icons/GooglePlayStore.png",
+      "src": "/assets/icons/android-chrome-512x512.png",
       "type": "image/png",
       "sizes": "512x512"
     }

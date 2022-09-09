@@ -1,4 +1,4 @@
-import { extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
+import { extendTheme } from "@chakra-ui/react";
 
 // export const theme = extendTheme({
 //   colors: {
@@ -128,7 +128,7 @@ export const components = {
     defaultProps: {
       // size: "lg", // default is md
       variant: "outline", // default is solid
-      // colorScheme: "blue", // default is gray
+      colorScheme: "blue", // default is gray
     },
   },
 };
@@ -138,7 +138,4 @@ export const fonts = {
   body: "",
 };
 
-// export const theme = extendTheme(
-//   withDefaultColorScheme({ colorScheme: "blue" }),
-//   { components, colors, fonts }
-// );
+export const theme = extendTheme({ components, colors, fonts });

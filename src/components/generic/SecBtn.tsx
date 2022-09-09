@@ -1,23 +1,22 @@
 import { Button } from "@chakra-ui/react";
-import { h } from "preact";
+import { FunctionalComponent, h } from "preact";
 
 interface SecBtnProps {
   onClick?: any;
-  width?: any;
-  type?: string;
-  children?: any;
-  [x: string]: any;
+  [x: string | number]: any;
 }
 
-export default function SecBtn({
+const SecBtn: FunctionalComponent<SecBtnProps> = ({
   children,
   onClick,
   width,
   type,
-}: SecBtnProps) {
+}) => {
   return (
     <Button type={type} width={width} onClick={onClick}>
       {children}
     </Button>
   );
-}
+};
+
+export default SecBtn;

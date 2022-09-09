@@ -35,10 +35,9 @@ import { db } from "../../util/firebase-config";
 import { Field, Form, Formik } from "formik";
 import useStorage from "../../hooks/useStorage";
 import { FadeInSlideRight } from "../../components/animations/FadeSlide";
-import { Starts } from "../races/raceEdit/Starts";
 // Icons
 
-export default function SeriesEdit({ setHeaderTitle }) {
+const SeriesEdit = ({ setHeaderTitle }) => {
   setHeaderTitle("Edit Series");
 
   const [seriesId] = useStorage("seriesId");
@@ -99,7 +98,7 @@ export default function SeriesEdit({ setHeaderTitle }) {
           <Form>
             <Flex justifyContent="space-between" alignItems="end">
               <FadeInSlideRight>
-                <Heading color="blue.400" mx={4}>
+                <Heading as="h5" color="blue.400" mx={4}>
                   <Editable
                     defaultValue={currentSeries.event}
                     isPreviewFocusable={true}
@@ -107,7 +106,7 @@ export default function SeriesEdit({ setHeaderTitle }) {
                     <EditablePreview />
                     <EditableInput
                       name="event"
-                      onChange={({ target }: any) => {
+                      onChange={({ target }) => {
                         setSeriesName(target.value);
                       }}
                     />
@@ -121,7 +120,7 @@ export default function SeriesEdit({ setHeaderTitle }) {
             <Box mb={6} mx={4}>
               <Accordion defaultIndex={[0]}>
                 <AccordionItem>
-                  <Text mb={3}>
+                  <Text as={"h2"} mb={3}>
                     <AccordionButton>
                       <Box flex="1" textAlign="left">
                         Series details
@@ -246,11 +245,6 @@ export default function SeriesEdit({ setHeaderTitle }) {
                     </Field>
 
                     <Divider my={3} />
-                    <Starts
-                      raceStarts={currentSeries.starts}
-                      docRef={docRef}
-                      values={""}
-                    />
 
                     <FormLabel htmlFor="event">Series name</FormLabel>
                     <Field name="event" as={Input} />
@@ -275,7 +269,7 @@ export default function SeriesEdit({ setHeaderTitle }) {
                 </AccordionItem>
 
                 <AccordionItem>
-                  <Text mb={3}>
+                  <Text as={"h2"} mb={3}>
                     <AccordionButton>
                       <Box flex="1" textAlign="left">
                         Venue details
@@ -305,7 +299,7 @@ export default function SeriesEdit({ setHeaderTitle }) {
                 </AccordionItem>
 
                 <AccordionItem>
-                  <Text mb={3}>
+                  <Text as={"h2"} mb={3}>
                     <AccordionButton>
                       <Box flex="1" textAlign="left">
                         File properties
@@ -348,6 +342,6 @@ export default function SeriesEdit({ setHeaderTitle }) {
       )}
     </Fragment>
   );
-}
+};
 
-// export default SeriesEdit;
+export default SeriesEdit;

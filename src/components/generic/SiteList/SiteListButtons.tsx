@@ -3,6 +3,7 @@ import {
   Tooltip,
   IconButton,
   Icon,
+  Box,
   useDisclosure,
   Button,
   Modal,
@@ -87,7 +88,7 @@ export function SiteListButtons(props: SiteListButtonProps) {
   );
 }
 
-function OpenModal({ item, disclosure, children }) {
+const OpenModal = ({ item, disclosure, children }) => {
   return (
     <Modal isOpen={disclosure.isOpen} onClose={disclosure.onClose}>
       <ModalOverlay />
@@ -105,4 +106,4 @@ function OpenModal({ item, disclosure, children }) {
       </ModalContent>
     </Modal>
   );
-}
+};

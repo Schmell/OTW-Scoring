@@ -14,7 +14,7 @@ import {
 import { arrayUnion, updateDoc } from "firebase/firestore";
 import { Form, useFormik } from "formik";
 
-export function AddStartModal({ isOpen, onClose, docRef }) {
+export const AddStartModal = ({ isOpen, onClose, docRef }) => {
   const upDate = async (start) => {
     await updateDoc(docRef, { starts: arrayUnion(start) });
   };
@@ -74,4 +74,4 @@ export function AddStartModal({ isOpen, onClose, docRef }) {
       </ModalContent>
     </Modal>
   );
-}
+};

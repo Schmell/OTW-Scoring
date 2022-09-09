@@ -9,38 +9,18 @@ import {
   Tooltip,
   Icon,
 } from "@chakra-ui/react";
-import {
-  DocumentData,
-  DocumentReference,
-  DocumentSnapshot,
-  getDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { updateDoc } from "firebase/firestore";
 import { FieldArray, Field } from "formik";
 import { Fragment, h } from "preact";
-import { useEffect, useState } from "preact/hooks";
+import { useState } from "preact/hooks";
 import { formatTime } from "../../../util/formatters";
 import { AddStartModal } from "./AddStartModal";
 // Icons
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 
-export function Starts({ raceStarts, docRef, values }) {
+export const Starts = ({ raceStarts, docRef, values }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const [starts, setStarts] = useState<[{ fleet: string; start: string }]>();
-
-  useEffect(() => {
-    (async () => {
-      if (raceStarts) {
-        setStarts(raceStarts);
-      } else {
-        const series = await getDoc(docRef.parent.parent);
-        const data = series.data() as any;
-        setStarts(data.starts);
-      }
-    })();
-  }, []);
 
   return (
     <Fragment>
@@ -67,7 +47,7 @@ export function Starts({ raceStarts, docRef, values }) {
 
       <FieldArray name="starts">
         {(helper) =>
-          starts?.map((item, idx) => {
+          raceStarts?.map((item, idx) => {
             const [start, setStart] = useState(formatTime(item.start));
 
             return (
@@ -116,4 +96,4 @@ export function Starts({ raceStarts, docRef, values }) {
       </FieldArray>
     </Fragment>
   );
-}
+};
