@@ -12,7 +12,7 @@ const App = () => {
 
   const [headerTitle, setHeaderTitle] = useState("Blw Me");
   // remove annoying firebase message
-  document?.querySelector(".firebase-emulator-warning")?.remove();
+  // document?.querySelector(".firebase-emulator-warning")?.remove();
   return (
     <div id="preact_root">
       <ChakraProvider resetCSS theme={theme}>
