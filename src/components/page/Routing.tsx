@@ -1,3 +1,4 @@
+import { h } from "preact";
 import AsyncRoute from "preact-async-route";
 import Router, { Route } from "preact-router";
 import Home from "../../routes/home";

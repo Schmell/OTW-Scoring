@@ -34,7 +34,7 @@ import PriBtn from "../../components/generic/PriBtn";
 import SecBtn from "../../components/generic/SecBtn";
 // import style from "./style.css";
 
-export const RaceEdit = ({ setHeaderTitle }) => {
+export default function RaceEdit({ setHeaderTitle }) {
   setHeaderTitle("Edit Race");
 
   interface IraceStarts {
@@ -214,4 +214,4 @@ export const RaceEdit = ({ setHeaderTitle }) => {
       )}
     </Fragment>
   );
-};
+}
