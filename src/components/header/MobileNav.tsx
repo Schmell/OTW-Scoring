@@ -73,9 +73,8 @@ export default function MobileNav({
           aria-label="open menu"
           display={{ base: "flex", md: "none" }}
           variant="ghost"
-          size="lg"
-          color={"white"}
-          fontSize="1.5em"
+          color="white"
+          size="xs"
           _hover={{
             bgcolor: "blue.400",
           }}

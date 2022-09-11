@@ -11,7 +11,8 @@ const App = () => {
   const [user] = useAuthState(auth);
 
   const [headerTitle, setHeaderTitle] = useState("Blw Me");
-  document.querySelector(".firebase-emulator-warning")?.remove();
+  // remove annoying firebase message
+  document?.querySelector(".firebase-emulator-warning")?.remove();
   return (
     <div id="preact_root">
       <ChakraProvider resetCSS theme={theme}>
