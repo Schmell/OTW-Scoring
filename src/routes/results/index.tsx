@@ -86,8 +86,15 @@ export default function Result(props) {
 
   useEffect(() => {
     (async () => {
-      const name = await raceDoc?.name;
-      setRaceName(name);
+      let name: string;
+      const rdName = await raceDoc?.name;
+      if (!rdName) {
+        const rdRank = await raceDoc?.rank;
+        if (!rdRank) return;
+        setRaceName(`Race ${rdRank}`);
+      } else {
+        setRaceName(rdName);
+      }
     })();
   }, [raceDoc, tableData]);
 

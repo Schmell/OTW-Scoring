@@ -1,13 +1,4 @@
-import {
-  Box,
-  Divider,
-  Flex,
-  Heading,
-  Icon,
-  IconButton,
-  Tooltip,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Divider, Flex, Heading, useDisclosure } from "@chakra-ui/react";
 import { addDoc, collection, query, where } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
@@ -16,7 +7,6 @@ import {
   FadeInSlideLeft,
   FadeInSlideRight,
 } from "../../components/animations/FadeSlide";
-import { AreYouSure } from "../../components/generic/AreYouSure";
 import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
 // Icons
@@ -30,7 +20,7 @@ import ToolIconBtn from "../../components/generic/ToolIconBtn";
 
 export default function Events({ user, setHeaderTitle }) {
   setHeaderTitle("Events");
-
+  // console.log("user: ", user);
   const [eventId, setEventId] = useStorage("eventId");
 
   const colRef = collection(db, "events");

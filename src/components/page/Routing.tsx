@@ -1,8 +1,10 @@
 import { h } from "preact";
 import AsyncRoute from "preact-async-route";
 import Router, { Route } from "preact-router";
+import { useAuthState } from "react-firebase-hooks/auth";
 import Home from "../../routes/home";
 import NotFoundPage from "../../routes/notfound";
+import { auth } from "../../util/firebase-config";
 import { SignIn } from "./SignIn";
 
 interface RoutingProps {
@@ -10,8 +12,30 @@ interface RoutingProps {
 }
 
 export default function Routing(props) {
+  // const [user] = useAuthState(auth);
+  // const { user } = props;
+  // console.log("user: ", user);
+  function routeChanged({ current, router }) {
+    // preact-cli's async routes have a .preload() method
+    const component = current && current.type;
+    if (component && component.preload) {
+      component.preload((mod) => {
+        // loading succeeded:
+        if (mod) return;
+        // ...otherwise, the route resolved to a failed/empty module.
+        // Some options for how to handle this state:
+        // Option 1 - show the previous route:
+        // router.routeTo(previous);
+        // Option 2 - show an error page:
+        router.routeTo("/");
+        // Option 3 - show an error modal:
+        // this.setState({ error: `Failed to load route ${url}` });
+      });
+    }
+  }
+
   return (
-    <Router>
+    <Router onChange={() => {}}>
       <Route path="/" component={Home} {...props} />
       <Route path="/signin" component={SignIn} {...props} />
       <AsyncRoute
