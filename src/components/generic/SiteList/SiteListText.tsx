@@ -7,7 +7,7 @@ interface SiteListTextProps {
   children: any;
   item: QueryDocumentSnapshot<DocumentData>;
   forward: string;
-  setStorage: (id: string) => void;
+  setStorage?: (id: string) => void;
   textItems: {
     head: string;
     sub: string;
@@ -31,7 +31,7 @@ export function SiteListText({
           mx={2}
           cursor={"pointer"}
           onClick={() => {
-            setStorage(item.id);
+            setStorage?.(item.id);
             route(`/${forward}`);
           }}
         >
@@ -43,8 +43,8 @@ export function SiteListText({
 
           <Text fontSize="md" color={useColorModeValue("gray.500", "gray.300")}>
             {textItems.foot}
-            <Divider />
-            {item.id}
+            {/* <Divider />
+            {item.id} */}
           </Text>
         </Box>
         {children}

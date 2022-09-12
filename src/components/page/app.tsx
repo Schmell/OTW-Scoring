@@ -12,7 +12,7 @@ const App = () => {
 
   const [headerTitle, setHeaderTitle] = useState("Blw Me");
   // remove annoying firebase message
-  // document?.querySelector(".firebase-emulator-warning")?.remove();
+  document?.querySelector(".firebase-emulator-warning")?.remove();
   return (
     <ChakraProvider resetCSS theme={theme}>
       <SidebarWithHeader headerTitle={headerTitle}>

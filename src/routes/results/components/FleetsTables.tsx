@@ -10,14 +10,10 @@ export default function FleetsTable(props) {
   const unique = Array.from(
     new Set(
       tableData.map((item) => {
-        // if (item.fleet && item.division) {
-        //   return `${item.fleet} - ${item.division}`;
-        // }
-        // console.log("item: ", item);
-        if (!item.fleet) {
+        if (!item.fleet || item.fleet === undefined) {
+          if (item.division) return item.division;
           return "Fleet";
         }
-        if (item.division) return item.division;
 
         return item.fleet;
       })
@@ -25,13 +21,12 @@ export default function FleetsTable(props) {
   );
 
   unique.forEach((fleetName) => {
-    // console.log("fleetName: ", fleetName);
-    const push = tableData.filter((td) => {
-      if (!td.fleet && !td.division) return td;
-      if (td.fleet && td.fleet === fleetName) return td;
-      if (td.division && td.division === fleetName) {
-        td.fleet = td.division;
-        return td;
+    const push = tableData.filter((row) => {
+      if (!row.fleet && !row.division) return row;
+      if (row.fleet && row.fleet === fleetName) return row;
+      if (row.division && row.division === fleetName) {
+        row.fleet = row.division;
+        return row;
       }
     });
     fleetsArray.push(push);

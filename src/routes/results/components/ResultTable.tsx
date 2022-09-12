@@ -147,9 +147,10 @@ function FleetTable(props: TableProps) {
         id: "boat",
         enableHiding: true,
         cell: (info: any) => {
-          // typing doesn't work in vite
           return (
-            <Link href={`/competitors/${info.row.original?.id}`}>
+            <Link
+              href={`/competitors/${info.row.original?._seriesid}/${info.row.original?.id}`}
+            >
               {info.getValue()}
             </Link>
           );
@@ -163,7 +164,9 @@ function FleetTable(props: TableProps) {
         header: () => "Skipper",
         cell: (info: any) => {
           return (
-            <Link href={`/competitors/${info.row.original?.id}`}>
+            <Link
+              href={`/competitors/${info.row.original?._seriesid}/${info.row.original?.id}`}
+            >
               {info.getValue()}
             </Link>
           );
@@ -176,7 +179,9 @@ function FleetTable(props: TableProps) {
         enableHiding: true,
         cell: (info: any) => {
           return (
-            <Link href={`/competitors/${info.row.original?.id}`}>
+            <Link
+              href={`/competitors/${info.row.original?._seriesid}/${info.row.original?.id}`}
+            >
               {info.getValue()}
             </Link>
           );

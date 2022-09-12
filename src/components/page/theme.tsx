@@ -131,6 +131,25 @@ export const components = {
       colorScheme: "blue", // default is gray
     },
   },
+  Spinner: {
+    // style object for base or default style
+    baseStyle: {},
+    // styles for different sizes ("sm", "md", "lg")
+    sizes: {},
+    // styles for different visual variants ("outline", "solid")
+    variants: {
+      outline: {
+        boxShadow: "md",
+      },
+    },
+    // default values for 'size', 'variant' and 'colorScheme'
+    // 6. We can overwrite defaultProps
+    defaultProps: {
+      size: "lg", // default is md
+      color: "blue.500",
+      colorScheme: "blue", // default is gray
+    },
+  },
 };
 
 export const fonts = {

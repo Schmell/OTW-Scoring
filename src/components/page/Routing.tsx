@@ -106,9 +106,18 @@ export default function Routing(props) {
         {...props}
       />
       <AsyncRoute
-        path="/competitors"
+        path="/competitors/:seriesId/:compId"
         getComponent={() =>
-          import("../../routes/competitors/Competitors").then(
+          import("../../routes/competitors/Comp").then(
+            (module) => module.default
+          )
+        }
+        {...props}
+      />
+      <AsyncRoute
+        path="/competitors/:seriesId/"
+        getComponent={() =>
+          import("../../routes/competitors/Comps").then(
             (module) => module.default
           )
         }

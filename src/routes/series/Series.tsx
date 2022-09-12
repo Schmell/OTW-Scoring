@@ -17,17 +17,16 @@ import {
   FadeInSlideLeft,
   FadeInSlideRight,
 } from "../../components/animations/FadeSlide";
-import { AreYouSure } from "../../components/generic/AreYouSure";
 import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
 // Icons
-import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
-import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import { SiteList } from "../../components/generic/SiteList";
 import { SiteListButtons } from "../../components/generic/SiteList/SiteListButtons";
 import { SiteListItem } from "../../components/generic/SiteList/SiteListItem";
 import { SiteListText } from "../../components/generic/SiteList/SiteListText";
 import ToolIconBtn from "../../components/generic/ToolIconBtn";
+import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
+import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 
 export default function Series(props) {
   const { user, setHeaderTitle, ...rest } = props;
