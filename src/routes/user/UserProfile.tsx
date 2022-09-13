@@ -1,14 +1,15 @@
-import { h } from "preact";
 import {
   Box,
-  Button,
-  Container,
   Divider,
-  FormLabel,
+  Flex,
   Heading,
+  Button,
   Input,
+  FormLabel,
   useToast,
+  useColorModeValue,
 } from "@chakra-ui/react";
+import { h } from "preact";
 import { doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../util/firebase-config";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -18,13 +19,15 @@ import {
   FadeIn,
   FadeInSlideRight,
 } from "../../components/animations/FadeSlide";
+import { Image } from "@chakra-ui/react";
+import { Fragment } from "react";
 
 export default function UserProfile() {
   const submittedToast = useToast();
-  const [user, userLoading] = useAuthState(auth);
+  const [user] = useAuthState(auth);
 
   const docRef = doc(db, "user", user!.uid); // bang
-  const [value, loading, error, snapshot] = useDocumentData(docRef);
+  const [value] = useDocumentData(docRef);
 
   const submitHandler = async (values: any) => {
     // remove undefined's from values
@@ -42,20 +45,19 @@ export default function UserProfile() {
       duration: 2000,
       isClosable: true,
     });
-
     history.back();
   };
 
   return (
-    <Container>
+    <Fragment>
       <FadeInSlideRight>
-        <Heading as="h3" color="blue.400" w="100%" mt={2} pb={3}>
+        <Heading color="blue.400" fontSize={"4xl"} mx={4} my={2}>
           Profile
         </Heading>
       </FadeInSlideRight>
-
+      <Divider border={4} />
       <FadeIn>
-        <Box mx={4}>
+        <Box mx={8} my={4}>
           <Formik
             enableReinitialize
             initialValues={{
@@ -69,8 +71,20 @@ export default function UserProfile() {
             onSubmit={submitHandler}
           >
             <Form>
-              <FormLabel htmlFor="nickname">Nickname</FormLabel>
-              <Field name="nickname" as={Input} />
+              <Flex justifyContent={"space-between"}>
+                <Box w="100%" mr={4}>
+                  <FormLabel htmlFor="nickname">Nickname</FormLabel>
+                  <Field name="nickname" as={Input} />
+                </Box>
+                <Image
+                  src={value?.photoURL ? value?.photoURL : ""}
+                  alt="Dan Abramov"
+                  boxSize="85px"
+                  border="1px solid"
+                  borderColor={useColorModeValue("blue.600", "blue.300")}
+                  borderRadius={"50%"}
+                />
+              </Flex>
 
               <Divider my={3} />
 
@@ -106,7 +120,7 @@ export default function UserProfile() {
           </Formik>
         </Box>
       </FadeIn>
-    </Container>
+    </Fragment>
   );
 }
 // export default UserProfile;

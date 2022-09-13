@@ -1,18 +1,15 @@
 import {
-  Box,
-  Button,
   Divider,
-  Editable,
-  EditableInput,
-  EditablePreview,
-  EditableTextarea,
   Flex,
   FormLabel,
   Grid,
   GridItem,
   Heading,
-  IconButton,
   Input,
+  Progress,
+  Text,
+} from "@chakra-ui/react";
+import {
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -20,27 +17,24 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Progress,
-  Spinner,
-  Text,
-  useColorModeValue,
-  useDisclosure,
 } from "@chakra-ui/react";
-import { collection, doc, updateDoc } from "firebase/firestore";
+import { Editable, EditableInput, EditablePreview } from "@chakra-ui/react";
+import { useColorModeValue, useDisclosure } from "@chakra-ui/react";
+import {} from "@chakra-ui/react";
+import {} from "@chakra-ui/react";
 import { h } from "preact";
 import { Fragment } from "react";
-import { useDocumentData } from "react-firebase-hooks/firestore";
-import { Page } from "../../components/page/Page";
+import { collection, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../util/firebase-config";
-
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ToolIconBtn from "../../components/generic/ToolIconBtn";
-import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 import { Field, Form, Formik } from "formik";
 import PriBtn from "../../components/generic/PriBtn";
-import SecBtn from "../../components/generic/SecBtn";
-import CloseIcon from "@mui/icons-material/Close";
+import ToolIconBtn from "../../components/generic/ToolIconBtn";
 import { capitalizeFirstLetter } from "../../util/formatters";
+// Icons
+import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function Comp({ seriesId, compId }) {
   const seriesRef = doc(db, "series", seriesId);
@@ -50,7 +44,6 @@ export default function Comp({ seriesId, compId }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleChange = async ({ target }) => {
-    // const obj[target.name] = target.value
     const update = await updateDoc(compDoc, { [target.name]: target.value });
   };
 
@@ -61,7 +54,7 @@ export default function Comp({ seriesId, compId }) {
   };
 
   return (
-    <Page>
+    <Fragment>
       {compLoading ? (
         <Fragment>
           <Heading mx={4} color="transparent" fontSize={"4xl"}>
@@ -76,7 +69,10 @@ export default function Comp({ seriesId, compId }) {
           <Fragment>
             <Flex mt={6} mx={2} gap={2} justifyContent="space-between">
               <Heading mx={4} color="blue.400" fontSize={"4xl"}>
-                {comp?.boat}
+                <Editable defaultValue={comp?.boat} justifyContent="center">
+                  <EditablePreview />
+                  <EditableInput onBlur={handleChange} name="boat" />
+                </Editable>
               </Heading>
               <Flex gap={2} mr={4}>
                 <ToolIconBtn
@@ -95,7 +91,6 @@ export default function Comp({ seriesId, compId }) {
             <Grid
               templateColumns="repeat(6, 1fr)"
               color={useColorModeValue("blue.500", "blue.300")}
-              maxWidth={540}
               gap={2}
               fontSize="lg"
               mx={4}
@@ -104,7 +99,13 @@ export default function Comp({ seriesId, compId }) {
                 .sort()
                 .map((c) => {
                   if (comp[c] === "0") return;
-                  if (c === "_seriesid" || c === "compid" || c === "id") return;
+                  if (
+                    c === "_seriesid" ||
+                    c === "compid" ||
+                    c === "id" ||
+                    c === "boat"
+                  )
+                    return;
                   return (
                     <Fragment>
                       <GridItem textAlign="end">
@@ -124,72 +125,6 @@ export default function Comp({ seriesId, compId }) {
                     </Fragment>
                   );
                 })}
-
-              <GridItem textAlign="right">
-                <Text fontWeight="semibold" pt="2px">
-                  Fleet:
-                </Text>
-              </GridItem>
-              <GridItem textAlign="left" colSpan={2}>
-                <Editable
-                  defaultValue={
-                    comp?.fleet || comp?.division
-                      ? comp.fleet || comp.division
-                      : "---"
-                  }
-                >
-                  <EditablePreview />
-                  <EditableInput onBlur={handleChange} name="fleet" />
-                </Editable>
-              </GridItem>
-
-              {/* <GridItem textAlign="right">
-                <Text fontWeight="semibold" pt="2px">
-                  Class:
-                </Text>
-              </GridItem>
-              <GridItem textAlign="left" colSpan={2}>
-                <Editable defaultValue={comp?.class ? comp.class : "---"}>
-                  <EditablePreview />
-                  <EditableInput onBlur={handleChange} name="model" />
-                </Editable>
-              </GridItem>
-
-              <GridItem textAlign="right">
-                <Text fontWeight="semibold" pt="2px">
-                  LOA:
-                </Text>
-              </GridItem>
-              <GridItem textAlign="left" colSpan={2}>
-                <Editable defaultValue={comp?.loa ? comp.loa : "---"}>
-                  <EditablePreview />
-                  <EditableInput onBlur={handleChange} name="loa" />
-                </Editable>
-              </GridItem>
-
-              <GridItem textAlign="right">
-                <Text fontWeight="semibold" pt="2px">
-                  Skipper:
-                </Text>
-              </GridItem>
-              <GridItem textAlign="left" colSpan={2}>
-                <Editable defaultValue={comp?.helmname ? comp.helmname : "---"}>
-                  <EditablePreview />
-                  <EditableInput onBlur={handleChange} name="helmname" />
-                </Editable>
-              </GridItem>
-
-              <GridItem textAlign="right">
-                <Text fontWeight="semibold" pt="2px">
-                  Sail No:
-                </Text>
-              </GridItem>
-              <GridItem textAlign="left" colSpan={2}>
-                <Editable defaultValue={comp?.sailno ? comp.sailno : "---"}>
-                  <EditablePreview />
-                  <EditableInput onBlur={handleChange} name="sailno" />
-                </Editable>
-              </GridItem> */}
             </Grid>
           </Fragment>
         )
@@ -234,6 +169,6 @@ export default function Comp({ seriesId, compId }) {
           </ModalContent>
         </Modal>
       </Fragment>
-    </Page>
+    </Fragment>
   );
 }
