@@ -2,25 +2,25 @@ import {
   Box,
   Divider,
   Flex,
-  Heading,
-  Button,
-  Input,
   FormLabel,
-  useToast,
+  Heading,
+  Image,
+  Input,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
-import { h } from "preact";
 import { doc, updateDoc } from "firebase/firestore";
-import { auth, db } from "../../util/firebase-config";
+import { Field, Form, Formik } from "formik";
+import { h } from "preact";
+import { Fragment } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { Field, Form, Formik } from "formik";
 import {
   FadeIn,
   FadeInSlideRight,
 } from "../../components/animations/FadeSlide";
-import { Image } from "@chakra-ui/react";
-import { Fragment } from "react";
+import PriBtn from "../../components/generic/PriBtn";
+import { auth, db } from "../../util/firebase-config";
 
 export default function UserProfile() {
   const submittedToast = useToast();
@@ -113,9 +113,9 @@ export default function UserProfile() {
 
               <Divider my={3} />
 
-              <Button type="submit" colorScheme="blue" w="100%" my={4}>
+              <PriBtn type="submit" w="100%" my={2} mb={4}>
                 Submit
-              </Button>
+              </PriBtn>
             </Form>
           </Formik>
         </Box>
@@ -123,4 +123,3 @@ export default function UserProfile() {
     </Fragment>
   );
 }
-// export default UserProfile;

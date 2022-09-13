@@ -1,5 +1,5 @@
 import { Fragment, h } from "preact";
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 // Chakra
 import {
   Accordion,
@@ -28,7 +28,14 @@ import {
   useToast,
 } from "@chakra-ui/react";
 // Firebase
-import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { db } from "../../util/firebase-config";
 //
@@ -42,6 +49,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
 
   const [seriesId] = useStorage("seriesId");
   const [seriesName, setSeriesName] = useState("");
+  console.log("seriesName: ", seriesName);
 
   // Get the currentRace data
   const docRef = doc(db, "series", seriesId);
@@ -49,13 +57,39 @@ const SeriesEdit = ({ setHeaderTitle }) => {
 
   const submittedToast = useToast();
 
+  const raceBasRequirements = {
+    _seriesid: "",
+    date: "",
+    sailed: "0",
+    fleet: "",
+    start: [],
+    time: "",
+  };
+
   const submitHandler = async (values: any) => {
+    // console.log("values.newFile: ", values.newFile);
+    // console.log("values.addRaces: ", values.addRaces);
+    if (values.newFile && values.addRaces) {
+      console.log("values.addRaces: ", values.addRaces);
+      // addRaces is an int or null
+      const racesRef = collection(docRef, "races");
+      for (let i = 1; values.addRaces + 1 > i; i++) {
+        // need to add raceBasRequirements
+        addDoc(racesRef, {
+          name: `${values.prefix} ${i}`,
+          raceid: i,
+          rank: i,
+          ...raceBasRequirements,
+        });
+      }
+    }
     // Remove undefined's
     Object.keys(values).forEach((key) =>
       values[key] === undefined ? delete values[key] : {}
     );
     // here we may need to add modified flag or something
     values.lastModified = serverTimestamp();
+    values.newFile = false;
     // update the firestore doc
     await updateDoc(docRef, values);
 
@@ -73,12 +107,22 @@ const SeriesEdit = ({ setHeaderTitle }) => {
     // route("/races", true);
   };
 
+  useEffect(() => {
+    if (!seriesLoading) {
+      setSeriesName(currentSeries && currentSeries.event);
+    }
+  }, [currentSeries, seriesLoading]);
+
   return (
     <Fragment>
-      {currentSeries && (
+      {currentSeries && seriesName && (
         <Formik
           initialValues={{
             event: currentSeries.event,
+            name: seriesName, // shouldn't really be name
+            newFile: true,
+            addRaces: null,
+            prefix: "Race ",
             eventwebsite: currentSeries.eventwebsite,
             eventburgee: currentSeries.eventburgee,
             eventemail: currentSeries.eventemail,
@@ -86,7 +130,6 @@ const SeriesEdit = ({ setHeaderTitle }) => {
             venuewebsite: currentSeries.venuewebsite,
             venueburgee: currentSeries.venueburgee,
             venueemail: currentSeries.venueemail,
-            name: seriesName,
             lastModified: currentSeries.__fileInfo.lastModified,
             lastModifiedDate: currentSeries.__fileInfo.lastModifiedDate,
             size: currentSeries.__fileInfo.size,
@@ -98,19 +141,8 @@ const SeriesEdit = ({ setHeaderTitle }) => {
           <Form>
             <Flex justifyContent="space-between" alignItems="end">
               <FadeInSlideRight>
-                <Heading as="h5" color="blue.400" mx={4}>
-                  <Editable
-                    defaultValue={currentSeries.event}
-                    isPreviewFocusable={true}
-                  >
-                    <EditablePreview />
-                    <EditableInput
-                      name="event"
-                      onChange={({ target }) => {
-                        setSeriesName(target.value);
-                      }}
-                    />
-                  </Editable>
+                <Heading fontSize={"4xl"} color="blue.400" mx={4}>
+                  {currentSeries.event}
                 </Heading>
               </FadeInSlideRight>
             </Flex>
@@ -118,6 +150,26 @@ const SeriesEdit = ({ setHeaderTitle }) => {
             <Divider my={3} border="8px" />
 
             <Box mb={6} mx={4}>
+              {currentSeries.newFile && (
+                <Flex alignItems={"center"} gap={0} my={2}>
+                  <FormLabel htmlFor="addRaces">#Races: </FormLabel>
+                  <Field
+                    name="addRaces"
+                    type="number"
+                    w={70}
+                    mr={6}
+                    as={Input}
+                  />
+                  <FormLabel htmlFor="prefix">Prefix: </FormLabel>
+                  <Field name="prefix" as={Input} />
+                  <Field
+                    name="__fileInfo.newFile"
+                    type="hidden"
+                    value={false}
+                    as={Input}
+                  />
+                </Flex>
+              )}
               <Accordion defaultIndex={[0]}>
                 <AccordionItem>
                   <Text as={"h2"} mb={3}>
@@ -136,7 +188,6 @@ const SeriesEdit = ({ setHeaderTitle }) => {
 
                     <Divider my={3} />
 
-                    {/* <FormLabel htmlFor="resutlType">Series name</FormLabel> */}
                     <Field name="resultType">
                       {({ field, form }) => (
                         <FormControl
@@ -195,7 +246,6 @@ const SeriesEdit = ({ setHeaderTitle }) => {
 
                     <Divider my={3} />
 
-                    {/* <FormLabel htmlFor="resutlType">Series name</FormLabel> */}
                     <Field name="rowTitle">
                       {({ field, form }) => (
                         <FormControl
@@ -248,6 +298,11 @@ const SeriesEdit = ({ setHeaderTitle }) => {
 
                     <FormLabel htmlFor="event">Series name</FormLabel>
                     <Field name="event" as={Input} />
+
+                    <Divider my={3} />
+
+                    <FormLabel htmlFor="venue">Venue</FormLabel>
+                    <Field name="venue" as={Input} />
 
                     <Divider my={3} />
 

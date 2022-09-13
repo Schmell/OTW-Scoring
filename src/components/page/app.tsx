@@ -11,10 +11,7 @@ const App = () => {
   const [user] = useAuthState(auth);
 
   const [headerTitle, setHeaderTitle] = useState("Blw Me");
-  // remove annoying firebase message
-  // if (document) {
-  //   document?.querySelector(".firebase-emulator-warning")?.remove();
-  // }
+
   return (
     <ChakraProvider resetCSS theme={theme}>
       <SidebarWithHeader headerTitle={headerTitle}>
