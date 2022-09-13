@@ -12,9 +12,6 @@ interface RoutingProps {
 }
 
 export default function Routing(props) {
-  // const [user] = useAuthState(auth);
-  // const { user } = props;
-  // console.log("user: ", user);
   function routeChanged({ current, router }) {
     // preact-cli's async routes have a .preload() method
     const component = current && current.type;
