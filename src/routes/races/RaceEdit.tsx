@@ -32,14 +32,16 @@ import { Sailed } from "./raceEdit/Sailed";
 import { Starts } from "./raceEdit/Starts";
 import PriBtn from "../../components/generic/PriBtn";
 import SecBtn from "../../components/generic/SecBtn";
+import ToolIconBtn from "../../components/generic/ToolIconBtn";
+import CloseIcon from "@mui/icons-material/Close";
 // import style from "./style.css";
 
 export default function RaceEdit({ setHeaderTitle }) {
   setHeaderTitle("Edit Race");
 
   interface IraceStarts {
-    fleet: string;
-    start: string;
+    fleet?: string;
+    start?: string;
   }
 
   // Get the current navigation id's
@@ -199,11 +201,18 @@ export default function RaceEdit({ setHeaderTitle }) {
                     <Notes loading={loading} currentRace={currentRace} />
 
                     {/* Submit Button */}
-                    <Flex gap={2}>
+                    <Flex gap={2} my={4} mb={6}>
                       <PriBtn type="submit" width="100%">
                         Submit
                       </PriBtn>
                       <SecBtn type="reset">Reset</SecBtn>
+                      <ToolIconBtn
+                        label="Close"
+                        icon={CloseIcon}
+                        action={() => {
+                          history.back();
+                        }}
+                      />
                     </Flex>
                   </Box>
                 </FadeIn>

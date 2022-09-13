@@ -18,13 +18,13 @@ import { SiteListItem } from "../../components/generic/SiteList/SiteListItem";
 import { SiteListText } from "../../components/generic/SiteList/SiteListText";
 import ToolIconBtn from "../../components/generic/ToolIconBtn";
 
-export default function Events({ user, setHeaderTitle }) {
+export default function Events(props) {
+  const { user, setHeaderTitle, ...rest } = props;
   setHeaderTitle("Events");
-  // console.log("user: ", user);
   const [eventId, setEventId] = useStorage("eventId");
 
   const colRef = collection(db, "events");
-  const ownerEvents = query(colRef, where("__owner", "==", user.uid));
+  const ownerEvents = query(colRef, where("__owner", "==", user && user.uid));
 
   const [events, eventsLoading] = useCollection(ownerEvents);
   const deleteEventDisclosure = useDisclosure();
@@ -39,7 +39,7 @@ export default function Events({ user, setHeaderTitle }) {
   };
 
   return (
-    <>
+    <Fragment>
       <Flex justifyContent="space-between" alignItems="end" px={4}>
         <FadeInSlideRight>
           <Heading as="h4" color="blue.400">
@@ -105,6 +105,6 @@ export default function Events({ user, setHeaderTitle }) {
         })}
         {/* series?.docs.map */}
       </SiteList>
-    </>
+    </Fragment>
   );
 }

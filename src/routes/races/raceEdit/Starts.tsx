@@ -1,18 +1,19 @@
 import {
   Box,
-  FormLabel,
-  IconButton,
   Divider,
   Flex,
-  Input,
-  useDisclosure,
-  Tooltip,
+  FormLabel,
   Icon,
+  IconButton,
+  Input,
+  Tooltip,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { updateDoc } from "firebase/firestore";
-import { FieldArray, Field } from "formik";
 import { Fragment, h } from "preact";
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
+import { updateDoc } from "firebase/firestore";
+import { useDocument } from "react-firebase-hooks/firestore";
+import { Field, FieldArray } from "formik";
 import { formatTime } from "../../../util/formatters";
 import { AddStartModal } from "./AddStartModal";
 // Icons
@@ -21,6 +22,22 @@ import CloseIcon from "@mui/icons-material/Close";
 
 export const Starts = ({ raceStarts, docRef, values }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [starts, setStarts] = useState<[{}]>();
+
+  const [race] = useDocument(docRef);
+  const [series] = useDocument(docRef.parent.parent);
+
+  useEffect(() => {
+    if (raceStarts?.length) {
+      setStarts(raceStarts);
+    } else {
+      const groupValues = series?.get("pubgroupvalues").split("|");
+      const seriesStarts = groupValues?.map((val) => {
+        return { fleet: val, start: "" };
+      });
+      setStarts(seriesStarts);
+    }
+  }, [series]);
 
   return (
     <Fragment>
@@ -47,7 +64,7 @@ export const Starts = ({ raceStarts, docRef, values }) => {
 
       <FieldArray name="starts">
         {(helper) =>
-          raceStarts?.map((item, idx) => {
+          starts?.map((item: any, idx) => {
             const [start, setStart] = useState(formatTime(item.start));
 
             return (
