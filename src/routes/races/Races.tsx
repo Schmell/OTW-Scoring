@@ -1,5 +1,5 @@
 import { Box, Divider, Flex, Heading, Progress } from "@chakra-ui/react";
-import { addDoc, collection, doc } from "firebase/firestore";
+import { addDoc, collection, doc, orderBy, query } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { Link, route } from "preact-router";
 import { useCollection, useDocumentData } from "react-firebase-hooks/firestore";
@@ -29,8 +29,13 @@ export default function Races(props) {
   const [seriesId, _setSeriesId] = useStorage("seriesId");
   const [_raceId, setRaceId] = useStorage("raceId", { initVal: "1" });
 
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////
   const racesRef = collection(db, "series", seriesId, "races");
-  const [races, racesLoading] = useCollection(racesRef);
+  const racesQ = query(racesRef, orderBy("name"), orderBy("date"));
+  const [races, racesLoading] = useCollection(racesQ);
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////
 
   const seriesRef = doc(db, "series", seriesId);
   const [series, _seriesLoading] = useDocumentData(seriesRef);

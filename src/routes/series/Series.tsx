@@ -51,9 +51,10 @@ export default function Series(props) {
     };
 
     const docRef = await addDoc(seriesRef, {
-      name: "Series ",
+      event: "New Series",
       __fileInfo,
       __owner: user.uid,
+      newFile: true,
     });
 
     setSeriesId(docRef.id);
@@ -64,7 +65,7 @@ export default function Series(props) {
     <Fragment>
       <Flex justifyContent="space-between" alignItems="end" px={4}>
         <FadeInSlideRight>
-          <Heading as="h4" color="blue.400">
+          <Heading fontSize="4xl" color="blue.400">
             All Series
           </Heading>
         </FadeInSlideRight>
@@ -78,7 +79,7 @@ export default function Series(props) {
               icon={FileUploadOutlinedIcon}
             />
             <ToolIconBtn
-              label="Add Series"
+              label="Create Series"
               action={addSeriesHandler}
               icon={AddToPhotosOutlinedIcon}
             />
@@ -119,12 +120,6 @@ export default function Series(props) {
                 </Box>
               </SiteListButtons>
             </SiteListText>
-            {/* {console.log(series.id)} */}
-            {/* <AreYouSure colPath="series" itemId={series.id} disclosure={deleteSeriesDisclosure}>
-              <Box>This will delete the series and is not undo-able</Box>
-              <Box>You will loose any work you have done with this Series</Box>
-              <Box>{series.id}</Box>
-            </AreYouSure> */}
           </SiteListItem>
         ))}
       </SiteList>
