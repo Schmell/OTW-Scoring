@@ -28,6 +28,7 @@ export class Comp implements IComp {
   public compid: string;
   [x: number]: any;
   [x: string]: any;
+
   constructor(props: IComp) {
     this.id = props.id;
     this.ref = props.ref;

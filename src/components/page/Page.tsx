@@ -1,6 +1,15 @@
 import { h } from "preact";
-import { Box, Container } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
+import { Fragment } from "react";
+import Footer from "../footer";
 
 export const Page = ({ children }) => {
-  return <Box mt={14}>{children}</Box>;
+  return (
+    <Fragment>
+      <Box w="100%" position="absolute" overflow="scroll">
+        {children}
+      </Box>
+      <Footer />
+    </Fragment>
+  );
 };

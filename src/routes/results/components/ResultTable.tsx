@@ -47,6 +47,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ToolIconBtn from "../../../components/generic/ToolIconBtn";
 import { DocumentData } from "firebase/firestore";
+import PageHead from "../../../components/page/pageHead";
 // import spacer from "../../../assets/img/spacer.gif";
 
 type ResultRow = {
@@ -363,7 +364,7 @@ function FleetTable(props: TableProps) {
   return (
     <Fragment>
       <Fragment>
-        <Flex justifyContent={"space-between"} px={6}>
+        {/* <Flex justifyContent={"space-between"} px={6}>
           <Flex>
             <Image src="../../../assets/img/spacer.gif" height={8} w={0} />
             <Heading color="blue.400" size="2xl">
@@ -371,7 +372,6 @@ function FleetTable(props: TableProps) {
             </Heading>
           </Flex>
 
-          {/* Header buttons */}
           <Flex gap={2}>
             <ToolIconBtn
               disabled={selectedRace <= 0}
@@ -407,9 +407,42 @@ function FleetTable(props: TableProps) {
           />
         </Flex>
 
-        <Divider my={3} border={4} />
+        <Divider my={3} border={4} /> */}
+        <PageHead title={fleetName ? fleetName : "Fleet"}>
+          <ToolIconBtn
+            disabled={selectedRace <= 0}
+            action={() => {
+              setSelectedRace(selectedRace - 1);
+            }}
+            label="Previous race"
+            icon={ChevronLeftIcon}
+          />
+          <ToolIconBtn
+            disabled={selectedRace >= racesArray.length - 1}
+            action={() => {
+              setSelectedRace(selectedRace + 1);
+            }}
+            label="Next race"
+            icon={ChevronRightIcon}
+          />
+          <ToolIconBtn
+            action={() => route("/series/edit")}
+            label="Edit Series"
+            icon={EditIcon}
+          />
+          <ToolIconBtn action={onOpen} label="Settings" icon={SettingsIcon} />
+        </PageHead>
 
-        <Box p={2}>
+        <SettingsModal
+          isOpen={isOpen}
+          onClose={onClose}
+          rowTitle={rowTitle}
+          setRowTitle={setRowTitle}
+          setResultType={setResultType}
+          resultType={resultType}
+        />
+
+        <Box p={2} mt={4}>
           <Heading
             fontSize={"xl"}
             py={3}

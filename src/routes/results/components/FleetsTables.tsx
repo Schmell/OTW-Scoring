@@ -1,7 +1,6 @@
+import { Box } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
-import { Divider, Text } from "@chakra-ui/react";
 import ResultTable from "./ResultTable";
-import { useEffect } from "preact/hooks";
 
 export default function FleetsTable(props) {
   const { tableData, ...rest } = props;
@@ -37,14 +36,14 @@ export default function FleetsTable(props) {
       {fleetsArray &&
         fleetsArray.sort().map((fleet) => {
           return (
-            <Fragment>
+            <Box mb={14}>
               <ResultTable
                 tableData={fleet}
                 fleetName={fleet[0].fleet}
                 {...rest}
               />
-              <Divider mb={4} mt={8} />
-            </Fragment>
+              {/* <Divider mb={4} mt={8} /> */}
+            </Box>
           );
         })}
     </Fragment>

@@ -22,8 +22,8 @@ import { Editable, EditableInput, EditablePreview } from "@chakra-ui/react";
 import { useColorModeValue, useDisclosure } from "@chakra-ui/react";
 import {} from "@chakra-ui/react";
 import {} from "@chakra-ui/react";
-import { h } from "preact";
-import { Fragment } from "react";
+import { Fragment, h } from "preact";
+import { useState } from "preact/hooks";
 import { collection, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../util/firebase-config";
 import { useDocumentData } from "react-firebase-hooks/firestore";
@@ -35,8 +35,12 @@ import { capitalizeFirstLetter } from "../../util/formatters";
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
+import PageHead from "../../components/page/pageHead";
+import { Page } from "../../components/page/Page";
 
 export default function Comp({ seriesId, compId }) {
+  const [edit, setEdit] = useState(true);
   const seriesRef = doc(db, "series", seriesId);
   const compsRef = collection(seriesRef, "comps");
   const compDoc = doc(compsRef, compId);
@@ -66,8 +70,8 @@ export default function Comp({ seriesId, compId }) {
         </Fragment>
       ) : (
         comp && (
-          <Fragment>
-            <Flex mt={6} mx={2} gap={2} justifyContent="space-between">
+          <Page>
+            {/* <Flex mt={6} mx={2} gap={2} justifyContent="space-between">
               <Heading mx={4} color="blue.400" fontSize={"4xl"}>
                 <Editable defaultValue={comp?.boat} justifyContent="center">
                   <EditablePreview />
@@ -87,13 +91,33 @@ export default function Comp({ seriesId, compId }) {
                 />
               </Flex>
             </Flex>
-            <Divider border="4px" my={4} />
+
+            <Divider border="4px" my={4} /> */}
+            <PageHead title={comp?.boat} loading={compLoading}>
+              <ToolIconBtn
+                label="Back"
+                action={() => history.back()}
+                icon={ArrowBackIcon}
+              />
+              <ToolIconBtn
+                label="Edit"
+                action={() => setEdit(!edit)}
+                icon={EditIcon}
+              />
+              <ToolIconBtn
+                label="Add field"
+                action={onOpen}
+                icon={AddToPhotosOutlinedIcon}
+              />
+            </PageHead>
+
             <Grid
               templateColumns="repeat(6, 1fr)"
               color={useColorModeValue("blue.500", "blue.300")}
               gap={2}
               fontSize="lg"
               mx={4}
+              mt={4}
             >
               {Object.keys(comp)
                 .sort()
@@ -106,6 +130,7 @@ export default function Comp({ seriesId, compId }) {
                     c === "boat"
                   )
                     return;
+
                   return (
                     <Fragment>
                       <GridItem textAlign="end">
@@ -117,6 +142,7 @@ export default function Comp({ seriesId, compId }) {
                         <Editable
                           defaultValue={comp[c]}
                           justifyContent="center"
+                          isDisabled={edit}
                         >
                           <EditablePreview />
                           <EditableInput onBlur={handleChange} name="rating" />
@@ -126,7 +152,7 @@ export default function Comp({ seriesId, compId }) {
                   );
                 })}
             </Grid>
-          </Fragment>
+          </Page>
         )
       )}
       <Fragment>

@@ -33,6 +33,7 @@ export function SiteListItem({ item, children }: SiteListProps) {
           borderBottomRightRadius={18}
           shadow={"md"}
           bgColor={useColorModeValue("white", "blackAlpha.300")}
+          minHeight={32}
         >
           {children}
         </ListItem>

@@ -7,23 +7,18 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
-} from "@chakra-ui/react";
-import {
+  Box,
   Button,
+  Divider,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Heading,
+  HStack,
   Input,
   Radio,
   RadioGroup,
-  Editable,
-  EditableInput,
-  EditablePreview,
-} from "@chakra-ui/react";
-import { FormControl, FormErrorMessage, FormLabel } from "@chakra-ui/react";
-import {
-  Box,
-  Divider,
-  Flex,
-  Heading,
-  HStack,
   Text,
   useToast,
 } from "@chakra-ui/react";
@@ -33,15 +28,16 @@ import {
   collection,
   doc,
   serverTimestamp,
-  setDoc,
   updateDoc,
 } from "firebase/firestore";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { db } from "../../util/firebase-config";
 //
 import { Field, Form, Formik } from "formik";
-import useStorage from "../../hooks/useStorage";
 import { FadeInSlideRight } from "../../components/animations/FadeSlide";
+import useStorage from "../../hooks/useStorage";
+import { Page } from "../../components/page/Page";
+import PageHead from "../../components/page/pageHead";
 // Icons
 
 const SeriesEdit = ({ setHeaderTitle }) => {
@@ -49,7 +45,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
 
   const [seriesId] = useStorage("seriesId");
   const [seriesName, setSeriesName] = useState("");
-  console.log("seriesName: ", seriesName);
+  // console.log("seriesName: ", seriesName);
 
   // Get the currentRace data
   const docRef = doc(db, "series", seriesId);
@@ -70,7 +66,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
     // console.log("values.newFile: ", values.newFile);
     // console.log("values.addRaces: ", values.addRaces);
     if (values.newFile && values.addRaces) {
-      console.log("values.addRaces: ", values.addRaces);
+      // console.log("values.addRaces: ", values.addRaces);
       // addRaces is an int or null
       const racesRef = collection(docRef, "races");
       for (let i = 1; values.addRaces + 1 > i; i++) {
@@ -114,7 +110,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
   }, [currentSeries, seriesLoading]);
 
   return (
-    <Fragment>
+    <Page>
       {currentSeries && seriesName && (
         <Formik
           initialValues={{
@@ -131,7 +127,8 @@ const SeriesEdit = ({ setHeaderTitle }) => {
             venueburgee: currentSeries.venueburgee,
             venueemail: currentSeries.venueemail,
             lastModified: currentSeries.__fileInfo.lastModified,
-            lastModifiedDate: currentSeries.__fileInfo.lastModifiedDate,
+            lastModifiedDate:
+              currentSeries.__fileInfo.lastModifiedDate.toDate(),
             size: currentSeries.__fileInfo.size,
             resultType: currentSeries.resultType,
             rowTitle: currentSeries.rowTitle || "boat",
@@ -139,7 +136,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
           onSubmit={submitHandler}
         >
           <Form>
-            <Flex justifyContent="space-between" alignItems="end">
+            {/* <Flex justifyContent="space-between" alignItems="end">
               <FadeInSlideRight>
                 <Heading fontSize={"4xl"} color="blue.400" mx={4}>
                   {currentSeries.event}
@@ -147,9 +144,15 @@ const SeriesEdit = ({ setHeaderTitle }) => {
               </FadeInSlideRight>
             </Flex>
 
-            <Divider my={3} border="8px" />
+            <Divider my={3} border="8px" /> */}
+            <PageHead
+              title={currentSeries.event}
+              loading={seriesLoading}
+            ></PageHead>
 
-            <Box mb={6} mx={4}>
+            <Box mb={10} mx={4} mt={4}>
+              {/* <Text>Last modified: </Text> */}
+
               {currentSeries.newFile && (
                 <Flex alignItems={"center"} gap={0} my={2}>
                   <FormLabel htmlFor="addRaces">#Races: </FormLabel>
@@ -171,23 +174,24 @@ const SeriesEdit = ({ setHeaderTitle }) => {
                 </Flex>
               )}
               <Accordion defaultIndex={[0]}>
-                <AccordionItem>
-                  <Text as={"h2"} mb={3}>
-                    <AccordionButton>
-                      <Box flex="1" textAlign="left">
-                        Series details
-                      </Box>
-                      <AccordionIcon />
-                    </AccordionButton>
-                  </Text>
-                  <AccordionPanel pb={4}>
-                    <Flex justifyContent={"space-between"}>
-                      <Text>Event Id: </Text>
-                      <Text color={"gray.400"}>{currentSeries.eventeid}</Text>
-                    </Flex>
-
-                    <Divider my={3} />
-
+                <AccordionItem border="0px">
+                  <AccordionButton
+                    bgGradient="linear(to-r, whiteAlpha.100, blue.300)"
+                    borderBottomRightRadius={15}
+                    boxShadow={"md"}
+                    _hover={{
+                      bgGradient: "linear(to-r, whiteAlpha.100, blue.400)",
+                    }}
+                    _focus={{
+                      boxShadow: "none",
+                    }}
+                  >
+                    <Box flex="1" textAlign="left">
+                      Series details
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                  <AccordionPanel>
                     <Field name="resultType">
                       {({ field, form }) => (
                         <FormControl
@@ -314,24 +318,37 @@ const SeriesEdit = ({ setHeaderTitle }) => {
                     <FormLabel htmlFor="eventemail">Series email</FormLabel>
                     <Field name="eventemail" as={Input} />
 
-                    <Divider mt={3} />
+                    <Divider my={3} />
 
                     <FormLabel htmlFor="eventburgee">Series burgee</FormLabel>
                     <Field name="eventburgee" as={Input} />
 
-                    <Divider mt={3} />
+                    <Divider my={3} />
+
+                    <Flex justifyContent={"space-between"}>
+                      <Text>Event Id: </Text>
+                      <Text color={"gray.400"}>{currentSeries.eventeid}</Text>
+                    </Flex>
                   </AccordionPanel>
                 </AccordionItem>
 
-                <AccordionItem>
-                  <Text as={"h2"} mb={3}>
-                    <AccordionButton>
-                      <Box flex="1" textAlign="left">
-                        Venue details
-                      </Box>
-                      <AccordionIcon />
-                    </AccordionButton>
-                  </Text>
+                <AccordionItem border="0px" mt={2}>
+                  <AccordionButton
+                    bgGradient="linear(to-r, whiteAlpha.100, blue.300)"
+                    borderBottomRightRadius={15}
+                    boxShadow={"md"}
+                    _hover={{
+                      bgGradient: "linear(to-r, whiteAlpha.100, blue.400)",
+                    }}
+                    _focus={{
+                      boxShadow: "none",
+                    }}
+                  >
+                    <Box flex="1" textAlign="left">
+                      Venue details
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
                   <AccordionPanel pb={4}>
                     <FormLabel htmlFor="venue">Venue</FormLabel>
                     <Field name="venue" as={Input} />
@@ -353,30 +370,46 @@ const SeriesEdit = ({ setHeaderTitle }) => {
                   </AccordionPanel>
                 </AccordionItem>
 
-                <AccordionItem>
-                  <Text as={"h2"} mb={3}>
-                    <AccordionButton>
-                      <Box flex="1" textAlign="left">
-                        File properties
-                      </Box>
-                      <AccordionIcon />
-                    </AccordionButton>
-                  </Text>
+                <AccordionItem border="0px" mt={2}>
+                  <AccordionButton
+                    bgGradient="linear(to-r, whiteAlpha.100, blue.300)"
+                    borderBottomRightRadius={15}
+                    boxShadow={"md"}
+                    _hover={{
+                      bgGradient: "linear(to-r, whiteAlpha.100, blue.400)",
+                    }}
+                    _focus={{
+                      boxShadow: "none",
+                    }}
+                  >
+                    <Box flex="1" textAlign="left">
+                      File properties
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+
                   <AccordionPanel pb={4}>
                     <FormLabel htmlFor="name">File name</FormLabel>
                     <Field name="name" as={Input} />
 
                     <Divider mt={3} />
 
-                    <FormLabel htmlFor="lastModified">Last Modified</FormLabel>
+                    {/* <FormLabel htmlFor="lastModified">Last Modified</FormLabel>
                     <Field name="lastModified" as={Input} />
 
-                    <Divider mt={3} />
+                    <Divider mt={3} /> */}
 
                     <FormLabel htmlFor="lastModifiedDate">
                       Last Modified Date
                     </FormLabel>
-                    <Field name="lastModifiedDate" as={Input} />
+                    <Text px={4}>
+                      {new Intl.DateTimeFormat(undefined, {
+                        dateStyle: "medium",
+                        timeStyle: "short",
+                      }).format(
+                        currentSeries.__fileInfo.lastModifiedDate.toDate()
+                      )}
+                    </Text>
 
                     <Divider mt={3} />
 
@@ -395,7 +428,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
           </Form>
         </Formik>
       )}
-    </Fragment>
+    </Page>
   );
 };
 

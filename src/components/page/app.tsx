@@ -15,13 +15,13 @@ const App = () => {
   return (
     <ChakraProvider resetCSS theme={theme}>
       <SidebarWithHeader headerTitle={headerTitle}>
-        <Box mt={16}>
-          <Routing
-            user={user}
-            setHeaderTitle={setHeaderTitle}
-            headerTitle={headerTitle}
-          />
-        </Box>
+        {/* <Box mt={16}> */}
+        <Routing
+          user={user}
+          setHeaderTitle={setHeaderTitle}
+          headerTitle={headerTitle}
+        />
+        {/* </Box> */}
       </SidebarWithHeader>
     </ChakraProvider>
   );

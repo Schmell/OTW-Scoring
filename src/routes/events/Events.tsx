@@ -17,6 +17,8 @@ import { SiteListButtons } from "../../components/generic/SiteList/SiteListButto
 import { SiteListItem } from "../../components/generic/SiteList/SiteListItem";
 import { SiteListText } from "../../components/generic/SiteList/SiteListText";
 import ToolIconBtn from "../../components/generic/ToolIconBtn";
+import { Page } from "../../components/page/Page";
+import PageHead from "../../components/page/pageHead";
 
 export default function Events(props) {
   const { user, setHeaderTitle, ...rest } = props;
@@ -40,14 +42,13 @@ export default function Events(props) {
 
   return (
     <Fragment>
-      <Flex justifyContent="space-between" alignItems="end" px={4}>
+      {/* <Flex justifyContent="space-between" alignItems="end" px={4}>
         <FadeInSlideRight>
           <Heading as="h4" color="blue.400">
             All Events
           </Heading>
         </FadeInSlideRight>
 
-        {/* Sub header buttons */}
         <FadeInSlideLeft>
           <Flex gap={2}>
             <ToolIconBtn
@@ -64,47 +65,60 @@ export default function Events(props) {
         </FadeInSlideLeft>
       </Flex>
 
-      <Divider mt={4} border={4} />
+      <Divider mt={4} border={4} /> */}
 
-      <SiteList loading={eventsLoading}>
-        {events?.docs.map((item) => {
-          const data = item.data();
-          // setEventId(item.id);
-          return (
-            <SiteListItem
-              key={item.id}
-              item={item}
-              disclosure={deleteEventDisclosure}
-              listType="series"
-            >
-              <SiteListText
+      <PageHead title="All Events">
+        <ToolIconBtn
+          label="Import file"
+          action={() => route("/import")}
+          icon={FileUploadOutlinedIcon}
+        />
+        <ToolIconBtn
+          label="Add Series"
+          action={addEventHandler}
+          icon={AddToPhotosOutlinedIcon}
+        />
+      </PageHead>
+      <Page>
+        <SiteList loading={eventsLoading}>
+          {events?.docs.map((item) => {
+            const data = item.data();
+            // setEventId(item.id);
+            return (
+              <SiteListItem
+                key={item.id}
                 item={item}
-                setStorage={setEventId}
-                forward="events/event"
-                textItems={{
-                  head: data.name,
-                  sub: data.venue,
-                  foot: data.date,
-                }}
+                disclosure={deleteEventDisclosure}
+                listType="series"
               >
-                <SiteListButtons
-                  setStorage={setEventId}
+                <SiteListText
                   item={item}
-                  listType="events"
-                  disclosure={deleteEventDisclosure}
+                  setStorage={setEventId}
+                  forward="events/event"
+                  textItems={{
+                    head: data.name,
+                    sub: data.venue,
+                    foot: data.date,
+                  }}
                 >
-                  <Box>This will delete the event and is not undo-able</Box>
-                  <Box>
-                    You will loose any work you have done with this Event
-                  </Box>
-                  {/* <Box>{item.id}</Box> */}
-                </SiteListButtons>
-              </SiteListText>
-            </SiteListItem>
-          );
-        })}
-        {/* series?.docs.map */}
-      </SiteList>
+                  <SiteListButtons
+                    setStorage={setEventId}
+                    item={item}
+                    listType="events"
+                    disclosure={deleteEventDisclosure}
+                  >
+                    <Box>This will delete the event and is not undo-able</Box>
+                    <Box>
+                      You will loose any work you have done with this Event
+                    </Box>
+                  </SiteListButtons>
+                </SiteListText>
+              </SiteListItem>
+            );
+          })}
+          {/* series?.docs.map */}
+        </SiteList>
+      </Page>
     </Fragment>
   );
 }

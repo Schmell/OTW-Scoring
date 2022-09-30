@@ -49,11 +49,20 @@ export function formatRelativeDate(toDate, fromDate: any = new Date()) {
   }
 }
 
+// function isValidDate(d) {
+//   return d instanceof Date && !isNaN(d);
+// }
+
 export const formatDate = (date: string) => {
   // this Obviously has holes in its theroy
   // I hate dates and i would encourage people to update there sailwave files or
   // just as the scorer just input the date at this stage
+  // const date = new Date(dateString)
   if (date) {
+    // all this can be solved with this line
+    
+    // console.log(new Intl.DateTimeFormat('en-CA').format(date));
+
     if (date.toString().includes("/")) {
       const rearrange = date.toString().split("/");
       // When i try to not mutate i get undefined randomly
@@ -74,9 +83,11 @@ export const formatDate = (date: string) => {
       const sorted = `${rearrange[2]}-${rearrange[1]}-${rearrange[0]}`;
       // console.log("sorted: ", sorted);
       return sorted;
-    } else {
-      return date;
-    }
+    } 
+    // else {
+    //   return date;
+    // }
+    return date;
   }
   return ""
 };
