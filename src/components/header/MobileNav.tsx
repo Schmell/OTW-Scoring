@@ -60,6 +60,7 @@ export default function MobileNav({
       zIndex="100"
       w="100%"
       maxW="760px"
+      boxShadow="md"
       bg={useColorModeValue("blue.500", "blue.900")}
       borderBottomWidth="1px"
       borderBottomColor={useColorModeValue("gray.200", "gray.700")}

@@ -12,10 +12,12 @@ interface ToolIconBtnProps {
 export default function ToolIconBtn<ToolIconBtnProps>(props) {
   const { action, icon, label, disabled, ...rest } = props;
   const [mounted, setMounted] = useState(false);
+  const buttonRef = useRef();
 
   useEffect(() => {
     setMounted(true);
     return () => {
+      // buttonRef.current
       setMounted(false);
     };
   }, []);
@@ -25,6 +27,7 @@ export default function ToolIconBtn<ToolIconBtnProps>(props) {
       {mounted && (
         <Tooltip label={label} hasArrow bg="blue.300" placement="bottom-start">
           <IconButton
+            ref={buttonRef}
             disabled={disabled}
             aria-label={label}
             icon={(<Icon as={icon} boxSize={7} />) as any} // not sure why??

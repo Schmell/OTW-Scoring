@@ -20,6 +20,7 @@ import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import ToolIconBtn from "../../components/generic/ToolIconBtn";
+import { Page } from "../../components/page/Page";
 
 export default function EventList({ setHeaderTitle }) {
   setHeaderTitle("Event");
@@ -43,7 +44,7 @@ export default function EventList({ setHeaderTitle }) {
   const deleteEventDisclosure = useDisclosure();
 
   return (
-    <Fragment>
+    <Page>
       {!eventDocLoading && eventDoc && (
         <Fragment>
           <Flex justifyContent="space-between" alignItems="end" px={4}>
@@ -127,6 +128,6 @@ export default function EventList({ setHeaderTitle }) {
           </SiteList>
         </Fragment>
       )}
-    </Fragment>
+    </Page>
   );
 }

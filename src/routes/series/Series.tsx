@@ -27,6 +27,8 @@ import { SiteListText } from "../../components/generic/SiteList/SiteListText";
 import ToolIconBtn from "../../components/generic/ToolIconBtn";
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
+import PageHead from "../../components/page/pageHead";
+import { Page } from "../../components/page/Page";
 
 export default function Series(props) {
   const { user, setHeaderTitle, ...rest } = props;
@@ -63,14 +65,13 @@ export default function Series(props) {
 
   return (
     <Fragment>
-      <Flex justifyContent="space-between" alignItems="end" px={4}>
+      {/* <Flex justifyContent="space-between" alignItems="end" px={4} bg="white">
         <FadeInSlideRight>
           <Heading fontSize="4xl" color="blue.400">
             All Series
           </Heading>
         </FadeInSlideRight>
 
-        {/* Sub header buttons */}
         <FadeInSlideLeft>
           <Flex gap={2}>
             <ToolIconBtn
@@ -85,44 +86,54 @@ export default function Series(props) {
             />
           </Flex>
         </FadeInSlideLeft>
-      </Flex>
-
-      <Divider mt={4} border={4} />
-
-      <SiteList loading={seriesLoading}>
-        {series?.docs.map((series) => (
-          <SiteListItem
-            key={series.id}
-            item={series}
-            disclosure={deleteSeriesDisclosure}
-            listType="series"
-          >
-            <SiteListText
+      </Flex> */}
+      <PageHead title="All Series" loading={seriesLoading}>
+        <ToolIconBtn
+          label="Import file"
+          action={() => route("/import")}
+          icon={FileUploadOutlinedIcon}
+        />
+        <ToolIconBtn
+          label="Create Series"
+          action={addSeriesHandler}
+          icon={AddToPhotosOutlinedIcon}
+        />
+      </PageHead>
+      <Page>
+        <SiteList loading={seriesLoading}>
+          {series?.docs.map((series) => (
+            <SiteListItem
+              key={series.id}
               item={series}
-              setStorage={setSeriesId}
-              forward="races"
-              textItems={{
-                head: series.data().event,
-                sub: series.data().venue,
-                foot: series.data().venuewebsite,
-              }}
-              // data={series}
+              disclosure={deleteSeriesDisclosure}
+              listType="series"
             >
-              <SiteListButtons
-                setStorage={setSeriesId}
+              <SiteListText
                 item={series}
-                listType="series"
-                disclosure={deleteSeriesDisclosure}
+                setStorage={setSeriesId}
+                forward="races"
+                textItems={{
+                  head: series.data().event,
+                  sub: series.data().venue,
+                  foot: series.data().venuewebsite,
+                }}
               >
-                <Box>This will delete the series and is not undo-able</Box>
-                <Box>
-                  You will loose any work you have done with this Series
-                </Box>
-              </SiteListButtons>
-            </SiteListText>
-          </SiteListItem>
-        ))}
-      </SiteList>
+                <SiteListButtons
+                  setStorage={setSeriesId}
+                  item={series}
+                  listType="series"
+                  disclosure={deleteSeriesDisclosure}
+                >
+                  <Box>This will delete the series and is not undo-able</Box>
+                  <Box>
+                    You will loose any work you have done with this Series
+                  </Box>
+                </SiteListButtons>
+              </SiteListText>
+            </SiteListItem>
+          ))}
+        </SiteList>
+      </Page>
     </Fragment>
   );
 }

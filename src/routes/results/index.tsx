@@ -11,6 +11,8 @@ import { db } from "../../util/firebase-config";
 import useStorage from "../../hooks/useStorage";
 import { compConverter } from "../../model/Comp";
 import FleetsTables from "./components/FleetsTables";
+import { Page } from "../../components/page/Page";
+import PageHead from "../../components/page/pageHead";
 
 export default function Result(props) {
   const { setHeaderTitle, seriesId, raceId, ...rest } = props;
@@ -103,8 +105,8 @@ export default function Result(props) {
   }, [tableData]);
 
   return (
-    <Fragment>
-      {compsLoading ? (
+    <Page>
+      {/* { {compsLoading ? (
         <Fragment>
           <Box px={6}>
             <Heading color="blue.400" size="xl">
@@ -114,6 +116,9 @@ export default function Result(props) {
           <Divider my={3} border={4} />
           <Progress size="xs" isIndeterminate top={-4} />
         </Fragment>
+      )} */}
+      {compsLoading ? (
+        <PageHead title={raceName}>Hey</PageHead>
       ) : (
         data && (
           <Fragment>
@@ -128,12 +133,7 @@ export default function Result(props) {
             />
           </Fragment>
         )
-        // : (
-        //   <Fragment>
-        //     <Heading>un-Sailed</Heading>
-        //   </Fragment>
-        // )
       )}
-    </Fragment>
+    </Page>
   );
 }

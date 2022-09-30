@@ -1,6 +1,9 @@
+import { Temporal } from "@js-temporal/polyfill";
+import { Date } from "./../routes/races/raceEdit/Date";
+import { fontFamily } from "@mui/system";
 import { User } from "firebase/auth";
 import { parse } from "papaparse";
-import { formatTime } from "./formatters";
+import { formatDate, formatTime } from "./formatters";
 
 interface IBlw {
   user: User | null | undefined;
@@ -14,6 +17,7 @@ interface chromeFile extends File {
 export default class Blw {
   user: User | null | undefined;
   file: chromeFile;
+
   constructor(props: IBlw) {
     this.user = props.user;
     this.file = props.file;
@@ -81,8 +85,9 @@ export default class Blw {
 
   async getResults() {
     const data = await this.getFileData();
-    const resultsArr: any = [];
 
+    const resultsArr: any = [];
+    // use rdisc to get an individuals result
     const results = data.filter((item: any) => {
       return item[0] === "rdisc";
     });
@@ -92,13 +97,32 @@ export default class Blw {
 
       // I would like to see a differrent solution for undefined
       // we cannot pass undefined to firestore
+
+      // const raceDates = data.filter((item) => {
+      //   return item[0] === "racedate";
+      // });
+      // // console.log('raceDates: ', raceDates);
+
+      // const raceDate = raceDates.filter((item) => {
+      //   return item[3] === result[3];
+      // });
+
+      // let date;
+      // if (raceDate[0] && raceDate[0][1]) {
+      //   date = formatDate(raceDate[0][1]);
+      // } else {
+      //   date = "";
+      // }
+      // // const date = formatDate(dateString)
+
       const resultRow = {
         id: `${result[3]}-${result[2]}`,
         compid: result[2],
         raceid: result[3],
-        // I am trying to return empty string from resultHelp
-        finish: this.resultHelp("rft", data, result),
-
+        // date: date,
+        finish: this.resultHelp("rft", data, result)
+          ? this.resultHelp("rft", data, result)
+          : "",
         start: this.resultHelp("rst", data, result)
           ? this.resultHelp("rst", data, result)
           : "",
@@ -137,24 +161,15 @@ export default class Blw {
     }); // forEach
 
     return resultsArr;
-  }
+  } // getResults
 
-  resultHelp(resultTag: any, data: any, result: any) {
-    let res = data.filter((item: any) => {
+  resultHelp(resultTag: string, data: any[], result: any[]) {
+    let res = data.filter((item) => {
       return (
         item[0] === resultTag && item[2] === result[2] && item[3] === result[3]
       );
     });
     if (res[0]) {
-      // if()
-      // if (res[0][1].includes(":")) {
-      //   const splits = res[0][1].split(":");
-      //   return Temporal.PlainTime.from({
-      //     hour: splits[0],
-      //     minute: splits[1],
-      //     second: splits[2],
-      //   }).toString();
-      // }
       return res[0][1];
     } else {
       return "";
@@ -177,10 +192,10 @@ export default class Blw {
     const data = await this.getFileData();
 
     // new object to be returned
-    var raceData: any = [];
+    let raceData: any = [];
 
     // Find all raceids by getting known csv row
-    var races = data.filter((item: any) => {
+    const races = data.filter((item: any) => {
       return item[0] === "racerank";
     });
 
@@ -196,7 +211,6 @@ export default class Blw {
         var regex = new RegExp(`^race`, "g");
         return item[0].match(regex) && item[3] === race[3];
       });
-      // console.log("resultRows: ", resultRows);
 
       let raceStarts: any = [];
 
@@ -216,7 +230,7 @@ export default class Blw {
           try {
             start = formatTime(start);
           } catch {
-            start = "00:00:00";
+            start = "";
           }
 
           raceStarts.push({ fleet, start });

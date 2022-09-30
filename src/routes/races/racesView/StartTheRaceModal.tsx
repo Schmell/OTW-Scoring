@@ -44,7 +44,7 @@ export default function StartTheRaceModal({
   const { isOpen, onClose } = disclosure;
 
   const timeDifference = () => {
-    if (!race.data().date || race.data().time) {
+    if (!race.data().date || !race.data().time) {
       return;
     }
     const then = new Date(

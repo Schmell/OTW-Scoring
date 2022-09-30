@@ -15,9 +15,13 @@ import { deleteDoc, doc } from "firebase/firestore";
 import { ComponentChildren, Fragment, h } from "preact";
 import { db } from "../../util/firebase-config";
 
-type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyof T, Keys>> &
+type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<
+  T,
+  Exclude<keyof T, Keys>
+> &
   {
-    [K in Keys]-?: Required<Pick<T, K>> & Partial<Record<Exclude<Keys, K>, undefined>>;
+    [K in Keys]-?: Required<Pick<T, K>> &
+      Partial<Record<Exclude<Keys, K>, undefined>>;
   }[Keys];
 interface BaseProps {
   disclosure: {
@@ -39,7 +43,15 @@ interface BaseProps {
 
 type AreYouSureProps = RequireOnlyOne<BaseProps, "callback" | "colPath">;
 
-export function AreYouSure({ disclosure, callback, title, itemId, colPath, risk, children }: AreYouSureProps) {
+export function AreYouSure({
+  disclosure,
+  callback,
+  title,
+  itemId,
+  colPath,
+  risk,
+  children,
+}: AreYouSureProps) {
   /**
    * Modal component for deleting documents
    * expects chidren for modal text
@@ -60,16 +72,16 @@ export function AreYouSure({ disclosure, callback, title, itemId, colPath, risk,
 
   if (!callback) {
     callback = async () => {
-      // console.log("colPath: ", colPath);
-      // console.log("itemId: ", itemId);
       if (!colPath) return;
       await deleteDoc(doc(db, colPath, itemId));
     };
   }
+
   const riskColor = () => {
     if (risk && risk !== "high") {
       if (risk === "low") return useColorModeValue("green.500", "green.400");
-      if (risk === "medium") return useColorModeValue("orange.500", "orange.400");
+      if (risk === "medium")
+        return useColorModeValue("orange.500", "orange.400");
     }
     return useColorModeValue("red.500", "red.900");
   };
@@ -77,11 +89,15 @@ export function AreYouSure({ disclosure, callback, title, itemId, colPath, risk,
   return (
     <Modal id={itemId} isOpen={isOpen} onClose={onClose} size="xs">
       <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="2px" />
-      <ModalContent>
-        <ModalHeader bgColor={useColorModeValue("blackAlpha.200", "blackAlpha.500")}>
+      <ModalContent borderBottomRightRadius={18}>
+        <ModalHeader
+          borderBottomRightRadius={18}
+          bgColor={useColorModeValue("blackAlpha.200", "blackAlpha.500")}
+        >
           <Text fontSize="2xl">{title ? title : "Are you sure?"}</Text>
           <Text fontSize="xs" color={riskColor()}>
-            The risk level is <b>{risk ? risk.toUpperCase() : "HIGH"}</b> for this operation
+            The risk level is <b>{risk ? risk.toUpperCase() : "HIGH"}</b> for
+            this operation
           </Text>
         </ModalHeader>
         <ModalCloseButton />
@@ -93,6 +109,14 @@ export function AreYouSure({ disclosure, callback, title, itemId, colPath, risk,
           <Flex>
             <Button
               bgColor={riskColor()}
+              color={risk !== "high" ? "white" : ""}
+              _hover={{
+                color: useColorModeValue("blue.200", "blue.300"),
+              }}
+              _active={{
+                backgroundColor: "red.800",
+                color: useColorModeValue("blue.200", "blue.300"),
+              }}
               mr={3}
               onClick={() => {
                 callback?.(itemId);
