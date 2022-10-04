@@ -34,6 +34,7 @@ import PriBtn from "../../components/generic/PriBtn";
 import SecBtn from "../../components/generic/SecBtn";
 import ToolIconBtn from "../../components/generic/ToolIconBtn";
 import CloseIcon from "@mui/icons-material/Close";
+import PageHead from "../../components/page/pageHead";
 // import style from "./style.css";
 
 export default function RaceEdit({ setHeaderTitle }) {
@@ -126,14 +127,13 @@ export default function RaceEdit({ setHeaderTitle }) {
               {}
               <Box>
                 {/* Heading */}
-                <Flex
+                {/* <Flex
                   justifyContent="space-between"
                   alignItems="center"
                   minWidth="max-content"
                   wrap="wrap"
                   mx={4}
                 >
-                  {/* This is the header with race name or number */}
                   <FadeInSlideRight>
                     <Heading as="h5" color="blue.400">
                       <Editable
@@ -158,11 +158,16 @@ export default function RaceEdit({ setHeaderTitle }) {
                   </FadeInSlideRight>
                 </Flex>
 
-                <Divider my={3} />
+                <Divider my={3} /> */}
+                <PageHead title={currentRace.name}>
+                  <Text fontSize="sm" color="lightgray">
+                    id: {currentRace?.raceid} - {currentRace?._seriesid}
+                  </Text>
+                </PageHead>
 
                 {/* Start the form */}
                 <FadeIn>
-                  <Box mx={4}>
+                  <Box mx={4} mt={4}>
                     <VisuallyHidden>
                       <Field name="name"></Field>
                     </VisuallyHidden>

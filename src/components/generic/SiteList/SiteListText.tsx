@@ -13,6 +13,7 @@ interface SiteListTextProps {
     sub: string;
     foot: string;
   };
+  action?: () => void;
   // data: any;
 }
 
@@ -22,6 +23,7 @@ export function SiteListText({
   item,
   forward,
   textItems,
+  action,
 }: SiteListTextProps) {
   return (
     <Fragment>
@@ -30,10 +32,14 @@ export function SiteListText({
           w="80%"
           mx={2}
           cursor={"pointer"}
-          onClick={() => {
-            setStorage?.(item.id);
-            route(`/${forward}`);
-          }}
+          onClick={
+            action
+              ? action
+              : () => {
+                  setStorage?.(item.id);
+                  route(`/${forward}`);
+                }
+          }
         >
           <Text fontSize={"xl"}>{textItems.head}</Text>
           <Divider mb={2} />

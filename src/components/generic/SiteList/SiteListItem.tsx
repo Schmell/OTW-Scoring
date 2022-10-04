@@ -16,9 +16,10 @@ interface SiteListProps {
     getDisclosureProps: (props?: any) => any;
   };
   children: any;
+  [x: string]: any;
 }
 
-export function SiteListItem({ item, children }: SiteListProps) {
+export function SiteListItem({ item, children, ...rest }: SiteListProps) {
   return (
     <Fragment>
       <SiteListAnimation>
@@ -30,10 +31,12 @@ export function SiteListItem({ item, children }: SiteListProps) {
           borderBottomWidth={4}
           borderColor={useColorModeValue("gray.200", "gray.700")}
           borderBottomColor={useColorModeValue("gray.100", "gray.400")}
-          borderBottomRightRadius={18}
+          borderBottomRightRadius="2em"
+          borderTopLeftRadius={18}
           shadow={"md"}
           bgColor={useColorModeValue("white", "blackAlpha.300")}
           minHeight={32}
+          {...rest}
         >
           {children}
         </ListItem>

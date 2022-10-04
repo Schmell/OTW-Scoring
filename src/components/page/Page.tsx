@@ -6,10 +6,10 @@ import Footer from "../footer";
 export const Page = ({ children }) => {
   return (
     <Fragment>
-      <Box w="100%" position="absolute" overflow="scroll">
+      <Box w="100%" className="page" overflowY={"hidden"}>
         {children}
       </Box>
-      <Footer />
+      {/* <Footer /> */}
     </Fragment>
   );
 };

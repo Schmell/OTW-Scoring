@@ -106,19 +106,8 @@ export default function Result(props) {
 
   return (
     <Page>
-      {/* { {compsLoading ? (
-        <Fragment>
-          <Box px={6}>
-            <Heading color="blue.400" size="xl">
-              {raceName}
-            </Heading>
-          </Box>
-          <Divider my={3} border={4} />
-          <Progress size="xs" isIndeterminate top={-4} />
-        </Fragment>
-      )} */}
       {compsLoading ? (
-        <PageHead title={raceName}>Hey</PageHead>
+        <PageHead title={raceName}></PageHead>
       ) : (
         data && (
           <Fragment>

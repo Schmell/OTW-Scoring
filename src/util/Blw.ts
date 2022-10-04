@@ -193,19 +193,19 @@ export default class Blw {
 
     // new object to be returned
     let raceData: any = [];
-
     // Find all raceids by getting known csv row
     const races = data.filter((item: any) => {
       return item[0] === "racerank";
     });
-
     // For each race push data to new object
     races.forEach((race: any) => {
       let raceObj = {
+        index: "",
         raceid: "",
         starts: "",
+        name: "",
+        rank: "",
       };
-
       raceObj.raceid = race[3];
       let resultRows = data.filter((item: any) => {
         var regex = new RegExp(`^race`, "g");
@@ -214,7 +214,7 @@ export default class Blw {
 
       let raceStarts: any = [];
 
-      resultRows.forEach((item) => {
+      resultRows.forEach((item, idx) => {
         // Format the starts to object
         if (item[0] === "racestart") {
           const stringToSplit = item[1].split("|");
@@ -240,14 +240,20 @@ export default class Blw {
 
           raceObj[newName] = item[1];
         }
-      });
+        raceObj.index = "" + idx;
+        // if(!item)
+      }); // resultRows.forEach
 
       // now add the starts to raceObj
       raceStarts.forEach((start: any) => {
         raceObj.starts = raceStarts;
       });
 
+      if (!raceObj.name) {
+        raceObj.name = `Race ${raceObj.rank}`;
+      }
       raceData.push(raceObj);
+      // console.log("raceData: ", raceData);
     });
 
     return raceData!;

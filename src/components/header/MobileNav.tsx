@@ -90,7 +90,7 @@ export default function MobileNav({
         <Text
           display={{ base: "flex", md: "none" }}
           fontSize="2xl"
-          fontWeight="semibold"
+          // fontWeight="semibold"
           color="white"
           ml={4}
         >

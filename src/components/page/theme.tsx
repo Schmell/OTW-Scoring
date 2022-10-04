@@ -1,4 +1,5 @@
 import { extendTheme } from "@chakra-ui/react";
+import "@fontsource/roboto";
 
 export const colors = {
   brand: {
@@ -95,8 +96,8 @@ export const components = {
 };
 
 export const fonts = {
-  // heading: "Serif",
-  body: "",
+  heading: ` "Roboto", sans-serif`,
+  body: ` "Roboto", sans-serif`,
 };
 
 export const theme = extendTheme({ components, colors, fonts, styles });

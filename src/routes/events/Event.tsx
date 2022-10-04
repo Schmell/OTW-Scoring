@@ -21,6 +21,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import ToolIconBtn from "../../components/generic/ToolIconBtn";
 import { Page } from "../../components/page/Page";
+import PageHead from "../../components/page/pageHead";
 
 export default function EventList({ setHeaderTitle }) {
   setHeaderTitle("Event");
@@ -47,14 +48,13 @@ export default function EventList({ setHeaderTitle }) {
     <Page>
       {!eventDocLoading && eventDoc && (
         <Fragment>
-          <Flex justifyContent="space-between" alignItems="end" px={4}>
+          {/* <Flex justifyContent="space-between" alignItems="end" px={4}>
             <FadeInSlideRight>
               <Heading as="h4" color="blue.400">
                 {eventDoc.name}
               </Heading>
             </FadeInSlideRight>
 
-            {/* Sub header buttons */}
             <FadeInSlideLeft>
               <Flex gap={2}>
                 <ToolIconBtn
@@ -75,14 +75,29 @@ export default function EventList({ setHeaderTitle }) {
               </Flex>
             </FadeInSlideLeft>
 
-            <AddSeriesModal
-              isOpen={isOpen}
-              onClose={onClose}
-              eventId={eventId}
-            />
+           
           </Flex>
 
-          <Divider my={3} border={2} shadow={"md"} />
+          <Divider my={3} border={2} shadow={"md"} /> */}
+          <PageHead title={eventDoc.name}>
+            <ToolIconBtn
+              label="Edit Event Details"
+              action={() => route("/events/edit")}
+              icon={EditIcon}
+            />
+            <ToolIconBtn
+              label="Import file"
+              action={() => route("/import")}
+              icon={FileUploadOutlinedIcon}
+            />
+            <ToolIconBtn
+              label="Add Series"
+              action={onOpen}
+              icon={AddToPhotosOutlinedIcon}
+            />
+          </PageHead>
+
+          <AddSeriesModal isOpen={isOpen} onClose={onClose} eventId={eventId} />
 
           <SiteList loading={seriesLoading}>
             {series?.docs.map((item) => {
