@@ -60,40 +60,12 @@ export default function Comp({ seriesId, compId }) {
   return (
     <Fragment>
       {compLoading ? (
-        <Fragment>
-          <Heading mx={4} color="transparent" fontSize={"4xl"}>
-            {" "}
-            h
-          </Heading>
-          <Divider border="4px" my={4} />
-          <Progress size="xs" isIndeterminate top={-4} />
-        </Fragment>
+        <PageHead title={""}></PageHead>
       ) : (
         comp && (
           <Page>
-            {/* <Flex mt={6} mx={2} gap={2} justifyContent="space-between">
-              <Heading mx={4} color="blue.400" fontSize={"4xl"}>
-                <Editable defaultValue={comp?.boat} justifyContent="center">
-                  <EditablePreview />
-                  <EditableInput onBlur={handleChange} name="boat" />
-                </Editable>
-              </Heading>
-              <Flex gap={2} mr={4}>
-                <ToolIconBtn
-                  label="Back"
-                  action={() => history.back()}
-                  icon={ArrowBackIcon}
-                />
-                <ToolIconBtn
-                  label="Add field"
-                  action={onOpen}
-                  icon={AddToPhotosOutlinedIcon}
-                />
-              </Flex>
-            </Flex>
-
-            <Divider border="4px" my={4} /> */}
-            <PageHead title={comp?.boat} loading={compLoading}>
+           
+            <PageHead title={comp?.boat ? comp?.boat : comp.helmname} loading={compLoading}>
               <ToolIconBtn
                 label="Back"
                 action={() => history.back()}
