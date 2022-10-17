@@ -22,6 +22,7 @@ export default function ImportList({
   duplicates,
 }: importProps) {
   const [copy, setCopy] = useState("copy");
+
   return (
     <Fragment>
       {listItems &&

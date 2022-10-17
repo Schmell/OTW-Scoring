@@ -27,10 +27,7 @@ export const Populate = async ({ user, file, copy }: PopulateProps) => {
     route("/");
     return null;
   }
-  const shit = (dodo) => {
-    console.log("dodo: ", dodo);
-  };
-  shit("smells");
+
   // no file so exit
   if (!file) return;
 
@@ -61,6 +58,9 @@ export const Populate = async ({ user, file, copy }: PopulateProps) => {
   // add series doc
   /////////////////////////////////////////////////////////////////////
   // So this whole process needs to proceed as as series of functions
+  // first we look for duplicates
+  // if - then copy or overwrite
+  // then get comps / races / results
 
   // const findCopyFile = query(seriesRef, where(__fileInfo))
   let sId;

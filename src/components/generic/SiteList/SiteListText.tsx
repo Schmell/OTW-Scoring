@@ -43,7 +43,11 @@ export function SiteListText({
         >
           <Text fontSize={"xl"}>{textItems.head}</Text>
           <Divider mb={2} />
-          <Text fontSize="lg" color={useColorModeValue("gray.500", "gray.300")}>
+          <Text
+            fontSize="lg"
+            my={2}
+            color={useColorModeValue("gray.500", "gray.300")}
+          >
             {textItems.sub}
           </Text>
 

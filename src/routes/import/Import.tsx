@@ -134,7 +134,7 @@ export default function Import({ setHeaderTitle }) {
         });
       }
 
-      Populate(user, file);
+      Populate({ user, file, copy });
     });
   };
 
@@ -144,7 +144,7 @@ export default function Import({ setHeaderTitle }) {
 
   return (
     <Page>
-      <Box px={2}>
+      <Box px={2} mt="60px">
         <Flex justifyContent={"space-between"}>
           <Heading color="blue.400">Select File</Heading>
           <SecBtn onClick={handleChooseFile}>Choose File(s)</SecBtn>

@@ -12,15 +12,15 @@ export default function PageHead(props) {
         py={6}
         mt={12}
         w="100%"
-        bgGradient={useColorModeValue(
-          "linear(to-b, gray.50, white)",
-          "linear(to-b, blackAlpha.100, blackAlpha.600)"
-        )}
         boxShadow="md"
         position="relative"
         borderBottomWidth={4}
         borderColor="gray.200"
         borderBottomEndRadius="2em"
+        bgGradient={useColorModeValue(
+          "linear(to-b, whiteAlpha.200, white)",
+          "linear(to-b, blackAlpha.50, blackAlpha.600)"
+        )}
       >
         <FadeInSlideRight>
           <Heading
@@ -40,7 +40,7 @@ export default function PageHead(props) {
         <Progress
           isIndeterminate
           size="xs"
-          w="full"
+          w="90%"
           top={-1}
           zIndex={20}
           bg="gray.200"
