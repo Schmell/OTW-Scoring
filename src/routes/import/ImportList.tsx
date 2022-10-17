@@ -13,15 +13,16 @@ import { importProps } from "./importTypes";
 // Icons
 import ClearIcon from "@mui/icons-material/Clear";
 import ToolIconBtn from "../../components/generic/ToolIconBtn";
-import { useState } from "preact/hooks";
+
+
 
 export default function ImportList({
   listItems,
   listState,
   setListState,
   duplicates,
+  setCopy,
 }: importProps) {
-  const [copy, setCopy] = useState("copy");
 
   return (
     <Fragment>

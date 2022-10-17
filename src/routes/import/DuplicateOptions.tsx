@@ -10,6 +10,7 @@ export function DuplicateOptions({ item, setCopy }) {
 
   const handleChange = (value) => {
     // setVal(value);
+    // setCopy(value)
     if (value === "overwrite") {
       setCopy(false);
     }

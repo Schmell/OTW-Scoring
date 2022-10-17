@@ -40,9 +40,8 @@ export default function Import({ setHeaderTitle }) {
 
   const [selectedButton, setSelectedButton] = useState("");
 
-  // useEffect(() => {
-  //   console.log("selectedButton: ", selectedButton);
-  // }, [selectedButton]);
+  const [copy, setCopy] = useState(true);
+  console.log("copy ", copy);
 
   const showDialog = async () => {
     return await fileDialog({ multiple: true, accept: ".blw" });
@@ -62,7 +61,7 @@ export default function Import({ setHeaderTitle }) {
             name: file.name,
             duplicate: true,
             file: file,
-            copy: true,
+            copy: copy,
           });
         }
       });
@@ -123,7 +122,7 @@ export default function Import({ setHeaderTitle }) {
 
   const populateWithArray = (fileObjList: importFileObj[]) => {
     fileObjList.forEach(async (fileObj) => {
-      const { copy, file } = fileObj;
+      const { file } = fileObj;
 
       if (!copy) {
         const colRef = collection(db, "series");
@@ -157,6 +156,7 @@ export default function Import({ setHeaderTitle }) {
           listState={duplicates}
           setListState={setDuplicates}
           duplicates={true}
+          setCopy={setCopy}
         />
 
         <ImportList
@@ -164,6 +164,7 @@ export default function Import({ setHeaderTitle }) {
           listState={newSeries}
           setListState={setNewSeries}
           duplicates={false}
+          setCopy={setCopy}
         />
 
         {newSeries.find((ups) => {

@@ -1,3 +1,5 @@
+import { StateUpdater } from "preact/hooks";
+
 export interface importFileObj {
     seriesId?: string;
     name?: string;
@@ -11,4 +13,5 @@ export interface importFileObj {
     listState: importFileObj[];
     setListState: any;
     duplicates: boolean;
+    setCopy: StateUpdater<boolean>
   }

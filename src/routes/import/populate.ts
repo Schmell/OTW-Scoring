@@ -40,14 +40,7 @@ export const Populate = async ({ user, file, copy }: PopulateProps) => {
   // need to check the series first
   const seriesData = await blw.getSeries();
 
-  // i wanna make comps top level but put race specific shit on the race
-  const compsData = await blw.getComps();
 
-  // races are races
-  const racesData = await blw.getRaces();
-
-  //results are results
-  const resultsData = await blw.getResults();
 
   // add owner to series data
   seriesData.__owner = user.uid;
@@ -58,11 +51,6 @@ export const Populate = async ({ user, file, copy }: PopulateProps) => {
   // Get series ref
   const seriesRef = collection(db, "series");
 
-  // add series doc
-  /////////////////////////////////////////////////////////////////////
-  // So this whole process needs to proceed as as series of functions
-
-  // const findCopyFile = query(seriesRef, where(__fileInfo))
   let sId;
 
   const findCopyFile = query(
@@ -74,48 +62,57 @@ export const Populate = async ({ user, file, copy }: PopulateProps) => {
   if (!copies.empty) {
     copies.forEach(async (copyDoc) => {
       if (copy) {
-        console.log("copy: ", copy);
         const existingFileName = seriesData.__fileInfo.name;
         const fileNameParts = existingFileName.split(".");
         seriesData.__fileInfo.name = `${fileNameParts[0]}-of-${copyDoc.id}.${fileNameParts[1]}`;
-        seriesData.event = `${seriesData.event}-${copyDoc.id}`;
+        seriesData.event = `${seriesData.event}-copy`;
         sId = await addDoc(seriesRef, seriesData);
-        console.log("sId: ", sId.id);
+        await addTables(sId)
       } else {
-        // const docRef = doc(seriesRef, copyDoc.id);
         sId = await updateDoc(doc(seriesRef, copyDoc.id), seriesData);
+        await addTables(sId)
       }
     });
   } else {
-    console.log("copies.empty: ", copies.empty);
     sId = await addDoc(seriesRef, seriesData);
+    await addTables(sId)
   }
 
-  // Map comps to firestore
-  await compsData.forEach(async (comp: any) => {
-    // console.log("comp: ", comp, sId.id);
-    console.log("sId.id: ", await sId.id);
-    setDoc(doc(seriesRef, await sId.id, "comps", comp.compid), {
-      _seriesid: sId.id,
-      ...comp,
-    });
-  });
+ async function addTables(sId){
 
-  // Map race to firestore
-  await racesData.forEach((race: any) => {
-    // console.log("race: ", race, sId.id);
-    setDoc(doc(seriesRef, sId.id, "races", race.raceid), {
-      _seriesid: sId.id,
-      ...race,
-    });
-  });
+    // i wanna make comps top level but put race specific shit on the race
+    const compsData = await blw.getComps();
 
-  // Map results to firestore
-  await resultsData.forEach((result: any) => {
-    // console.log("result: ", result, sId.id);
-    setDoc(doc(seriesRef, sId.id, "results", result.id), {
-      _seriesid: sId.id,
-      ...result,
+    // races are races
+    const racesData = await blw.getRaces();
+  
+    //results are results
+    const resultsData = await blw.getResults();
+    
+    // Map comps to firestore
+    await compsData.forEach(async (comp: any) => {
+      setDoc(doc(seriesRef, await sId.id, "comps", comp.compid), {
+        _seriesid: sId.id,
+        ...comp,
+      });
     });
-  });
+  
+    // Map race to firestore
+    await racesData.forEach((race: any) => {
+      setDoc(doc(seriesRef, sId.id, "races", race.raceid), {
+        _seriesid: sId.id,
+        ...race,
+      });
+    });
+  
+    // Map results to firestore
+    await resultsData.forEach((result: any) => {
+      setDoc(doc(seriesRef, sId.id, "results", result.id), {
+        _seriesid: sId.id,
+        ...result,
+      });
+    });
+
+  }
+
 }; // populate
