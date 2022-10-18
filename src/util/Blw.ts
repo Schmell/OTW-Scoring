@@ -274,6 +274,8 @@ export default class Blw {
       __owner?: string;
       __event?: string;
       lastModifiedDate?: string;
+      includecorrected?: string
+      resultType?: string
       [x: string | number | symbol]: unknown;
     };
 

@@ -41,7 +41,6 @@ export default function Import({ setHeaderTitle }) {
   const [selectedButton, setSelectedButton] = useState("");
 
   const [copy, setCopy] = useState(true);
-  console.log("copy ", copy);
 
   const showDialog = async () => {
     return await fileDialog({ multiple: true, accept: ".blw" });
@@ -186,7 +185,7 @@ export default function Import({ setHeaderTitle }) {
           </Box>
         ) : (
           <Box>
-            <Formik
+            {/* <Formik
               onSubmit={(vals) => {
                 console.log("values: ", vals);
               }}
@@ -269,7 +268,7 @@ export default function Import({ setHeaderTitle }) {
                   </Form>
                 );
               }}
-            </Formik>
+            </Formik> */}
             <Text as="p">
               Use the choose files button to select your Sailwave file(s) to
               import
