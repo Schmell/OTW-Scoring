@@ -1,12 +1,8 @@
-import { Box, Divider, Flex, Heading, useDisclosure } from "@chakra-ui/react";
+import { Box, useDisclosure } from "@chakra-ui/react";
 import { addDoc, collection, query, where } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
 import { useCollection } from "react-firebase-hooks/firestore";
-import {
-  FadeInSlideLeft,
-  FadeInSlideRight,
-} from "../../components/animations/FadeSlide";
 import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
 // Icons
@@ -19,6 +15,7 @@ import { SiteListText } from "../../components/generic/SiteList/SiteListText";
 import ToolIconBtn from "../../components/generic/ToolIconBtn";
 import { Page } from "../../components/page/Page";
 import PageHead from "../../components/page/pageHead";
+import ToolIconButton from "../../components/generic/ToolIconButton";
 
 export default function Events(props) {
   const { user, setHeaderTitle, ...rest } = props;
@@ -42,41 +39,16 @@ export default function Events(props) {
 
   return (
     <Fragment>
-      {/* <Flex justifyContent="space-between" alignItems="end" px={4}>
-        <FadeInSlideRight>
-          <Heading as="h4" color="blue.400">
-            All Events
-          </Heading>
-        </FadeInSlideRight>
-
-        <FadeInSlideLeft>
-          <Flex gap={2}>
-            <ToolIconBtn
-              label="Import file"
-              action={() => route("/import")}
-              icon={FileUploadOutlinedIcon}
-            />
-            <ToolIconBtn
-              label="Add Series"
-              action={addEventHandler}
-              icon={AddToPhotosOutlinedIcon}
-            />
-          </Flex>
-        </FadeInSlideLeft>
-      </Flex>
-
-      <Divider mt={4} border={4} /> */}
-
       <PageHead title="All Events">
-        <ToolIconBtn
-          label="Import file"
-          action={() => route("/import")}
+        <ToolIconButton
+          aria-label="Import file"
           icon={FileUploadOutlinedIcon}
+          onClick={() => route("/import")}
         />
-        <ToolIconBtn
-          label="Add Series"
-          action={addEventHandler}
+        <ToolIconButton
+          aria-label="Add Series"
           icon={AddToPhotosOutlinedIcon}
+          onClick={addEventHandler}
         />
       </PageHead>
       <Page>

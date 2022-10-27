@@ -1,12 +1,8 @@
-import { Box, Divider, Flex, Heading, useDisclosure } from "@chakra-ui/react";
+import { Box, useDisclosure } from "@chakra-ui/react";
 import { collection, doc, query, updateDoc, where } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
 import { useCollection, useDocumentData } from "react-firebase-hooks/firestore";
-import {
-  FadeInSlideLeft,
-  FadeInSlideRight,
-} from "../../components/animations/FadeSlide";
 import { AreYouSure } from "../../components/generic/AreYouSure";
 import { SiteList } from "../../components/generic/SiteList";
 import { SiteListButtons } from "../../components/generic/SiteList/SiteListButtons";
@@ -22,6 +18,7 @@ import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import ToolIconBtn from "../../components/generic/ToolIconBtn";
 import { Page } from "../../components/page/Page";
 import PageHead from "../../components/page/pageHead";
+import ToolIconButton from "../../components/generic/ToolIconButton";
 
 export default function EventList({ setHeaderTitle }) {
   setHeaderTitle("Event");
@@ -48,52 +45,21 @@ export default function EventList({ setHeaderTitle }) {
     <Page>
       {!eventDocLoading && eventDoc && (
         <Fragment>
-          {/* <Flex justifyContent="space-between" alignItems="end" px={4}>
-            <FadeInSlideRight>
-              <Heading as="h4" color="blue.400">
-                {eventDoc.name}
-              </Heading>
-            </FadeInSlideRight>
-
-            <FadeInSlideLeft>
-              <Flex gap={2}>
-                <ToolIconBtn
-                  label="Edit Event Details"
-                  action={() => route("/events/edit")}
-                  icon={EditIcon}
-                />
-                <ToolIconBtn
-                  label="Import file"
-                  action={() => route("/import")}
-                  icon={FileUploadOutlinedIcon}
-                />
-                <ToolIconBtn
-                  label="Add Series"
-                  action={onOpen}
-                  icon={AddToPhotosOutlinedIcon}
-                />
-              </Flex>
-            </FadeInSlideLeft>
-
-           
-          </Flex>
-
-          <Divider my={3} border={2} shadow={"md"} /> */}
           <PageHead title={eventDoc.name}>
-            <ToolIconBtn
-              label="Edit Event Details"
-              action={() => route("/events/edit")}
+            <ToolIconButton
+              aria-label="Edit Event Details"
               icon={EditIcon}
+              onClick={() => route("/events/edit")}
             />
-            <ToolIconBtn
-              label="Import file"
-              action={() => route("/import")}
+            <ToolIconButton
+              aria-label="Import file"
               icon={FileUploadOutlinedIcon}
+              onClick={() => route("/import")}
             />
-            <ToolIconBtn
-              label="Add Series"
-              action={onOpen}
+            <ToolIconButton
+              aria-label="Add Series"
               icon={AddToPhotosOutlinedIcon}
+              onClick={onOpen}
             />
           </PageHead>
 
@@ -101,7 +67,6 @@ export default function EventList({ setHeaderTitle }) {
 
           <SiteList loading={seriesLoading}>
             {series?.docs.map((item) => {
-              // console.log("item: ", item.data());
               return (
                 <SiteListItem
                   key={item.id}

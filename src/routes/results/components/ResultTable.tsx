@@ -2,7 +2,9 @@
 import {
   Box,
   Button,
-  Divider,
+  Editable,
+  EditableInput,
+  EditablePreview,
   Flex,
   Heading,
   Icon,
@@ -10,12 +12,11 @@ import {
   Spinner,
   Text,
 } from "@chakra-ui/react";
-import { Editable, EditableInput, EditablePreview } from "@chakra-ui/react";
 // Chakra hooks
 import {
+  useBreakpointValue,
   useColorModeValue,
   useDisclosure,
-  useBreakpointValue,
 } from "@chakra-ui/react";
 // Chakra table
 import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
@@ -41,12 +42,12 @@ import SettingsModal from "./SettingsModal";
 // Icons
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import EditIcon from "@mui/icons-material/Edit";
-import SettingsIcon from "@mui/icons-material/Settings";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ToolIconBtn from "../../../components/generic/ToolIconBtn";
+import EditIcon from "@mui/icons-material/Edit";
+import SettingsIcon from "@mui/icons-material/Settings";
 import { DocumentData } from "firebase/firestore";
+import ToolIconButton from "../../../components/generic/ToolIconButton";
 import PageHead from "../../../components/page/pageHead";
 // import spacer from "../../../assets/img/spacer.gif";
 
@@ -409,28 +410,32 @@ function FleetTable(props: TableProps) {
 
         <Divider my={3} border={4} /> */}
         <PageHead title={fleetName ? fleetName : "Fleet"}>
-          <ToolIconBtn
+          <ToolIconButton
+            aria-label="Previous race"
+            icon={ChevronLeftIcon}
             disabled={selectedRace <= 0}
-            action={() => {
+            onClick={() => {
               setSelectedRace(selectedRace - 1);
             }}
-            label="Previous race"
-            icon={ChevronLeftIcon}
           />
-          <ToolIconBtn
+          <ToolIconButton
+            aria-label="Next race"
+            icon={ChevronRightIcon}
             disabled={selectedRace >= racesArray.length - 1}
-            action={() => {
+            onClick={() => {
               setSelectedRace(selectedRace + 1);
             }}
-            label="Next race"
-            icon={ChevronRightIcon}
           />
-          <ToolIconBtn
-            action={() => route("/series/edit")}
-            label="Edit Series"
+          <ToolIconButton
+            aria-label="Edit Series"
             icon={EditIcon}
+            onClick={() => route("/series/edit")}
           />
-          <ToolIconBtn action={onOpen} label="Settings" icon={SettingsIcon} />
+          <ToolIconButton
+            aria-label="Settings"
+            icon={SettingsIcon}
+            onClick={onOpen}
+          />
         </PageHead>
 
         <SettingsModal

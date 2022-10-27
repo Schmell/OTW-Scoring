@@ -29,6 +29,7 @@ import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import PageHead from "../../components/page/pageHead";
 import { Page } from "../../components/page/Page";
+import ToolIconButton from "../../components/generic/ToolIconButton";
 
 export default function Series(props) {
   const { user, setHeaderTitle, ...rest } = props;
@@ -88,15 +89,15 @@ export default function Series(props) {
         </FadeInSlideLeft>
       </Flex> */}
       <PageHead title="All Series" loading={seriesLoading}>
-        <ToolIconBtn
-          label="Import file"
-          action={() => route("/import")}
+        <ToolIconButton
+          aria-label="Import file"
           icon={FileUploadOutlinedIcon}
+          onClick={() => route("/import")}
         />
-        <ToolIconBtn
-          label="Create Series"
-          action={addSeriesHandler}
+        <ToolIconButton
+          aria-label="Create Series"
           icon={AddToPhotosOutlinedIcon}
+          onClick={addSeriesHandler}
         />
       </PageHead>
       <Page>

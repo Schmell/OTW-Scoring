@@ -29,6 +29,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import CloseIcon from "@mui/icons-material/Close";
+import ToolIconButton from "../../components/generic/ToolIconButton";
 
 export default function Races(props) {
   const { setHeaderTitle, ...rest } = props;
@@ -77,15 +78,15 @@ export default function Races(props) {
   return (
     <Page>
       <PageHead title={series && series.event}>
-        <ToolIconBtn
-          action={() => route("/series/edit")}
-          label="Edit Series"
+        <ToolIconButton
+          aria-label="Edit Series"
           icon={EditIcon}
+          onClick={() => route("/series/edit")}
         />
-        <ToolIconBtn
-          action={addRaceHandler}
-          label="Add Race"
+        <ToolIconButton
+          aria-label="Add Race"
           icon={AddToPhotosOutlinedIcon}
+          onClick={addRaceHandler}
         />
       </PageHead>
 

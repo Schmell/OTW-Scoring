@@ -4,8 +4,8 @@ import {
   collection,
   collectionGroup,
   doc,
+  DocumentData,
   DocumentReference,
-  getDoc,
   getDocs,
   query,
   setDoc,
@@ -51,7 +51,7 @@ export const Populate = async ({ user, file, copy }: PopulateProps) => {
   // Get series ref
   const seriesRef = collection(db, "series");
 
-  let sId;
+  let sId
 
   const findCopyFile = query(
     collectionGroup(db, "series"),
@@ -78,7 +78,7 @@ export const Populate = async ({ user, file, copy }: PopulateProps) => {
     await addTables(sId);
   }
 
-  async function addTables(sId: DocumentReference) {
+  async function addTables(sId: DocumentReference<DocumentData>) {
     // i wanna make comps top level but put race specific shit on the race
     const compsData = await blw.getComps();
 

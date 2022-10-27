@@ -12,9 +12,7 @@ import { DuplicateOptions } from "./DuplicateOptions";
 import { importProps } from "./importTypes";
 // Icons
 import ClearIcon from "@mui/icons-material/Clear";
-import ToolIconBtn from "../../components/generic/ToolIconBtn";
-
-
+import ToolIconButton from "../../components/generic/ToolIconButton";
 
 export default function ImportList({
   listItems,
@@ -23,14 +21,14 @@ export default function ImportList({
   duplicates,
   setCopy,
 }: importProps) {
-
+  // console.log("listItems ", listItems);
   return (
     <Fragment>
       {listItems &&
         listItems.find((fileObj) => {
           if (fileObj.name) return true;
         }) && (
-          <Box my={3}>
+          <Box my={3} mx={4}>
             <Box>
               <Heading as="h3" color="blue.300" fontSize="lg">
                 {duplicates ? "Duplicate files" : "New Files"}
@@ -68,11 +66,11 @@ export default function ImportList({
                             {item.duplicate && (
                               <DuplicateOptions item={item} setCopy={setCopy} />
                             )}
-                            <ToolIconBtn
+                            <ToolIconButton
                               icon={ClearIcon}
-                              label="Remove from Upload"
+                              aria-label="Remove from Upload"
                               variant="ghost"
-                              action={() => {
+                              onClick={() => {
                                 const filtered = listState.filter((ls) => {
                                   if (ls.name !== item.name) return true;
                                 });

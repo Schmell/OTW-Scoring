@@ -27,16 +27,6 @@ export default function Home({ setHeaderTitle }) {
       <PageHead title="On the Water Scoring" loading={userLoading}>
         {!user ? <SignIn /> : <SignOut />}
       </PageHead>
-      {/* <Heading color="blue.400">
-        <Flex justifyContent="space-between" px={4}>
-          <FadeInSlideRight>
-            <Text>On the Water Scoring</Text>
-          </FadeInSlideRight>
-          <FadeInSlideLeft>{!user ? <SignIn /> : <SignOut />}</FadeInSlideLeft>
-        </Flex>
-      </Heading> */}
-
-      {/* <Divider my={4} border={4} shadow={"md"} /> */}
 
       <FadeInSlideRight>
         <Box m={7}>

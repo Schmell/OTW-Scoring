@@ -124,41 +124,7 @@ export default function RaceEdit({ setHeaderTitle }) {
         >
           {({ values }) => (
             <Form>
-              {}
               <Box>
-                {/* Heading */}
-                {/* <Flex
-                  justifyContent="space-between"
-                  alignItems="center"
-                  minWidth="max-content"
-                  wrap="wrap"
-                  mx={4}
-                >
-                  <FadeInSlideRight>
-                    <Heading as="h5" color="blue.400">
-                      <Editable
-                        defaultValue={
-                          currentRace?.name
-                            ? currentRace.name
-                            : `Race ${currentRace?.rank}`
-                        }
-                        isPreviewFocusable={true}
-                      >
-                        <EditablePreview />
-                        <EditableInput
-                          onChange={({ target }) => {
-                            setRaceName(target.value);
-                          }}
-                        />
-                      </Editable>
-                    </Heading>
-                    <Text fontSize="sm" color="lightgray">
-                      id: {currentRace?.raceid} - {currentRace?._seriesid}
-                    </Text>
-                  </FadeInSlideRight>
-                </Flex>
-
-                <Divider my={3} /> */}
                 <PageHead title={currentRace.name}>
                   <Text fontSize="sm" color="lightgray">
                     id: {currentRace?.raceid} - {currentRace?._seriesid}

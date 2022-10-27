@@ -1,8 +1,8 @@
-import { Fragment, h } from "preact";
 import { Box, Container, Heading } from "@chakra-ui/react";
+import { Fragment, h } from "preact";
 import {
-  FadeInSlideRight,
   FadeIn,
+  FadeInSlideRight,
 } from "../../components/animations/FadeSlide";
 
 const UserLanding = () => {
@@ -10,17 +10,7 @@ const UserLanding = () => {
     <Fragment>
       <Container>
         <FadeInSlideRight>
-          <Heading
-            as="h3"
-            color="blue.400"
-            // position={"fixed"}
-            w="100%"
-            mt={2}
-            pb={3}
-            // height={"20px"}
-            // bg={"white"}
-            // zIndex="+1"
-          >
+          <Heading as="h3" color="blue.400" w="100%" mt={2} pb={3}>
             User area
           </Heading>
         </FadeInSlideRight>
