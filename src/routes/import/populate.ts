@@ -7,6 +7,7 @@ import {
   DocumentData,
   DocumentReference,
   getDocs,
+  limitToLast,
   query,
   setDoc,
   updateDoc,
@@ -20,16 +21,17 @@ interface PopulateProps {
   user: User | null | undefined;
   file: File;
   copy?: boolean;
+  __public: boolean;
 }
 
-export const Populate = async ({ user, file, copy }: PopulateProps) => {
+export const Populate = async ({ user, file, copy, __public }: PopulateProps) => {
   if (!user) {
     console.warn("User not logged in ", user);
     route("/");
     return null;
   }
 
-  // no file so exit
+  // no file so exinotet
   if (!file) return;
 
   // Make new Blw class
@@ -41,6 +43,10 @@ export const Populate = async ({ user, file, copy }: PopulateProps) => {
   // add owner to series data
   seriesData.__owner = user.uid;
 
+  // make series public by default
+  // will need to necessary changes to import and seriesEdit to control from ui
+  seriesData.__public = __public;
+
   // add blank event
   seriesData.__event = "";
 
@@ -51,13 +57,16 @@ export const Populate = async ({ user, file, copy }: PopulateProps) => {
   // Get series ref
   const seriesRef = collection(db, "series");
 
+  // let sId: DocumentReference<DocumentData>
   let sId
 
   const findCopyFile = query(
     collectionGroup(db, "series"),
     where("__fileInfo.name", "==", seriesData.__fileInfo.name)
   );
+
   const copies = await getDocs(findCopyFile);
+
   // No copies so write as is
   if (!copies.empty) {
     copies.forEach(async (copyDoc) => {
@@ -69,8 +78,9 @@ export const Populate = async ({ user, file, copy }: PopulateProps) => {
         sId = await addDoc(seriesRef, seriesData);
         await addTables(sId);
       } else {
-        sId = await updateDoc(doc(seriesRef, copyDoc.id), seriesData);
-        await addTables(sId);
+       sId = await updateDoc(doc(seriesRef, copyDoc.id), seriesData);
+      await addTables(sId || null);
+        
       }
     });
   } else {

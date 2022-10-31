@@ -16,6 +16,7 @@ import PageHead from "../../components/page/pageHead";
 import { SignIn } from "../../components/page/SignIn";
 import { SignOut } from "../../components/page/SignOut";
 import { auth } from "../../util/firebase-config";
+import PublicSeriesList from "../series/PublicSeriesList";
 
 export default function Home({ setHeaderTitle }) {
   const [user, userLoading, _userError] = useAuthState(auth);
@@ -76,6 +77,7 @@ export default function Home({ setHeaderTitle }) {
           </UnorderedList>
         </Box>
       )}
+      <PublicSeriesList />
     </Page>
   );
 }

@@ -1,23 +1,16 @@
-import {
-  Box,
-  Divider,
-  Flex,
-  Heading,
-  Icon,
-  IconButton,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Divider, Flex, Heading, useDisclosure } from "@chakra-ui/react";
+import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
+import { collection, doc, orderBy, query } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { useState } from "preact/hooks";
-import { collection, doc, orderBy, query } from "firebase/firestore";
 import { useCollection, useDocument } from "react-firebase-hooks/firestore";
-import { db } from "../../util/firebase-config";
+import { FadeInSlideRight } from "../../components/animations/FadeSlide";
 import { SiteList } from "../../components/generic/SiteList";
 import { SiteListButtons } from "../../components/generic/SiteList/SiteListButtons";
 import { SiteListItem } from "../../components/generic/SiteList/SiteListItem";
 import { SiteListText } from "../../components/generic/SiteList/SiteListText";
-import { FadeInSlideRight } from "../../components/animations/FadeSlide";
-import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
+import ToolIconButton from "../../components/generic/ToolIconButton";
+import { db } from "../../util/firebase-config";
 
 export default function Competitors({ setHeaderTitle, seriesId }) {
   setHeaderTitle("Competitors");
@@ -38,12 +31,10 @@ export default function Competitors({ setHeaderTitle, seriesId }) {
           <Heading color="blue.400">{series?.data()?.event}</Heading>
         </FadeInSlideRight>
 
-        <IconButton
+        <ToolIconButton
           aria-label="Add Event"
-          icon={(<Icon as={AddToPhotosOutlinedIcon} />) as any}
-          colorScheme={"blue"}
-          variant={"outline"}
-          boxShadow={"md"}
+          icon={AddToPhotosOutlinedIcon}
+          onClick={() => {}}
         />
       </Flex>
 

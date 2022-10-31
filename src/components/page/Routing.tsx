@@ -147,6 +147,27 @@ export default function Routing(props) {
         }
         {...props}
       />
+
+      <AsyncRoute
+        path="/organization/edit/:orgId"
+        getComponent={() =>
+          import("../../routes/organizations/OrganizationEdit").then(
+            (module) => module.default
+          )
+        }
+        {...props}
+      />
+
+      <AsyncRoute
+        path="/organization/:orgId"
+        getComponent={() =>
+          import("../../routes/organizations/Organization").then(
+            (module) => module.default
+          )
+        }
+        {...props}
+      />
+
       <NotFoundPage default={true} />
     </Router>
   );

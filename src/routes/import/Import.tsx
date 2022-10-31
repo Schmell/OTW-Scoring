@@ -30,6 +30,7 @@ export default function Import({ setHeaderTitle }) {
   const [newSeries, setNewSeries] = useState([{} as importFileObj]);
 
   const [copy, setCopy] = useState(true);
+  const [__public, setPublic] = useState(true);
 
   const showDialog = async () => {
     return await fileDialog({ multiple: true, accept: ".blw" });
@@ -118,7 +119,7 @@ export default function Import({ setHeaderTitle }) {
           deleteDoc(doc.ref);
         });
       }
-      Populate({ user, file, copy });
+      Populate({ user, file, copy, __public });
     });
   };
 
@@ -138,6 +139,7 @@ export default function Import({ setHeaderTitle }) {
         setListState={setDuplicates}
         duplicates={true}
         setCopy={setCopy}
+        setPublic={setPublic}
       />
 
       <ImportList
@@ -146,6 +148,7 @@ export default function Import({ setHeaderTitle }) {
         setListState={setNewSeries}
         duplicates={false}
         setCopy={setCopy}
+        setPublic={setPublic}
       />
 
       {newSeries.find((ups) => {

@@ -2,10 +2,13 @@ import {
   Box,
   Divider,
   Flex,
+  FormLabel,
   Heading,
   List,
   ListItem,
+  Switch,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
 import { DuplicateOptions } from "./DuplicateOptions";
@@ -20,6 +23,7 @@ export default function ImportList({
   setListState,
   duplicates,
   setCopy,
+  setPublic,
 }: importProps) {
   // console.log("listItems ", listItems);
   return (
@@ -62,10 +66,20 @@ export default function ImportList({
                               </Text>
                             )}
                           </Box>
+
                           <Flex alignItems="center">
+                            <Switch
+                              mr={8}
+                              defaultChecked
+                              onChange={(e) => {
+                                setPublic(e.target.checked);
+                              }}
+                            />
+
                             {item.duplicate && (
                               <DuplicateOptions item={item} setCopy={setCopy} />
                             )}
+
                             <ToolIconButton
                               icon={ClearIcon}
                               aria-label="Remove from Upload"

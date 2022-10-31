@@ -1,4 +1,4 @@
-import { Box, ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import { h } from "preact";
 import { useState } from "preact/hooks";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -9,19 +9,18 @@ import { theme } from "./theme";
 
 const App = () => {
   const [user] = useAuthState(auth);
-
+  // header title is causing way to much rerendering
+  // try to impliment useStorage
   const [headerTitle, setHeaderTitle] = useState("Blw Me");
 
   return (
     <ChakraProvider resetCSS theme={theme}>
       <SidebarWithHeader headerTitle={headerTitle}>
-        {/* <Box mt={16}> */}
         <Routing
           user={user}
           setHeaderTitle={setHeaderTitle}
           headerTitle={headerTitle}
         />
-        {/* </Box> */}
       </SidebarWithHeader>
     </ChakraProvider>
   );

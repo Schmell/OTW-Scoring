@@ -6,6 +6,7 @@ export interface importFileObj {
     file: File;
     duplicate: boolean;
     copy?: boolean;
+
   }
 
   export interface importProps {
@@ -13,5 +14,6 @@ export interface importFileObj {
     listState: importFileObj[];
     setListState: any;
     duplicates: boolean;
-    setCopy: StateUpdater<boolean>
+    setCopy: StateUpdater<boolean>;
+    setPublic: StateUpdater<boolean>;
   }
