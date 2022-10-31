@@ -4,8 +4,8 @@ import { useState } from "preact/hooks";
 import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
 
-export async function addOrganization(props){
-  const {uid} = props
+export async function addOrganization(uid){
+  // const {uid} = props
     // const [org, setOrgId] = useStorage("orgId")
 
     const colRef = collection(db, "organizations")

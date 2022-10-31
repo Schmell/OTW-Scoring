@@ -21,8 +21,11 @@ import {
 } from "@chakra-ui/react";
 import {
   collection,
+  deleteDoc,
   doc,
   DocumentData,
+  DocumentSnapshot,
+  getDoc,
   getDocs,
   query,
   QuerySnapshot,
@@ -33,7 +36,11 @@ import { Field, Form, Formik } from "formik";
 import { h } from "preact";
 import { Fragment, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useCollection, useDocumentData } from "react-firebase-hooks/firestore";
+import {
+  useCollection,
+  useDocument,
+  useDocumentData,
+} from "react-firebase-hooks/firestore";
 import {
   FadeIn,
   FadeInSlideRight,
@@ -51,36 +58,70 @@ import { addOrganization } from "../organizations/addOrganization";
 import { route } from "preact-router";
 import useDebounce from "../../hooks/useDebounce";
 import { useEffect } from "preact/hooks";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import GroupRemoveOutlinedIcon from "@mui/icons-material/GroupRemoveOutlined";
 
 export default function UserProfile({ setHeaderTitle, user }) {
   setHeaderTitle("Profile");
-  const submittedToast = useToast();
-  // const [user, userLoading] = useAuthState(auth);
-  // console.log("user ", user.uid);
 
-  const docRef = doc(db, "user", user!.uid); // bang
+  const submittedToast = useToast();
+
+  const docRef = doc(db, "user", user?.uid); // bang
   const [value] = useDocumentData(docRef);
 
   const orgsRef = collection(db, "organizations");
   const userOrgs = query(orgsRef, where("__owner", "==", user?.uid));
   const [orgs, orgsLoading] = useCollection(userOrgs);
 
+  const followOrgsRef = collection(db, "followOrgs");
+  const userFollowOrgs = query(followOrgsRef, where("userId", "==", user?.uid));
+  const [followOrgs, followingOrgsLoading] = useCollection(userFollowOrgs);
+
+  const [following, setFollowing] = useState();
+
+  const getFollowing = () => {
+    const items = followOrgs?.docs.map((follow) => {
+      const docRef = doc(orgsRef, follow.data().orgId);
+      // const item = await getDoc(do cRef);
+      const [item] = useDocument(docRef);
+      return { org: { ...item?.data() }, id: docRef.id };
+    });
+    if (items) return items;
+    return [];
+  };
+  console.log("getFollowing ", getFollowing()?.length);
+
+  const unFollowOrg = async (orgId) => {
+    const q = query(
+      followOrgsRef,
+      where("orgId", "==", orgId),
+      where("userId", "==", user.uid)
+    );
+    const del = await getDocs(q);
+    del.docs.map(async (d) => {
+      await deleteDoc(d.ref);
+    });
+  };
+
   // console.log("orgs ", orgs?.docs);
 
-  const [searchString, setSearchString] = useState<string>("");
-  const debouncedValue = useDebounce<string>(searchString, 500);
-  const [searchItems, setSearchItems] = useState<QuerySnapshot<DocumentData>>();
-  useEffect(() => {
-    console.log("searchString ", searchString);
-    (async () => {
-      const search = query(
-        orgsRef,
-        where("orgName", "array-contains", debouncedValue)
-      );
-      const docs = await getDocs(search);
-      setSearchItems(docs);
-    })();
-  }, [debouncedValue]);
+  //
+  // This is for the search bar
+  //
+  // const [searchString, setSearchString] = useState<string>("");
+  // const debouncedValue = useDebounce<string>(searchString, 500);
+  // const [searchItems, setSearchItems] = useState<QuerySnapshot<DocumentData>>();
+  // useEffect(() => {
+  //   console.log("searchString ", searchString);
+  //   (async () => {
+  //     const search = query(
+  //       orgsRef,
+  //       where("orgName", "array-contains", debouncedValue)
+  //     );
+  //     const docs = await getDocs(search);
+  //     setSearchItems(docs);
+  //   })();
+  // }, [debouncedValue]);
 
   const submitHandler = async (values: any) => {
     // remove undefined's from values
@@ -101,10 +142,10 @@ export default function UserProfile({ setHeaderTitle, user }) {
     history.back();
   };
 
-  const searchOrgs = (e) => {
-    // console.log("e ", e.target.value);
-    setSearchString(e.target.value);
-  };
+  // const searchOrgs = (e) => {
+  //   // console.log("e ", e.target.value);
+  //   setSearchString(e.target.value);
+  // };
 
   return (
     <Fragment>
@@ -227,24 +268,25 @@ export default function UserProfile({ setHeaderTitle, user }) {
                         />
                         <Input
                           placeholder="Find Organization"
-                          onChange={searchOrgs}
+                          onChange={() => {}}
                         />
                       </InputGroup>
                       <ToolIconButton
                         aria-label="add Organization"
                         icon={AddToPhotosOutlinedIcon}
                         onClick={() => {
-                          user && addOrganization(user);
+                          addOrganization(user?.uid);
                         }}
                       />
                     </Flex>
-                    <VStack>
+                    {/* <VStack>
                       {searchItems?.docs.map((hit) => (
                         <Box>{hit.data().orgName}</Box>
                       ))}
-                    </VStack>
+                    </VStack> */}
 
                     <Divider my={4} />
+
                     <Heading size={"md"} mb={2} color={"blue.400"}>
                       Your Organizations
                     </Heading>
@@ -259,12 +301,16 @@ export default function UserProfile({ setHeaderTitle, user }) {
                             _hover={{
                               background: "blue.100",
                             }}
-                            onClick={() => {
-                              // view organization from db
-                              route(`/organization/${org.id}`);
-                            }}
                           >
-                            <Text fontSize="md">{org.data().orgName}</Text>
+                            <Box
+                              cursor="pointer"
+                              onClick={() => {
+                                // view organization from db
+                                route(`/organization/${org.id}`);
+                              }}
+                            >
+                              <Text cursor="pointer">{org.data().orgName}</Text>
+                            </Box>
                             <Flex gap={2}>
                               <ToolIconButton
                                 aria-label="Edit Organization"
@@ -286,6 +332,49 @@ export default function UserProfile({ setHeaderTitle, user }) {
                           </Flex>
                         ))}
                     </VStack>
+
+                    {getFollowing().length > 0 && (
+                      <Fragment>
+                        <Heading size={"md"} my={2} mt={4} color={"blue.400"}>
+                          Following
+                        </Heading>
+                        <Divider mb={2} />
+                        <VStack align={"left"}>
+                          {getFollowing()?.map((org) => (
+                            <Flex
+                              p={2}
+                              pr={4}
+                              justifyContent={"space-between"}
+                              _hover={{
+                                background: "blue.100",
+                              }}
+                            >
+                              <Box
+                                w="full"
+                                cursor="pointer"
+                                onClick={() => {
+                                  // view organization from db
+                                  route(`/organization/${org?.id}`);
+                                }}
+                              >
+                                <Text fontSize="md">{org?.org.orgName}</Text>
+                              </Box>
+                              <Flex gap={2}>
+                                <ToolIconButton
+                                  aria-label="Un-Follow"
+                                  icon={GroupRemoveOutlinedIcon}
+                                  size="xs"
+                                  variant="ghost"
+                                  onClick={() => {
+                                    unFollowOrg(org?.id);
+                                  }}
+                                />
+                              </Flex>
+                            </Flex>
+                          ))}
+                        </VStack>
+                      </Fragment>
+                    )}
                   </AccordionPanel>
                 </AccordionItem>
               </Accordion>
