@@ -31,6 +31,15 @@ export default function Routing(props) {
         {...props}
       />
       <AsyncRoute
+        path="/organizations"
+        getComponent={() =>
+          import("../../routes/organizations/Organizations").then(
+            (module) => module.default
+          )
+        }
+        {...props}
+      />
+      <AsyncRoute
         path="/series"
         getComponent={() =>
           import("../../routes/series/Series").then((module) => module.default)

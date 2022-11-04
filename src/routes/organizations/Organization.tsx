@@ -71,11 +71,11 @@ export default function Organization(props) {
     const matched = followOrgs?.docs.filter((followed) => {
       return followed.data().orgId === orgId;
     });
-    console.log("matched ", matched?.length);
+    // console.log("matched ", matched?.length);
     if (matched && matched.length > 0) return true;
     return false;
   };
-  console.log("checkFollowing(); ", checkFollowing());
+  // console.log("checkFollowing(); ", checkFollowing());
 
   return (
     <Fragment>
@@ -90,28 +90,31 @@ export default function Organization(props) {
               }}
             />
           )}
-          {checkFollowing() ? (
-            <ToolIconButton
-              aria-label="Un-Follow"
-              icon={GroupRemoveOutlinedIcon}
-              onClick={() => {
-                unFollowOrg(org?.id);
-              }}
-            />
-          ) : (
-            <ToolIconButton
-              aria-label="Follow"
-              icon={PersonAddIcon}
-              onClick={() => {
-                addToFollowOrg(org?.id);
-              }}
-            />
-          )}
+          {org?.data()?.__public ||
+            (org?.data()?.__owner === user.uid && (
+              <Fragment>
+                {checkFollowing() ? (
+                  <ToolIconButton
+                    aria-label="Un-Follow"
+                    icon={GroupRemoveOutlinedIcon}
+                    onClick={() => {
+                      unFollowOrg(org?.id);
+                    }}
+                  />
+                ) : (
+                  <ToolIconButton
+                    aria-label="Follow"
+                    icon={PersonAddIcon}
+                    onClick={() => {
+                      addToFollowOrg(org?.id);
+                    }}
+                  />
+                )}
+              </Fragment>
+            ))}
         </PageHead>
         {!orgLoading && (
           <Box m={4}>
-            {/* <Heading color={"blue.500"}>{org?.data()?.orgName}</Heading>
-            <Divider mb={2} /> */}
             <Flex mx={4} mb={4} justifyContent="space-between">
               <Text>{org?.data()?.description}</Text>
 

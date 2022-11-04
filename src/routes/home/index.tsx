@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Divider,
   Heading,
   Image,
@@ -9,7 +10,9 @@ import {
 } from "@chakra-ui/react";
 import { h } from "preact";
 import { Link } from "preact-router";
+import { useEffect } from "preact/hooks";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { useIndexedDBStore } from "use-indexeddb";
 import { FadeInSlideRight } from "../../components/animations/FadeSlide";
 import { Page } from "../../components/page/Page";
 import PageHead from "../../components/page/pageHead";
@@ -23,12 +26,25 @@ export default function Home({ setHeaderTitle }) {
 
   setHeaderTitle("Home");
 
+  const { getAll, add } = useIndexedDBStore("user-params");
+
+  const onClick = () => {
+    add({ currentPage: "Competitors", headerTitle: "Home" }).then(console.log);
+    getAll().then(console.log).catch(console.error);
+  };
+
+  const insertHome = () => {};
+
+  // useEffect(() => {
+  //   insertHome();
+  // }, []);
+
   return (
     <Page>
       <PageHead title="On the Water Scoring" loading={userLoading}>
         {!user ? <SignIn /> : <SignOut />}
       </PageHead>
-
+      <Button onClick={onClick}>getAll</Button>
       <FadeInSlideRight>
         <Box m={7}>
           <Text fontSize="lg" fontWeight="bold">

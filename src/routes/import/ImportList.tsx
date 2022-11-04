@@ -8,6 +8,7 @@ import {
   ListItem,
   Switch,
   Text,
+  Tooltip,
   VStack,
 } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
@@ -67,19 +68,19 @@ export default function ImportList({
                             )}
                           </Box>
 
-                          <Flex alignItems="center">
+                          <Flex alignItems="center" gap={2}>
+                            <Text fontSize="xs" color="gray.400">
+                              Public:
+                            </Text>
                             <Switch
-                              mr={8}
                               defaultChecked
                               onChange={(e) => {
                                 setPublic(e.target.checked);
                               }}
                             />
-
                             {item.duplicate && (
                               <DuplicateOptions item={item} setCopy={setCopy} />
                             )}
-
                             <ToolIconButton
                               icon={ClearIcon}
                               aria-label="Remove from Upload"

@@ -14,59 +14,51 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Text,
   useColorModeValue,
   useToast,
   VStack,
-  Text,
 } from "@chakra-ui/react";
 import {
   collection,
   deleteDoc,
   doc,
-  DocumentData,
-  DocumentSnapshot,
-  getDoc,
   getDocs,
   query,
-  QuerySnapshot,
   updateDoc,
   where,
 } from "firebase/firestore";
 import { Field, Form, Formik } from "formik";
 import { h } from "preact";
 import { Fragment, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
 import {
   useCollection,
   useDocument,
   useDocumentData,
 } from "react-firebase-hooks/firestore";
-import {
-  FadeIn,
-  FadeInSlideRight,
-} from "../../components/animations/FadeSlide";
+import { FadeIn } from "../../components/animations/FadeSlide";
 import PriBtn from "../../components/generic/PriBtn";
 import ToolIconButton from "../../components/generic/ToolIconButton";
 import PageHead from "../../components/page/pageHead";
 import { auth, db } from "../../util/firebase-config";
 
-import EditIcon from "@mui/icons-material/Edit";
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
-import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
-import { addOrganization } from "../organizations/addOrganization";
-import { route } from "preact-router";
-import useDebounce from "../../hooks/useDebounce";
-import { useEffect } from "preact/hooks";
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import EditIcon from "@mui/icons-material/Edit";
 import GroupRemoveOutlinedIcon from "@mui/icons-material/GroupRemoveOutlined";
+import SearchIcon from "@mui/icons-material/Search";
+import { route } from "preact-router";
+import { addOrganization } from "../organizations/addOrganization";
+import { useAuthState } from "react-firebase-hooks/auth";
 
-export default function UserProfile({ setHeaderTitle, user }) {
+export default function UserProfile({ setHeaderTitle }) {
   setHeaderTitle("Profile");
 
+  const [user] = useAuthState(auth);
+  if (!user) return;
   const submittedToast = useToast();
 
-  const docRef = doc(db, "user", user?.uid); // bang
+  const docRef = doc(db, "user", user!.uid); // bang
   const [value] = useDocumentData(docRef);
 
   const orgsRef = collection(db, "organizations");
@@ -89,13 +81,12 @@ export default function UserProfile({ setHeaderTitle, user }) {
     if (items) return items;
     return [];
   };
-  console.log("getFollowing ", getFollowing()?.length);
 
   const unFollowOrg = async (orgId) => {
     const q = query(
       followOrgsRef,
       where("orgId", "==", orgId),
-      where("userId", "==", user.uid)
+      where("userId", "==", user!.uid)
     );
     const del = await getDocs(q);
     del.docs.map(async (d) => {
@@ -223,12 +214,14 @@ export default function UserProfile({ setHeaderTitle, user }) {
                       alignItems="center"
                       gap={4}
                     >
-                      <FormLabel htmlFor="photoURL">Avatar url</FormLabel>
-                      <Field name="photoURL" as={Input} />
+                      <Box w="full">
+                        <FormLabel htmlFor="photoURL">Avatar url</FormLabel>
+                        <Field name="photoURL" as={Input} />
+                      </Box>
                       <Image
                         src={value?.photoURL ? value?.photoURL : ""}
                         alt={value?.displayName}
-                        boxSize="45px"
+                        boxSize="55px"
                         border="1px solid"
                         borderColor={useColorModeValue("blue.600", "blue.300")}
                         borderRadius={"50%"}
@@ -309,7 +302,16 @@ export default function UserProfile({ setHeaderTitle, user }) {
                                 route(`/organization/${org.id}`);
                               }}
                             >
-                              <Text cursor="pointer">{org.data().orgName}</Text>
+                              <Flex alignItems={"center"}>
+                                <Text cursor="pointer">
+                                  {org.data().orgName}
+                                </Text>
+                                {!org.data().__public && (
+                                  <Text fontSize={"xs"} ml={2} color="red.600">
+                                    - Private
+                                  </Text>
+                                )}
+                              </Flex>
                             </Box>
                             <Flex gap={2}>
                               <ToolIconButton

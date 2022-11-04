@@ -93,6 +93,26 @@ export const components = {
       colorScheme: "blue", // default is gray
     },
   },
+  Tooltip: {
+    // style object for base or default style
+    baseStyle: {},
+    // styles for different sizes ("sm", "md", "lg")
+    sizes: {},
+    // styles for different visual variants ("outline", "solid")
+    variants: {
+      // outline: {
+      //   boxShadow: "md",
+      // },
+    },
+    // default values for 'size', 'variant' and 'colorScheme'
+    // 6. We can overwrite defaultProps
+    defaultProps: {
+      hasArrow: true,
+      placement: "bottom-start",
+      // colorScheme: "blue", // default is gray
+      background: "blue.300",
+    },
+  },
 };
 
 export const fonts = {

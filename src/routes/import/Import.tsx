@@ -128,51 +128,53 @@ export default function Import({ setHeaderTitle }) {
   }, []);
 
   return (
-    <Page>
+    <Fragment>
       <PageHead title="Select File">
         <SecBtn onClick={handleChooseFile}>Choose File(s)</SecBtn>
       </PageHead>
+      <Page>
+        <ImportList
+          listItems={duplicates}
+          listState={duplicates}
+          setListState={setDuplicates}
+          duplicates={true}
+          setCopy={setCopy}
+          setPublic={setPublic}
+        />
 
-      <ImportList
-        listItems={duplicates}
-        listState={duplicates}
-        setListState={setDuplicates}
-        duplicates={true}
-        setCopy={setCopy}
-        setPublic={setPublic}
-      />
+        <ImportList
+          listItems={newSeries}
+          listState={newSeries}
+          setListState={setNewSeries}
+          duplicates={false}
+          setCopy={setCopy}
+          setPublic={setPublic}
+        />
 
-      <ImportList
-        listItems={newSeries}
-        listState={newSeries}
-        setListState={setNewSeries}
-        duplicates={false}
-        setCopy={setCopy}
-        setPublic={setPublic}
-      />
-
-      {newSeries.find((ups) => {
-        if (ups.name) return true;
-      }) ||
-      duplicates.find((dup) => {
-        if (dup.name) return true;
-      }) ? (
-        <Box px={1}>
-          <PriBtn
-            width={"100%"}
-            onClick={() => {
-              populateWithArray([...duplicates, ...newSeries]);
-              route("/series");
-            }}
-          >
-            Import
-          </PriBtn>
-        </Box>
-      ) : (
-        <Text as="p" m={4}>
-          Use the choose files button to select your Sailwave file(s) to import
-        </Text>
-      )}
-    </Page>
+        {newSeries.find((ups) => {
+          if (ups.name) return true;
+        }) ||
+        duplicates.find((dup) => {
+          if (dup.name) return true;
+        }) ? (
+          <Box px={1}>
+            <PriBtn
+              width={"100%"}
+              onClick={() => {
+                populateWithArray([...duplicates, ...newSeries]);
+                route("/series");
+              }}
+            >
+              Import
+            </PriBtn>
+          </Box>
+        ) : (
+          <Text as="p" m={4}>
+            Use the choose files button to select your Sailwave file(s) to
+            import
+          </Text>
+        )}
+      </Page>
+    </Fragment>
   );
 }

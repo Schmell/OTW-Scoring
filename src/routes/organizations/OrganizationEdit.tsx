@@ -7,9 +7,12 @@ import {
   Box,
   Button,
   Divider,
+  Flex,
   FormLabel,
   Input,
+  Switch,
   Textarea,
+  useFocusEffect,
 } from "@chakra-ui/react";
 import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 import {
@@ -27,6 +30,9 @@ import { Field, Form, Formik } from "formik";
 import useStorage from "../../hooks/useStorage";
 import EditIcon from "@mui/icons-material/Edit";
 import { addOrganization } from "./addOrganization";
+import * as yup from "yup";
+import { useState } from "react";
+import { useEffect } from "preact/hooks";
 
 interface OrganizationEditProps {
   orgRef?: DocumentReference<DocumentData>;
@@ -37,21 +43,41 @@ interface OrganizationEditProps {
 export default function OrganizationEdit(props: OrganizationEditProps) {
   const { orgId, user } = props;
 
-  // const [orgId, setOrgId] = useStorage("orgId");
-
   const docRef = doc(db, "organizations", orgId);
   const [org, orgLoading] = useDocument(docRef);
 
+  // const [orgId, setOrgId] = useStorage("orgId");
+  const [isPublic, setIsPublic] = useState(org?.data()?.__public);
+  // console.log("isPublic ", isPublic);
+  useEffect(() => {
+    setIsPublic(true);
+  }, []);
+
   const handleSubmit = async (values) => {
     console.log("values ", values);
+    // Remove undefined's
+    Object.keys(values).forEach((key) =>
+      values[key] === undefined ? delete values[key] : {}
+    );
     await updateDoc(docRef, { ...values });
   };
 
+  const validationSchema = yup.object({
+    contactEmail: yup
+      .string()
+      .email("Enter a valid email")
+      .required("Email is required"),
+    // password: yup
+    //   .string()
+    //   .min(8, "Password should be of minimum 8 characters length")
+    //   .required("Password is required"),
+  });
+
   return (
     <Fragment>
-      <PageHead title="Orgaization Edit">
+      <PageHead title="Organization Edit">
         <ToolIconButton
-          aria-label="Add Orgaization"
+          aria-label="Add Organization"
           icon={AddToPhotosOutlinedIcon}
           onClick={() => {
             user && addOrganization(user);
@@ -63,6 +89,7 @@ export default function OrganizationEdit(props: OrganizationEditProps) {
           <Formik
             enableReinitialize
             initialValues={{
+              __public: isPublic,
               orgName: org.data()?.orgName,
               short: org.data()?.short,
               description: org.data()?.description,
@@ -76,11 +103,31 @@ export default function OrganizationEdit(props: OrganizationEditProps) {
               state: org.data()?.state,
               country: org.data()?.country,
             }}
+            // validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
             <Form>
-              <FormLabel htmlFor="orgName">Name: </FormLabel>
-              <Field name="orgName" as={Input} />
+              <Flex justifyContent={"end"}>
+                <FormLabel htmlFor="setPublicState" m={0} mr={2}>
+                  Public:
+                </FormLabel>
+                {/* <Switch name="__public" /> */}
+                <Field
+                  name="setPublicState"
+                  type="checkbox"
+                  as={Switch}
+                  isChecked={isPublic}
+                  m={0}
+                  onChange={() => {
+                    setIsPublic(!isPublic);
+                  }}
+                />
+              </Flex>
+
+              <FormLabel htmlFor="orgName" mt={0}>
+                Name:
+              </FormLabel>
+              <Field name="orgName" as={Input} errorBorderColor="red.300" />
               <Divider my={4} />
 
               <FormLabel htmlFor="short">Short name: </FormLabel>
@@ -100,7 +147,11 @@ export default function OrganizationEdit(props: OrganizationEditProps) {
               <Divider my={4} />
 
               <FormLabel htmlFor="contactEmail">Contact Email: </FormLabel>
-              <Field name="contactEmail" as={Input} />
+              <Field
+                name="contactEmail"
+                as={Input}
+                errorBorderColor="red.300"
+              />
               <Divider my={4} />
 
               <FormLabel htmlFor="website">Website: </FormLabel>
