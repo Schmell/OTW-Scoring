@@ -19,6 +19,7 @@ import {
   Input,
   Radio,
   RadioGroup,
+  Switch,
   Text,
   useToast,
 } from "@chakra-ui/react";
@@ -38,6 +39,7 @@ import { FadeInSlideRight } from "../../components/animations/FadeSlide";
 import useStorage from "../../hooks/useStorage";
 import { Page } from "../../components/page/Page";
 import PageHead from "../../components/page/pageHead";
+import ToolIconButton from "../../components/generic/ToolIconButton";
 // Icons
 
 const SeriesEdit = ({ setHeaderTitle }) => {
@@ -50,7 +52,7 @@ const SeriesEdit = ({ setHeaderTitle }) => {
   // Get the currentRace data
   const docRef = doc(db, "series", seriesId);
   const [currentSeries, seriesLoading, error] = useDocumentData(docRef);
-
+  // console.log("currentSeries.__public ", currentSeries?.__public);
   const submittedToast = useToast();
 
   const raceBasRequirements = {
@@ -136,23 +138,22 @@ const SeriesEdit = ({ setHeaderTitle }) => {
           onSubmit={submitHandler}
         >
           <Form>
-            {/* <Flex justifyContent="space-between" alignItems="end">
-              <FadeInSlideRight>
-                <Heading fontSize={"4xl"} color="blue.400" mx={4}>
-                  {currentSeries.event}
-                </Heading>
-              </FadeInSlideRight>
-            </Flex>
-
-            <Divider my={3} border="8px" /> */}
-            <PageHead
-              title={currentSeries.event}
-              loading={seriesLoading}
-            ></PageHead>
+            <PageHead title={currentSeries.event} loading={seriesLoading}>
+              <Box mr={4}>
+                <Text color={"blue.500"}>Public</Text>
+                <Switch
+                  ml={1}
+                  defaultChecked={currentSeries.__public}
+                  onChange={async () => {
+                    await updateDoc(docRef, {
+                      __public: !currentSeries.__public,
+                    });
+                  }}
+                />
+              </Box>
+            </PageHead>
 
             <Box mb={10} mx={4} mt={4}>
-              {/* <Text>Last modified: </Text> */}
-
               {currentSeries.newFile && (
                 <Flex alignItems={"center"} gap={0} my={2}>
                   <FormLabel htmlFor="addRaces">#Races: </FormLabel>

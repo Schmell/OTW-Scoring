@@ -1,5 +1,13 @@
 {
   "projects": {
     "default": "otw-scoring"
+  },
+  "targets": {},
+  "etags": {
+    "otw-scoring": {
+      "extensionInstances": {
+        "firestore-algolia-search": "fb8801dfec84e0798cd9878782c634ecf39238a5089c9f47a816393588c94cdb"
+      }
+    }
   }
 }

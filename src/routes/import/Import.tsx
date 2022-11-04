@@ -1,6 +1,5 @@
-import { h } from "preact";
-import { route } from "preact-router";
-import { useEffect, useState } from "preact/hooks";
+import { Box, Text } from "@chakra-ui/react";
+import fileDialog from "file-dialog";
 import {
   collection,
   deleteDoc,
@@ -8,27 +7,19 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import { Fragment, h } from "preact";
+import { route } from "preact-router";
+import { useEffect, useState } from "preact/hooks";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../util/firebase-config";
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Divider,
-  Flex,
-  Heading,
-  Text,
-} from "@chakra-ui/react";
-import fileDialog from "file-dialog";
 //
 import PriBtn from "../../components/generic/PriBtn";
+import SecBtn from "../../components/generic/SecBtn";
+import { Page } from "../../components/page/Page";
+import PageHead from "../../components/page/pageHead";
 import ImportList from "./ImportList";
 import { importFileObj } from "./importTypes";
 import { Populate } from "./populate";
-import SecBtn from "../../components/generic/SecBtn";
-import BtnGrp from "../../components/generic/ButtonGroup";
-import { Form, Formik } from "formik";
-import { Page } from "../../components/page/Page";
 
 export default function Import({ setHeaderTitle }) {
   setHeaderTitle("Import");
@@ -38,11 +29,8 @@ export default function Import({ setHeaderTitle }) {
   const [duplicates, setDuplicates] = useState([{} as importFileObj]);
   const [newSeries, setNewSeries] = useState([{} as importFileObj]);
 
-  const [selectedButton, setSelectedButton] = useState("");
-
-  // useEffect(() => {
-  //   console.log("selectedButton: ", selectedButton);
-  // }, [selectedButton]);
+  const [copy, setCopy] = useState(true);
+  const [__public, setPublic] = useState(true);
 
   const showDialog = async () => {
     return await fileDialog({ multiple: true, accept: ".blw" });
@@ -62,7 +50,7 @@ export default function Import({ setHeaderTitle }) {
             name: file.name,
             duplicate: true,
             file: file,
-            copy: true,
+            copy: copy,
           });
         }
       });
@@ -110,7 +98,6 @@ export default function Import({ setHeaderTitle }) {
     let ups: importFileObj[] = [];
 
     checked.forEach((item) => {
-      //   console.log("item: ", item);
       if (item.duplicate) {
         dups.push(item);
       } else {
@@ -123,8 +110,7 @@ export default function Import({ setHeaderTitle }) {
 
   const populateWithArray = (fileObjList: importFileObj[]) => {
     fileObjList.forEach(async (fileObj) => {
-      const { copy, file } = fileObj;
-
+      const { file } = fileObj;
       if (!copy) {
         const colRef = collection(db, "series");
         const q = query(colRef, where("__fileInfo.name", "==", file.name));
@@ -133,8 +119,7 @@ export default function Import({ setHeaderTitle }) {
           deleteDoc(doc.ref);
         });
       }
-
-      Populate({ user, file, copy });
+      Populate({ user, file, copy, __public });
     });
   };
 
@@ -143,20 +128,18 @@ export default function Import({ setHeaderTitle }) {
   }, []);
 
   return (
-    <Page>
-      <Box px={2} mt="60px">
-        <Flex justifyContent={"space-between"}>
-          <Heading color="blue.400">Select File</Heading>
-          <SecBtn onClick={handleChooseFile}>Choose File(s)</SecBtn>
-        </Flex>
-
-        <Divider my={4} />
-
+    <Fragment>
+      <PageHead title="Select File">
+        <SecBtn onClick={handleChooseFile}>Choose File(s)</SecBtn>
+      </PageHead>
+      <Page>
         <ImportList
           listItems={duplicates}
           listState={duplicates}
           setListState={setDuplicates}
           duplicates={true}
+          setCopy={setCopy}
+          setPublic={setPublic}
         />
 
         <ImportList
@@ -164,6 +147,8 @@ export default function Import({ setHeaderTitle }) {
           listState={newSeries}
           setListState={setNewSeries}
           duplicates={false}
+          setCopy={setCopy}
+          setPublic={setPublic}
         />
 
         {newSeries.find((ups) => {
@@ -184,98 +169,12 @@ export default function Import({ setHeaderTitle }) {
             </PriBtn>
           </Box>
         ) : (
-          <Box>
-            <Formik
-              onSubmit={(vals) => {
-                console.log("values: ", vals);
-              }}
-              initialValues={{
-                labels: selectedButton,
-                resultType: selectedButton,
-              }}
-            >
-              {({
-                values: { labels },
-                setFieldValue,
-                handleChange,
-                submitForm,
-              }) => {
-                return (
-                  <Form>
-                    <BtnGrp
-                      labels={["points", "elapsed", "corrected", "finishes"]}
-                      mb={2}
-                      size="sm"
-                      onChange={handleChange}
-                      setSelectedButton={setSelectedButton}
-                      selectedButton={selectedButton}
-                      // name="resultType"
-                    />
-                    <Divider m={4} />
-
-                    <ButtonGroup isAttached>
-                      <Button
-                        name="resultType"
-                        onClick={(e) => {
-                          console.log("e: ", e.target);
-                          setSelectedButton("one");
-                        }}
-                        borderRight={"none"}
-                        isActive={selectedButton === "one" ? true : false}
-                        _active={{
-                          boxShadow: "none",
-                          background: "blue.100",
-                          color: "blue.600",
-                        }}
-                      >
-                        one
-                      </Button>
-                      <Button
-                        name="resultType"
-                        onClick={(e) => {
-                          console.log("e: ", e.target);
-                          setSelectedButton("two");
-                        }}
-                        borderRight={"none"}
-                        isActive={selectedButton === "two" ? true : false}
-                        _active={{
-                          boxShadow: "none",
-                          background: "blue.100",
-                          color: "blue.600",
-                        }}
-                      >
-                        two
-                      </Button>
-                      <Button
-                        name="resultType"
-                        onClick={(e) => {
-                          console.log("e: ", e.target);
-                          setSelectedButton("three");
-                        }}
-                        // borderRight={"none"}
-                        isActive={selectedButton === "three" ? true : false}
-                        _active={{
-                          boxShadow: "none",
-                          background: "blue.100",
-                          color: "blue.600",
-                        }}
-                      >
-                        three
-                      </Button>
-                    </ButtonGroup>
-                    <Divider m={4} />
-                    <Button type="submit"> go </Button>
-                  </Form>
-                );
-              }}
-            </Formik>
-            <Text as="p">
-              Use the choose files button to select your Sailwave file(s) to
-              import
-            </Text>
-          </Box>
+          <Text as="p" m={4}>
+            Use the choose files button to select your Sailwave file(s) to
+            import
+          </Text>
         )}
-      </Box>
-    </Page>
+      </Page>
+    </Fragment>
   );
 }

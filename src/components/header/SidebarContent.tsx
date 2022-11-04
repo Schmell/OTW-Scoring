@@ -1,19 +1,19 @@
 import {
-  BoxProps,
   Box,
-  useColorModeValue,
-  Flex,
+  BoxProps,
   CloseButton,
+  Flex,
   Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { h } from "preact";
 import { Link as PLink } from "preact-router";
 // import { IconType } from "react-icons";
 
-import Home from "@mui/icons-material/Home";
-import MdPeople from "@mui/icons-material/People";
-import MdCloudUpload from "@mui/icons-material/CloudUpload";
 import MdCalendarToday from "@mui/icons-material/CalendarToday";
+import MdCloudUpload from "@mui/icons-material/CloudUpload";
+import GroupIcon from "@mui/icons-material/Group";
+import Home from "@mui/icons-material/Home";
 import MdOutlineMediation from "@mui/icons-material/Mediation";
 import MdSailing from "@mui/icons-material/Sailing";
 import MdSettings from "@mui/icons-material/Settings";
@@ -32,10 +32,11 @@ export default function SidebarContent({
   const LinkItems = [
     { name: "Home", icon: Home, href: "/" },
     { name: "Import", icon: MdCloudUpload, href: "/import" },
+    { name: "Organizations", icon: GroupIcon, href: "/organizations" },
     { name: "Events", icon: MdCalendarToday, href: "/events" },
     { name: "Series", icon: MdOutlineMediation, href: "/series" },
     { name: "Races", icon: MdSailing, href: "/races" },
-    { name: "Competiors", icon: MdPeople, href: "/competitors" },
+    { name: "Competiors", icon: GroupIcon, href: "/competitors" },
     { name: "Settings", icon: MdSettings, href: "/settings" },
   ];
 

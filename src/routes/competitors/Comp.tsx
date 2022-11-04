@@ -1,15 +1,12 @@
 import {
-  Divider,
+  Editable,
+  EditableInput,
+  EditablePreview,
   Flex,
   FormLabel,
   Grid,
   GridItem,
-  Heading,
   Input,
-  Progress,
-  Text,
-} from "@chakra-ui/react";
-import {
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -17,27 +14,27 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Text,
+  useColorModeValue,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { Editable, EditableInput, EditablePreview } from "@chakra-ui/react";
-import { useColorModeValue, useDisclosure } from "@chakra-ui/react";
-import {} from "@chakra-ui/react";
-import {} from "@chakra-ui/react";
+import { collection, doc, updateDoc } from "firebase/firestore";
+import { Field, Form, Formik } from "formik";
 import { Fragment, h } from "preact";
 import { useState } from "preact/hooks";
-import { collection, doc, updateDoc } from "firebase/firestore";
-import { db } from "../../util/firebase-config";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { Field, Form, Formik } from "formik";
 import PriBtn from "../../components/generic/PriBtn";
 import ToolIconBtn from "../../components/generic/ToolIconBtn";
+import { db } from "../../util/firebase-config";
 import { capitalizeFirstLetter } from "../../util/formatters";
 // Icons
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
-import PageHead from "../../components/page/pageHead";
+import ToolIconButton from "../../components/generic/ToolIconButton";
 import { Page } from "../../components/page/Page";
+import PageHead from "../../components/page/pageHead";
 
 export default function Comp({ seriesId, compId }) {
   const [edit, setEdit] = useState(true);
@@ -64,22 +61,24 @@ export default function Comp({ seriesId, compId }) {
       ) : (
         comp && (
           <Page>
-           
-            <PageHead title={comp?.boat ? comp?.boat : comp.helmname} loading={compLoading}>
-              <ToolIconBtn
-                label="Back"
-                action={() => history.back()}
+            <PageHead
+              title={comp?.boat ? comp?.boat : comp.helmname}
+              loading={compLoading}
+            >
+              <ToolIconButton
+                aria-label="Back"
                 icon={ArrowBackIcon}
+                onClick={() => history.back()}
               />
-              <ToolIconBtn
-                label="Edit"
-                action={() => setEdit(!edit)}
+              <ToolIconButton
+                aria-label="Edit"
                 icon={EditIcon}
+                onClick={() => setEdit(!edit)}
               />
-              <ToolIconBtn
-                label="Add field"
-                action={onOpen}
+              <ToolIconButton
+                aria-label="Add field"
                 icon={AddToPhotosOutlinedIcon}
+                onClick={onOpen}
               />
             </PageHead>
 

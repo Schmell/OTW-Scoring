@@ -273,7 +273,10 @@ export default class Blw {
       event: string;
       __owner?: string;
       __event?: string;
+      __public?: boolean
       lastModifiedDate?: string;
+      includecorrected?: string
+      resultType?: string
       [x: string | number | symbol]: unknown;
     };
 

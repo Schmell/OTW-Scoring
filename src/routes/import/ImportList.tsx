@@ -2,34 +2,38 @@ import {
   Box,
   Divider,
   Flex,
+  FormLabel,
   Heading,
   List,
   ListItem,
+  Switch,
   Text,
+  Tooltip,
+  VStack,
 } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
 import { DuplicateOptions } from "./DuplicateOptions";
 import { importProps } from "./importTypes";
 // Icons
 import ClearIcon from "@mui/icons-material/Clear";
-import ToolIconBtn from "../../components/generic/ToolIconBtn";
-import { useState } from "preact/hooks";
+import ToolIconButton from "../../components/generic/ToolIconButton";
 
 export default function ImportList({
   listItems,
   listState,
   setListState,
   duplicates,
+  setCopy,
+  setPublic,
 }: importProps) {
-  const [copy, setCopy] = useState("copy");
-
+  // console.log("listItems ", listItems);
   return (
     <Fragment>
       {listItems &&
         listItems.find((fileObj) => {
           if (fileObj.name) return true;
         }) && (
-          <Box my={3}>
+          <Box my={3} mx={4}>
             <Box>
               <Heading as="h3" color="blue.300" fontSize="lg">
                 {duplicates ? "Duplicate files" : "New Files"}
@@ -63,15 +67,25 @@ export default function ImportList({
                               </Text>
                             )}
                           </Box>
-                          <Flex alignItems="center">
+
+                          <Flex alignItems="center" gap={2}>
+                            <Text fontSize="xs" color="gray.400">
+                              Public:
+                            </Text>
+                            <Switch
+                              defaultChecked
+                              onChange={(e) => {
+                                setPublic(e.target.checked);
+                              }}
+                            />
                             {item.duplicate && (
                               <DuplicateOptions item={item} setCopy={setCopy} />
                             )}
-                            <ToolIconBtn
+                            <ToolIconButton
                               icon={ClearIcon}
-                              label="Remove from Upload"
+                              aria-label="Remove from Upload"
                               variant="ghost"
-                              action={() => {
+                              onClick={() => {
                                 const filtered = listState.filter((ls) => {
                                   if (ls.name !== item.name) return true;
                                 });

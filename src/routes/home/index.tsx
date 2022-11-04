@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Divider,
   Heading,
   Image,
@@ -9,35 +10,41 @@ import {
 } from "@chakra-ui/react";
 import { h } from "preact";
 import { Link } from "preact-router";
+import { useEffect } from "preact/hooks";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { useIndexedDBStore } from "use-indexeddb";
 import { FadeInSlideRight } from "../../components/animations/FadeSlide";
 import { Page } from "../../components/page/Page";
 import PageHead from "../../components/page/pageHead";
 import { SignIn } from "../../components/page/SignIn";
 import { SignOut } from "../../components/page/SignOut";
 import { auth } from "../../util/firebase-config";
+import PublicSeriesList from "../series/PublicSeriesList";
 
 export default function Home({ setHeaderTitle }) {
   const [user, userLoading, _userError] = useAuthState(auth);
 
   setHeaderTitle("Home");
 
+  const { getAll, add } = useIndexedDBStore("user-params");
+
+  const onClick = () => {
+    add({ currentPage: "Competitors", headerTitle: "Home" }).then(console.log);
+    getAll().then(console.log).catch(console.error);
+  };
+
+  const insertHome = () => {};
+
+  // useEffect(() => {
+  //   insertHome();
+  // }, []);
+
   return (
     <Page>
       <PageHead title="On the Water Scoring" loading={userLoading}>
         {!user ? <SignIn /> : <SignOut />}
       </PageHead>
-      {/* <Heading color="blue.400">
-        <Flex justifyContent="space-between" px={4}>
-          <FadeInSlideRight>
-            <Text>On the Water Scoring</Text>
-          </FadeInSlideRight>
-          <FadeInSlideLeft>{!user ? <SignIn /> : <SignOut />}</FadeInSlideLeft>
-        </Flex>
-      </Heading> */}
-
-      {/* <Divider my={4} border={4} shadow={"md"} /> */}
-
+      <Button onClick={onClick}>getAll</Button>
       <FadeInSlideRight>
         <Box m={7}>
           <Text fontSize="lg" fontWeight="bold">
@@ -86,6 +93,7 @@ export default function Home({ setHeaderTitle }) {
           </UnorderedList>
         </Box>
       )}
+      <PublicSeriesList />
     </Page>
   );
 }

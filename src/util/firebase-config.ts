@@ -4,6 +4,7 @@ import { connectAuthEmulator, getAuth } from "firebase/auth";
 import {
   connectFirestoreEmulator,
   enableIndexedDbPersistence,
+  enableMultiTabIndexedDbPersistence,
   getFirestore,
 } from "firebase/firestore";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
@@ -43,7 +44,7 @@ if (location.hostname === "localhost"){
 }
 
 
-enableIndexedDbPersistence(db).catch((err) => {
+enableMultiTabIndexedDbPersistence(db).catch((err) => {
   if (err.code == "failed-precondition") {
     console.log("failed-precondition: (close other tabs first)", err.code);
     // Multiple tabs open, persistence can only be enabled in one tab at a a time.
