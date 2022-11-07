@@ -1,11 +1,22 @@
-import { Flex, Box, Divider, Text, useColorModeValue } from "@chakra-ui/react";
-import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
+import {
+  Flex,
+  Box,
+  Divider,
+  Text,
+  useColorModeValue,
+  Badge,
+} from "@chakra-ui/react";
+import {
+  DocumentData,
+  DocumentSnapshot,
+  QueryDocumentSnapshot,
+} from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
 
 interface SiteListTextProps {
   children: any;
-  item: QueryDocumentSnapshot<DocumentData>;
+  item: QueryDocumentSnapshot<DocumentData> | DocumentSnapshot<DocumentData>;
   forward: string;
   setStorage?: (id: string) => void;
   textItems: {
@@ -31,7 +42,7 @@ export function SiteListText({
         <Box
           w="80%"
           mx={2}
-          cursor={"pointer"}
+          cursor="pointer"
           onClick={
             action
               ? action
@@ -41,8 +52,17 @@ export function SiteListText({
                 }
           }
         >
-          <Text fontSize={"xl"}>{textItems.head}</Text>
+          <Flex alignItems="center" gap={2}>
+            <Text fontSize="xl">{textItems.head}</Text>
+            {!item.data()?.__public && (
+              <Badge ml={4} colorScheme="red" variant="outline">
+                Private
+              </Badge>
+            )}
+          </Flex>
+
           <Divider mb={2} />
+
           <Text
             fontSize="lg"
             my={2}

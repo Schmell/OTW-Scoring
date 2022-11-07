@@ -1,5 +1,11 @@
 {
     "presets": [ 
         "preact-cli/babel"
-    ]
+    ],
+    "env": {
+        "development" : {
+          "compact": false
+        }
+      }
+    
 }
