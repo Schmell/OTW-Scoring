@@ -1,16 +1,23 @@
-import { Flex, Heading, Progress, useColorModeValue } from "@chakra-ui/react";
+import {
+  Flex,
+  Heading,
+  Image,
+  Progress,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import { Fragment, h } from "preact";
 import { FadeInSlideLeft, FadeInSlideRight } from "../animations/FadeSlide";
 
 export default function PageHead(props) {
-  const { title, children, loading } = props;
+  const { title, children, loading, noSpace } = props;
   return (
     <Fragment>
+      {!noSpace && <Image src="../../assets/img/spacer.gif" height={14} />}
       <Flex
         justifyContent="space-between"
+        alignItems="center"
         px={4}
-        py={6}
-        mt={12}
+        py={4}
         w="100%"
         boxShadow="md"
         position="relative"

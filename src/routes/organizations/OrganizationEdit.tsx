@@ -67,10 +67,6 @@ export default function OrganizationEdit(props: OrganizationEditProps) {
       .string()
       .email("Enter a valid email")
       .required("Email is required"),
-    // password: yup
-    //   .string()
-    //   .min(8, "Password should be of minimum 8 characters length")
-    //   .required("Password is required"),
   });
 
   return (
@@ -111,7 +107,6 @@ export default function OrganizationEdit(props: OrganizationEditProps) {
                 <FormLabel htmlFor="setPublicState" m={0} mr={2}>
                   Public:
                 </FormLabel>
-                {/* <Switch name="__public" /> */}
                 <Field
                   name="setPublicState"
                   type="checkbox"
@@ -124,9 +119,7 @@ export default function OrganizationEdit(props: OrganizationEditProps) {
                 />
               </Flex>
 
-              <FormLabel htmlFor="orgName" mt={0}>
-                Name:
-              </FormLabel>
+              <FormLabel htmlFor="orgName">Name:</FormLabel>
               <Field name="orgName" as={Input} errorBorderColor="red.300" />
               <Divider my={4} />
 

@@ -15,11 +15,11 @@ const App = () => {
   // try to impliment useStorage
   const [headerTitle, setHeaderTitle] = useState("Blw Me");
 
-  useEffect(() => {
-    setupIndexedDB(idbConfig)
-      .then(() => console.log("success"))
-      .catch((e) => console.error("error / unsupported", e));
-  }, []);
+  // useEffect(() => {
+  //   setupIndexedDB(idbConfig)
+  //     .then(() => console.log("success"))
+  //     .catch((e) => console.error("error / unsupported", e));
+  // }, []);
 
   return (
     <ChakraProvider resetCSS theme={theme}>

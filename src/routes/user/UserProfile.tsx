@@ -4,7 +4,9 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
+  Badge,
   Box,
+  Checkbox,
   Divider,
   Flex,
   FormLabel,
@@ -23,6 +25,8 @@ import {
   collection,
   deleteDoc,
   doc,
+  DocumentData,
+  DocumentSnapshot,
   getDocs,
   query,
   updateDoc,
@@ -45,11 +49,11 @@ import { auth, db } from "../../util/firebase-config";
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
-import GroupRemoveOutlinedIcon from "@mui/icons-material/GroupRemoveOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import { route } from "preact-router";
-import { addOrganization } from "../organizations/addOrganization";
 import { useAuthState } from "react-firebase-hooks/auth";
+import FollowButtons from "../../components/generic/FollowButtons";
+import { addOrganization } from "../organizations/addOrganization";
 
 export default function UserProfile({ setHeaderTitle }) {
   setHeaderTitle("Profile");
@@ -59,7 +63,9 @@ export default function UserProfile({ setHeaderTitle }) {
   const submittedToast = useToast();
 
   const docRef = doc(db, "user", user!.uid); // bang
-  const [value] = useDocumentData(docRef);
+  const [userData] = useDocumentData(docRef);
+
+  // console.log("userData ", userData);
 
   const orgsRef = collection(db, "organizations");
   const userOrgs = query(orgsRef, where("__owner", "==", user?.uid));
@@ -69,29 +75,14 @@ export default function UserProfile({ setHeaderTitle }) {
   const userFollowOrgs = query(followOrgsRef, where("userId", "==", user?.uid));
   const [followOrgs, followingOrgsLoading] = useCollection(userFollowOrgs);
 
-  const [following, setFollowing] = useState();
-
   const getFollowing = () => {
     const items = followOrgs?.docs.map((follow) => {
-      const docRef = doc(orgsRef, follow.data().orgId);
-      // const item = await getDoc(do cRef);
+      const docRef = doc(orgsRef, follow.data().followId);
       const [item] = useDocument(docRef);
       return { org: { ...item?.data() }, id: docRef.id };
     });
     if (items) return items;
     return [];
-  };
-
-  const unFollowOrg = async (orgId) => {
-    const q = query(
-      followOrgsRef,
-      where("orgId", "==", orgId),
-      where("userId", "==", user!.uid)
-    );
-    const del = await getDocs(q);
-    del.docs.map(async (d) => {
-      await deleteDoc(d.ref);
-    });
   };
 
   // console.log("orgs ", orgs?.docs);
@@ -116,10 +107,11 @@ export default function UserProfile({ setHeaderTitle }) {
 
   const submitHandler = async (values: any) => {
     // remove undefined's from values
+    console.log("values ", values);
+
     Object.keys(values).forEach((key) =>
       values[key] === undefined ? delete values[key] : {}
     );
-
     await updateDoc(docRef, values);
 
     // show submitted toast
@@ -140,14 +132,18 @@ export default function UserProfile({ setHeaderTitle }) {
 
   return (
     <Fragment>
-      <PageHead title={value?.displayName}>
+      <PageHead title={userData?.displayName}>
         <Image
-          src={value?.photoURL ? value?.photoURL : ""}
-          alt={value?.displayName}
+          src={userData?.photoURL ? userData?.photoURL : ""}
+          alt={userData?.displayName}
           boxSize="50px"
           border="1px solid"
           borderColor={useColorModeValue("blue.600", "blue.300")}
           borderRadius={"50%"}
+          cursor="pointer"
+          onClick={() => {
+            console.log("id: ", userData?.uid);
+          }}
         />
       </PageHead>
 
@@ -156,12 +152,13 @@ export default function UserProfile({ setHeaderTitle }) {
           <Formik
             enableReinitialize
             initialValues={{
-              nickname: value?.displayName,
-              firstname: value?.firstname,
-              lastname: value?.lastname,
-              email: value?.email,
-              photoURL: value?.photoURL,
-              phoneNumber: value?.phoneNumber,
+              nickname: userData?.displayName,
+              firstname: userData?.firstname,
+              lastname: userData?.lastname,
+              email: userData?.email,
+              privateEmail: userData?.privateEmail,
+              photoURL: userData?.photoURL,
+              phoneNumber: userData?.phoneNumber,
             }}
             onSubmit={submitHandler}
           >
@@ -185,6 +182,9 @@ export default function UserProfile({ setHeaderTitle }) {
                     <AccordionIcon />
                   </AccordionButton>
                   <AccordionPanel pb={4}>
+                    <Text fontSize="xs" color="gray.300" align="right">
+                      id: {userData?.uid}
+                    </Text>
                     <FormLabel htmlFor="nickname">Nickname</FormLabel>
                     <Field name="nickname" as={Input} />
 
@@ -201,7 +201,13 @@ export default function UserProfile({ setHeaderTitle }) {
                     <Divider my={3} />
 
                     <FormLabel htmlFor="email">Email</FormLabel>
-                    <Field name="email" as={Input} />
+                    <Flex gap={2} alignItems="center">
+                      <Field name="email" as={Input} />
+                      <FormLabel htmlFor="privateEmail" fontSize="xs" m={0}>
+                        Private
+                      </FormLabel>
+                      <Checkbox name="privateEmail" m={0} />
+                    </Flex>
 
                     <Divider my={3} />
 
@@ -219,8 +225,8 @@ export default function UserProfile({ setHeaderTitle }) {
                         <Field name="photoURL" as={Input} />
                       </Box>
                       <Image
-                        src={value?.photoURL ? value?.photoURL : ""}
-                        alt={value?.displayName}
+                        src={userData?.photoURL ? userData?.photoURL : ""}
+                        alt={userData?.displayName}
                         boxSize="55px"
                         border="1px solid"
                         borderColor={useColorModeValue("blue.600", "blue.300")}
@@ -280,60 +286,67 @@ export default function UserProfile({ setHeaderTitle }) {
 
                     <Divider my={4} />
 
-                    <Heading size={"md"} mb={2} color={"blue.400"}>
-                      Your Organizations
-                    </Heading>
-                    <Divider mb={2} />
-                    <VStack align={"left"}>
-                      {!orgsLoading &&
-                        orgs?.docs.map((org) => (
-                          <Flex
-                            p={2}
-                            pr={4}
-                            justifyContent={"space-between"}
-                            _hover={{
-                              background: "blue.100",
-                            }}
-                          >
-                            <Box
-                              cursor="pointer"
-                              onClick={() => {
-                                // view organization from db
-                                route(`/organization/${org.id}`);
+                    {!orgsLoading && orgs && orgs.docs.length > 0 && (
+                      <Fragment>
+                        <Heading size={"md"} mb={2} color={"blue.400"}>
+                          Your Organizations
+                        </Heading>
+                        <Divider mb={2} />
+                        <VStack align={"left"}>
+                          {orgs?.docs.map((org) => (
+                            <Flex
+                              p={2}
+                              pr={4}
+                              justifyContent={"space-between"}
+                              _hover={{
+                                background: "blue.100",
                               }}
                             >
-                              <Flex alignItems={"center"}>
-                                <Text cursor="pointer">
-                                  {org.data().orgName}
-                                </Text>
-                                {!org.data().__public && (
-                                  <Text fontSize={"xs"} ml={2} color="red.600">
-                                    - Private
-                                  </Text>
-                                )}
-                              </Flex>
-                            </Box>
-                            <Flex gap={2}>
-                              <ToolIconButton
-                                aria-label="Edit Organization"
-                                icon={EditIcon}
-                                size="xs"
-                                variant="ghost"
+                              <Box
+                                cursor="pointer"
                                 onClick={() => {
-                                  route(`/organization/edit/${org.id}`);
+                                  // view organization from db
+                                  route(`/organization/${org.id}`);
                                 }}
-                              />
-                              <ToolIconButton
-                                aria-label="Remove Organization"
-                                icon={CloseIcon}
-                                size="xs"
-                                variant="ghost"
-                                onClick={() => {}}
-                              />
+                              >
+                                <Flex alignItems="center">
+                                  <Text cursor="pointer">
+                                    {org.data().orgName}
+                                  </Text>
+                                  {!org.data().__public && (
+                                    <Badge
+                                      ml={4}
+                                      colorScheme="red"
+                                      variant="outline"
+                                    >
+                                      Private
+                                    </Badge>
+                                  )}
+                                </Flex>
+                              </Box>
+                              <Flex gap={2}>
+                                <ToolIconButton
+                                  aria-label="Edit Organization"
+                                  icon={EditIcon}
+                                  size="xs"
+                                  variant="ghost"
+                                  onClick={() => {
+                                    route(`/organization/edit/${org.id}`);
+                                  }}
+                                />
+                                <ToolIconButton
+                                  aria-label="Remove Organization"
+                                  icon={CloseIcon}
+                                  size="xs"
+                                  variant="ghost"
+                                  onClick={() => {}}
+                                />
+                              </Flex>
                             </Flex>
-                          </Flex>
-                        ))}
-                    </VStack>
+                          ))}
+                        </VStack>
+                      </Fragment>
+                    )}
 
                     {getFollowing().length > 0 && (
                       <Fragment>
@@ -347,6 +360,7 @@ export default function UserProfile({ setHeaderTitle }) {
                               p={2}
                               pr={4}
                               justifyContent={"space-between"}
+                              alignItems="center"
                               _hover={{
                                 background: "blue.100",
                               }}
@@ -355,14 +369,12 @@ export default function UserProfile({ setHeaderTitle }) {
                                 w="full"
                                 cursor="pointer"
                                 onClick={() => {
-                                  // view organization from db
                                   route(`/organization/${org?.id}`);
                                 }}
                               >
                                 <Text fontSize="md">{org?.org.orgName}</Text>
                               </Box>
-                              <Flex gap={2}>
-                                <ToolIconButton
+                              {/* <ToolIconButton
                                   aria-label="Un-Follow"
                                   icon={GroupRemoveOutlinedIcon}
                                   size="xs"
@@ -370,8 +382,13 @@ export default function UserProfile({ setHeaderTitle }) {
                                   onClick={() => {
                                     unFollowOrg(org?.id);
                                   }}
-                                />
-                              </Flex>
+                                /> */}
+                              <FollowButtons
+                                user={user}
+                                data={org as any}
+                                variant="ghost"
+                                colName="followOrgs"
+                              />
                             </Flex>
                           ))}
                         </VStack>

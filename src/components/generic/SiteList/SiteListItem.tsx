@@ -4,7 +4,7 @@ import { Fragment, h } from "preact";
 import { SiteListAnimation } from "../../animations/FadeSlide";
 
 interface SiteListProps {
-  item: QueryDocumentSnapshot<DocumentData>;
+  item: QueryDocumentSnapshot<DocumentData> | any;
   listType: string;
   disclosure: {
     isOpen: boolean;
