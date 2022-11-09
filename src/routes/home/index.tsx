@@ -44,7 +44,6 @@ export default function Home({ setHeaderTitle }) {
       <PageHead title="On the Water Scoring" loading={userLoading}>
         {!user ? <SignIn /> : <SignOut />}
       </PageHead>
-      <Button onClick={onClick}>getAll</Button>
       <FadeInSlideRight>
         <Box m={7}>
           <Text fontSize="lg" fontWeight="bold">

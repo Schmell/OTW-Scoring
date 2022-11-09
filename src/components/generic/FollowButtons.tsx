@@ -21,25 +21,25 @@ import { User } from "firebase/auth";
 
 interface FollowButtonsProps {
   user: User | null | undefined;
-  data:
-    | QueryDocumentSnapshot<DocumentData>
-    | DocumentSnapshot<DocumentData>
-    | undefined;
-  //   dataId: string;
+  data: QueryDocumentSnapshot<DocumentData> | DocumentSnapshot<DocumentData>;
   colName: string;
   variant?: string;
 }
 
 export default function FollowButtons(props: FollowButtonsProps) {
   const { user, data, colName, ...rest } = props;
+
   const followRef = collection(db, colName);
   const userFollow = query(followRef, where("userId", "==", user?.uid));
   const [followOrgs, followLoading] = useCollection(userFollow);
 
   const addToFollow = async (followId) => {
-    const added = await addDoc(followRef, {
+    console.log("user?.uid ", user?.uid);
+    console.log("followId ", followId);
+    return await addDoc(followRef, {
       userId: user?.uid,
       followId: followId,
+      // followRef: followRef,
     });
   };
 
@@ -59,11 +59,9 @@ export default function FollowButtons(props: FollowButtonsProps) {
     const matched = followOrgs?.docs.filter((followed) => {
       return followed.data().followId === data?.id;
     });
-    // console.log("matched ", matched?.length);
     if (matched && matched.length > 0) return true;
     return false;
   };
-  // console.log("checkFollowing(); ", checkFollowing());
 
   return (
     <Fragment>
