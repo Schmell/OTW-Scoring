@@ -54,7 +54,7 @@ export function SiteListText({
         >
           <Flex alignItems="center" gap={2}>
             <Text fontSize="xl">{textItems.head}</Text>
-            {!item.data()?.__public && (
+            {item.data()?.__public !== undefined && !item.data()?.__public && (
               <Badge ml={4} colorScheme="red" variant="outline">
                 Private
               </Badge>

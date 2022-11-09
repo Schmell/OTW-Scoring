@@ -1,4 +1,4 @@
-import { Box, useDisclosure, useFocusEffect } from "@chakra-ui/react";
+import { Box, useDisclosure, useFocusEffect, Text } from "@chakra-ui/react";
 import {
   addDoc,
   collection,
@@ -9,7 +9,7 @@ import {
 } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
-import { useCollection } from "react-firebase-hooks/firestore";
+import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
 // Icons
@@ -26,6 +26,8 @@ import PageHead from "../../components/page/pageHead";
 import ToolIconButton from "../../components/generic/ToolIconButton";
 import { useState } from "react";
 import { useEffect } from "preact/hooks";
+import FollowButtons from "../../components/generic/FollowButtons";
+import SearchIcon from "@mui/icons-material/Search";
 
 export default function Events(props) {
   const { user, setHeaderTitle, ...rest } = props;
@@ -44,6 +46,7 @@ export default function Events(props) {
     where("__owner", "!=", user && user.uid),
     where("__public", "==", true)
   );
+
   const [allEvents, allEventsLoading] = useCollection(otherPublicEvents);
 
   class FollowEvents {
@@ -65,14 +68,15 @@ export default function Events(props) {
   // Firestore data converter
   const followEventsConverter = {
     toFirestore: (event) => {
+      console.log("event ", event);
       return {
-        name: event.name,
-        state: event.state,
-        country: event.country,
+        userId: event.userId,
+        followId: event.followId,
+        followRef: event.followRef,
       };
     },
-    fromFirestore: (snapshot, options) => {
-      const data = snapshot.data(options);
+    fromFirestore: (snapshot) => {
+      const data = snapshot.data();
       return new FollowEvents(data.userId, data.followId, data.followRef);
     },
   };
@@ -80,13 +84,21 @@ export default function Events(props) {
   const followEventsRef = collection(db, "followEvents");
   const followQuery = query(
     followEventsRef,
-    where("userId", "==", user && user.uid)
-  ).withConverter(followEventsConverter);
-  const [followEvents, followEventsLoading] = useCollection(followQuery);
+    where("userId", "==", user && user?.uid)
+  );
+  const [followEvents, followEventsLoading, error] = useCollection(followQuery);
 
-  useEffect(() => {
-    console.log("followEvents ", followEvents);
-  }, []);
+  const getFollowing = () => {
+    const items = followEvents?.docs.map((follow) => {
+      const docRef = doc(colRef, follow.data().followId);
+      const [item] = useDocument(docRef);
+      // return { org: { ...item?.data() }, id: docRef.id };
+      return item;
+    });
+    console.log("items ", items);
+    if (items) return items;
+    return [];
+  };
 
   const deleteEventDisclosure = useDisclosure();
 
@@ -99,74 +111,86 @@ export default function Events(props) {
     route("/events/edit");
   };
 
-  // const getAllEvents = () => {};
-
-  setPageTitle("Your Events");
-
-  useEffect(() => {}, []);
-
   return (
     <Fragment>
-      <PageHead title="Your Events" loading={eventsLoading}>
-        <ToolIconButton
-          aria-label="Import file"
-          icon={FileUploadOutlinedIcon}
-          onClick={() => route("/import")}
-        />
-        <ToolIconButton
-          aria-label="Add Event"
-          icon={AddToPhotosOutlinedIcon}
-          onClick={addEventHandler}
-        />
-      </PageHead>
-      <Page>
-        <SiteList loading={eventsLoading}>
-          {events?.docs.map((item) => {
-            const data = item.data();
-            // setEventId(item.id);
-            return (
-              <SiteListItem
-                key={item.id}
-                item={item}
-                disclosure={deleteEventDisclosure}
-                listType="series"
-              >
-                <SiteListText
-                  item={item}
-                  setStorage={setEventId}
-                  forward="events/event"
-                  textItems={{
-                    head: data.name,
-                    sub: data.venue,
-                    foot: data.date,
-                  }}
-                >
-                  <SiteListButtons
-                    setStorage={setEventId}
-                    item={item}
-                    listType="events"
-                    disclosure={deleteEventDisclosure}
-                  >
-                    <Box>This will delete the event and is not undo-able</Box>
-                    <Box>
-                      You will loose any work you have done with this Event
-                    </Box>
-                  </SiteListButtons>
-                </SiteListText>
-              </SiteListItem>
-            );
-          })}
-          {/* series?.docs.map */}
-        </SiteList>
-      </Page>
+      {events?.docs && (
+        <Fragment>
+          <PageHead title="Your Events" loading={eventsLoading}>
+            <ToolIconButton
+              aria-label="Find Events"
+              icon={SearchIcon}
+              onClick={() => route("/events/public")}
+            />
+            <ToolIconButton
+              aria-label="Import file"
+              icon={FileUploadOutlinedIcon}
+              onClick={() => route("/import")}
+            />
+            <ToolIconButton
+              aria-label="Add Event"
+              icon={AddToPhotosOutlinedIcon}
+              onClick={addEventHandler}
+            />
+          </PageHead>
+
+          <Page>
+            <SiteList loading={eventsLoading}>
+              {events?.docs.map((item) => {
+                const data = item.data();
+                return (
+                  <Fragment>
+                    {!data.__owner ?? <Text>You have no Items</Text>}
+                    <SiteListItem
+                      key={item.id}
+                      item={item}
+                      disclosure={deleteEventDisclosure}
+                      listType="series"
+                    >
+                      <SiteListText
+                        item={item}
+                        setStorage={setEventId}
+                        forward="events/event"
+                        textItems={{
+                          head: data.name,
+                          sub: data.venue,
+                          foot: data.date,
+                        }}
+                      >
+                        <SiteListButtons
+                          setStorage={setEventId}
+                          item={item}
+                          listType="events"
+                          disclosure={deleteEventDisclosure}
+                        >
+                          <Box>
+                            This will delete the event and is not undo-able
+                          </Box>
+                          <Box>
+                            You will loose any work you have done with this
+                            Event
+                          </Box>
+                        </SiteListButtons>
+                      </SiteListText>
+                    </SiteListItem>
+                  </Fragment>
+                );
+              })}
+            </SiteList>
+          </Page>
+        </Fragment>
+      )}
+
       {allEvents?.docs && (
         <Fragment>
-          <PageHead title="Public Events" loading={allEventsLoading}></PageHead>
+          <PageHead
+            title="Public Events"
+            loading={allEventsLoading}
+            noSpace={true}
+          ></PageHead>
           <Page>
             <SiteList loading={allEventsLoading}>
               {allEvents?.docs.map((item) => {
                 const data = item.data();
-                // setEventId(item.id);
                 return (
                   <SiteListItem
                     key={item.id}
@@ -184,24 +208,60 @@ export default function Events(props) {
                         foot: data.date,
                       }}
                     >
-                      <SiteListButtons
-                        setStorage={setEventId}
-                        item={item}
-                        listType="events"
-                        disclosure={deleteEventDisclosure}
-                      >
-                        <Box>
-                          This will delete the event and is not undo-able
-                        </Box>
-                        <Box>
-                          You will loose any work you have done with this Event
-                        </Box>
-                      </SiteListButtons>
+                      <FollowButtons
+                        user={user}
+                        data={item}
+                        variant="ghost"
+                        colName="followEvents"
+                      />
                     </SiteListText>
                   </SiteListItem>
                 );
               })}
-              {/* series?.docs.map */}
+            </SiteList>
+          </Page>
+        </Fragment>
+      )}
+
+      {getFollowing() && !followEventsLoading && (
+        <Fragment>
+          <PageHead
+            title="Following"
+            loading={followEventsLoading}
+            noSpace={true}
+          ></PageHead>
+          <Page>
+            <SiteList loading={followEventsLoading}>
+              {getFollowing()?.map((item) => {
+                const data = item?.data();
+                //
+                return (
+                  <SiteListItem
+                    key={item?.id}
+                    item={item}
+                    disclosure={deleteEventDisclosure}
+                    listType="events"
+                  >
+                    <SiteListText
+                      item={item!}
+                      setStorage={setEventId}
+                      forward="events/event"
+                      textItems={{
+                        head: data?.name,
+                        sub: data?.venue,
+                        foot: data?.date,
+                      }}
+                    >
+                      <FollowButtons
+                        user={user}
+                        data={item!}
+                        variant="ghost"
+                        colName="followEvents"
+                      />
+                    </SiteListText>
+                  </SiteListItem>
+                );
+              })}
             </SiteList>
           </Page>
         </Fragment>

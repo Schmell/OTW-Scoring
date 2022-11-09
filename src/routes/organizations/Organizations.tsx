@@ -113,7 +113,11 @@ export default function Organizations(props) {
       </Page>
 
       <Fragment>
-        <PageHead title="Following" loading={orgsLoading} noSpace={true}>
+        <PageHead
+          title="Following"
+          loading={followingOrgsLoading}
+          noSpace={true}
+        >
           <ToolIconButton
             aria-label="Search"
             icon={SearchIcon}

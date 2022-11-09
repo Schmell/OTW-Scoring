@@ -19,8 +19,10 @@ import ToolIconBtn from "../../components/generic/ToolIconBtn";
 import { Page } from "../../components/page/Page";
 import PageHead from "../../components/page/pageHead";
 import ToolIconButton from "../../components/generic/ToolIconButton";
+import UserLanding from "../user/UserLanding";
+import FollowButtons from "../../components/generic/FollowButtons";
 
-export default function EventList({ setHeaderTitle }) {
+export default function EventList({ setHeaderTitle, user }) {
   setHeaderTitle("Event");
 
   const [eventId] = useStorage("eventId");
@@ -68,41 +70,52 @@ export default function EventList({ setHeaderTitle }) {
           <SiteList loading={seriesLoading}>
             {series?.docs.map((item) => {
               return (
-                <SiteListItem
-                  key={item.id}
-                  item={item}
-                  disclosure={deleteEventDisclosure}
-                  listType="series"
-                >
-                  <SiteListText
-                    item={item}
-                    setStorage={setSeriesId}
-                    forward="races"
-                    textItems={{
-                      head: item.data().event,
-                      sub: item.data().venue,
-                      foot: item.data().venuewebsite,
-                    }}
-                  >
-                    <SiteListButtons
-                      setStorage={setSeriesId}
+                <Fragment>
+                  {item.data().__owner === user?.uid ? (
+                    <SiteListItem
+                      key={item.id}
                       item={item}
-                      listType="series"
                       disclosure={deleteEventDisclosure}
+                      listType="series"
+                    >
+                      <SiteListText
+                        item={item}
+                        setStorage={setSeriesId}
+                        forward="races"
+                        textItems={{
+                          head: item.data().event,
+                          sub: item.data().venue,
+                          foot: item.data().venuewebsite,
+                        }}
+                      >
+                        <SiteListButtons
+                          setStorage={setSeriesId}
+                          item={item}
+                          listType="series"
+                          disclosure={deleteEventDisclosure}
+                        />
+                      </SiteListText>
+                      <AreYouSure
+                        disclosure={deleteEventDisclosure}
+                        callback={removeSeries}
+                        itemId={item.id}
+                        risk="low"
+                      >
+                        <Box>
+                          This action will remove this series from the event
+                        </Box>
+                        <Box>You can always add this back if you want</Box>
+                      </AreYouSure>
+                    </SiteListItem>
+                  ) : (
+                    <FollowButtons
+                      user={user}
+                      data={item}
+                      colName="followEvents"
+                      variant="ghost"
                     />
-                  </SiteListText>
-                  <AreYouSure
-                    disclosure={deleteEventDisclosure}
-                    callback={removeSeries}
-                    itemId={item.id}
-                    risk="low"
-                  >
-                    <Box>
-                      This action will remove this series from the event
-                    </Box>
-                    <Box>You can always add this back if you want</Box>
-                  </AreYouSure>
-                </SiteListItem>
+                  )}
+                </Fragment>
               );
             })}
           </SiteList>

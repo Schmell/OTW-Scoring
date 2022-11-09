@@ -157,9 +157,9 @@ export default function Import({ setHeaderTitle }) {
         duplicates.find((dup) => {
           if (dup.name) return true;
         }) ? (
-          <Box px={1}>
+          <Box m={4}>
             <PriBtn
-              width={"100%"}
+              w="full"
               onClick={() => {
                 populateWithArray([...duplicates, ...newSeries]);
                 route("/series");
