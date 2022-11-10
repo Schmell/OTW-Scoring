@@ -44,8 +44,6 @@
         "destination": "/index.html"
       }
     ]
-  },
-  "extensions": {
-    "firestore-algolia-search": "algolia/firestore-algolia-search@0.5.14"
   }
+
 }

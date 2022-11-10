@@ -5,8 +5,10 @@ import {
   FormLabel,
   Input,
   Select,
+  SlideFade,
   Switch,
   Text,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import {
@@ -36,11 +38,22 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import PriBtn from "../../components/generic/PriBtn";
 import SecBtn from "../../components/generic/SecBtn";
 import ToolIconButton from "../../components/generic/ToolIconButton";
+import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 
-export default function EventEdit({ user, setHeaderTitle }) {
+export default function EventEdit({ user, setHeaderTitle, eventId }) {
   setHeaderTitle("Event Edit");
 
-  const [eventId] = useStorage("eventId");
+  // Submit button appears on scroll
+  const { isOpen, onToggle, onOpen } = useDisclosure();
+  if (!window) {
+    // setUserHasScrolled(true);
+    onOpen();
+  } else {
+    window.onscroll = function () {
+      // setUserHasScrolled(true);
+      onOpen();
+    };
+  }
 
   // Get the currentRace data
   const docRef = doc(db, "events", eventId);
@@ -169,18 +182,25 @@ export default function EventEdit({ user, setHeaderTitle }) {
                   <Field name="date" type="date" as={Input} />
 
                   <Divider my={3} />
-
-                  <Flex gap={2}>
-                    <PriBtn
-                      type="submit"
-                      width="full"
-                      isLoading={isSubmitting}
-                      loadingText="Submitting"
-                    >
-                      Submit
-                    </PriBtn>
-                    <SecBtn type="reset">Reset</SecBtn>
-                  </Flex>
+                  <SecBtn type="reset">Reset</SecBtn>
+                  {/* Submit Button */}
+                  <SlideFade in={isOpen} offsetX="20px">
+                    <Box m={4} position="fixed" bottom={0} right={0}>
+                      <PriBtn
+                        type="submit"
+                        px={8}
+                        leftIcon={(<SaveOutlinedIcon />) as any}
+                        borderRadius="full"
+                        isLoading={isSubmitting}
+                        loadingText="Saving"
+                        onClick={() => {
+                          history.back();
+                        }}
+                      >
+                        Save
+                      </PriBtn>
+                    </Box>
+                  </SlideFade>
                 </Form>
               )}
             </Formik>

@@ -9,7 +9,11 @@ import { addDoc, collection, doc, query } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
 import { useEffect } from "preact/hooks";
-import { useCollection, useDocumentData } from "react-firebase-hooks/firestore";
+import {
+  useCollection,
+  useDocument,
+  useDocumentData,
+} from "react-firebase-hooks/firestore";
 import useStorage from "../../hooks/useStorage";
 import { db } from "../../util/firebase-config";
 import RaceItem from "./racesView/RaceItem";
@@ -32,7 +36,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import ToolIconButton from "../../components/generic/ToolIconButton";
 
 export default function Races(props) {
-  const { setHeaderTitle, ...rest } = props;
+  const { setHeaderTitle, seriesId, ...rest } = props;
+  // http://localhost:8080/races/hcCKIVNTgEkvnRnSIjDY
 
   setHeaderTitle("Races");
 
@@ -40,7 +45,7 @@ export default function Races(props) {
   const [racesArray, setRacesArray] = useStorage("racesArray");
   // const { raceCtx, setRaceCtx, racesCtx, setRacesCtx } = useContext(RacesCtx);
   const startTheRaceDisclosure = useDisclosure();
-  const [seriesId, setSeriesId] = useStorage("seriesId");
+  // const [seriesId, setSeriesId] = useStorage("seriesId");
   // const [raceId, setRaceId] = useStorage("seriesId");
   const [raceId, setRaceId] = useStorage("raceId", { initVal: "1" });
 
@@ -53,7 +58,7 @@ export default function Races(props) {
   /////////////////////////////////////////////////////////////////////////////////////////////
   // console.log("races: ", races?.docs);
   const seriesRef = doc(db, "series", seriesId);
-  const [series, _seriesLoading] = useDocumentData(seriesRef);
+  const [series, _seriesLoading] = useDocument(seriesRef);
 
   const addRaceHandler = async () => {
     const docRef = await addDoc(racesRef, {
@@ -65,7 +70,7 @@ export default function Races(props) {
       starts: [],
     });
     setRaceId(docRef.id);
-    route("/races/edit");
+    route(`/races/edit/${docRef.id}`);
   };
 
   useEffect(() => {
@@ -77,11 +82,11 @@ export default function Races(props) {
 
   return (
     <Page>
-      <PageHead title={series && series.event}>
+      <PageHead title={series && series.data()?.event}>
         <ToolIconButton
           aria-label="Edit Series"
           icon={EditIcon}
-          onClick={() => route("/series/edit")}
+          onClick={() => route(`/series/edit/${series?.id}`)}
         />
         <ToolIconButton
           aria-label="Add Race"

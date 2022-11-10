@@ -36,7 +36,7 @@ export default function Series(props) {
   setHeaderTitle("Series");
   // Get users series
   const seriesRef = collection(db, "series");
-  const [series, seriesLoading] = useCollection(
+  const [userSeries, userSeriesLoading] = useCollection(
     query(seriesRef, where("__owner", "==", user && user.uid))
   );
   const deleteSeriesDisclosure = useDisclosure();
@@ -61,48 +61,27 @@ export default function Series(props) {
     });
 
     setSeriesId(docRef.id);
-    route("/series/edit");
+    route(`/series/edit/${docRef.id}`);
   };
 
   return (
     <Fragment>
-      {/* <Flex justifyContent="space-between" alignItems="end" px={4} bg="white">
-        <FadeInSlideRight>
-          <Heading fontSize="4xl" color="blue.400">
-            All Series
-          </Heading>
-        </FadeInSlideRight>
-
-        <FadeInSlideLeft>
-          <Flex gap={2}>
-            <ToolIconBtn
-              label="Import file"
-              action={() => route("/import")}
-              icon={FileUploadOutlinedIcon}
-            />
-            <ToolIconBtn
-              label="Create Series"
-              action={addSeriesHandler}
-              icon={AddToPhotosOutlinedIcon}
-            />
-          </Flex>
-        </FadeInSlideLeft>
-      </Flex> */}
-      <PageHead title="All Series" loading={seriesLoading}>
-        <ToolIconButton
-          aria-label="Import file"
-          icon={FileUploadOutlinedIcon}
-          onClick={() => route("/import")}
-        />
-        <ToolIconButton
-          aria-label="Create Series"
-          icon={AddToPhotosOutlinedIcon}
-          onClick={addSeriesHandler}
-        />
-      </PageHead>
       <Page>
-        <SiteList loading={seriesLoading}>
-          {series?.docs.map((series) => (
+        <PageHead title="Your Series" loading={userSeriesLoading}>
+          <ToolIconButton
+            aria-label="Import file"
+            icon={FileUploadOutlinedIcon}
+            onClick={() => route("/import")}
+          />
+          <ToolIconButton
+            aria-label="Create Series"
+            icon={AddToPhotosOutlinedIcon}
+            onClick={addSeriesHandler}
+          />
+        </PageHead>
+
+        <SiteList loading={userSeriesLoading}>
+          {userSeries?.docs.map((series) => (
             <SiteListItem
               key={series.id}
               item={series}

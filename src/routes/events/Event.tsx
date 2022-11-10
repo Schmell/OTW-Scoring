@@ -22,10 +22,10 @@ import ToolIconButton from "../../components/generic/ToolIconButton";
 import UserLanding from "../user/UserLanding";
 import FollowButtons from "../../components/generic/FollowButtons";
 
-export default function EventList({ setHeaderTitle, user }) {
+export default function EventList({ setHeaderTitle, user, eventId }) {
   setHeaderTitle("Event");
 
-  const [eventId] = useStorage("eventId");
+  // const [eventId] = useStorage("eventId");
   const [_seriesId, setSeriesId] = useStorage("seriesId");
 
   const colRef = collection(db, "series");
