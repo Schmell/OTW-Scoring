@@ -48,7 +48,7 @@ export function SiteListText({
               ? action
               : () => {
                   setStorage?.(item.id);
-                  route(`/${forward}`);
+                  route(`/${forward}/${item.id}`);
                 }
           }
         >

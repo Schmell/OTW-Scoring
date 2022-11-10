@@ -1,25 +1,10 @@
-import { Button } from "@chakra-ui/react";
+import { Button, ButtonProps } from "@chakra-ui/react";
 import { FunctionalComponent, h } from "preact";
 
-interface PriBtnProps {
-  onClick?: () => void;
-  [x: string | number]: any;
-}
-
-export default function PriBtn(props) {
-  const { children, onClick, width, type } = props;
+export default function PriBtn(props: ButtonProps) {
   return (
-    <Button
-      {...props}
-      variant="solid"
-      boxShadow="md"
-      // width={width}
-      // type={type}
-      // onClick={() => {
-      //   onClick?.();
-      // }}
-    >
-      {children}
+    <Button {...props} variant="solid" boxShadow="md">
+      {props.children}
     </Button>
   );
 }

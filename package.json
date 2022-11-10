@@ -21,6 +21,7 @@
       "build/"
     ]
   },
+  
   "dependencies": {
     "@chakra-ui/react": "^1.8.6",
     "@emotion/react": "^11.9.0",

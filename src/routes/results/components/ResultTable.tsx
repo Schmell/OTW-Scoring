@@ -49,7 +49,9 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { DocumentData } from "firebase/firestore";
 import ToolIconButton from "../../../components/generic/ToolIconButton";
 import PageHead from "../../../components/page/pageHead";
-// import spacer from "../../../assets/img/spacer.gif";
+
+// @ts-ignore
+// import spacer from "../assets/img/spacer.gif";
 
 type ResultRow = {
   id: number;
@@ -365,50 +367,6 @@ function FleetTable(props: TableProps) {
   return (
     <Fragment>
       <Fragment>
-        {/* <Flex justifyContent={"space-between"} px={6}>
-          <Flex>
-            <Image src="../../../assets/img/spacer.gif" height={8} w={0} />
-            <Heading color="blue.400" size="2xl">
-              {fleetName ? fleetName : "Fleet"}
-            </Heading>
-          </Flex>
-
-          <Flex gap={2}>
-            <ToolIconBtn
-              disabled={selectedRace <= 0}
-              action={() => {
-                setSelectedRace(selectedRace - 1);
-              }}
-              label="Previous race"
-              icon={ChevronLeftIcon}
-            />
-            <ToolIconBtn
-              disabled={selectedRace >= racesArray.length - 1}
-              action={() => {
-                setSelectedRace(selectedRace + 1);
-              }}
-              label="Next race"
-              icon={ChevronRightIcon}
-            />
-            <ToolIconBtn
-              action={() => route("/series/edit")}
-              label="Edit Series"
-              icon={EditIcon}
-            />
-            <ToolIconBtn action={onOpen} label="Settings" icon={SettingsIcon} />
-          </Flex>
-
-          <SettingsModal
-            isOpen={isOpen}
-            onClose={onClose}
-            rowTitle={rowTitle}
-            setRowTitle={setRowTitle}
-            setResultType={setResultType}
-            resultType={resultType}
-          />
-        </Flex>
-
-        <Divider my={3} border={4} /> */}
         <PageHead title={fleetName ? fleetName : "Fleet"}>
           <ToolIconButton
             aria-label="Previous race"
@@ -462,7 +420,7 @@ function FleetTable(props: TableProps) {
           >
             <Flex justifyContent="space-between">
               <Flex alignItems="center">
-                <Image src="../../../assets/img/spacer.gif" height={8} w={0} />
+                {/* <Image src="../../../assets/img/spacer.gif" height={8} w={0} /> */}
                 {race ? (
                   <Text fontSize="2xl">
                     {race?.name || `Race ${race?.rank}`}

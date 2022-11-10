@@ -1,21 +1,26 @@
-import { h } from "preact";
+import { User } from "firebase/auth";
+import { Fragment, h } from "preact";
 import AsyncRoute from "preact-async-route";
 import Router, { Route } from "preact-router";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { StateUpdater } from "preact/hooks";
 import Home from "../../routes/home";
 import NotFoundPage from "../../routes/notfound";
-import { auth } from "../../util/firebase-config";
 import { SignIn } from "./SignIn";
 
 interface RoutingProps {
+  user: User | null | undefined;
+  setHeaderTitle: StateUpdater<string>;
+  headerTitle: string;
   [x: string | number]: any;
 }
 
-export default function Routing(props) {
+export default function Routing(props: RoutingProps) {
+  const { user } = props;
   return (
     <Router onChange={() => {}}>
       <Route path="/" component={Home} {...props} />
       <Route path="/signin" component={SignIn} {...props} />
+
       <AsyncRoute
         path="/import"
         getComponent={() =>
@@ -55,8 +60,9 @@ export default function Routing(props) {
         }
         {...props}
       />
+
       <AsyncRoute
-        path="/series/edit"
+        path="/series/edit/:seriesId"
         getComponent={() =>
           import("../../routes/series/SeriesEdit").then(
             (module) => module.default
@@ -64,6 +70,7 @@ export default function Routing(props) {
         }
         {...props}
       />
+
       <AsyncRoute
         path="/events"
         getComponent={() =>
@@ -72,7 +79,7 @@ export default function Routing(props) {
         {...props}
       />
       <AsyncRoute
-        path="/events/edit"
+        path="/events/edit/:eventId"
         getComponent={() =>
           import("../../routes/events/EventEdit").then(
             (module) => module.default
@@ -81,21 +88,30 @@ export default function Routing(props) {
         {...props}
       />
       <AsyncRoute
-        path="/events/event"
+        path="/events/event/:eventId"
         getComponent={() =>
           import("../../routes/events/Event").then((module) => module.default)
         }
         {...props}
       />
       <AsyncRoute
-        path="/races"
+        path="/events/search"
+        getComponent={() =>
+          import("../../routes/events/SearchEvents").then(
+            (module) => module.default
+          )
+        }
+        {...props}
+      />
+      <AsyncRoute
+        path="/races/:seriesId"
         getComponent={() =>
           import("../../routes/races/Races").then((module) => module.default)
         }
         {...props}
       />
       <AsyncRoute
-        path="/races/edit"
+        path="/races/edit/:raceId/:seriesId"
         getComponent={() =>
           import("../../routes/races/RaceEdit").then((module) => module.default)
         }

@@ -23,6 +23,7 @@ type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<
     [K in Keys]-?: Required<Pick<T, K>> &
       Partial<Record<Exclude<Keys, K>, undefined>>;
   }[Keys];
+
 interface BaseProps {
   disclosure: {
     isOpen: boolean;
@@ -33,11 +34,11 @@ interface BaseProps {
     getButtonProps: (props?: any) => any;
     getDisclosureProps: (props?: any) => any;
   };
-  callback: (id: string) => Promise<void>;
+  callback?: (id: string) => void;
   itemId: string;
   children: ComponentChildren;
   title?: string;
-  colPath: string;
+  colPath?: string | null;
   risk?: "low" | "medium" | "high";
 }
 
@@ -51,7 +52,7 @@ export function AreYouSure({
   colPath,
   risk,
   children,
-}: AreYouSureProps) {
+}: BaseProps) {
   /**
    * Modal component for deleting documents
    * expects chidren for modal text

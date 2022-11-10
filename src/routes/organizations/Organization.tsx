@@ -14,7 +14,14 @@ import {
 } from "@chakra-ui/react";
 import { Fragment, h } from "preact";
 import { Link, route } from "preact-router";
-import { collection, doc, query, where } from "firebase/firestore";
+import {
+  collection,
+  deleteField,
+  doc,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "../../util/firebase-config";
 import { User } from "firebase/auth";
 import { useCollection, useDocument } from "react-firebase-hooks/firestore";
@@ -23,6 +30,7 @@ import ToolIconButton from "../../components/generic/ToolIconButton";
 import PageHead from "../../components/page/pageHead";
 // Icons
 import EditIcon from "@mui/icons-material/Edit";
+import AddToPhotosIcon from "@mui/icons-material/AddToPhotosOutlined";
 import { SiteList } from "../../components/generic/SiteList";
 import { SiteListItem } from "../../components/generic/SiteList/SiteListItem";
 import { SiteListButtons } from "../../components/generic/SiteList/SiteListButtons";
@@ -55,13 +63,20 @@ export default function Organization(props: OrganizationProps) {
       <Fragment>
         <PageHead title={org?.data()?.orgName} loading={orgLoading}>
           {org?.data()?.__owner === user?.uid && (
-            <ToolIconButton
-              aria-label="Edit Organization"
-              icon={EditIcon}
-              onClick={() => {
-                route(`/organization/edit/${orgId}`);
-              }}
-            />
+            <Fragment>
+              <ToolIconButton
+                aria-label="Edit Organization"
+                icon={EditIcon}
+                onClick={() => {
+                  route(`/organization/edit/${orgId}`);
+                }}
+              />
+              <ToolIconButton
+                aria-label="Add series"
+                icon={AddToPhotosIcon}
+                onClick={() => {}}
+              />
+            </Fragment>
           )}
           {org?.data()?.__public && org?.data()?.__owner !== user?.uid && (
             <FollowButtons user={user} data={org} colName="followOrgs" />
@@ -93,6 +108,9 @@ export default function Organization(props: OrganizationProps) {
                 </Tab>
               </TabList>
               <TabPanels>
+                {/* /////////////////////////// */}
+                {/* Events */}
+                {/* /////////////////////////// */}
                 <TabPanel p={0}>
                   <SiteList loading={orgEventsLoading}>
                     {orgEvents?.docs.map((item) => {
@@ -119,7 +137,14 @@ export default function Organization(props: OrganizationProps) {
                                 <SiteListButtons
                                   setStorage={setEventId}
                                   item={item}
-                                  listType="events"
+                                  listType={""}
+                                  callback={async (id) => {
+                                    console.log("id ", id);
+                                    // updateDoc removing orgaization
+                                    await updateDoc(item.ref, {
+                                      organization: deleteField(),
+                                    });
+                                  }}
                                   disclosure={deleteEventDisclosure}
                                 >
                                   <Box>
@@ -146,6 +171,9 @@ export default function Organization(props: OrganizationProps) {
                     })}
                   </SiteList>
                 </TabPanel>
+                {/* /////////////////////////// */}
+                {/* Details                     */}
+                {/* /////////////////////////// */}
                 <TabPanel>
                   <Fragment>
                     <Flex mx={4} mb={4} justifyContent="space-between">

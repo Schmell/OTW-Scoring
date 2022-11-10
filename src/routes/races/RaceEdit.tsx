@@ -37,7 +37,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import PageHead from "../../components/page/pageHead";
 // import style from "./style.css";
 
-export default function RaceEdit({ setHeaderTitle }) {
+export default function RaceEdit({ setHeaderTitle, raceId, seriesId }) {
   setHeaderTitle("Edit Race");
 
   interface IraceStarts {
@@ -47,8 +47,8 @@ export default function RaceEdit({ setHeaderTitle }) {
 
   // Get the current navigation id's
   // only need the getters here
-  const [raceId] = useStorage("raceId");
-  const [seriesId] = useStorage("seriesId");
+  // const [raceId] = useStorage("raceId");
+  // const [seriesId] = useStorage("seriesId");
 
   // Set state for form values
   // Not sure why these are the only ones i need to set state for

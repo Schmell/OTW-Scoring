@@ -10,8 +10,10 @@ import {
   Flex,
   FormLabel,
   Input,
+  SlideFade,
   Switch,
   Textarea,
+  useDisclosure,
   useFocusEffect,
 } from "@chakra-ui/react";
 import { useCollection, useDocument } from "react-firebase-hooks/firestore";
@@ -33,6 +35,9 @@ import { addOrganization } from "./addOrganization";
 import * as yup from "yup";
 import { useState } from "react";
 import { useEffect } from "preact/hooks";
+import PriBtn from "../../components/generic/PriBtn";
+import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
+import SecBtn from "../../components/generic/SecBtn";
 
 interface OrganizationEditProps {
   orgRef?: DocumentReference<DocumentData>;
@@ -41,8 +46,19 @@ interface OrganizationEditProps {
 }
 
 export default function OrganizationEdit(props: OrganizationEditProps) {
+  // http://localhost:8080/organizations/edit/CI9yaUlY81un8Cgwo3jJ
   const { orgId, user } = props;
-
+  const { isOpen, onToggle, onOpen } = useDisclosure();
+  if (!window) {
+    // setUserHasScrolled(true);
+    onOpen();
+  } else {
+    window.onscroll = function () {
+      // setUserHasScrolled(true);
+      onOpen();
+    };
+  }
+  // const [seriesId] = useStorage("orgStorage");
   const docRef = doc(db, "organizations", orgId);
   const [org, orgLoading] = useDocument(docRef);
 
@@ -102,87 +118,103 @@ export default function OrganizationEdit(props: OrganizationEditProps) {
             // validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            <Form>
-              <Flex justifyContent={"end"}>
-                <FormLabel htmlFor="setPublicState" m={0} mr={2}>
-                  Public:
-                </FormLabel>
+            {({
+              isSubmitting,
+              getFieldProps,
+              handleChange,
+              handleBlur,
+              values,
+            }) => (
+              <Form>
+                <Flex justifyContent={"end"}>
+                  <FormLabel htmlFor="setPublicState" m={0} mr={2}>
+                    Public:
+                  </FormLabel>
+                  <Field
+                    name="setPublicState"
+                    type="checkbox"
+                    as={Switch}
+                    isChecked={isPublic}
+                    m={0}
+                    onChange={() => {
+                      setIsPublic(!isPublic);
+                    }}
+                  />
+                </Flex>
+
+                <FormLabel htmlFor="orgName">Name:</FormLabel>
+                <Field name="orgName" as={Input} errorBorderColor="red.300" />
+                <Divider my={4} />
+
+                <FormLabel htmlFor="short">Short name: </FormLabel>
+                <Field name="short" as={Input} />
+                <Divider my={4} />
+
+                <FormLabel htmlFor="description">Description: </FormLabel>
+                <Field name="description" as={Textarea} />
+                <Divider my={4} />
+
+                <FormLabel htmlFor="titlePhoto">Title Photo Url: </FormLabel>
+                <Field name="titlePhoto" as={Input} />
+                <Divider my={4} />
+
+                <FormLabel htmlFor="phone">Phone Number: </FormLabel>
+                <Field name="phone" as={Input} />
+                <Divider my={4} />
+
+                <FormLabel htmlFor="contactEmail">Contact Email: </FormLabel>
                 <Field
-                  name="setPublicState"
-                  type="checkbox"
-                  as={Switch}
-                  isChecked={isPublic}
-                  m={0}
-                  onChange={() => {
-                    setIsPublic(!isPublic);
-                  }}
+                  name="contactEmail"
+                  as={Input}
+                  errorBorderColor="red.300"
                 />
-              </Flex>
+                <Divider my={4} />
 
-              <FormLabel htmlFor="orgName">Name:</FormLabel>
-              <Field name="orgName" as={Input} errorBorderColor="red.300" />
-              <Divider my={4} />
+                <FormLabel htmlFor="website">Website: </FormLabel>
+                <Field name="website" as={Input} />
+                <Divider my={4} />
 
-              <FormLabel htmlFor="short">Short name: </FormLabel>
-              <Field name="short" as={Input} />
-              <Divider my={4} />
+                <FormLabel htmlFor="address">Address: </FormLabel>
+                <Field name="address" as={Input} />
+                <Divider my={4} />
 
-              <FormLabel htmlFor="description">Description: </FormLabel>
-              <Field name="description" as={Textarea} />
-              <Divider my={4} />
+                <FormLabel htmlFor="city">City: </FormLabel>
+                <Field name="city" as={Input} />
+                <Divider my={4} />
 
-              <FormLabel htmlFor="titlePhoto">Title Photo Url: </FormLabel>
-              <Field name="titlePhoto" as={Input} />
-              <Divider my={4} />
+                <FormLabel htmlFor="area">Area: </FormLabel>
+                <Field name="area" as={Input} />
+                <Divider my={4} />
 
-              <FormLabel htmlFor="phone">Phone Number: </FormLabel>
-              <Field name="phone" as={Input} />
-              <Divider my={4} />
+                <FormLabel htmlFor="state">State: </FormLabel>
+                <Field name="state" as={Input} />
+                <Divider my={4} />
 
-              <FormLabel htmlFor="contactEmail">Contact Email: </FormLabel>
-              <Field
-                name="contactEmail"
-                as={Input}
-                errorBorderColor="red.300"
-              />
-              <Divider my={4} />
+                <FormLabel htmlFor="country">Country: </FormLabel>
+                <Field name="country" as={Input} />
+                <Divider my={4} />
 
-              <FormLabel htmlFor="website">Website: </FormLabel>
-              <Field name="website" as={Input} />
-              <Divider my={4} />
-
-              <FormLabel htmlFor="address">Address: </FormLabel>
-              <Field name="address" as={Input} />
-              <Divider my={4} />
-
-              <FormLabel htmlFor="city">City: </FormLabel>
-              <Field name="city" as={Input} />
-              <Divider my={4} />
-
-              <FormLabel htmlFor="area">Area: </FormLabel>
-              <Field name="area" as={Input} />
-              <Divider my={4} />
-
-              <FormLabel htmlFor="state">State: </FormLabel>
-              <Field name="state" as={Input} />
-              <Divider my={4} />
-
-              <FormLabel htmlFor="country">Country: </FormLabel>
-              <Field name="country" as={Input} />
-              <Divider my={4} />
-
-              <Button
-                variant="solid"
-                type="submit"
-                w="100%"
-                mb={8}
-                onClick={() => {
-                  history.back();
-                }}
-              >
-                Submit
-              </Button>
-            </Form>
+                {/* Submit Button */}
+                <SecBtn type="reset">Reset</SecBtn>
+                <SlideFade in={isOpen} offsetX="20px">
+                  <Box m={4} position="fixed" bottom={0} right={0}>
+                    <PriBtn
+                      type="submit"
+                      px={8}
+                      leftIcon={(<SaveOutlinedIcon />) as any}
+                      borderRadius="full"
+                      isLoading={isSubmitting}
+                      loadingText="Submitting"
+                      onClick={() => {
+                        history.back();
+                      }}
+                    >
+                      Save
+                    </PriBtn>
+                  </Box>
+                </SlideFade>
+              </Form>
+            )}
           </Formik>
         )}
       </Box>

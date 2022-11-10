@@ -1,4 +1,9 @@
-import { Box, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  SlideFade,
+  useDisclosure,
+  useFocusEffect,
+} from "@chakra-ui/react";
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
 import { collection, doc, query, where } from "firebase/firestore";
 import { Fragment, h } from "preact";
@@ -19,12 +24,15 @@ import FollowButtons from "../../components/generic/FollowButtons";
 import SearchIcon from "@mui/icons-material/Search";
 import PriBtn from "../../components/generic/PriBtn";
 import { route } from "preact-router";
+import { useEffect, useState } from "preact/hooks";
 
 interface OrganizationsProps {}
 
 export default function Organizations(props) {
   const { user, setHeaderTitle, ...rest } = props;
   setHeaderTitle("Organizations");
+
+  const { isOpen, onToggle, onOpen } = useDisclosure();
 
   const orgsRef = collection(db, "organizations");
   const publicOrgsRef = query(
@@ -41,6 +49,10 @@ export default function Organizations(props) {
   const userFollowOrgs = query(followOrgsRef, where("userId", "==", user?.uid));
   const [followOrgs, followingOrgsLoading] = useCollection(userFollowOrgs);
 
+  useEffect(() => {
+    console.log("followOrgs ", followOrgs?.docs);
+  }, [followOrgs, followingOrgsLoading]);
+
   const getFollowing = () => {
     const items = followOrgs?.docs.map((follow) => {
       const docRef = doc(orgsRef, follow.data().followId);
@@ -51,6 +63,18 @@ export default function Organizations(props) {
     if (items) return items;
     return [];
   };
+
+  const [userHasScrolled, setUserHasScrolled] = useState(false);
+
+  if (!window) {
+    // setUserHasScrolled(true);
+    onOpen();
+  } else {
+    window.onscroll = function () {
+      // setUserHasScrolled(true);
+      onOpen();
+    };
+  }
 
   const deleteOrgDisclosure = useDisclosure();
 
@@ -84,7 +108,7 @@ export default function Organizations(props) {
                 <SiteListText
                   item={org}
                   setStorage={setOrgId}
-                  forward={`organization/${org.id}`}
+                  forward={`organization`}
                   textItems={{
                     head: org.data().orgName,
                     sub: org.data().country,
@@ -94,7 +118,7 @@ export default function Organizations(props) {
                   <SiteListButtons
                     setStorage={setOrgId}
                     item={org}
-                    listType="organizations"
+                    listType="organization"
                     disclosure={deleteOrgDisclosure}
                   >
                     <Box>
@@ -111,66 +135,73 @@ export default function Organizations(props) {
           ))}
         </SiteList>
       </Page>
-
-      <Fragment>
-        <PageHead
-          title="Following"
-          loading={followingOrgsLoading}
-          noSpace={true}
-        >
-          <ToolIconButton
-            aria-label="Search"
-            icon={SearchIcon}
-            onClick={() => {
-              route("/organizations/search");
-            }}
-          />
-        </PageHead>
-        <Page>
-          <SiteList loading={orgsLoading}>
-            {getFollowing()?.map((org) => (
-              <Fragment>
-                {org?.data() && org.data()?.__public && (
-                  <SiteListItem
-                    key={org.id}
-                    item={org}
-                    disclosure={deleteOrgDisclosure}
-                    listType="organization"
-                  >
-                    <SiteListText
-                      item={org}
-                      setStorage={setOrgId}
-                      forward={`organization/${org.id}`}
-                      textItems={{
-                        head: org.data()?.orgName,
-                        sub: org.data()?.country,
-                        foot: org.data()?.website,
-                      }}
-                    >
-                      <FollowButtons
-                        user={user}
-                        data={org}
-                        colName={"followOrgs"}
-                        variant="ghost"
-                        {...rest}
-                      />
-                    </SiteListText>
-                  </SiteListItem>
-                )}
-              </Fragment>
-            ))}
-            <PriBtn
-              w="full"
-              leftIcon={<SearchIcon />}
+      {followOrgs?.docs?.length! > 0 && (
+        <Fragment>
+          <PageHead
+            title="Following"
+            loading={followingOrgsLoading}
+            noSpace={true}
+          >
+            <ToolIconButton
+              aria-label="Search"
+              icon={SearchIcon}
               onClick={() => {
                 route("/organizations/search");
               }}
-            >
-              Find More Organizations
-            </PriBtn>
-          </SiteList>
-        </Page>
-      </Fragment>
+            />
+          </PageHead>
+          <Page>
+            <SiteList loading={followingOrgsLoading}>
+              {getFollowing()?.map((org) => (
+                <Fragment>
+                  {org?.data() && org.data()?.__public && (
+                    <SiteListItem
+                      key={org.id}
+                      item={org}
+                      disclosure={deleteOrgDisclosure}
+                      listType="organization"
+                    >
+                      <SiteListText
+                        item={org}
+                        setStorage={setOrgId}
+                        forward={`organization`}
+                        textItems={{
+                          head: org.data()?.orgName,
+                          sub: org.data()?.country,
+                          foot: org.data()?.website,
+                        }}
+                      >
+                        <FollowButtons
+                          user={user}
+                          data={org}
+                          colName={"followOrgs"}
+                          variant="ghost"
+                          {...rest}
+                        />
+                      </SiteListText>
+                    </SiteListItem>
+                  )}
+                </Fragment>
+              ))}
+            </SiteList>
+          </Page>
+        </Fragment>
+      )}
+
+      <SlideFade in={isOpen} offsetX="20px">
+        <Box m={4} position="fixed" bottom={0} right={0}>
+          <PriBtn
+            w="full"
+            leftIcon={(<SearchIcon />) as any}
+            borderRadius="full"
+            onClick={() => {
+              route("/organizations/search");
+            }}
+          >
+            Search
+          </PriBtn>
+        </Box>
+      </SlideFade>
     </Fragment>
   );
 }

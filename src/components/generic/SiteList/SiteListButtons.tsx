@@ -11,6 +11,7 @@ interface SiteListButtonProps {
   item: QueryDocumentSnapshot<DocumentData>;
   listType: string;
   setStorage: (id: string) => void;
+  callback?: (id: string) => void;
   disclosure: {
     isOpen: boolean;
     onOpen: () => void;
@@ -24,7 +25,7 @@ interface SiteListButtonProps {
 }
 
 export function SiteListButtons(props: SiteListButtonProps) {
-  const { setStorage, item, listType, children, ...rest } = props;
+  const { setStorage, item, listType, children, callback, ...rest } = props;
   const disclosure = useDisclosure();
 
   return (
@@ -36,8 +37,8 @@ export function SiteListButtons(props: SiteListButtonProps) {
           size={"sm"}
           variant="ghost"
           onClick={() => {
-            setStorage(item.id);
-            route(`/${listType}/edit`);
+            // setStorage(item.id);
+            route(`/${listType}/edit/${item.id}`);
           }}
         />
 
@@ -50,7 +51,12 @@ export function SiteListButtons(props: SiteListButtonProps) {
         />
       </Flex>
 
-      <AreYouSure itemId={item.id} disclosure={disclosure} colPath={listType}>
+      <AreYouSure
+        itemId={item.id}
+        disclosure={disclosure}
+        colPath={listType ? listType : null}
+        callback={callback ? callback : () => {}}
+      >
         {children}
       </AreYouSure>
     </Fragment>

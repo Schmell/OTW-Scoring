@@ -1,4 +1,4 @@
-import { ListItem, useColorModeValue } from "@chakra-ui/react";
+import { Box, ListItem, useColorModeValue } from "@chakra-ui/react";
 import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { SiteListAnimation } from "../../animations/FadeSlide";
@@ -20,6 +20,7 @@ interface SiteListProps {
 }
 
 export function SiteListItem({ item, children, ...rest }: SiteListProps) {
+  if (!item) return <Box>No Item</Box>;
   return (
     <Fragment>
       <SiteListAnimation>
