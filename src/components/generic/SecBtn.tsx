@@ -6,17 +6,12 @@ interface SecBtnProps {
   [x: string | number]: any;
 }
 
-const SecBtn: FunctionalComponent<SecBtnProps> = ({
-  children,
-  onClick,
-  width,
-  type,
-}) => {
+export default function SecBtn(props: SecBtnProps) {
+  const { children, onClick, width, type, ...rest } = props;
   return (
-    <Button type={type} width={width} onClick={onClick}>
-      {children}
-    </Button>
+    // <Button type={type} width={width} onClick={onClick}>
+    //   {children}
+    // </Button>
+    <Button {...props}>{children}</Button>
   );
-};
-
-export default SecBtn;
+}

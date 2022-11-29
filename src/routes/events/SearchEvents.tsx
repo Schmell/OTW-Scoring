@@ -27,6 +27,7 @@ import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import { useAuthState } from "react-firebase-hooks/auth";
 import SearchOptions from "./SearchOptions";
+import FollowButtons from "../../components/generic/FollowButtons";
 
 interface SearchEventsProps {}
 
@@ -40,8 +41,8 @@ export default function SearchEvents(props) {
   const eventsRef = collection(db, "events");
   const publicEventsQuery = query(
     eventsRef,
-    where("__owner", "!=", user && user?.uid),
-    where("__public", "==", true)
+    where("__public", "==", true),
+    where("__owner", "!=", user?.uid)
   );
   const [events, eventsLoading] = useCollection(publicEventsQuery);
 
@@ -49,67 +50,72 @@ export default function SearchEvents(props) {
 
   return (
     <Fragment>
-      <PageHead title="Search Events" loading={eventsLoading}></PageHead>
+      <PageHead title="Search Events" loading={eventsLoading}>
+        <ToolIconButton
+          aria-label="add Organization"
+          icon={AddToPhotosOutlinedIcon}
+          onClick={() => {
+            // addOrganization(user?.uid);
+          }}
+        />
+      </PageHead>
 
       <Page>
-        <Flex gap={2} mx={4} my={4}>
-          {/* <Input name="search" /> */}
-          <InputGroup>
-            <InputLeftElement
-              pointerEvents="none"
-              children={<Icon as={SearchIcon} />}
-            />
-            <Input placeholder="Find Organization" onChange={() => {}} />
-          </InputGroup>
-          <ToolIconButton
-            aria-label="add Organization"
-            icon={AddToPhotosOutlinedIcon}
-            onClick={() => {
-              // addOrganization(user?.uid);
-            }}
-          />
-          <SearchOptions />
-        </Flex>
+        {!eventsLoading && (
+          <Fragment>
+            <Flex gap={2} mx={4} my={4}>
+              <InputGroup>
+                <InputLeftElement
+                  pointerEvents="none"
+                  children={<Icon as={SearchIcon} />}
+                />
+                <Input placeholder="Find Organization" onChange={() => {}} />
+              </InputGroup>
+              <ToolIconButton
+                aria-label="add Organization"
+                icon={AddToPhotosOutlinedIcon}
+                onClick={() => {
+                  // addOrganization(user?.uid);
+                }}
+              />
+            </Flex>
+            <SearchOptions />
 
-        <SiteList loading={eventsLoading}>
-          {events?.docs.map((item) => {
-            const data = item.data();
-            return (
-              <Fragment>
-                {!data.__owner ?? <Text>You have no Items</Text>}
-                <SiteListItem
-                  key={item.id}
-                  item={item}
-                  disclosure={deleteEventDisclosure}
-                  listType="series"
-                >
-                  <SiteListText
-                    item={item}
-                    setStorage={setEventId}
-                    forward="events/event"
-                    textItems={{
-                      head: data.name,
-                      sub: data.venue,
-                      foot: data.date,
-                    }}
-                  >
-                    <SiteListButtons
-                      setStorage={setEventId}
+            <SiteList>
+              {events?.docs.map((item) => {
+                const data = item.data();
+                return (
+                  <Fragment>
+                    <SiteListItem
+                      key={item.id}
                       item={item}
-                      listType="events"
                       disclosure={deleteEventDisclosure}
+                      listType="events"
                     >
-                      <Box>This will delete the event and is not undo-able</Box>
-                      <Box>
-                        You will loose any work you have done with this Event
-                      </Box>
-                    </SiteListButtons>
-                  </SiteListText>
-                </SiteListItem>
-              </Fragment>
-            );
-          })}
-        </SiteList>
+                      <SiteListText
+                        item={item}
+                        setStorage={setEventId}
+                        forward="events/event"
+                        textItems={{
+                          head: data.name,
+                          sub: data.venue,
+                          foot: data.date,
+                        }}
+                      >
+                        <FollowButtons
+                          user={user}
+                          data={item!}
+                          variant="ghost"
+                          colName="followEvents"
+                        />
+                      </SiteListText>
+                    </SiteListItem>
+                  </Fragment>
+                );
+              })}
+            </SiteList>
+          </Fragment>
+        )}
       </Page>
     </Fragment>
   );

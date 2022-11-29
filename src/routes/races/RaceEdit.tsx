@@ -35,6 +35,7 @@ import SecBtn from "../../components/generic/SecBtn";
 import ToolIconBtn from "../../components/generic/ToolIconBtn";
 import CloseIcon from "@mui/icons-material/Close";
 import PageHead from "../../components/page/pageHead";
+import Weather from "./raceEdit/Weather";
 // import style from "./style.css";
 
 export default function RaceEdit({ setHeaderTitle, raceId, seriesId }) {
@@ -167,7 +168,9 @@ export default function RaceEdit({ setHeaderTitle, raceId, seriesId }) {
                       docRef={docRef}
                       values={values}
                     />
-
+                    <Divider my={3} />
+                    <Weather />
+                    <Divider my={3} />
                     {/* Notes */}
                     <Notes loading={loading} currentRace={currentRace} />
 

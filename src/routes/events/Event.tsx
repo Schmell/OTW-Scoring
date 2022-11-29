@@ -2,7 +2,7 @@ import { Box, useDisclosure } from "@chakra-ui/react";
 import { collection, doc, query, updateDoc, where } from "firebase/firestore";
 import { Fragment, h } from "preact";
 import { route } from "preact-router";
-import { useCollection, useDocumentData } from "react-firebase-hooks/firestore";
+import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 import { AreYouSure } from "../../components/generic/AreYouSure";
 import { SiteList } from "../../components/generic/SiteList";
 import { SiteListButtons } from "../../components/generic/SiteList/SiteListButtons";
@@ -15,18 +15,25 @@ import AddSeriesModal from "./AddSeriesModal";
 import AddToPhotosOutlinedIcon from "@mui/icons-material/AddToPhotosOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
-import ToolIconBtn from "../../components/generic/ToolIconBtn";
+import { User } from "firebase/auth";
+import FollowButtons from "../../components/generic/FollowButtons";
+import ToolIconButton from "../../components/generic/ToolIconButton";
 import { Page } from "../../components/page/Page";
 import PageHead from "../../components/page/pageHead";
-import ToolIconButton from "../../components/generic/ToolIconButton";
-import UserLanding from "../user/UserLanding";
-import FollowButtons from "../../components/generic/FollowButtons";
 
-export default function EventList({ setHeaderTitle, user, eventId }) {
+type EventListProps = {
+  setHeaderTitle: any;
+  user: User;
+  eventId: string;
+};
+export default function EventList(props: EventListProps) {
+  const { setHeaderTitle, user, eventId } = props;
   setHeaderTitle("Event");
 
   // const [eventId] = useStorage("eventId");
   const [_seriesId, setSeriesId] = useStorage("seriesId");
+
+  console.log("eventId ", eventId);
 
   const colRef = collection(db, "series");
   const seriesQuery = query(colRef, where("__event", "==", eventId));
@@ -38,89 +45,100 @@ export default function EventList({ setHeaderTitle, user, eventId }) {
     await updateDoc(doc(db, "series", id), { __event: "" });
   };
   const docRef = doc(db, "events", eventId);
-  const [eventDoc, eventDocLoading] = useDocumentData(docRef);
+  const [eventDoc, eventDocLoading] = useDocument(docRef);
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const addEventDisclosure = useDisclosure();
   const deleteEventDisclosure = useDisclosure();
 
   return (
     <Page>
-      {!eventDocLoading && eventDoc && (
-        <Fragment>
-          <PageHead title={eventDoc.name}>
-            <ToolIconButton
-              aria-label="Edit Event Details"
-              icon={EditIcon}
-              onClick={() => route("/events/edit")}
-            />
-            <ToolIconButton
-              aria-label="Import file"
-              icon={FileUploadOutlinedIcon}
-              onClick={() => route("/import")}
-            />
-            <ToolIconButton
-              aria-label="Add Series"
-              icon={AddToPhotosOutlinedIcon}
-              onClick={onOpen}
-            />
-          </PageHead>
+      {/* {!eventDocLoading && eventDoc && ( */}
+      <Fragment>
+        <PageHead title={eventDoc?.data()?.name}>
+          <ToolIconButton
+            aria-label="Edit Event Details"
+            icon={EditIcon}
+            onClick={() => route("/events/edit")}
+          />
+          <ToolIconButton
+            aria-label="Import file"
+            icon={FileUploadOutlinedIcon}
+            onClick={() => route("/import")}
+          />
+          <ToolIconButton
+            aria-label="Add Series"
+            icon={AddToPhotosOutlinedIcon}
+            onClick={addEventDisclosure.onOpen}
+          />
+        </PageHead>
 
-          <AddSeriesModal isOpen={isOpen} onClose={onClose} eventId={eventId} />
+        <AddSeriesModal
+          // isOpen={isOpen}
+          // onClose={onClose}
+          disclosure={addEventDisclosure}
+          eventId={eventId}
+          event={eventDoc}
+          user={user}
+        />
 
-          <SiteList loading={seriesLoading}>
-            {series?.docs.map((item) => {
-              return (
-                <Fragment>
-                  {item.data().__owner === user?.uid ? (
-                    <SiteListItem
-                      key={item.id}
-                      item={item}
-                      disclosure={deleteEventDisclosure}
-                      listType="series"
-                    >
-                      <SiteListText
-                        item={item}
+        <SiteList loading={seriesLoading}>
+          {series?.docs.map((item) => {
+            // console.log("item ", item.data().__owner);
+            // console.log("user?.uid ", user?.uid);
+            return (
+              <Fragment>
+                {/* item.data().__owner === user?.uid */}
+
+                <SiteListItem
+                  key={item.id}
+                  item={item}
+                  disclosure={deleteEventDisclosure}
+                  listType="series"
+                >
+                  <SiteListText
+                    item={item}
+                    setStorage={setSeriesId}
+                    forward="races"
+                    textItems={{
+                      head: item.data().event,
+                      sub: item.data().venue,
+                      foot: item.data().venuewebsite,
+                    }}
+                  >
+                    {item.data().__owner === user?.uid ? (
+                      <SiteListButtons
                         setStorage={setSeriesId}
-                        forward="races"
-                        textItems={{
-                          head: item.data().event,
-                          sub: item.data().venue,
-                          foot: item.data().venuewebsite,
-                        }}
-                      >
-                        <SiteListButtons
-                          setStorage={setSeriesId}
-                          item={item}
-                          listType="series"
-                          disclosure={deleteEventDisclosure}
-                        />
-                      </SiteListText>
-                      <AreYouSure
+                        item={item}
+                        listType="series"
                         disclosure={deleteEventDisclosure}
-                        callback={removeSeries}
-                        itemId={item.id}
-                        risk="low"
-                      >
-                        <Box>
-                          This action will remove this series from the event
-                        </Box>
-                        <Box>You can always add this back if you want</Box>
-                      </AreYouSure>
-                    </SiteListItem>
-                  ) : (
-                    <FollowButtons
-                      user={user}
-                      data={item}
-                      colName="followEvents"
-                      variant="ghost"
-                    />
-                  )}
-                </Fragment>
-              );
-            })}
-          </SiteList>
-        </Fragment>
-      )}
+                      />
+                    ) : (
+                      <FollowButtons
+                        user={user}
+                        data={item}
+                        colName="followEvents"
+                        variant="ghost"
+                      />
+                    )}
+                  </SiteListText>
+                  <AreYouSure
+                    disclosure={deleteEventDisclosure}
+                    callback={removeSeries}
+                    itemId={item.id}
+                    risk="low"
+                  >
+                    <Box>
+                      This action will remove this series from the event
+                    </Box>
+                    <Box>You can always add this back if you want</Box>
+                  </AreYouSure>
+                </SiteListItem>
+              </Fragment>
+            );
+          })}
+        </SiteList>
+      </Fragment>
+      {/* )} */}
     </Page>
   );
 }

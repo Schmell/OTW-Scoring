@@ -118,6 +118,7 @@ export default function Result(props) {
               racesArray={racesArray}
               selectedRace={selectedRace}
               setSelectedRace={setSelectedRace}
+              seriesId={seriesId}
               {...rest}
             />
           </Fragment>

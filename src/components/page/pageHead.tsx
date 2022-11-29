@@ -1,7 +1,7 @@
 import {
+  Box,
   Flex,
   Heading,
-  Image,
   Progress,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -12,7 +12,7 @@ export default function PageHead(props) {
   const { title, children, loading, noSpace } = props;
   return (
     <Fragment>
-      {!noSpace && <Image src="../../assets/img/spacer.gif" height={14} />}
+      {!noSpace && <Box my={14}>{""}</Box>}
       <Flex
         justifyContent="space-between"
         alignItems="center"
@@ -22,7 +22,7 @@ export default function PageHead(props) {
         boxShadow="md"
         position="relative"
         borderBottomWidth={4}
-        borderColor="gray.200"
+        borderColor={useColorModeValue("gray.200", "blackAlpha.600")}
         borderBottomEndRadius="2em"
         bgGradient={useColorModeValue(
           "linear(to-b, whiteAlpha.200, white)",

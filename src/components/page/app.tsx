@@ -15,21 +15,18 @@ const App = () => {
   // try to impliment useStorage
   const [headerTitle, setHeaderTitle] = useState("Blw Me");
 
-  // useEffect(() => {
-  //   setupIndexedDB(idbConfig)
-  //     .then(() => console.log("success"))
-  //     .catch((e) => console.error("error / unsupported", e));
-  // }, []);
-
   return (
     <ChakraProvider resetCSS theme={theme}>
       <SidebarWithHeader headerTitle={headerTitle}>
-        <Routing
-          user={user}
-          userLoading={userLoading}
-          setHeaderTitle={setHeaderTitle}
-          headerTitle={headerTitle}
-        />
+        {!userLoading && (
+          <Routing
+            user={user}
+            uid={user?.uid}
+            userLoading={userLoading}
+            setHeaderTitle={setHeaderTitle}
+            headerTitle={headerTitle}
+          />
+        )}
       </SidebarWithHeader>
     </ChakraProvider>
   );

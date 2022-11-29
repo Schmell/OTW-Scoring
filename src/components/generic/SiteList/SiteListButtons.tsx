@@ -54,8 +54,8 @@ export function SiteListButtons(props: SiteListButtonProps) {
       <AreYouSure
         itemId={item.id}
         disclosure={disclosure}
-        colPath={listType ? listType : null}
-        callback={callback ? callback : () => {}}
+        colPath={listType}
+        // callback={callback ? callback : () => {}}
       >
         {children}
       </AreYouSure>

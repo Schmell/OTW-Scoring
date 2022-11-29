@@ -3,21 +3,18 @@ import { Fragment, h } from "preact";
 // Icons
 
 interface SiteListProps {
-  loading: boolean;
-  children: any;
+  loading?: boolean;
+  children: h.JSX.Element[] | undefined;
   [x: string]: any;
 }
 
-export function SiteList({ loading, children, ...rest }: SiteListProps) {
+export function SiteList(props: SiteListProps) {
+  const { loading, children, ...rest } = props;
   return (
     <Fragment>
-      {loading ? (
-        <Progress size="xs" isIndeterminate />
-      ) : (
-        <List px={4} mb={16}>
-          {children}
-        </List>
-      )}
+      <List px={4} mb={16} {...rest}>
+        {children}
+      </List>
     </Fragment>
   );
 }

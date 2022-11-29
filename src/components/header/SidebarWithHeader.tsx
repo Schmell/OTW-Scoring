@@ -1,11 +1,5 @@
+import { Box, Drawer, DrawerContent, useDisclosure } from "@chakra-ui/react";
 import { h } from "preact";
-import {
-  Box,
-  Drawer,
-  DrawerContent,
-  useColorModeValue,
-  useDisclosure,
-} from "@chakra-ui/react";
 import MobileNav from "./MobileNav";
 import SidebarContent from "./SidebarContent";
 
@@ -14,7 +8,7 @@ export default function SidebarWithHeader({ children, headerTitle }) {
 
   return (
     // This is the Content Area
-    <Box maxW="1000px" m="auto">
+    <Box maxW="1000px" m="auto" className="mainPane">
       <SidebarContent
         onClose={() => onClose}
         display={{ base: "none", md: "block" }}
