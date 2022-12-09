@@ -29,7 +29,7 @@ type EventListProps = {
 export default function EventList(props: EventListProps) {
   const { setHeaderTitle, user, eventId } = props;
   setHeaderTitle("Event");
-
+  // if(!eventId) eventId = "1"
   // const [eventId] = useStorage("eventId");
   const [_seriesId, setSeriesId] = useStorage("seriesId");
 

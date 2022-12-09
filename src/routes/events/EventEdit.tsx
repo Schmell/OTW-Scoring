@@ -42,7 +42,7 @@ import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 
 export default function EventEdit({ user, setHeaderTitle, eventId }) {
   setHeaderTitle("Event Edit");
-  console.log("history ", history);
+  // console.log("history ", history);
 
   // Submit button appears on scroll
   const { isOpen, onOpen } = useDisclosure();
@@ -67,7 +67,8 @@ export default function EventEdit({ user, setHeaderTitle, eventId }) {
   const submitHandler = async (values: any, { setSubmitting }) => {
     setSubmitting(true);
     console.log("values ", values);
-    if (!values.__public) values.__public = true;
+    if (!values.__public == undefined) values.__public = true;
+    if (values.__public[0]) values.__public = false;
     // Remove undefined's
     Object.keys(values).forEach((key) =>
       values[key] === undefined ? delete values[key] : {}
@@ -134,7 +135,7 @@ export default function EventEdit({ user, setHeaderTitle, eventId }) {
                       name="__public"
                       as={Switch}
                       defaultChecked={currentEvent.__public}
-                      value="true"
+                      // value="true"
                     />
                   </Flex>
 
@@ -194,7 +195,7 @@ export default function EventEdit({ user, setHeaderTitle, eventId }) {
                       isLoading={isSubmitting}
                       loadingText="Saving"
                       onClick={() => {
-                        history.back();
+                        // history.back();
                       }}
                     >
                       Save

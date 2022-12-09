@@ -20,7 +20,14 @@ import { AddStartModal } from "./AddStartModal";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 
-export const Starts = ({ raceStarts, docRef, values }) => {
+interface StartsProps {
+  raceStarts: any;
+  docRef: any;
+  values: any;
+}
+
+export const Starts = (props) => {
+  const { raceStarts, docRef, values } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [starts, setStarts] = useState<[{}]>();
 

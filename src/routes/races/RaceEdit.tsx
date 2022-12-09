@@ -171,6 +171,7 @@ export default function RaceEdit({ setHeaderTitle, raceId, seriesId }) {
                     <Divider my={3} />
                     <Weather />
                     <Divider my={3} />
+
                     {/* Notes */}
                     <Notes loading={loading} currentRace={currentRace} />
 

@@ -63,6 +63,7 @@ export default function Events(props) {
     const docRef = await addDoc(colRef, {
       name: "New event",
       __owner: user.uid,
+      __public: true,
     });
     setEventId(docRef.id);
     route(`/events/edit/${docRef.id}`);
