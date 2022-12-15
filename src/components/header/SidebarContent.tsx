@@ -32,6 +32,7 @@ export default function SidebarContent({
   const LinkItems = [
     { name: "Home", icon: Home, href: "/" },
     { name: "Import", icon: MdCloudUpload, href: "/import" },
+    { name: "Users", icon: GroupIcon, href: "/users" },
     { name: "Organizations", icon: GroupIcon, href: "/organizations" },
     { name: "Events", icon: MdCalendarToday, href: "/events" },
     { name: "Series", icon: MdOutlineMediation, href: "/series" },

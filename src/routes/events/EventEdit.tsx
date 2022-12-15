@@ -42,28 +42,21 @@ import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 
 export default function EventEdit({ user, setHeaderTitle, eventId }) {
   setHeaderTitle("Event Edit");
+  // console.log("history ", history);
 
   // Submit button appears on scroll
-  const { isOpen, onToggle, onOpen } = useDisclosure();
+  const { isOpen, onOpen } = useDisclosure();
   if (!window) {
-    // setUserHasScrolled(true);
     onOpen();
   } else {
-    window.onscroll = function () {
-      // setUserHasScrolled(true);
-      onOpen();
-    };
+    onOpen();
   }
 
   // Get the currentRace data
   const docRef = doc(db, "events", eventId);
   const [currentEvent, eventLoading] = useDocumentData(docRef);
 
-  // const eventsRef = collection(db, "events");
-  // const userEvents = query(eventsRef, where("__owner", "==", user?.uid));
-  // const [events, eventsLoading] = useCollection(userEvents);
-
-  const [orgName, setOrgName] = useState(currentEvent?.organization);
+  const [orgName] = useState(currentEvent?.organization);
 
   const orgsRef = collection(db, "organizations");
   const userOrgsQuery = query(orgsRef, where("__owner", "==", user.uid));
@@ -74,6 +67,8 @@ export default function EventEdit({ user, setHeaderTitle, eventId }) {
   const submitHandler = async (values: any, { setSubmitting }) => {
     setSubmitting(true);
     console.log("values ", values);
+    if (!values.__public == undefined) values.__public = true;
+    if (values.__public[0]) values.__public = false;
     // Remove undefined's
     Object.keys(values).forEach((key) =>
       values[key] === undefined ? delete values[key] : {}
@@ -118,6 +113,7 @@ export default function EventEdit({ user, setHeaderTitle, eventId }) {
           {currentEvent && (
             <Formik
               initialValues={{
+                __public: currentEvent.__public,
                 name: currentEvent.name,
                 organization: currentEvent.organization,
                 venue: currentEvent.venue,
@@ -139,7 +135,7 @@ export default function EventEdit({ user, setHeaderTitle, eventId }) {
                       name="__public"
                       as={Switch}
                       defaultChecked={currentEvent.__public}
-                      value="true"
+                      // value="true"
                     />
                   </Flex>
 
@@ -152,7 +148,13 @@ export default function EventEdit({ user, setHeaderTitle, eventId }) {
                   {/* <Field name="organization" as={Input} /> */}
                   {/* <Field as={() => <Select value={"hey"} />}></Field> */}
                   <Flex gap={2}>
-                    <Field name="organization" as={Select}>
+                    <Field
+                      name="organization"
+                      as={Select}
+                      defaultIndex={0}
+                      placeholder="Select Organization"
+                    >
+                      {/* <option>{org.data().orgName}</option> */}
                       {userOrgs?.docs.map((org) => {
                         // console.log("userOrgs?.docs ", );
                         return (
@@ -184,23 +186,21 @@ export default function EventEdit({ user, setHeaderTitle, eventId }) {
                   <Divider my={3} />
                   <SecBtn type="reset">Reset</SecBtn>
                   {/* Submit Button */}
-                  <SlideFade in={isOpen} offsetX="20px">
-                    <Box m={4} position="fixed" bottom={0} right={0}>
-                      <PriBtn
-                        type="submit"
-                        px={8}
-                        leftIcon={(<SaveOutlinedIcon />) as any}
-                        borderRadius="full"
-                        isLoading={isSubmitting}
-                        loadingText="Saving"
-                        onClick={() => {
-                          history.back();
-                        }}
-                      >
-                        Save
-                      </PriBtn>
-                    </Box>
-                  </SlideFade>
+                  <Box m={4} position="fixed" bottom={0} right={0}>
+                    <PriBtn
+                      type="submit"
+                      px={8}
+                      leftIcon={(<SaveOutlinedIcon />) as any}
+                      borderRadius="full"
+                      isLoading={isSubmitting}
+                      loadingText="Saving"
+                      onClick={() => {
+                        // history.back();
+                      }}
+                    >
+                      Save
+                    </PriBtn>
+                  </Box>
                 </Form>
               )}
             </Formik>

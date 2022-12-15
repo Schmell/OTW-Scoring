@@ -173,13 +173,14 @@ export default function MobileNav({
                     <Link
                       href="/user/profile"
                       _hover={{
-                        color: useColorModeValue("gray.700", "gray.100"),
+                        color: useColorModeValue("blue.300", "blue.100"),
                         textDecor: "none",
                       }}
                     >
                       <MenuItem
                         _hover={{
-                          color: useColorModeValue("gray.700", "gray.100"),
+                          color: useColorModeValue("blue.700", "blue.100"),
+                          textDecor: "none",
                         }}
                       >
                         Profile
@@ -199,10 +200,10 @@ export default function MobileNav({
                     <Link
                       href="/billing"
                       _visited={{
-                        color: useColorModeValue("gray.700", "gray.100"),
+                        color: useColorModeValue("blue.700", "blue.100"),
                       }}
                       _hover={{
-                        color: useColorModeValue("gray.700", "gray.100"),
+                        color: useColorModeValue("blue.700", "blue.100"),
                         textDecor: "none",
                       }}
                     >

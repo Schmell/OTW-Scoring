@@ -15,7 +15,7 @@ interface RoutingProps {
 }
 
 export default function Routing(props: RoutingProps) {
-  const { user } = props;
+  // const { user } = props;
   return (
     <Router onChange={() => {}}>
       <Route path="/" component={Home} {...props} />
@@ -56,7 +56,9 @@ export default function Routing(props: RoutingProps) {
       <AsyncRoute
         path="/series"
         getComponent={() =>
-          import("../../routes/series/Series").then((module) => module.default)
+          import("../../routes/series/SeriesCompact").then(
+            (module) => module.default
+          )
         }
         {...props}
       />
@@ -111,7 +113,7 @@ export default function Routing(props: RoutingProps) {
         {...props}
       />
       <AsyncRoute
-        path="/races/edit/:raceId/:seriesId"
+        path="/races/:seriesId/edit/:raceId"
         getComponent={() =>
           import("../../routes/races/RaceEdit").then((module) => module.default)
         }
@@ -179,6 +181,14 @@ export default function Routing(props: RoutingProps) {
           import("../../routes/organizations/Organization").then(
             (module) => module.default
           )
+        }
+        {...props}
+      />
+
+      <AsyncRoute
+        path="/users"
+        getComponent={() =>
+          import("../../routes/users/Users").then((module) => module.default)
         }
         {...props}
       />

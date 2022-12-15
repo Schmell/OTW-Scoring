@@ -50,9 +50,6 @@ import { DocumentData } from "firebase/firestore";
 import ToolIconButton from "../../../components/generic/ToolIconButton";
 import PageHead from "../../../components/page/pageHead";
 
-// @ts-ignore
-// import spacer from "../assets/img/spacer.gif";
-
 type ResultRow = {
   id: number;
   boat: string;
@@ -99,6 +96,7 @@ interface TableProps {
   setSelectedRace: (arg0: number) => void;
   sailed: string;
   race: DocumentData | undefined;
+  seriesId: string;
 }
 
 function FleetTable(props: TableProps) {
@@ -111,9 +109,10 @@ function FleetTable(props: TableProps) {
     headerTitle,
     selectedRace,
     setSelectedRace,
+    seriesId,
     ...rest
   } = props;
-
+  // console.log("rest ", seriesId);
   // console.log("race: ", race);
   // States
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
@@ -387,7 +386,7 @@ function FleetTable(props: TableProps) {
           <ToolIconButton
             aria-label="Edit Series"
             icon={EditIcon}
-            onClick={() => route("/series/edit")}
+            onClick={() => route(`/series/edit/${seriesId}`)}
           />
           <ToolIconButton
             aria-label="Settings"
@@ -420,7 +419,6 @@ function FleetTable(props: TableProps) {
           >
             <Flex justifyContent="space-between">
               <Flex alignItems="center">
-                {/* <Image src="../../../assets/img/spacer.gif" height={8} w={0} /> */}
                 {race ? (
                   <Text fontSize="2xl">
                     {race?.name || `Race ${race?.rank}`}
@@ -435,6 +433,7 @@ function FleetTable(props: TableProps) {
                 ) : (
                   <Text pl={1}>{`  - ${isSailed}`}</Text>
                 )}
+                <Box my={4}>{""}</Box>
               </Flex>
               <Text fontSize="sm" pr={4}>
                 {race && race.date}

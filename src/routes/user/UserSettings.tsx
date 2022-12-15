@@ -12,10 +12,11 @@ import {
   HStack,
   Radio,
   RadioGroup,
+  SlideFade,
   Switch,
   useToast,
 } from "@chakra-ui/react";
-import { doc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
 import { Field, Form, Formik } from "formik";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
@@ -24,6 +25,7 @@ import {
   FadeInSlideRight,
 } from "../../components/animations/FadeSlide";
 import { auth, db } from "../../util/firebase-config";
+import PriBtn from "../../components/generic/PriBtn";
 
 export default function UserSettings() {
   const submittedToast = useToast();
@@ -41,12 +43,21 @@ export default function UserSettings() {
   }, []);
 
   const submitHandler = async (values: any) => {
-    console.log("values: ", values);
+    // console.log("values: ", values);
     // remove undefined's from values
     Object.keys(values).map((m) => {
       if (values[m] === undefined) return (values[m] = "");
       return values;
     });
+    // get user data subcollection
+    ///////////////////////////////////////////////
+    // Writting to sub collection here
+    ///////////////////////////////////////////////
+    // const colRef = collection(docRef, "profile");
+    // const subRef = doc(colRef, "settings");
+
+    // await setDoc(subRef, values);
+
     // update the firestore doc
     await updateDoc(docRef, values);
 
@@ -64,7 +75,7 @@ export default function UserSettings() {
   };
 
   return (
-    <>
+    <Fragment>
       <Container>
         <FadeInSlideRight>
           <Heading color="blue.400" w="100%" mt={2} pb={3}>
@@ -143,15 +154,29 @@ export default function UserSettings() {
                   }}
                 ></Field>
 
-                <Button type="submit" colorScheme="blue" w="100%" my={4}>
-                  Submit
-                </Button>
+                <SlideFade in={true} offsetX="20px">
+                  <Box m={4} position="fixed" bottom={0} right={0}>
+                    <PriBtn
+                      type="submit"
+                      px={8}
+                      // leftIcon={(<SaveOutlinedIcon />) as any}
+                      borderRadius="full"
+                      // isLoading={isSubmitting}
+                      loadingText="Saving"
+                      onClick={() => {
+                        history.back();
+                      }}
+                    >
+                      Save
+                    </PriBtn>
+                  </Box>
+                </SlideFade>
               </Form>
             </Formik>
           </Box>
         </FadeIn>
       </Container>
-    </>
+    </Fragment>
   );
 }
 // export default UserSettings;

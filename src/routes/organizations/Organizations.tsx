@@ -88,6 +88,11 @@ export default function Organizations(props) {
     <Fragment>
       <PageHead title="Your Organizations" loading={orgsLoading}>
         <ToolIconButton
+          aria-label="Find Events"
+          icon={SearchIcon}
+          onClick={() => route("/organizations/search")}
+        />
+        <ToolIconButton
           aria-label="Add Orgaization"
           icon={AddToPhotosOutlinedIcon}
           onClick={() => {
@@ -188,20 +193,20 @@ export default function Organizations(props) {
         </Fragment>
       )}
 
-      <SlideFade in={isOpen} offsetX="20px">
-        <Box m={4} position="fixed" bottom={0} right={0}>
-          <PriBtn
-            w="full"
-            leftIcon={(<SearchIcon />) as any}
-            borderRadius="full"
-            onClick={() => {
-              route("/organizations/search");
-            }}
-          >
-            Search
-          </PriBtn>
-        </Box>
-      </SlideFade>
+      {/* <SlideFade in={isOpen} offsetX="20px"> */}
+      <Box m={4} position="fixed" bottom={0} right={0}>
+        <PriBtn
+          w="full"
+          leftIcon={(<SearchIcon />) as any}
+          borderRadius="full"
+          onClick={() => {
+            route("/organizations/search");
+          }}
+        >
+          Search
+        </PriBtn>
+      </Box>
+      {/* </SlideFade> */}
     </Fragment>
   );
 }

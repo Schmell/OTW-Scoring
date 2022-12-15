@@ -7,6 +7,7 @@ import {
   deleteDoc,
   DocumentData,
   DocumentSnapshot,
+  getDoc,
   getDocs,
   query,
   QueryDocumentSnapshot,
@@ -29,34 +30,35 @@ interface FollowButtonsProps {
 export default function FollowButtons(props: FollowButtonsProps) {
   const { user, data, colName, ...rest } = props;
 
-  const followRef = collection(db, colName);
-  const userFollow = query(followRef, where("userId", "==", user?.uid));
-  const [followOrgs, followLoading] = useCollection(userFollow);
+  const followColl = collection(db, colName);
+  const followQuery = query(followColl, where("userId", "==", user?.uid));
+  const [userFollows] = useCollection(followQuery);
 
-  const addToFollow = async (followId) => {
-    console.log("user?.uid ", user?.uid);
-    console.log("followId ", followId);
-    return await addDoc(followRef, {
+  const addToFollow = async () => {
+    return await addDoc(followColl, {
       userId: user?.uid,
-      followId: followId,
-      // followRef: followRef,
+      followId: data.id,
+      followRef: data.ref,
     });
   };
 
-  const unFollow = async (followId) => {
+  const unFollow = async () => {
+    // this should only happen one at a time
+    // just get the follow doc an delete
     const q = query(
-      followRef,
-      where("followId", "==", followId),
+      followColl,
+      where("followId", "==", data.id),
       where("userId", "==", user?.uid)
     );
     const del = await getDocs(q);
     del.docs.map(async (d) => {
       await deleteDoc(d.ref);
     });
+    // await deleteDoc(followRef);
   };
 
   const checkFollowing = () => {
-    const matched = followOrgs?.docs.filter((followed) => {
+    const matched = userFollows?.docs.filter((followed) => {
       return followed.data().followId === data?.id;
     });
     if (matched && matched.length > 0) return true;
@@ -70,18 +72,14 @@ export default function FollowButtons(props: FollowButtonsProps) {
           <ToolIconButton
             aria-label="Un-Follow"
             icon={GroupRemoveOutlinedIcon}
-            onClick={() => {
-              unFollow(data?.id);
-            }}
+            onClick={unFollow}
             {...rest}
           />
         ) : (
           <ToolIconButton
             aria-label="Follow"
             icon={GroupAddOutlinedIcon}
-            onClick={() => {
-              addToFollow(data?.id);
-            }}
+            onClick={addToFollow}
             {...rest}
           />
         )}

@@ -18,18 +18,27 @@ import { SiteListText } from "../../components/generic/SiteList/SiteListText";
 import ToolIconButton from "../../components/generic/ToolIconButton";
 import { Page } from "../../components/page/Page";
 import PageHead from "../../components/page/pageHead";
+import CompactList from "../../components/generic/CompactList/CompactList";
+import CompactListItem from "../../components/generic/CompactList/CompactListItem";
 import { seriesConverter } from "../../model/Series";
+import { useEffect } from "preact/hooks";
 
-export default function Series(props) {
+export default function SeriesCompact(props) {
   const { user, setHeaderTitle, ...rest } = props;
   setHeaderTitle("Series");
   // Get users series
   const seriesRef = collection(db, "series");
-  const ownerSeries = query(
-    seriesRef,
-    where("__owner", "==", user && user.uid)
+  const [userSeries, userSeriesLoading] = useCollection(
+    query(seriesRef, where("__owner", "==", user && user.uid))
   );
-  const [userSeries, userSeriesLoading] = useCollection(ownerSeries);
+  // console.log("userSeries ", userSeries);
+
+  // const seriesRef = collection(db, "series").withConverter(seriesConverter)
+  const classRef = seriesRef.withConverter(seriesConverter);
+  const q = query(classRef, where("__owner", "==", user && user.uid));
+  const [seriesClass, seriesClassLoading] = useCollectionData(q);
+
+  // console.log("seriesClass ", seriesClass);
 
   const deleteSeriesDisclosure = useDisclosure();
 
@@ -57,42 +66,36 @@ export default function Series(props) {
   };
 
   return (
-    <Fragment>
-      <Page>
-        <PageHead title="Your Series" loading={userSeriesLoading}>
-          <ToolIconButton
-            aria-label="Import file"
-            icon={FileUploadOutlinedIcon}
-            onClick={() => route("/import")}
-          />
-          <ToolIconButton
-            aria-label="Create Series"
-            icon={AddToPhotosOutlinedIcon}
-            onClick={addSeriesHandler}
-          />
-        </PageHead>
+    <Page>
+      <PageHead title="Your Series Compact" loading={userSeriesLoading}>
+        <ToolIconButton
+          aria-label="Import file"
+          icon={FileUploadOutlinedIcon}
+          onClick={() => route("/import")}
+        />
+        <ToolIconButton
+          aria-label="Create Series"
+          icon={AddToPhotosOutlinedIcon}
+          onClick={addSeriesHandler}
+        />
+      </PageHead>
 
-        <SiteList loading={userSeriesLoading}>
-          {userSeries?.docs.map((series) => (
-            <SiteListItem
-              key={series.id}
-              item={series}
-              disclosure={deleteSeriesDisclosure}
-              listType="series"
-            >
-              <SiteListText
-                item={series}
-                setStorage={setSeriesId}
-                forward="races"
-                textItems={{
-                  head: series.data().event,
-                  sub: series.data().venue,
-                  foot: series.data().venuewebsite,
-                }}
+      <CompactList loading={userSeriesLoading}>
+        <Fragment>
+          {seriesClass?.map((series) => {
+            // const data = series.data();
+
+            return (
+              <CompactListItem
+                title={series.event}
+                subText={series.venue}
+                item={series.snapshot}
+                snap={series}
+                forward={`/races/${series.id}`}
               >
                 <SiteListButtons
                   setStorage={setSeriesId}
-                  item={series}
+                  item={series.snapshot}
                   listType="series"
                   disclosure={deleteSeriesDisclosure}
                 >
@@ -101,11 +104,11 @@ export default function Series(props) {
                     You will loose any work you have done with this Series
                   </Box>
                 </SiteListButtons>
-              </SiteListText>
-            </SiteListItem>
-          ))}
-        </SiteList>
-      </Page>
-    </Fragment>
+              </CompactListItem>
+            );
+          })}
+        </Fragment>
+      </CompactList>
+    </Page>
   );
 }

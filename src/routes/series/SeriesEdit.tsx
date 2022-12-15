@@ -8,13 +8,11 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
-  Button,
   Divider,
   Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Heading,
   HStack,
   Input,
   Radio,
@@ -36,21 +34,17 @@ import {
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { db } from "../../util/firebase-config";
 //
+import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import { Field, Form, Formik } from "formik";
-import { FadeInSlideRight } from "../../components/animations/FadeSlide";
-import useStorage from "../../hooks/useStorage";
+import PriBtn from "../../components/generic/PriBtn";
 import { Page } from "../../components/page/Page";
 import PageHead from "../../components/page/pageHead";
-import ToolIconButton from "../../components/generic/ToolIconButton";
-import PriBtn from "../../components/generic/PriBtn";
-import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 
 // Icons
-import PublishIcon from "@mui/icons-material/Publish";
-import BackupIcon from "@mui/icons-material/Backup";
+import * as Yup from "yup";
 import SecBtn from "../../components/generic/SecBtn";
 
-const SeriesEdit = ({ setHeaderTitle, seriesId }) => {
+export default function SeriesEdit({ setHeaderTitle, seriesId }) {
   setHeaderTitle("Edit Series");
   // Submit button appears on scroll
   const { isOpen, onToggle, onOpen } = useDisclosure();
@@ -70,7 +64,11 @@ const SeriesEdit = ({ setHeaderTitle, seriesId }) => {
   // Get the currentRace data
   const docRef = doc(db, "series", seriesId);
   const [currentSeries, seriesLoading, error] = useDocumentData(docRef);
-  // console.log("currentSeries.__public ", currentSeries?.__public);
+
+  useEffect(() => {
+    console.log("currentSeries ", currentSeries);
+  }, [currentSeries]);
+
   const submittedToast = useToast();
 
   const raceBasRequirements = {
@@ -129,6 +127,18 @@ const SeriesEdit = ({ setHeaderTitle, seriesId }) => {
     }
   }, [currentSeries, seriesLoading]);
 
+  const seriesEditSchema = Yup.object().shape({
+    event: Yup.string()
+      .min(2, "Too Short!")
+      .max(50, "Too Long!")
+      .required("Required"),
+    venue: Yup.string()
+      .min(2, "Too Short!")
+      .max(50, "Too Long!")
+      .required("Required"),
+    eventemail: Yup.string().email("Invalid email"),
+  });
+
   return (
     <Page>
       {currentSeries && seriesName && (
@@ -146,22 +156,17 @@ const SeriesEdit = ({ setHeaderTitle, seriesId }) => {
             venuewebsite: currentSeries.venuewebsite,
             venueburgee: currentSeries.venueburgee,
             venueemail: currentSeries.venueemail,
+            fileName: currentSeries.__fileInfo.name,
             lastModified: currentSeries.__fileInfo.lastModified,
-            lastModifiedDate:
-              currentSeries.__fileInfo.lastModifiedDate.toDate(),
+            lastModifiedDate: currentSeries.__fileInfo.lastModifiedDate,
             size: currentSeries.__fileInfo.size,
             resultType: currentSeries.resultType,
             rowTitle: currentSeries.rowTitle || "boat",
           }}
+          // validationSchema={seriesEditSchema}
           onSubmit={submitHandler}
         >
-          {({
-            isSubmitting,
-            getFieldProps,
-            handleChange,
-            handleBlur,
-            values,
-          }) => (
+          {({ isSubmitting, values, errors, touched }) => (
             <Form>
               <PageHead title={currentSeries.event} loading={seriesLoading}>
                 <Box mr={4}>
@@ -178,7 +183,7 @@ const SeriesEdit = ({ setHeaderTitle, seriesId }) => {
                 </Box>
               </PageHead>
 
-              <Box mb={3} mx={4} mt={4}>
+              <Box mb={3} mt={4}>
                 {currentSeries.newFile && (
                   <Flex alignItems={"center"} gap={0} my={2}>
                     <FormLabel htmlFor="addRaces">#Races: </FormLabel>
@@ -199,8 +204,10 @@ const SeriesEdit = ({ setHeaderTitle, seriesId }) => {
                     />
                   </Flex>
                 )}
+
                 <Accordion defaultIndex={[0]}>
                   {/* ///////////////////////////// */}
+                  {/*// Series details ///////////  */}
                   <AccordionItem border="0px">
                     <AccordionButton
                       bgGradient="linear(to-r, whiteAlpha.100, blue.300)"
@@ -326,14 +333,22 @@ const SeriesEdit = ({ setHeaderTitle, seriesId }) => {
                       </Field>
 
                       <Divider my={3} />
-
-                      <FormLabel htmlFor="event">Series name</FormLabel>
-                      <Field name="event" as={Input} />
+                      <FormControl
+                        isInvalid={(!!errors.venue as any) && touched.venue}
+                      >
+                        <FormLabel htmlFor="event">Series name</FormLabel>
+                        <Field name="event" as={Input} />
+                        <FormErrorMessage>{errors.venue}</FormErrorMessage>
+                      </FormControl>
 
                       <Divider my={3} />
-
-                      <FormLabel htmlFor="venue">Venue</FormLabel>
-                      <Field name="venue" as={Input} />
+                      <FormControl
+                        isInvalid={(!!errors.venue as any) && touched.venue}
+                      >
+                        <FormLabel htmlFor="venue">Venue</FormLabel>
+                        <Field name="venue" as={Input} />
+                        <FormErrorMessage>{errors.venue}</FormErrorMessage>
+                      </FormControl>
 
                       <Divider my={3} />
 
@@ -361,6 +376,8 @@ const SeriesEdit = ({ setHeaderTitle, seriesId }) => {
                     </AccordionPanel>
                   </AccordionItem>
 
+                  {/* ///////////////////////////// */}
+                  {/*// Venue details ////////////  */}
                   <AccordionItem border="0px" mt={2}>
                     <AccordionButton
                       bgGradient="linear(to-r, whiteAlpha.100, blue.300)"
@@ -401,6 +418,8 @@ const SeriesEdit = ({ setHeaderTitle, seriesId }) => {
                     </AccordionPanel>
                   </AccordionItem>
 
+                  {/* ///////////////////////////// */}
+                  {/*// File properties //////////  */}
                   <AccordionItem border="0px" mt={2}>
                     <AccordionButton
                       bgGradient="linear(to-r, whiteAlpha.100, blue.300)"
@@ -420,15 +439,23 @@ const SeriesEdit = ({ setHeaderTitle, seriesId }) => {
                     </AccordionButton>
 
                     <AccordionPanel pb={4}>
-                      <FormLabel htmlFor="name">File name</FormLabel>
-                      <Field name="name" as={Input} />
+                      <FormLabel htmlFor="fileName">File name</FormLabel>
+                      <Field name="fileName" as={Input} />
 
                       <Divider mt={3} />
 
-                      {/* <FormLabel htmlFor="lastModified">Last Modified</FormLabel>
-                    <Field name="lastModified" as={Input} />
+                      <FormLabel htmlFor="lastModified">
+                        Last Modified
+                      </FormLabel>
+                      {/* <Field name="lastModified" as={Text} /> */}
+                      <Text px={4}>
+                        {new Intl.DateTimeFormat(undefined, {
+                          dateStyle: "medium",
+                          timeStyle: "short",
+                        }).format(currentSeries.__fileInfo.lastModified)}
+                      </Text>
 
-                    <Divider mt={3} /> */}
+                      <Divider mt={3} />
 
                       <FormLabel htmlFor="lastModifiedDate">
                         Last Modified Date
@@ -437,21 +464,23 @@ const SeriesEdit = ({ setHeaderTitle, seriesId }) => {
                         {new Intl.DateTimeFormat(undefined, {
                           dateStyle: "medium",
                           timeStyle: "short",
-                        }).format(
-                          currentSeries.__fileInfo.lastModifiedDate.toDate()
-                        )}
+                        }).format(currentSeries.__fileInfo.lastModifiedDate)}
+                        {/* {currentSeries.__fileInfo.lastModifiedDate} */}
                       </Text>
 
                       <Divider mt={3} />
 
                       <FormLabel htmlFor="size">Size</FormLabel>
-                      <Field name="size" as={Input} />
+                      {/* <Field name="size" as={Input} /> */}
+                      <Text px={4}>{currentSeries.__fileInfo.size}</Text>
 
                       {/* <Divider mt={3} /> */}
                     </AccordionPanel>
                   </AccordionItem>
                 </Accordion>
+
                 <Divider my={3} />
+
                 {/* Submit Button */}
                 <SecBtn type="reset">Reset</SecBtn>
                 <SlideFade in={isOpen} offsetX="20px">
@@ -475,6 +504,4 @@ const SeriesEdit = ({ setHeaderTitle, seriesId }) => {
       )}
     </Page>
   );
-};
-
-export default SeriesEdit;
+}

@@ -15,6 +15,15 @@ a {
   margin: auto;
  
 }
+.mainPane {
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.mainPane::-webkit-scrollbar { 
+    display: "none" !important;
+}
+
 
 
 h1,

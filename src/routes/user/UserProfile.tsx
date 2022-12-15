@@ -32,6 +32,7 @@ import {
   DocumentSnapshot,
   getDocs,
   query,
+  setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -61,23 +62,21 @@ import { addOrganization } from "../organizations/addOrganization";
 import { SiteListButtons } from "../../components/generic/SiteList/SiteListButtons";
 import useStorage from "../../hooks/useStorage";
 
-export default function UserProfile({ setHeaderTitle }) {
+export default function UserProfile({ setHeaderTitle, user }) {
   setHeaderTitle("Profile");
-  const { isOpen, onToggle, onOpen } = useDisclosure();
+  const { isOpen, onOpen } = useDisclosure();
   if (!window) {
-    // setUserHasScrolled(true);
     onOpen();
   } else {
     window.onscroll = function () {
-      // setUserHasScrolled(true);
       onOpen();
     };
   }
-  const [user] = useAuthState(auth);
-  if (!user) return;
+  const [userIf] = useAuthState(auth);
+  // if (!user) return;
   const submittedToast = useToast();
 
-  const docRef = doc(db, "user", user!.uid); // bang
+  const docRef = doc(db, "user", (user && user?.uid) || (userIf && userIf.uid)); // bang
   const [userData] = useDocumentData(docRef);
 
   const [orgsId, setOrgsId] = useStorage("orgs");
@@ -130,7 +129,11 @@ export default function UserProfile({ setHeaderTitle }) {
     Object.keys(values).forEach((key) =>
       values[key] === undefined ? delete values[key] : {}
     );
-    await updateDoc(docRef, values);
+    // await updateDoc(docRef, values);
+    const colRef = collection(docRef, "profile");
+    const subRef = doc(colRef, "info");
+    // console.log("subRef ", subRef.id);
+    await setDoc(subRef, values);
 
     // show submitted toast
     submittedToast({
@@ -230,11 +233,16 @@ export default function UserProfile({ setHeaderTitle }) {
 
                       <FormLabel htmlFor="email">Email</FormLabel>
                       <Flex gap={2} alignItems="center">
-                        <Field name="email" as={Input} />
+                        <Field name="email" as={Input} type="email" />
                         <FormLabel htmlFor="privateEmail" fontSize="xs" m={0}>
                           Private
                         </FormLabel>
-                        <Checkbox name="privateEmail" m={0} />
+                        <Field
+                          type="checkbox"
+                          name="privateEmail"
+                          m={0}
+                          as={Checkbox}
+                        />
                       </Flex>
 
                       <Divider my={3} />

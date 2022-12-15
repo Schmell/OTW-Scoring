@@ -152,7 +152,7 @@ export default function Races(props) {
               <SiteListButtons
                 setStorage={setRaceId}
                 item={race}
-                listType="races"
+                listType={`races/${seriesId}`}
                 disclosure={startTheRaceDisclosure}
               >
                 <Box>This will delete the race and is not undo-able</Box>

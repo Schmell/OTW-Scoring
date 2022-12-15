@@ -9,7 +9,7 @@
     "dev": "preact watch --refresh",
     "lint": "eslint \"**/*.{ts,tsx}\"",
     "test": "jest ./tests",
-    "em-start": " firebase emulators:start"
+    "em-start": " firebase emulators:start --import=./testdata"
   },
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",
@@ -21,7 +21,6 @@
       "build/"
     ]
   },
-  
   "dependencies": {
     "@chakra-ui/react": "^1.8.6",
     "@emotion/react": "^11.9.0",
@@ -41,6 +40,7 @@
     "preact-render-to-string": "^5.1.4",
     "preact-router": "^3.2.1",
     "react-firebase-hooks": "^5.0.2",
+    "react-use": "^17.4.0",
     "use-indexeddb": "^2.0.2",
     "yup": "^0.32.11"
   },
